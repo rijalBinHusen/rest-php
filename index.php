@@ -1,36 +1,19 @@
 <?php
 
 require_once('vendor/autoload.php');
-require_once('controller/Greeting.php');
-require_once('model/database.php');
-require_once('controller/Articles.php');
-require_once('controller/MyGuest.php');
+require_once('controller/My_report_warehouse.php');
+// require_once('model/database.php');
 
-// Myguests
-$guests = new MyGuest();
-Flight::route('GET /myguests', array($guests, 'getMyGuests'));
-Flight::route('POST /myguests', array($guests, 'addMyGuest'));
-Flight::route('DELETE /myguests/@id', array($guests, 'deleteGuest'));
-Flight::route('GET /myguests/@id', array($guests, 'getGuestById'));
-Flight::route('PUT /myguests/@id', array($guests, 'updateGuestById'));
+// My report rest api
+// My report rest api warehouse endpoint
+$myreport_warehouse = new My_report_warehouse();
+// Flight::route('GET /myreport', array($myreport_warehouse, 'getMyGuests'));
+Flight::route('POST /myreport', array($myreport_warehouse, 'add_warehouse'));
+// Flight::route('DELETE /myreport/warehouse/@id', array($guests, 'deleteGuest'));
+// Flight::route('GET /myreport/warehouse/@id', array($guests, 'getGuestById'));
+// Flight::route('PUT /myreport/warehouse/@id', array($guests, 'updateGuestById'));
 
-// Articles
-$articles = new Articles();
-Flight::route('GET /articles', array($articles, 'getArticles'));
-
-// check the database connection status
-$database = new sqldatabase();
-Flight::route('GET /database', array($database, 'status'));
-
-
-// greeting route
-$greeting = new Greeting();
-Flight::route('GET /greeting', array($greeting, 'hello'));
-// named parameter
-Flight::route('GET /greeting/@name/@id', array($greeting, 'hello2'));
-
-// greeting route
-
+// My report rest api
 // root route
 Flight::route('GET /', function () {
     echo 'I received a GET request.';
@@ -38,7 +21,7 @@ Flight::route('GET /', function () {
 
 Flight::route('POST /', function () {
     $req = Flight::request()->query->name;
-    echo 'I received a POST request '. $req;
+    echo 'I received a POST request ' . $req;
 });
 
 Flight::route('PUT /', function () {
