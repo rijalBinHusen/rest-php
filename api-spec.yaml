@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Judul API
-  description: Disini deskripsi terkait API yang kita buat.
+  title: All my rest api
+  description: Rest API for experiment.
   version: 0.1.1
 servers:
   - url: https://example.com/myreport
     description: My report end point.
 paths:
-  /warehouse:
+  /warehouses:
     get:
       summary: Get all warehouse.
       responses:
@@ -20,12 +20,96 @@ paths:
                 items:
                   $ref: '#/components/schemas/Warehouse'
         '400':
-          description: failed to get data
+          $ref: '#/components/responses/400Error'
+  /warehouse:
+    post:
+      summary: Lets a user post a new warehouse
+      requestBody:
+        $ref: '#/components/requestBodies/Warehouse'
+      responses:
+        '200':
+          description: Successfully created a new artist
           content:
             application/json:
               schema:
-                type: string
-                example: 'cannot get data'
+                  $ref: '#/components/schemas/Warehouse'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /warehouse/{id}:
+    get:
+      summary: Get warehouse by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Warehouse'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      summary: Update warehouse by id
+      requestBody:
+        $ref: '#/components/requestBodies/Warehouse'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /supervisors:
+    get:
+      summary: Get all supervisor.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supervisor'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /supervisor:
+    post:
+      summary: Lets a user post a new supervisor
+      requestBody:
+        $ref: '#/components/requestBodies/Supervisor'
+      responses:
+        '200':
+          description: Successfully created a new artist
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Supervisor'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /supervisor/{id}:
+    get:
+      summary: Get supervisor by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Supervisor'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      summary: Update supervisor by id
+      requestBody:
+        $ref: '#/components/requestBodies/Supervisor'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  
 
 components:
   schemas:
@@ -46,3 +130,76 @@ components:
           type: string
           example: 'spv001, spv002, spv003'
           nullable: true
+    Supervisor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'SUP22500001'
+        supervisor_name:
+          type: string
+          example: 'supervisor001'
+        supervisor_phone:
+          type: number
+          example: 629283019283098123
+          nullable: true
+        supervisor_warehouse:
+          type: string
+          example: 'warehouse001'
+          nullable: true
+        disabled:
+          type: boolean
+          nullable: false
+          example: true
+
+  requestBodies:
+    Warehouse:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                warehouse_name:
+                  type: string
+                warehouse_group:
+                  type: string
+                warehouse_supervisors:
+                  type: string
+    Supervisor:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supervisor_name:
+                  type: string
+                supervisor_phone:
+                  type: number
+                supervisor_warehouse:
+                  type: string
+                disabled:
+                  type: boolean
+
+
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object 
+            properties:
+              message:
+                type: string
+
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object 
+            properties:
+              message:
+                type: string
