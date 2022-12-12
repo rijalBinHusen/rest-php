@@ -37,6 +37,14 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   /warehouse/{id}:
+    parameters:
+          - name: id
+            in: path
+            required: true
+            description: The ID of the warehouse
+            schema:
+              type: string
+            example: 'WAR220203902'
     get:
       summary: Get warehouse by id.
       responses:
@@ -88,6 +96,14 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   /supervisor/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the supervisor
+          schema:
+            type: string
+          example: 'SUP20220239'
     get:
       summary: Get supervisor by id.
       responses:
@@ -109,7 +125,69 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
-  
+  /problems/periode/{periode1}/{periode2}:
+    parameters:
+        - name: periode1
+          in: path
+          required: true
+          description: The start periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+        - name: periode2
+          in: path
+          required: true
+          description: The end periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+    get:
+      summary: Get problems between two periode.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /problems/active:
+    get:
+      summary: Get problems not finished.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /problem/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of problem
+          schema:
+            type: string
+          example: 'PRO2204509'
+    get:
+      summary: Get problems not finished.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '400':
+          $ref: '#/components/responses/400Error'
 
 components:
   schemas:
@@ -149,8 +227,46 @@ components:
           nullable: true
         disabled:
           type: boolean
-          nullable: false
           example: true
+          nullable: false
+    Problem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'PRO22500001'
+        warehouse: 
+          type: string
+        supervisor: 
+          type: string
+        headspv: 
+          type: string
+        kode_item:
+          type: string
+        tanggal_mulai:
+          type: number
+        shift_mulai:
+          type: number
+        pic: 
+          type: string
+        dl: 
+          type: number
+        masalah:
+          type: string
+        sumberMasalah:
+         type: string
+        solusi:
+          type: string
+        solusi_panjang:
+          type: string
+        dl_panjang:
+          type: string
+        pic_panjang:
+          type: string
+        tanggal_selesai:
+          type: number
+        shift_selesai:
+          type: number
 
   requestBodies:
     Warehouse:
@@ -181,6 +297,60 @@ components:
                   type: string
                 disabled:
                   type: boolean
+    Problem:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                warehouse: 
+                  type: string
+
+                supervisor: 
+                  type: string
+
+                headspv: 
+                  type: string
+
+                kode_item:
+                  type: string
+                  
+                tanggal_mulai:
+                  type: number
+
+                shift_mulai:
+                  type: number
+
+                pic: 
+                  type: string
+
+                dl: 
+                  type: number
+
+                masalah:
+                  type: string
+
+                sumberMasalah:
+                  type: string
+
+                solusi:
+                  type: string
+
+                solusi_panjang:
+                  type: string
+
+                dl_panjang:
+                  type: string
+                  
+                pic_panjang:
+                  type: string
+
+                tanggal_selesai:
+                  type: number
+
+                shift_selesai:
+                  type: number
 
 
   responses:
