@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Judul API
+  description: Disini deskripsi terkait API yang kita buat.
+  version: 0.1.1
+servers:
+  - url: https://example.com/myreport
+    description: My report end point.
+paths:
+  /warehouse:
+    get:
+      summary: Get all warehouse.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Warehouse'
+        '400':
+          description: failed to get data
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'cannot get data'
+
+components:
+  schemas:
+    Warehouse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'WAR22500001'
+        warehouse_name:
+          type: string
+          example: 'warehouse001'
+        warehouse_group:
+          type: string
+          example: 'warehouse001, warehouse002'
+          nullable: true
+        warehouse_supervisor:
+          type: string
+          example: 'spv001, spv002, spv003'
+          nullable: true
