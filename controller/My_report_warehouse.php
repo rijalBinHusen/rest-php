@@ -14,17 +14,16 @@ class My_report_warehouse
     // }
     public function add_warehouse()
     {
-        // $req = Flight::request();
-        // $warehouse_name = $req->query->warehouse_name;
-        // $warehouse_group = $req->query->warehouse_group;
-        return $this->my_report_warehouse->append_warehouse();
-        // $warehouse_name, $warehouse_group);
+        $req = Flight::request();
+        $warehouse_name = $req->data->warehouse_name;
+        $warehouse_group = $req->data->warehouse_group;
+        return $this->my_report_warehouse->append_warehouse($warehouse_name, $warehouse_group);
     }
-    // public function getGuestById($id) {
-    //     // myguest/8
-    //     // the 8 will automatically becoming parameter $id
-    //     return $this->my_report_warehouse->getGuestById($id);
-    // }
+    public function get_warehouse_by_id($id) {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        return $this->my_report_warehouse->get_warehous_by_id($id);
+    }
     // public function deleteGuest($id) {
     //     // myguest/8
     //     // the 8 will automatically becoming parameter $id
