@@ -29,29 +29,27 @@ class My_report_warehouse
     //     // the 8 will automatically becoming parameter $id
     //     return $this->my_report_warehouse->deleteGuest($id);
     // }
-    // public function updateGuestById($id) {
-    //     // catch the query string request
-    //     $req = Flight::request();
-    //     $firstname = $req->query->firstname;
-    //     $lastname = $req->query->lastname;
-    //     $email = $req->query->email;
-    //     // initiate the column and values to update
-    //     $keyValueToUpdate = null;
-    //     // conditional firstname
-    //     if($firstname) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate) ? "firstname='$firstname'" : "$keyValueToUpdate firstname='$firstname'";
-    //     } 
+    public function update_warehouse_by_id($id) {
+        // catch the query string request
+        $req = Flight::request();
+        $warehouse_name = $req->data->warehouse_name;
+        $warehouse_group = $req->data->warehouse_group;
+        // initiate the column and values to update
+        $keyValueToUpdate = null;
+        // conditional warehouse_name
+        if($warehouse_name) {
+            $keyValueToUpdate = is_null($keyValueToUpdate) 
+                ? "warehouse_name='$warehouse_name'" 
+                : "$keyValueToUpdate warehouse_name='$warehouse_name'";
+        } 
 
-    //     // conditional lastname
-    //     if($lastname) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate) ? "lastname='$lastname'" : "$keyValueToUpdate lastname='$lastname'";
-    //     } 
-
-    //     // conditional email
-    //     if($email) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate) ? "email='$email'" : "$keyValueToUpdate email='$email'";
-    //     } 
-    //     // send to myguest model
-    //     $this->my_report_warehouse->updateGuestById($keyValueToUpdate, $id);
-    // }
+        // conditional warehouse$warehouse_group
+        if($warehouse_group) {
+            $keyValueToUpdate = is_null($keyValueToUpdate) 
+                ? "warehouse_group='$warehouse_group'" 
+                : "$keyValueToUpdate warehouse_group='$warehouse_group'";
+        }
+        // send to myguest model
+        $this->my_report_warehouse->update_warehouse_by_id($keyValueToUpdate, $id);
+    }
 }

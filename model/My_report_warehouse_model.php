@@ -47,13 +47,10 @@ class My_report_warehouse_model
             'status' => $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'")
         ));
     }
-    // public function updateGuestById($keyValueToUpdate, $id) {
-    //     $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', $id);
-    //     return Flight::json(array(
-    //         'status' => $res
-    //     ));
-    // }
-    public function getLastId()
-    {
+    public function update_warehouse_by_id($keyValueToUpdate, $id) {
+        $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
+        return Flight::json(array(
+            'status' => $res
+        ));
     }
 }

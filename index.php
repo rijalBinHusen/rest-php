@@ -9,12 +9,12 @@ require_once('controller/My_report_warehouse.php');
 $myreport_warehouse = new My_report_warehouse();
 Flight::route('GET /myreport/warehouse', array($myreport_warehouse, 'get_warehouse'));
 Flight::route('POST /myreport/warehouse', array($myreport_warehouse, 'add_warehouse'));
-// Flight::route('DELETE /myreport/warehouse/@id', array($guests, 'deleteGuest'));
 Flight::route('GET /myreport/warehouse/@id', array($myreport_warehouse, 'get_warehouse_by_id'));
-// Flight::route('PUT /myreport/warehouse/@id', array($guests, 'updateGuestById'));
-
+Flight::route('PUT /myreport/warehouse/@id', array($myreport_warehouse, 'update_warehouse_by_id'));
+// My report rest api warehouse endpoint
 // My report rest api
-// root route
+
+// root route for testing
 Flight::route('GET /', function () {
     echo 'I received a GET request.';
 });
