@@ -8,10 +8,10 @@ class My_report_warehouse
     {
         $this->my_report_warehouse = new My_report_warehouse_model();
     }
-    // public function getMyGuests()
-    // {
-    //     return $this->my_report_warehouse->getMyGuests();
-    // }
+    public function get_warehouse()
+    {
+        return $this->my_report_warehouse->get_warehouse();
+    }
     public function add_warehouse()
     {
         $req = Flight::request();

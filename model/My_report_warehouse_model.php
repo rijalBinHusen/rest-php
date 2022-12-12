@@ -13,13 +13,13 @@ class My_report_warehouse_model
     {
         $this->database = new sqldatabase();
     }
-    // public function getMyGuests()
-    // {
-    //     return Flight::json(array(
-    //         'status' => 'success',
-    //         'data' => $this->database->getData($this->columns, $this->table)
-    //     ));
-    // }
+    public function get_warehouse()
+    {
+        return Flight::json(array(
+            'status' => 'success',
+            'data' => $this->database->getData($this->columns, $this->table)
+        ));
+    }
     public function append_warehouse($warehouse_name, $warehouse_group)
     {
         $lastId = $this->database->getLastId($this->table);
@@ -30,7 +30,7 @@ class My_report_warehouse_model
                 "('$nextId', '$warehouse_name', '$warehouse_group'");
         // ternary either success or fail
         $result = $res ? 
-                    $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', $nextId) 
+                    $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$nextId'") 
                     : 'Can not insert to database';
         // return as json
         return Flight::json(array(
@@ -44,7 +44,7 @@ class My_report_warehouse_model
     // }
     public function get_warehous_by_id($id) {
         return Flight::json(array(
-            'status' => $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', $id)
+            'status' => $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'")
         ));
     }
     // public function updateGuestById($keyValueToUpdate, $id) {

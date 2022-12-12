@@ -61,7 +61,7 @@ class sqldatabase
         // we are gonna split string as array, so we can loop it bruh
         $arrOfColumns = explode(", ", $allColumns);
         try {
-            $query = "SELECT $allColumns from $table WHERE $columnToSearch = '$criteria'";
+            $query = "SELECT $allColumns from $table WHERE $columnToSearch = $criteria";
             $query = $this->conn->query($query);
             // set the resulting array to associative
             while ($row = $query->fetch()) {

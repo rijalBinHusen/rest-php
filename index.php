@@ -7,7 +7,7 @@ require_once('controller/My_report_warehouse.php');
 // My report rest api
 // My report rest api warehouse endpoint
 $myreport_warehouse = new My_report_warehouse();
-// Flight::route('GET /myreport', array($myreport_warehouse, 'getMyGuests'));
+Flight::route('GET /myreport/warehouse', array($myreport_warehouse, 'get_warehouse'));
 Flight::route('POST /myreport/warehouse', array($myreport_warehouse, 'add_warehouse'));
 // Flight::route('DELETE /myreport/warehouse/@id', array($guests, 'deleteGuest'));
 Flight::route('GET /myreport/warehouse/@id', array($myreport_warehouse, 'get_warehouse_by_id'));
