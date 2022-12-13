@@ -5,10 +5,21 @@ info:
   version: 0.1.1
 servers:
   - url: https://example.com/myreport
-    description: My report end point.
+    description: My report end point
+tags:
+  - name: warehouse
+    description: Warehouse department
+  - name: supervisor
+    description: People who handle department
+  - name: problem
+    description: Problem that exist in department
+  - name: head supervisor
+    description: The people who responsible above the supervisor and all department
 paths:
   /warehouses:
     get:
+      tags:
+      - warehouse
       summary: Get all warehouse.
       responses:
         '200':
@@ -23,6 +34,8 @@ paths:
           $ref: '#/components/responses/400Error'
   /warehouse:
     post:
+      tags:
+      - warehouse
       summary: Lets a user post a new warehouse
       requestBody:
         $ref: '#/components/requestBodies/Warehouse'
@@ -46,6 +59,8 @@ paths:
               type: string
             example: 'WAR220203902'
     get:
+      tags:
+      - warehouse
       summary: Get warehouse by id.
       responses:
         '200':
@@ -57,6 +72,8 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
     put:
+      tags:
+      - warehouse
       summary: Update warehouse by id
       requestBody:
         $ref: '#/components/requestBodies/Warehouse'
@@ -66,8 +83,11 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  # End of warehouse end point
   /supervisors:
     get:
+      tags:
+      - supervisor
       summary: Get all supervisor.
       responses:
         '200':
@@ -82,6 +102,8 @@ paths:
           $ref: '#/components/responses/400Error'
   /supervisor:
     post:
+      tags:
+      - supervisor
       summary: Lets a user post a new supervisor
       requestBody:
         $ref: '#/components/requestBodies/Supervisor'
@@ -105,6 +127,8 @@ paths:
             type: string
           example: 'SUP20220239'
     get:
+      tags:
+      - supervisor
       summary: Get supervisor by id.
       responses:
         '200':
@@ -116,6 +140,8 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
     put:
+      tags:
+      - supervisor
       summary: Update supervisor by id
       requestBody:
         $ref: '#/components/requestBodies/Supervisor'
@@ -125,6 +151,7 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  # End of supeervisor end point
   /problems/periode/{periode1}/{periode2}:
     parameters:
         - name: periode1
@@ -142,6 +169,8 @@ paths:
             type: number
           example: 80394802938098
     get:
+      tags:
+      - problem
       summary: Get problems between two periode.
       responses:
         '200':
@@ -156,6 +185,8 @@ paths:
           $ref: '#/components/responses/400Error'
   /problems/active:
     get:
+      tags:
+      - problem
       summary: Get problems not finished.
       responses:
         '200':
@@ -178,6 +209,8 @@ paths:
             type: string
           example: 'PRO2204509'
     get:
+      tags:
+      - problem
       summary: Get problems not finished.
       responses:
         '200':
@@ -189,6 +222,8 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
     put:
+      tags:
+      - problem
       summary: Update problem by id
       requestBody:
         $ref: '#/components/requestBodies/Problem'
@@ -215,6 +250,8 @@ paths:
             type: string
           example: 'SUP2204509'
     get:
+      tags:
+      - problem
       summary: Get problems by warehouse and supervisor.
       responses:
         '200':
@@ -237,6 +274,8 @@ paths:
             type: string
           example: 'item12398'
     get:
+      tags:
+      - problem
       summary: Get problems by item kode.
       responses:
         '200':
@@ -251,6 +290,8 @@ paths:
           $ref: '#/components/responses/400Error'
   /problem:
     post:
+      tags:
+      - problem
       summary: Lets a user post a new problem
       requestBody:
         $ref: '#/components/requestBodies/Problem'
@@ -264,6 +305,25 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  # End of problem end point
+  /headspv:
+    post:
+      tags:
+      - head supervisor
+      summary: Lets a user post a new head supervisor
+      requestBody:
+        $ref: '#/components/requestBodies/Head_supervisor'
+      responses:
+        '200':
+          description: Successfully created a new head supervisor
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Head_supervisor'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  
 
 components:
   schemas:
@@ -301,6 +361,9 @@ components:
           type: string
           example: 'warehouse001'
           nullable: true
+        supervisor_shift:
+          type: number 
+          example: 1
         disabled:
           type: boolean
           example: true
@@ -343,6 +406,21 @@ components:
           type: number
         shift_selesai:
           type: number
+    Head_supervisor:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'HEA12312830'
+        name:
+          type: string
+        phone:
+          type: number
+        head_shift:
+          type: number 
+          example: 1
+        disabled:
+          type: boolean
 
   requestBodies:
     Warehouse:
@@ -371,6 +449,8 @@ components:
                   type: number
                 supervisor_warehouse:
                   type: string
+                supervisor_shift:
+                  type: number
                 disabled:
                   type: boolean
     Problem:
@@ -427,7 +507,22 @@ components:
 
                 shift_selesai:
                   type: number
-
+    Head_supervisor:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phone:
+                  type: number
+                head_shift:
+                  type: number 
+                  example: 1
+                disabled:
+                  type: boolean
 
   responses:
     400Error:
