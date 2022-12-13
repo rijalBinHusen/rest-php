@@ -28,7 +28,7 @@ paths:
         $ref: '#/components/requestBodies/Warehouse'
       responses:
         '200':
-          description: Successfully created a new artist
+          description: Successfully created a new warehouse
           content:
             application/json:
               schema:
@@ -87,7 +87,7 @@ paths:
         $ref: '#/components/requestBodies/Supervisor'
       responses:
         '200':
-          description: Successfully created a new artist
+          description: Successfully created a new supervisor
           content:
             application/json:
               schema:
@@ -188,6 +188,82 @@ paths:
                 $ref: '#/components/schemas/Problem'
         '400':
           $ref: '#/components/responses/400Error'
+    put:
+      summary: Update problem by id
+      requestBody:
+        $ref: '#/components/requestBodies/Problem'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /problem/active/{warehouseId}/{supervisorId}:
+    parameters:
+        - name: warehouseId
+          in: path
+          required: true
+          description: id of warehouse
+          schema:
+            type: string
+          example: 'WAR2204509'
+        - name: supervisorId
+          in: path
+          required: true
+          description: id of supervisor
+          schema:
+            type: string
+          example: 'SUP2204509'
+    get:
+      summary: Get problems by warehouse and supervisor.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /problem/item/{itemKoded}:
+    parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: kode of item
+          schema:
+            type: string
+          example: 'item12398'
+    get:
+      summary: Get problems by item kode.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /problem:
+    post:
+      summary: Lets a user post a new problem
+      requestBody:
+        $ref: '#/components/requestBodies/Problem'
+      responses:
+        '200':
+          description: Successfully created a new problem
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Problem'
+
+        '400':
+          $ref: '#/components/responses/400Error'
 
 components:
   schemas:
@@ -239,7 +315,7 @@ components:
           type: string
         supervisor: 
           type: string
-        headspv: 
+        head_spv: 
           type: string
         kode_item:
           type: string
@@ -253,7 +329,7 @@ components:
           type: number
         masalah:
           type: string
-        sumberMasalah:
+        sumber_masalah:
          type: string
         solusi:
           type: string
@@ -310,7 +386,7 @@ components:
                 supervisor: 
                   type: string
 
-                headspv: 
+                head_spv: 
                   type: string
 
                 kode_item:
