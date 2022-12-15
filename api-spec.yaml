@@ -17,6 +17,8 @@ tags:
     description: The people who responsible above the supervisor and all department
   - name: field problem
     description: The problem that obstruct supervisor in field
+  - name: document 
+    description: paper record that must be created by supervisor
 paths:
   /warehouses:
     get:
@@ -213,7 +215,7 @@ paths:
     get:
       tags:
       - problem
-      summary: Get problems not finished.
+      summary: Get problems by id.
       responses:
         '200':
           description: successful operation
@@ -454,8 +456,136 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of field problem end point
-  
+  /documents/periode/{periode1}/{periode2}:
+    parameters:
+        - name: periode1
+          in: path
+          required: true
+          description: The start periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+        - name: periode2
+          in: path
+          required: true
+          description: The end periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+    get:
+      tags:
+      - document
+      summary: Get documents between two periode.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /document/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of document
+          schema:
+            type: string
+          example: 'DOC2204509'
+    get:
+      tags:
+      - document
+      summary: Get document by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - document
+      summary: Update document by id
+      requestBody:
+        $ref: '#/components/requestBodies/Document'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
 
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - document
+      summary: Delete field document by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /document:
+    post:
+      tags:
+      - document
+      summary: Lets a user post a new document
+      requestBody:
+        $ref: '#/components/requestBodies/Document'
+      responses:
+        '200':
+          description: Successfully created a new document
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Document'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /document/{status}:
+    parameters:
+        - name: status
+          in: path
+          required: true
+          description: status of document between 0,1,2
+          schema:
+            type: number
+          example: 1
+    get:
+      tags:
+      - document
+      summary: Get document by status.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /document/last_date:
+    get:
+      tags:
+      - document
+      summary: Get the higher date document.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '400':
+          $ref: '#/components/responses/400Error'
 components:
   schemas:
     Warehouse:
@@ -555,6 +685,8 @@ components:
     Field_problem:
       type: object
       properties:
+        id:
+          type: string
         periode: 
           type: number
         supervisor_id:
@@ -571,6 +703,44 @@ components:
           type: string
         dl: 
           type: number
+    Document:
+      type: object
+      properties:
+        id: 
+          type: string
+        collected: 
+          type: number
+        approval:
+          type: number
+        status: 
+          type: number
+        shared: 
+          type: number
+        finished: 
+          type: number
+        total_do: 
+          type: number
+        total_kendaraan: 
+          type: number
+        total_waktu: 
+          type: number
+        base_report_file: 
+          type: string
+        is_finished: 
+          type: boolean
+        supervisor_id: 
+          type: string
+        periode:
+          type: number
+        shift:
+          type: number
+        head_supervisor_id:
+          type: string
+        warehouse_id:
+          type: string
+        is_generated_document:
+          type: boolean
+
 
   requestBodies:
     Warehouse:
@@ -696,6 +866,45 @@ components:
                   type: string
                 dl: 
                   type: number
+    Document:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                collected: 
+                  type: number
+                approval: 
+                  type: number
+                status: 
+                  type: number
+                shared: 
+                  type: number
+                finished: 
+                  type: number
+                total_do: 
+                  type: number
+                total_kendaraan: 
+                  type: number
+                total_waktu: 
+                  type: number
+                base_report_file: 
+                  type: string
+                is_finished: 
+                  type: boolean
+                supervisor_id: 
+                  type: string
+                periode:
+                  type: number
+                shift:
+                  type: number
+                head_supervisor_id:
+                  type: string
+                warehouse_id:
+                  type: string
+                is_generated_document:
+                  type: boolean
 
   responses:
     400Error:
