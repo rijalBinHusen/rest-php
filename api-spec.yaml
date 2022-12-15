@@ -27,6 +27,8 @@ tags:
     description: case from police departmen
   - name: case import
     description: case that we imported from excel
+  - name: base stock
+    description: base record as report stock
 paths:
   /warehouses:
     get:
@@ -943,7 +945,119 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of Case import end point
+  /base_stocks:
+    parameters:
+      - name: parent
+        in: query
+        description: Parent id values that need to be considered for filter
+        required: false
+        explode: true
+        schema:
+          type: string
+          default: BAS22030003
+          enum:
+            - BAS22030003
+            - BAS22030004
+            - BAS22030005
+      - name: shift
+        in: query
+        description: Shift id values that need to be considered for filter
+        required: false
+        explode: true
+        schema:
+          type: number
+          default: 1
+          enum:
+            - 1
+            - 2
+            - 3
+    get:
+      tags:
+      - base stock
+      summary: Get base stock by parent.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Base_stock'
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base stock
+      summary: Delete base stock by parent
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
 
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_stock/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of base stock
+          schema:
+            type: string
+          example: 'BAS2204509'
+    get:
+      tags:
+      - base stock
+      summary: Get base stock by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Base_stock'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - case import
+      summary: Update case import by id
+      requestBody:
+        $ref: '#/components/requestBodies/Base_stock'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base stock
+      summary: Delete field base stock by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_stock:
+    post:
+      tags:
+      - base stock
+      summary: Lets a user post a new base stock
+      requestBody:
+        $ref: '#/components/requestBodies/Base_stock'
+      responses:
+        '200':
+          description: Successfully created a new base stock
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Base_stock'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  
 components:
   schemas:
     Warehouse:
@@ -1213,6 +1327,35 @@ components:
         periode: 
           type: string
         temuan: 
+          type: string
+    Base_stock:
+      type: object
+      properties:
+        id:
+          type: string
+        parent:
+          type: string
+        shift:
+          type: string
+        item:
+          type: string
+        awal:
+          type: number
+        in:
+          type: number
+        plan_out:
+          type: number
+        out:
+          type: number
+        date_in:
+          type: string
+        date_out:
+          type: string
+        date_end:
+          type: string
+        real:
+          type: number
+        problem:
           type: string
 
   requestBodies:
@@ -1501,6 +1644,37 @@ components:
                 periode: 
                   type: string
                 temuan: 
+                  type: string
+    Base_stock:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parent:
+                  type: string
+                shift:
+                  type: string
+                item:
+                  type: string
+                awal:
+                  type: number
+                in:
+                  type: number
+                out:
+                  type: number
+                date_in:
+                  type: string
+                plan_out:
+                  type: number
+                date_out:
+                  type: string
+                date_end:
+                  type: string
+                real:
+                  type: number
+                problem:
                   type: string
 
   responses:
