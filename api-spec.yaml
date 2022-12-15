@@ -19,6 +19,10 @@ tags:
     description: The problem that obstruct supervisor in field
   - name: document 
     description: paper record that must be created by supervisor
+  - name: complain
+    description: complain from customer
+  - name: complain import
+    description: complain that we imported from excel
 paths:
   /warehouses:
     get:
@@ -586,6 +590,183 @@ paths:
                 $ref: '#/components/schemas/Document'
         '400':
           $ref: '#/components/responses/400Error'
+  # End of document end point
+  /complain:
+    post:
+      tags:
+      - complain
+      summary: Lets a user post a new complain
+      requestBody:
+        $ref: '#/components/requestBodies/Complain'
+      responses:
+        '200':
+          description: Successfully created a new complain
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Complain'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /complain/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of complain
+          schema:
+            type: string
+          example: 'COM2204509'
+    get:
+      tags:
+      - complain
+      summary: Get complain by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complain'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - complain
+      summary: Update complain by id
+      requestBody:
+        $ref: '#/components/requestBodies/Complain'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - complain
+      summary: Delete field complain by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /complains:
+    get:
+      tags:
+      - complain
+      summary: Get complain.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Complain'
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of complain end point
+  /complain_import:
+    post:
+      tags:
+      - complain import
+      summary: Lets a user post a new complain
+      requestBody:
+        $ref: '#/components/requestBodies/Complain_import'
+      responses:
+        '200':
+          description: Successfully created a new complain import from excel
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Complain_import'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /complains_import:
+    get:
+      tags:
+      - complain import
+      summary: Get complain imported.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Complain_import'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /complain_import/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of complain
+          schema:
+            type: string
+          example: 'COM2204509'
+    get:
+      tags:
+      - complain import
+      summary: Get complain by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Complain_import'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - complain import
+      summary: Update complain by id
+      requestBody:
+        $ref: '#/components/requestBodies/Complain_import'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - complain import
+      summary: Delete field complain by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of complain import
+
+
 components:
   schemas:
     Warehouse:
@@ -740,7 +921,74 @@ components:
           type: string
         is_generated_document:
           type: boolean
-
+    Complain:
+      type: object
+      properties:
+        id: 
+          type: string
+        periode:
+          type: number
+        head:
+          type: string
+        dl:
+          type: number
+        insert:
+          type: number
+        masalah:
+          type: string
+        supervisor_id:
+          type: number
+        parent:
+          type: string
+        pic:
+          type: string
+        solusi:
+          type: string
+        is_status_done:
+          type: boolean
+        sumber_masalah:
+          type: string
+        type:
+          type: string
+        is_count:
+          type: boolean
+    Complain_import:
+      type: object
+      properties:
+        id: 
+          type: string
+        customer: 
+          type: string
+        do: 
+          type: string
+        gudang: 
+          type: string
+        item: 
+          type: string
+        kabag: 
+          type: string
+        nomor_SJ: 
+          type: string
+        nopol: 
+          type: string
+        real: 
+          type: string
+        row: 
+          type: string
+        spv: 
+          type: string
+        tally: 
+          type: string
+        tanggal_bongkar: 
+          type: string
+        tanggal_info: 
+          type: string
+        tanggal_komplain: 
+          type: string
+        tanggal_SJ: 
+          type: string
+        type: 
+          type: string
 
   requestBodies:
     Warehouse:
@@ -905,7 +1153,79 @@ components:
                   type: string
                 is_generated_document:
                   type: boolean
-
+    Complain:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                periode:
+                  type: number
+                head:
+                  type: string
+                dl:
+                  type: number
+                insert:
+                  type: number
+                masalah:
+                  type: string
+                supervisor_id:
+                  type: number
+                parent:
+                  type: string
+                pic:
+                  type: string
+                solusi:
+                  type: string
+                is_status_done:
+                  type: boolean
+                sumber_masalah:
+                  type: string
+                type:
+                  type: string
+                is_count:
+                  type: boolean
+    Complain_import:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer: 
+                  type: string
+                do: 
+                  type: string
+                gudang: 
+                  type: string
+                item: 
+                  type: string
+                kabag: 
+                  type: string
+                nomor_SJ: 
+                  type: string
+                nopol: 
+                  type: string
+                real: 
+                  type: string
+                row: 
+                  type: string
+                spv: 
+                  type: string
+                tally: 
+                  type: string
+                tanggal_bongkar: 
+                  type: string
+                tanggal_info: 
+                  type: string
+                tanggal_komplain: 
+                  type: string
+                tanggal_SJ: 
+                  type: string
+                type: 
+                  type: string
+            
   responses:
     400Error:
       description: Invalid request
