@@ -59,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Warehouse'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -127,7 +127,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Supervisor'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -315,7 +315,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Problem'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -349,7 +349,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Head_supervisor'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -417,7 +417,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Field_problem'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -554,7 +554,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Document'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -610,7 +610,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Complain'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -697,7 +697,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Complain_import'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -784,7 +784,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Case'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -871,7 +871,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Case_import'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -1033,7 +1033,7 @@ paths:
     delete:
       tags:
       - base stock
-      summary: Delete field base stock by id
+      summary: Delete base stock by id
       responses:
         '200':
           $ref: '#/components/responses/200Success'
@@ -1053,13 +1053,19 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Base_stock'
+                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
   
 components:
   schemas:
+    Return_after_post:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'WAR22500001'
     Warehouse:
       type: object
       properties:
