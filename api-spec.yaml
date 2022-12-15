@@ -306,7 +306,23 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of problem end point
-  /headspv:
+  /heads_spv:
+    get:
+      tags:
+      - head supervisor
+      summary: Get all head supervisor.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Head_supervisor'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /head_spv:
     post:
       tags:
       - head supervisor
@@ -315,7 +331,7 @@ paths:
         $ref: '#/components/requestBodies/Head_supervisor'
       responses:
         '200':
-          description: Successfully created a new head supervisor
+          description: Successfully created a new supervisor
           content:
             application/json:
               schema:
@@ -323,6 +339,41 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  /head_spv/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the head supervisor
+          schema:
+            type: string
+          example: 'HEA20220239'
+    get:
+      tags:
+      - head supervisor
+      summary: Get head supervisor by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Head_supervisor'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - head supervisor
+      summary: Update head supervisor by id
+      requestBody:
+        $ref: '#/components/requestBodies/Head_supervisor'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of supeervisor end point
   
 
 components:
