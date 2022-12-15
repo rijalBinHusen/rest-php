@@ -23,6 +23,10 @@ tags:
     description: complain from customer
   - name: complain import
     description: complain that we imported from excel
+  - name: case
+    description: case from police departmen
+  - name: case import
+    description: case that we imported from excel
 paths:
   /warehouses:
     get:
@@ -765,7 +769,180 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of complain import
+  /case:
+    post:
+      tags:
+      - case
+      summary: Lets a user post a new case
+      requestBody:
+        $ref: '#/components/requestBodies/Case'
+      responses:
+        '200':
+          description: Successfully created a new case
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Case'
 
+        '400':
+          $ref: '#/components/responses/400Error'
+  /case/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of case
+          schema:
+            type: string
+          example: 'COM2204509'
+    get:
+      tags:
+      - case
+      summary: Get case by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - case
+      summary: Update case by id
+      requestBody:
+        $ref: '#/components/requestBodies/Case'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - case
+      summary: Delete field case by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /cases:
+    get:
+      tags:
+      - case
+      summary: Get cases.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Case'
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of Case end point
+  /case_import:
+    post:
+      tags:
+      - case import
+      summary: Lets a user post a new case import
+      requestBody:
+        $ref: '#/components/requestBodies/Case_import'
+      responses:
+        '200':
+          description: Successfully created a new case import
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Case_import'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /case_import/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of case import
+          schema:
+            type: string
+          example: 'COM2204509'
+    get:
+      tags:
+      - case import
+      summary: Get case import by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Case_import'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - case import
+      summary: Update case import by id
+      requestBody:
+        $ref: '#/components/requestBodies/Case_import'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - case import
+      summary: Delete field case import by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /cases_import:
+    get:
+      tags:
+      - case import
+      summary: Get cases import.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Case'
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of Case import end point
 
 components:
   schemas:
@@ -988,6 +1165,54 @@ components:
         tanggal_SJ: 
           type: string
         type: 
+          type: string
+    Case:
+      type: object
+      properties:
+        id: 
+          type: string
+        periode: 
+          type: number
+        head: 
+          type: string
+        dl: 
+          type: number
+        masalah: 
+          type: string
+        supervisor_id: 
+          type: string
+        parent: 
+          type: string
+        pic: 
+          type: string
+        solusi: 
+          type: string
+        status: 
+          type: string
+        sumber_masalah: 
+          type: string
+    Case_import:
+      type: object
+      properties:
+        id: 
+          type: string
+        bagian: 
+          type: string
+        divisi: 
+          type: string
+        fokus: 
+          type: string
+        kabag: 
+          type: string
+        karu: 
+          type: string
+        keterangan1: 
+          type: string
+        keterangan2: 
+          type: string
+        periode: 
+          type: string
+        temuan: 
           type: string
 
   requestBodies:
@@ -1225,7 +1450,59 @@ components:
                   type: string
                 type: 
                   type: string
-            
+    Case:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                periode: 
+                  type: number
+                head: 
+                  type: string
+                dl: 
+                  type: number
+                masalah: 
+                  type: string
+                supervisor_id: 
+                  type: string
+                parent: 
+                  type: string
+                pic: 
+                  type: string
+                solusi: 
+                  type: string
+                status: 
+                  type: string
+                sumber_masalah: 
+                  type: string
+    Case_import:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bagian: 
+                  type: string
+                divisi: 
+                  type: string
+                fokus: 
+                  type: string
+                kabag: 
+                  type: string
+                karu: 
+                  type: string
+                keterangan1: 
+                  type: string
+                keterangan2: 
+                  type: string
+                periode: 
+                  type: string
+                temuan: 
+                  type: string
+
   responses:
     400Error:
       description: Invalid request
