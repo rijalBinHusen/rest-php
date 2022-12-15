@@ -33,6 +33,8 @@ tags:
     description: base record that parent of base stock and base clock
   - name: base clock
     description: base record as report clock
+  - name: base item
+    description: base item product
 
 paths:
   /warehouses:
@@ -1268,6 +1270,107 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  # End of base clock end point
+  /base_items:
+    parameters:
+      - name: limit
+        in: query
+        description: Limit values that need to be considered
+        required: false
+        explode: true
+        schema:
+          type: number
+          default: 10
+          enum:
+            - 20
+            - 30
+            - 40
+    get:
+      tags:
+      - base item
+      summary: Get base item.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Base_item'
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base item
+      summary: Delete base item
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_item/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of base item
+          schema:
+            type: string
+          example: 'BAS2204509'
+    get:
+      tags:
+      - base item
+      summary: Get base item by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Base_item'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - case import
+      summary: Update case import by id
+      requestBody:
+        $ref: '#/components/requestBodies/Base_item'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base item
+      summary: Delete base item by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_item:
+    post:
+      tags:
+      - base item
+      summary: Let a user post a new base item
+      requestBody:
+        $ref: '#/components/requestBodies/Base_item'
+      responses:
+        '200':
+          description: Successfully created a new base item
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
   
 
 components:
@@ -1610,6 +1713,17 @@ components:
         finish:
           type: string
         rehat:
+          type: number
+    Base_item:
+      type: object
+      properties:
+        id:
+          type: string
+        kode:
+          type: string 
+        name:
+          type: string
+        last_used:
           type: number
 
   requestBodies:
@@ -1970,7 +2084,22 @@ components:
                   type: string
                 rehat:
                   type: number
-  
+    Base_item:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                kode:
+                  type: string 
+                name:
+                  type: string
+                last_used:
+                  type: number
+
   responses:
     400Error:
       description: Invalid request
