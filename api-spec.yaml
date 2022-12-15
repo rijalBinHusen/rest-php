@@ -15,6 +15,8 @@ tags:
     description: Problem that exist in department
   - name: head supervisor
     description: The people who responsible above the supervisor and all department
+  - name: field problem
+    description: The problem that obstruct supervisor in field
 paths:
   /warehouses:
     get:
@@ -373,7 +375,85 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
-  # End of supeervisor end point
+  # End of head supeervisor end point
+  /fieLd_problems:
+    get:
+      tags:
+      - field problem
+      summary: Get all field problem.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field_problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /field_problem:
+    post:
+      tags:
+      - field problem
+      summary: Lets a user post a new field problem
+      requestBody:
+        $ref: '#/components/requestBodies/Field_problem'
+      responses:
+        '200':
+          description: Successfully created a new field problem
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Field_problem'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /field_problem/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the field problem
+          schema:
+            type: string
+          example: 'FIE20220239'
+    get:
+      tags:
+      - field problem
+      summary: Get field problem by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Field_problem'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - field problem
+      summary: Update field problem by id
+      requestBody:
+        $ref: '#/components/requestBodies/Field_problem'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - field problem
+      summary: Delete field problem by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  # End of field problem end point
   
 
 components:
@@ -472,6 +552,25 @@ components:
           example: 1
         disabled:
           type: boolean
+    Field_problem:
+      type: object
+      properties:
+        periode: 
+          type: number
+        supervisor_id:
+          type: string
+        head_spv_id: 
+          type: string
+        masalah: 
+          type: string 
+        sumber_masalah: 
+          type: string
+        solusi: 
+          type: string
+        pic: 
+          type: string
+        dl: 
+          type: number
 
   requestBodies:
     Warehouse:
@@ -574,6 +673,29 @@ components:
                   example: 1
                 disabled:
                   type: boolean
+    Field_problem:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                periode: 
+                  type: number
+                supervisor_id:
+                  type: string
+                head_spv_id: 
+                  type: string
+                masalah: 
+                  type: string 
+                sumber_masalah: 
+                  type: string
+                solusi: 
+                  type: string
+                pic: 
+                  type: string
+                dl: 
+                  type: number
 
   responses:
     400Error:
