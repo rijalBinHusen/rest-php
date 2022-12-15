@@ -31,6 +31,8 @@ tags:
     description: base record as report stock
   - name: base file
     description: base record that parent of base stock and base clock
+  - name: base clock
+    description: base record as report clock
 
 paths:
   /warehouses:
@@ -1153,8 +1155,120 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
-  
+  # End of base file end point
+  /base_clocks:
+    parameters:
+      - name: parent
+        in: query
+        description: Parent id values that need to be considered for filter
+        required: false
+        explode: true
+        schema:
+          type: string
+          default: BAS22030003
+          enum:
+            - BAS22030003
+            - BAS22030004
+            - BAS22030005
+      - name: shift
+        in: query
+        description: Shift id values that need to be considered for filter
+        required: false
+        explode: true
+        schema:
+          type: number
+          default: 1
+          enum:
+            - 1
+            - 2
+            - 3
+    get:
+      tags:
+      - base clock
+      summary: Get base clock by parent.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Base_clock'
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base clock
+      summary: Delete base clock by parent
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
 
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_clock/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of base clock
+          schema:
+            type: string
+          example: 'BAS2204509'
+    get:
+      tags:
+      - base clock
+      summary: Get base clock by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Base_clock'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - case import
+      summary: Update case import by id
+      requestBody:
+        $ref: '#/components/requestBodies/Base_clock'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base clock
+      summary: Delete base clock by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_clock:
+    post:
+      tags:
+      - base clock
+      summary: Lets a user post a new base clock
+      requestBody:
+        $ref: '#/components/requestBodies/Base_clock'
+      responses:
+        '200':
+          description: Successfully created a new base clock
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  
 
 components:
   schemas:
@@ -1478,7 +1592,26 @@ components:
           type: string
         imported:
           type: boolean
-    
+    Base_clock:
+      type: object
+      properties:
+        id:
+          type: string
+        parent:
+          type: string
+        shift:
+          type: number
+        no_do:
+          type: string
+        reg:
+          type: string
+        start:
+          type: string
+        finish:
+          type: string
+        rehat:
+          type: number
+
   requestBodies:
     Warehouse:
         required: true
@@ -1816,7 +1949,28 @@ components:
                   type: string
                 imported:
                   type: boolean
-
+    Base_clock:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parent:
+                  type: string
+                shift:
+                  type: number
+                no_do:
+                  type: string
+                reg:
+                  type: string
+                start:
+                  type: string
+                finish:
+                  type: string
+                rehat:
+                  type: number
+  
   responses:
     400Error:
       description: Invalid request
