@@ -29,6 +29,9 @@ tags:
     description: case that we imported from excel
   - name: base stock
     description: base record as report stock
+  - name: base file
+    description: base record that parent of base stock and base clock
+
 paths:
   /warehouses:
     get:
@@ -1057,7 +1060,102 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+  # End of base stock end point
+  /base_files:
+    parameters:
+        - name: periode1
+          in: query
+          required: true
+          description: The start periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+        - name: periode2
+          in: query
+          required: true
+          description: The end periode to search, date in unix time
+          schema:
+            type: number
+          example: 80394802938098
+    get:
+      tags:
+      - base file
+      summary: Get documents between two periode.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Base_file'
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_files/{id}:
+    parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of base file
+          schema:
+            type: string
+          example: 'BAS2204509'
+    get:
+      tags:
+      - base file
+      summary: Get base file by id.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Base_file'
+        '400':
+          $ref: '#/components/responses/400Error'
+    put:
+      tags:
+      - base file
+      summary: Update base file by id
+      requestBody:
+        $ref: '#/components/requestBodies/Base_file'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+    delete:
+      tags:
+      - base file
+      summary: Delete base file by id
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /base_file:
+    post:
+      tags:
+      - base file
+      summary: Lets a user post a new base file
+      requestBody:
+        $ref: '#/components/requestBodies/Base_file'
+      responses:
+        '200':
+          description: Successfully created a new base file
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
   
+
+
 components:
   schemas:
     Return_after_post:
@@ -1363,7 +1461,24 @@ components:
           type: number
         problem:
           type: string
-
+    Base_file:
+      type: object
+      properties:
+        id:
+          type: string
+        periode:
+          type: number 
+        warehouse_id:
+          type: string
+        file_name:
+          type: string
+        stock_sheet:
+          type: string
+        clock_sheet:
+          type: string
+        imported:
+          type: boolean
+    
   requestBodies:
     Warehouse:
         required: true
@@ -1682,6 +1797,25 @@ components:
                   type: number
                 problem:
                   type: string
+    Base_file:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                periode:
+                  type: number 
+                warehouse_id:
+                  type: string
+                file_name:
+                  type: string
+                stock_sheet:
+                  type: string
+                clock_sheet:
+                  type: string
+                imported:
+                  type: boolean
 
   responses:
     400Error:
