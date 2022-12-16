@@ -125,6 +125,29 @@ class sqldatabase
         $row = $query->fetch();
         return $row;
     }
+    public function getAllData($columns, $table)
+    {
+        // initiate array
+        $result = array();
+        // we are gonna split string as array, so we can loop it bruh
+        $arrOfColumns = explode(", ", $columns);
+        // the query
+        $querySql = 'SELECT ' . $columns . ' from ' . $table;
+        // execute the query
+        $query = $this->conn->query($querySql);
+        // iterate the result query
+        while ($row = $query->fetch()) {
+            $tempResult = array();
+            // iterate the columns
+            foreach ($arrOfColumns as $column) {
+                // tempResult { tempResult: row }
+                $tempResult[$column] = $row[$column];
+            }
+            // push to result
+            array_push($result, $tempResult);
+        }
+        return $result;
+    }
     function __destruct()
     {
         $this->conn  = null;
