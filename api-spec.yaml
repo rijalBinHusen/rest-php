@@ -116,9 +116,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Supervisor'
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supervisor'
         '400':
           $ref: '#/components/responses/400Error'
   /supervisor:
@@ -134,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -157,7 +163,15 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Supervisor'
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supervisor'
         '400':
           $ref: '#/components/responses/400Error'
     put:
@@ -1418,7 +1432,7 @@ components:
         supervisor_shift:
           type: number 
           example: 1
-        disabled:
+        is_disabled:
           type: boolean
           example: true
           nullable: false
@@ -1755,7 +1769,7 @@ components:
                   type: string
                 supervisor_shift:
                   type: number
-                disabled:
+                is_disabled:
                   type: boolean
     Problem:
         required: true

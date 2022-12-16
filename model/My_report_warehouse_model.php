@@ -13,7 +13,7 @@ class My_report_warehouse_model
     {
         $this->database = new sqldatabase();
     }
-    public function get_warehouse()
+    public function get_warehouses()
     {
         return Flight::json(array(
             'status' => 'success',

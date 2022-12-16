@@ -3,14 +3,14 @@ require_once(__DIR__ . '/../model/My_report_warehouse_model.php');
 
 class My_report_warehouse
 {
-    // protected $my_report_warehouse;
+    protected $my_report_warehouse;
     function __construct()
     {
         $this->my_report_warehouse = new My_report_warehouse_model();
     }
-    public function get_warehouse()
+    public function get_warehouses()
     {
-        return $this->my_report_warehouse->get_warehouse();
+        return $this->my_report_warehouse->get_warehouses();
     }
     public function add_warehouse()
     {
