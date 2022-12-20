@@ -15,7 +15,7 @@ class My_report_supervisor_model
     }
     public function get_supervisors()
     {
-        return $this->database->getData($this->columns, $this->table);
+        return $this->database->getAllData($this->columns, $this->table);
     }
     public function append_supervisor($supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled)
     {
@@ -23,8 +23,11 @@ class My_report_supervisor_model
         // jika tidak ada last id
         $nextId = $lastId ? generateId($lastId['id']) : generateId('WAR22320000');
         // send to database model
-        $res = $this->database->writeData($this->table, "( id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled )", 
-                "('$nextId', '$supervisor_name', '$supervisor_phone, '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'");
+        $res = $this->database->writeData(
+            $this->table,
+            "( id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled )",
+            "('$nextId', '$supervisor_name', '$supervisor_phone, '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
+        );
         // ternary either success or fail
         return $res 
                     ? $nextId
@@ -39,7 +42,8 @@ class My_report_supervisor_model
         $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
         return $res;
     }
-    public function update_supervisor_by_id($keyValueToUpdate, $id) {
+    public function update_supervisor_by_id($keyValueToUpdate, $id)
+    {
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }

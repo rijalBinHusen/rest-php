@@ -116,15 +116,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: success
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Supervisor'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supervisor'
         '400':
           $ref: '#/components/responses/400Error'
   /supervisor:
