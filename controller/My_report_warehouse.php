@@ -40,14 +40,14 @@ class My_report_warehouse
         if($warehouse_name) {
             $keyValueToUpdate = is_null($keyValueToUpdate) 
                 ? "warehouse_name='$warehouse_name'" 
-                : "$keyValueToUpdate warehouse_name='$warehouse_name'";
+                : "$keyValueToUpdate, warehouse_name='$warehouse_name'";
         } 
 
         // conditional warehouse$warehouse_group
         if($warehouse_group) {
             $keyValueToUpdate = is_null($keyValueToUpdate) 
                 ? "warehouse_group='$warehouse_group'" 
-                : "$keyValueToUpdate warehouse_group='$warehouse_group'";
+                : "$keyValueToUpdate, warehouse_group='$warehouse_group'";
         }
         // send to myguest model
         $this->my_report_warehouse->update_warehouse_by_id($keyValueToUpdate, $id);

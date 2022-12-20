@@ -21,15 +21,15 @@ class My_report_supervisor_model
     {
         $lastId = $this->database->getLastId($this->table);
         // jika tidak ada last id
-        $nextId = $lastId ? generateId($lastId['id']) : generateId('WAR22320000');
+        $nextId = $lastId ? generateId($lastId['id']) : generateId('SUP22320000');
         // send to database model
         $res = $this->database->writeData(
             $this->table,
             "( id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled )",
-            "('$nextId', '$supervisor_name', '$supervisor_phone, '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
+            "('$nextId', '$supervisor_name', '$supervisor_phone', '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
         );
         // ternary either success or fail
-        return $res 
+        return $res
                     ? $nextId
                     : 'Can not insert to database';
     }

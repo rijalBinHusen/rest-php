@@ -38,7 +38,8 @@ class sqldatabase
             $this->conn->exec($sql);
             return "New record created successfully";
         } catch (PDOException $e) {
-            return $sql . "<br>" . $e->getMessage();
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
         }
     }
     public function deleteData($table, $column, $criteria)
@@ -51,7 +52,8 @@ class sqldatabase
             $this->conn->exec($sql);
             return "Record deleted successfully";
         } catch (PDOException $e) {
-            return $sql . "<br>" . $e->getMessage();
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
         }
     }
     public function findDataByColumnCriteria($table, $allColumns, $columnToSearch, $criteria)
@@ -76,7 +78,8 @@ class sqldatabase
             }
             return $result;
         } catch (PDOException $e) {
-            return "Error: " . $e->getMessage();
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
         }
     }
     public function getData($columns, $table, $totalRow = 10)
@@ -147,6 +150,9 @@ class sqldatabase
             array_push($result, $tempResult);
         }
         return $result;
+    }
+    public function log_error($operation, $name_table, $message) {
+        $this->writeData("error_log", "operation, name_table, message_error", $operation, $name_table, $message);
     }
     function __destruct()
     {

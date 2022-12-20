@@ -1,12 +1,12 @@
 <?php
 require_once(__DIR__ . '/../model/My_report_supervisor_model.php');
 
-class My_report_warehouse
+class My_report_supervisor
 {   
     // variabel for http code status
-    protected $code = null;
     protected $result = "Failed to response request";
     protected $my_report_supervisor;
+    protected $result_from_model = null;
 
     function __construct()
     {
@@ -46,26 +46,50 @@ class My_report_warehouse
     //     // the 8 will automatically becoming parameter $id
     //     return $this->my_report_supervisor->deleteGuest($id);
     // }
-    public function update_warehouse_by_id($id)
+    public function update_supervisor_by_id($id)
     {
         // catch the query string request
         $req = Flight::request();
         $supervisor_name = $req->data->supervisor_name;
         $supervisor_phone = $req->data->supervisor_phone;
+        $supervisor_warehouse = $req->data->supervisor_warehouse;
+        $supervisor_shift = $req->data->supervisor_shift;
+        $is_disabled = $req->data->is_disabled;
         // initiate the column and values to update
         $keyValueToUpdate = null;
         // conditional supervisor_name
         if ($supervisor_name) {
             $keyValueToUpdate = is_null($keyValueToUpdate)
                 ? "supervisor_name='$supervisor_name'"
-                : "$keyValueToUpdate supervisor_name='$supervisor_name'";
+                : "$keyValueToUpdate, supervisor_name='$supervisor_name'";
         }
 
-        // conditional warehouse$supervisor_phone
+        // conditional is_disabled
+        if ($is_disabled) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "is_disabled='$is_disabled'"
+                : "$keyValueToUpdate, is_disabled='$is_disabled'";
+        }
+
+        // conditional supervisor_shift
+        if ($supervisor_shift) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "supervisor_shift='$supervisor_shift'"
+                : "$keyValueToUpdate, supervisor_shift='$supervisor_shift'";
+        }
+
+        // conditional supervisor_warehouse
+        if ($supervisor_warehouse) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "supervisor_warehouse='$supervisor_warehouse'"
+                : "$keyValueToUpdate, supervisor_warehouse='$supervisor_warehouse'";
+        }
+
+        // conditional supervisor_phone
         if ($supervisor_phone) {
             $keyValueToUpdate = is_null($keyValueToUpdate)
                 ? "supervisor_phone='$supervisor_phone'"
-                : "$keyValueToUpdate supervisor_phone='$supervisor_phone'";
+                : "$keyValueToUpdate, supervisor_phone='$supervisor_phone'";
         }
         // send to myguest model
         $this->my_report_supervisor->update_supervisor_by_id($keyValueToUpdate, $id);
@@ -84,7 +108,7 @@ class My_report_warehouse
         // return the result
         return Flight::json(array(
             // the result
-            $this->result_from_model ? $this->result_from_model : $this->result
+            $this->result
             // and the code
         ), $this->code);
     }
