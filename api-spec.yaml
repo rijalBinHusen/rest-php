@@ -335,22 +335,6 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of problem end point
-  /heads_spv:
-    get:
-      tags:
-      - head supervisor
-      summary: Get all head supervisor.
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Head_supervisor'
-        '400':
-          $ref: '#/components/responses/400Error'
   /head_spv:
     post:
       tags:
@@ -366,6 +350,22 @@ paths:
               schema:
                   $ref: '#/components/schemas/Return_after_post'
 
+        '400':
+          $ref: '#/components/responses/400Error'
+  /heads_spv:
+    get:
+      tags:
+      - head supervisor
+      summary: Get all head supervisor.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Head_supervisor'
         '400':
           $ref: '#/components/responses/400Error'
   /head_spv/{id}:
@@ -1464,14 +1464,14 @@ components:
         id:
           type: string
           example: 'HEA12312830'
-        name:
+        head_name:
           type: string
-        phone:
+        head_phone:
           type: number
         head_shift:
           type: number 
           example: 1
-        disabled:
+        is_disabled:
           type: boolean
     Field_problem:
       type: object
@@ -1816,14 +1816,14 @@ components:
             schema:
               type: object
               properties:
-                name:
+                head_name:
                   type: string
-                phone:
+                head_phone:
                   type: number
                 head_shift:
                   type: number 
                   example: 1
-                disabled:
+                is_disabled:
                   type: boolean
     Field_problem:
         required: true
