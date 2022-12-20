@@ -25,8 +25,8 @@ class My_report_supervisor_model
         // send to database model
         $res = $this->database->writeData(
             $this->table,
-            "( id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled )",
-            "('$nextId', '$supervisor_name', '$supervisor_phone', '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
+            "id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled",
+            "'$nextId', '$supervisor_name', '$supervisor_phone', '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
         );
         // ternary either success or fail
         return $res

@@ -33,12 +33,17 @@ class sqldatabase
     public function writeData($table, $columns, $values)
     {
         try {
-            $sql = "INSERT INTO " . $table . $columns . " VALUES " . $values . " )";
-            // use exec() because no results are returned
-            $this->conn->exec($sql);
-            return "New record created successfully";
+
+            $sql = "INSERT INTO  $table ( $columns ) VALUES ( $values  )";
+            // Prepare statement
+            $stmt = $this->conn->prepare($sql);
+            // execute the query
+            $stmt->execute();
+            // return a message to say the create succeeded
+            return true;
+            // return $sql;
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("create", $table, $e->getMessage());
             return false;
         }
     }
@@ -46,13 +51,16 @@ class sqldatabase
     {
         try {
             // sql to delete a record
-            $sql = "DELETE FROM " . $table . " WHERE " . $column . "=" . $criteria;
-
-            // use exec() because no results are returned
-            $this->conn->exec($sql);
+            $sql = "DELETE FROM $table WHERE $column=$criteria";
+            // Prepare statement
+            $stmt = $this->conn->prepare($sql);
+            // execute the query
+            $stmt->execute();
+            // return message
             return "Record deleted successfully";
+            // catching an error
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("delete", $table, $e->getMessage());
             return false;
         }
     }
@@ -78,7 +86,7 @@ class sqldatabase
             }
             return $result;
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("find data by criteria", $table, $e->getMessage());
             return false;
         }
     }
@@ -104,7 +112,7 @@ class sqldatabase
             }
             return $result;
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("get data", $table, $e->getMessage());
             return false;
         }
     }
@@ -113,7 +121,7 @@ class sqldatabase
         try {
 
             $sql = "UPDATE " . $table . " SET " . $keyValueToUpdate . " WHERE " . $columnCriteria . "=" . $criteria;
-            //// Prepare statement
+            // Prepare statement
             $stmt = $this->conn->prepare($sql);
             
             // execute the query
@@ -123,7 +131,7 @@ class sqldatabase
             return $stmt->rowCount() . " records UPDATED successfully";
             // return $sql;
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("update", $table, $e->getMessage());
             return false;
         }
     }
@@ -148,7 +156,7 @@ class sqldatabase
             // return $sql;
             return $row;
         } catch (PDOException $e) {
-            $this->log_error("append", $table, $e->getMessage());
+            $this->log_error("get last id", $table, $e->getMessage());
             return false;
         }
     }
@@ -176,7 +184,7 @@ class sqldatabase
         return $result;
     }
     public function log_error($operation, $name_table, $message) {
-        $this->writeData("error_log", "operation, name_table, message_error", $operation, $name_table, $message);
+        $this->writeData("error_log", "operation, name_table, message_error", "'$operation', '$name_table', '$message'");
     }
     function __destruct()
     {

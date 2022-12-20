@@ -34,7 +34,7 @@ class My_report_base_item_model
                     : 'Can not insert to database';
     }
     public function delete_item($id) {
-        return $this->database->deleteData($this->table, 'id', $id);
+        return $this->database->deleteData($this->table, 'id', "'$id'");
     }
     public function get_item_by_id($id) {
         $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");

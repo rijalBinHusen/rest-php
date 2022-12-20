@@ -59,8 +59,8 @@ class My_report_base_item
         // conditional kode
         if ($kode) {
             $keyValueToUpdate = is_null($keyValueToUpdate)
-                ? "kode='$kode'"
-                : "$keyValueToUpdate, kode='$kode'";
+                ? "item_kode='$kode'"
+                : "$keyValueToUpdate, item_kode='$kode'";
         }
 
         // conditional last_used
@@ -73,8 +73,8 @@ class My_report_base_item
         // conditional name
         if ($name) {
             $keyValueToUpdate = is_null($keyValueToUpdate)
-                ? "name='$name'"
-                : "$keyValueToUpdate, name='$name'";
+                ? "item_name='$name'"
+                : "$keyValueToUpdate, item_name='$name'";
         }
         // send to myguest model
         $this->result_from_model = $this->base_item_model->update_item_by_id($keyValueToUpdate, $id);
