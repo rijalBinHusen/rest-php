@@ -32,7 +32,7 @@ class My_report_supervisor
         // return the result
         return $this->response();
     }
-    public function get_superviosr_by_id($id)
+    public function get_supervisor_by_id($id)
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
@@ -65,10 +65,11 @@ class My_report_supervisor
         }
 
         // conditional is_disabled
-        if ($is_disabled) {
+        if (!is_null($is_disabled)) {
+            $value = $is_disabled ? 1 : 0;
             $keyValueToUpdate = is_null($keyValueToUpdate)
-                ? "is_disabled='$is_disabled'"
-                : "$keyValueToUpdate, is_disabled='$is_disabled'";
+                ? "is_disabled='$value'"
+                : "$keyValueToUpdate, is_disabled='$value'";
         }
 
         // conditional supervisor_shift
@@ -92,7 +93,8 @@ class My_report_supervisor
                 : "$keyValueToUpdate, supervisor_phone='$supervisor_phone'";
         }
         // send to myguest model
-        $this->my_report_supervisor->update_supervisor_by_id($keyValueToUpdate, $id);
+        $this->result_from_model = $this->my_report_supervisor->update_supervisor_by_id($keyValueToUpdate, $id);
+        return $this->response();
     }
     protected function response()
     {
@@ -106,10 +108,10 @@ class My_report_supervisor
             $this->code = 400;
         }
         // return the result
-        return Flight::json(array(
+        return Flight::json(
             // the result
             $this->result
             // and the code
-        ), $this->code);
+        , $this->code);
     }
 }

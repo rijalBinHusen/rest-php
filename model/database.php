@@ -89,32 +89,43 @@ class sqldatabase
         // we are gonna split string as array, so we can loop it bruh
         $arrOfColumns = explode(", ", $columns);
         // the query
-        $querySql = 'SELECT ' . $columns . ' from ' . $table . ' LIMIT ' . $totalRow;
-        $query = $this->conn->query($querySql);
-        while ($row = $query->fetch()) {
-            $tempResult = array();
-            // iterate the columns
-            foreach ($arrOfColumns as $column) {
-                // tempResult { tempResult: row }
-                $tempResult[$column] = $row[$column];
+        try {
+            $querySql = 'SELECT ' . $columns . ' from ' . $table . ' LIMIT ' . $totalRow;
+            $query = $this->conn->query($querySql);
+            while ($row = $query->fetch()) {
+                $tempResult = array();
+                // iterate the columns
+                foreach ($arrOfColumns as $column) {
+                    // tempResult { tempResult: row }
+                    $tempResult[$column] = $row[$column];
+                }
+                // push to result
+                array_push($result, $tempResult);
             }
-            // push to result
-            array_push($result, $tempResult);
+            return $result;
+        } catch (PDOException $e) {
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
         }
-        return $result;
     }
     public function updateDataByCriteria($table, $keyValueToUpdate, $columnCriteria, $criteria)
-    {
-        $sql = "UPDATE " . $table . " SET " . $keyValueToUpdate . " WHERE " . $columnCriteria . "=" . $criteria;
-        //// Prepare statement
-        $stmt = $this->conn->prepare($sql);
+    {   
+        try {
 
-        // execute the query
-        $stmt->execute();
-
-        // echo a message to say the UPDATE succeeded
-        return $stmt->rowCount() . " records UPDATED successfully";
-        // return $sql;
+            $sql = "UPDATE " . $table . " SET " . $keyValueToUpdate . " WHERE " . $columnCriteria . "=" . $criteria;
+            //// Prepare statement
+            $stmt = $this->conn->prepare($sql);
+            
+            // execute the query
+            $stmt->execute();
+            
+            // echo a message to say the UPDATE succeeded
+            return $stmt->rowCount() . " records UPDATED successfully";
+            // return $sql;
+        } catch (PDOException $e) {
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
+        }
     }
     public function status()
     {
