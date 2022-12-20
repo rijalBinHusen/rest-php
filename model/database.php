@@ -59,7 +59,7 @@ class sqldatabase
     public function findDataByColumnCriteria($table, $allColumns, $columnToSearch, $criteria)
     {
         // initiate array
-        $result = array();
+        $result = null;
         // we are gonna split string as array, so we can loop it bruh
         $arrOfColumns = explode(", ", $allColumns);
         try {
@@ -74,7 +74,7 @@ class sqldatabase
                     $tempResult[$column] = $row[$column];
                 }
                 // push to result
-                array_push($result, $tempResult);
+                $result = $tempResult;
             }
             return $result;
         } catch (PDOException $e) {
@@ -134,10 +134,23 @@ class sqldatabase
     }
     public function getLastId($table)
     {
-        $querySql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
-        $query = $this->conn->query($querySql);
-        $row = $query->fetch();
-        return $row;
+        try {
+
+            $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
+            //// Prepare statement
+            $stmt = $this->conn->prepare($sql);
+            
+            // execute the query
+            $stmt->execute();
+            
+            // echo a message to say the UPDATE succeeded
+            $row = $stmt->fetch();
+            // return $sql;
+            return $row;
+        } catch (PDOException $e) {
+            $this->log_error("append", $table, $e->getMessage());
+            return false;
+        }
     }
     public function getAllData($columns, $table)
     {

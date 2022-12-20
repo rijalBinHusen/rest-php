@@ -16,3 +16,11 @@ name_table VARCHAR(30) NOT NULL,
 message_error VARCHAR(50),
 time_error TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+
+-- base_item
+CREATE TABLE base_item (
+id VARCHAR(30) PRIMARY KEY,
+item_kode VARCHAR(30) NOT NULL,
+item_name VARCHAR(30) NOT NULL,
+last_used INT(50)
+)

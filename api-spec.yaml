@@ -1279,6 +1279,23 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of base clock end point
+  /base_item:
+    post:
+      tags:
+      - base item
+      summary: Let a user post a new base item
+      requestBody:
+        $ref: '#/components/requestBodies/Base_item'
+      responses:
+        '200':
+          description: Successfully created a new base item
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
   /base_items:
     parameters:
       - name: limit
@@ -1308,16 +1325,6 @@ paths:
                   $ref: '#/components/schemas/Base_item'
         '400':
           $ref: '#/components/responses/400Error'
-    delete:
-      tags:
-      - base item
-      summary: Delete base item
-      responses:
-        '200':
-          $ref: '#/components/responses/200Success'
-
-        '400':
-          $ref: '#/components/responses/400Error'
   /base_item/{id}:
     parameters:
         - name: id
@@ -1342,8 +1349,8 @@ paths:
           $ref: '#/components/responses/400Error'
     put:
       tags:
-      - case import
-      summary: Update case import by id
+      - base item
+      summary: Update base item by id
       requestBody:
         $ref: '#/components/requestBodies/Base_item'
       responses:
@@ -1359,23 +1366,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200Success'
-
-        '400':
-          $ref: '#/components/responses/400Error'
-  /base_item:
-    post:
-      tags:
-      - base item
-      summary: Let a user post a new base item
-      requestBody:
-        $ref: '#/components/requestBodies/Base_item'
-      responses:
-        '200':
-          description: Successfully created a new base item
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -2099,8 +2089,6 @@ components:
             schema:
               type: object
               properties:
-                id:
-                  type: string
                 kode:
                   type: string 
                 name:

@@ -3,7 +3,7 @@
 require_once('vendor/autoload.php');
 require_once('controller/My_report_warehouse.php');
 require_once('controller/My_report_supervisor.php');
-// require_once('model/database.php');
+require_once('controller/My_report_base_item.php');
 
 // My report rest api
 // My report rest api warehouse endpoint
@@ -23,6 +23,12 @@ Flight::route('PUT /myreport/supervisor/@id', array($myreport_supervisor, 'updat
 // my report supervisor
 
 // my report base item
+$myreport_base_item = new My_report_base_item();
+Flight::route('GET /myreport/base_items', array($myreport_base_item, 'get_items'));
+Flight::route('POST /myreport/base_item', array($myreport_base_item, 'add_item'));
+Flight::route('GET /myreport/base_item/@id', array($myreport_base_item, 'get_item_by_id'));
+Flight::route('PUT /myreport/base_item/@id', array($myreport_base_item, 'update_item_by_id'));
+Flight::route('DELETE /myreport/base_item/@id', array($myreport_base_item, 'delete_item'));
 // my report base item
 
 // my report head supervisor
