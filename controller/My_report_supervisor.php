@@ -3,8 +3,8 @@ require_once(__DIR__ . '/../model/My_report_supervisor_model.php');
 
 class My_report_warehouse
 {   
-    protected $status = null;
-    protected $message = null;
+    // variabel for http code status
+    protected $code = null;
     protected $result = "Failed to response request";
     protected $my_report_supervisor;
 
@@ -16,18 +16,14 @@ class My_report_warehouse
     {   
         $send_data_to_model = $this->my_report_supervisor->get_supervisors();
         if($send_data_to_model) {
-            $this->status = 200;
+            $this->code = 200;
             $this->result = $send_data_to_model;
         } else {
-            $this->status = 400;
+            $this->code = 400;
         }
+        $respose = $this->response();
         // return the result
-        return Flight::json(array(
-            'status' => 'success',
-            $this->status == 200 
-                ? 'data' => $this->result
-                : 'message' => $this->message
-        ), $this->status);
+        return $respose;
     }
     public function add_supervisor()
     {
@@ -39,67 +35,66 @@ class My_report_warehouse
         $is_disabled = $req->data->is_disabled;
         // append to database
         $send_data_to_model = $this->my_report_supervisor->append_supervisor($supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled);
-        $result = $send_data_to_model
-                    ? $send_data_to_model
-                    : 'Failed to append data';
-        // return the result
         if($send_data_to_model) {
-            return Flight::json(array(
-                'status' => 'success',
-                'data' => $result
-            ));
+            $this->code = 200;
+            $this->result = $send_data_to_model;
         } else {
-            return Flight::json(array(
-                'message' => $result,
-            ), 400);
+            $this->code = 400;
         }
+        $respose = $this->response();
+        // return the result
+        return $respose;
     }
-    public function get_warehouse_by_id($id) {
+    public function get_supervisor_by_id($id) {
         // myguest/8
         // the 8 will automatically becoming parameter $id
         // append to database
         $send_data_to_model = $this->my_report_supervisor->get_supervisor_by_id($id);
-        $result = $send_data_to_model
-                    ? $send_data_to_model
-                    : 'Failed to get data';
-        // return the result
         if($send_data_to_model) {
-            return Flight::json(array(
-                'status' => 'success',
-                'data' => $result
-            ));
+            $this->code = 200;
+            $this->result = $send_data_to_model;
         } else {
-            return Flight::json(array(
-                'message' => $result,
-            ), 400);
+            $this->code = 400;
         }
+        $respose = $this->response();
+        // return the result
+        return $respose;
     }
     // public function deleteGuest($id) {
     //     // myguest/8
     //     // the 8 will automatically becoming parameter $id
     //     return $this->my_report_supervisor->deleteGuest($id);
     // }
-    public function update_warehouse_by_id($id) {
+    public function update_superivsor_by_id($id) {
         // catch the query string request
         $req = Flight::request();
-        $warehouse_name = $req->data->warehouse_name;
-        $warehouse_group = $req->data->warehouse_group;
+        $supervisor_name = $req->data->supervisor_name;
+        $supervisor_phone = $req->data->supervisor_phone;
+        $supervisor_warehouse = $req->data->supervisor_warehouse;
+        $supervisor_shift = $req->data->supervisor_shift;
+        $is_disabled = $req->data->is_disabled;
         // initiate the column and values to update
         $keyValueToUpdate = null;
         // conditional warehouse_name
-        if($warehouse_name) {
+        if($supervisor_name) {
             $keyValueToUpdate = is_null($keyValueToUpdate) 
-                ? "warehouse_name='$warehouse_name'" 
-                : "$keyValueToUpdate warehouse_name='$warehouse_name'";
+                ? "supervisor_name='$supervisor_name'" 
+                : "$keyValueToUpdate supervisor_name='$supervisor_name'";
         } 
 
         // conditional warehouse$warehouse_group
-        if($warehouse_group) {
+        if($supervisor_phone) {
             $keyValueToUpdate = is_null($keyValueToUpdate) 
-                ? "warehouse_group='$warehouse_group'" 
-                : "$keyValueToUpdate warehouse_group='$warehouse_group'";
+                ? "supervisor_p$supervisor_phone='$supervisor_phone'" 
+                : "$keyValueToUpdate supervisor_p$supervisor_phone='$supervisor_phone'";
         }
         // send to myguest model
         $this->my_report_supervisor->update_warehouse_by_id($keyValueToUpdate, $id);
+    }
+    public function response() {
+        return Flight::json(array(
+            'status' => $this->status == 200 ? 'success' : 'failed',
+            'data' => $this->result
+        ), $this->status);
     }
 }

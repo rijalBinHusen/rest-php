@@ -26,13 +26,9 @@ class My_report_supervisor_model
         $res = $this->database->writeData($this->table, "( id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled )", 
                 "('$nextId', '$supervisor_name', '$supervisor_phone, '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'");
         // ternary either success or fail
-        $result = $res 
+        return $res 
                     ? $nextId
                     : 'Can not insert to database';
-        // return as json
-        return Flight::json(array(
-            'id' => $result
-        ));
     }
     // public function deleteGuest($id) {
     //     return Flight::json(array(
@@ -40,15 +36,11 @@ class My_report_supervisor_model
     //     ));
     // }
     public function get_supervisor_by_id($id) {
-        return Flight::json(array(
-            'status' => 'success',
-            'data' => $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'")
-        ));
+        $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
+        return $res;
     }
     public function update_supervisor_by_id($keyValueToUpdate, $id) {
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
-        return Flight::json(array(
-            'message' => $res
-        ));
+        return $res;
     }
 }
