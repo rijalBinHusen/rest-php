@@ -117,16 +117,16 @@ class sqldatabase
         }
     }
     public function updateDataByCriteria($table, $keyValueToUpdate, $columnCriteria, $criteria)
-    {   
+    {
         try {
 
             $sql = "UPDATE " . $table . " SET " . $keyValueToUpdate . " WHERE " . $columnCriteria . "=" . $criteria;
             // Prepare statement
             $stmt = $this->conn->prepare($sql);
-            
+
             // execute the query
             $stmt->execute();
-            
+
             // echo a message to say the UPDATE succeeded
             return $stmt->rowCount() . " records UPDATED successfully";
             // return $sql;
@@ -147,10 +147,10 @@ class sqldatabase
             $sql = "SELECT * FROM $table ORDER BY id DESC LIMIT 1";
             //// Prepare statement
             $stmt = $this->conn->prepare($sql);
-            
+
             // execute the query
             $stmt->execute();
-            
+
             // echo a message to say the UPDATE succeeded
             $row = $stmt->fetch();
             // return $sql;
@@ -183,8 +183,38 @@ class sqldatabase
         }
         return $result;
     }
-    public function log_error($operation, $name_table, $message) {
+    public function log_error($operation, $name_table, $message)
+    {
         $this->writeData("error_log", "operation, name_table, message_error", "'$operation', '$name_table', '$message'");
+    }
+    public function get_data_by_where_query($columns, $table, $your_query)
+    {
+        // your query = column_name BETWEEN value1 AND value2;
+        // your query = column_name >= 10 AND column_name <= 20;
+        // your query = column_name NOT BETWEEN 100 AND 150;
+        // initiate array
+        $result = array();
+        // we are gonna split string as array, so we can loop it bruh
+        $arrOfColumns = explode(", ", $columns);
+        // the query
+        try {
+            $querySql = "SELECT $columns from $table WHERE $your_query";
+            $query = $this->conn->query($querySql);
+            while ($row = $query->fetch()) {
+                $tempResult = array();
+                // iterate the columns
+                foreach ($arrOfColumns as $column) {
+                    // tempResult { tempResult: row }
+                    $tempResult[$column] = $row[$column];
+                }
+                // push to result
+                array_push($result, $tempResult);
+            }
+            return $result;
+        } catch (PDOException $e) {
+            $this->log_error("get data", $table, $e->getMessage());
+            return false;
+        }
     }
     function __destruct()
     {
