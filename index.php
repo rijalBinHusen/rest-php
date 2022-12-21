@@ -4,7 +4,7 @@ require_once('vendor/autoload.php');
 require_once('controller/My_report_warehouse.php');
 require_once('controller/My_report_supervisor.php');
 require_once('controller/My_report_base_item.php');
-require_once('controller/My_report_head_spv.php.php');
+require_once('controller/My_report_head_spv.php');
 
 // My report rest api
 // My report rest api warehouse endpoint

@@ -22,13 +22,19 @@ class My_report_supervisor
     public function add_supervisor()
     {
         $req = Flight::request();
+        $id = $req->data->id;
         $supervisor_name = $req->data->supervisor_name;
         $supervisor_phone = $req->data->supervisor_phone;
         $supervisor_warehouse = $req->data->supervisor_warehouse;
         $supervisor_shift = $req->data->supervisor_shift;
         $is_disabled = $req->data->is_disabled;
-        // append to database
-        $this->result_from_model = $this->my_report_supervisor->append_supervisor($supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled);
+        if($id) {
+            // write warehouse
+            $this->result_from_model = $this->my_report_supervisor->write_supervisor($id, $supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled);
+        } else {
+            // append to database
+            $this->result_from_model = $this->my_report_supervisor->append_supervisor($supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled);
+        }
         // return the result
         return $this->response();
     }

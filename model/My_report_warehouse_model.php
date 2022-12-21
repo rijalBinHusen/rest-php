@@ -15,10 +15,7 @@ class My_report_warehouse_model
     }
     public function get_warehouses()
     {
-        return Flight::json(array(
-            'status' => 'success',
-            'data' => $this->database->getData($this->columns, $this->table)
-        ));
+        return $this->database->getData($this->columns, $this->table);
     }
     public function append_warehouse($warehouse_name, $warehouse_group)
     {
@@ -29,13 +26,7 @@ class My_report_warehouse_model
         $res = $this->database->writeData($this->table, "( id,  warehouse_name, warehouse_group )", 
                 "('$nextId', '$warehouse_name', '$warehouse_group'");
         // ternary either success or fail
-        $result = $res ? 
-                    $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$nextId'") 
-                    : 'Can not insert to database';
-        // return as json
-        return Flight::json(array(
-            'status' => $result
-        ));
+        return $res ? $nextId : 'Can not insert to database';
     }
     // public function deleteGuest($id) {
     //     return Flight::json(array(
@@ -43,14 +34,19 @@ class My_report_warehouse_model
     //     ));
     // }
     public function get_warehous_by_id($id) {
-        return Flight::json(array(
-            'status' => $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'")
-        ));
+        $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
+        return $res;
     }
     public function update_warehouse_by_id($keyValueToUpdate, $id) {
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
-        return Flight::json(array(
-            'status' => $res
-        ));
+        return $res;
+    }
+    public function write_warehouse($id, $warehouse_name, $warehouse_group)
+    {
+        // send to database model
+        $res = $this->database->writeData($this->table, "( id,  warehouse_name, warehouse_group )", 
+                "('$id', '$warehouse_name', '$warehouse_group'");
+        // ternary either success or fail
+        return $res ? true : false;
     }
 }

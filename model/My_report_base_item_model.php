@@ -25,12 +25,12 @@ class My_report_base_item_model
         // send to database model
         $res = $this->database->writeData(
             $this->table,
-            "( $this->columns )",
-            "('$nextId', '$kode', '$name', '$last_used'"
+            "$this->columns",
+            "'$nextId', '$kode', '$name', '$last_used'"
         );
         // ternary either success or fail
         return $res
-                    ? $nextId
+                    ? array( 'id' => $nextId)
                     : 'Can not insert to database';
     }
     public function delete_item($id) {
@@ -44,5 +44,17 @@ class My_report_base_item_model
     {
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
+    }
+    public function write_item($id, $kode, $name, $last_used)
+    {
+        $res = $this->database->writeData(
+            $this->table,
+            "$this->columns",
+            "'$id', '$kode', '$name', '$last_used'"
+        );
+        // ternary either success or fail
+        return $res
+                    ? true
+                    : false;
     }
 }

@@ -47,4 +47,15 @@ class My_report_supervisor_model
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }
+    public function write_supervisor($id, $supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled)
+    {
+        // send to database model
+        $res = $this->database->writeData(
+            $this->table,
+            "id,  supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled",
+            "'$id', '$supervisor_name', '$supervisor_phone', '$supervisor_warehouse', '$supervisor_shift', '$is_disabled'"
+        );
+        // ternary either success or fail
+        return $res ? true : false;
+    }
 }

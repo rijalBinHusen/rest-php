@@ -31,7 +31,7 @@ CREATE TABLE
         is_disabled BOOLEAN
     ) -- Head supervisor table
 CREATE TABLE
-    problems (
+    problem (
         id VARCHAR(30) PRIMARY KEY,
         warehouse_id VARCHAR(30) NOT NULL,
         supervisor_id VARCHAR(30) NOT NULL,

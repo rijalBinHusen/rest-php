@@ -48,4 +48,15 @@ class My_report_head_spv_model
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }
+    public function write_head($id, $head_name, $head_phone, $head_shift, $is_disabled)
+    {
+        // send to database model
+        $res = $this->database->writeData(
+            $this->table,
+            "id,  head_name, head_phone, head_shift, is_disabled",
+            "'$id', '$head_name', '$head_phone', '$head_shift', '$is_disabled'"
+        );
+        // ternary either success or fail
+        return $res ? true : false;
+    }
 }

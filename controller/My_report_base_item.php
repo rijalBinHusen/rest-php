@@ -22,12 +22,18 @@ class My_report_base_item
     public function add_item()
     {
         $req = Flight::request();
+        $id = $req->data->id;
         $kode = $req->data->kode;
         $name = $req->data->name;
         $last_used = $req->data->last_used;
         
-        // append to database
-        $this->result_from_model = $this->base_item_model->append_item($kode, $name, $last_used);
+        if($id) {
+            // write to database
+            $this->result_from_model = $this->base_item_model->write_item($id, $kode, $name, $last_used);
+        } else {
+            // append to database
+            $this->result_from_model = $this->base_item_model->append_item($kode, $name, $last_used);
+        }
         // return the result
         return $this->response();
     }

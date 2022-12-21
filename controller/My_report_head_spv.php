@@ -22,12 +22,18 @@ class My_report_head_spv
     public function add_head_spv()
     {
         $req = Flight::request();
+        $id = $req->data->id;
         $head_spv_name = $req->data->head_spv_name;
         $head_spv_phone = $req->data->head_spv_phone;
         $head_spv_shift = $req->data->head_spv_shift;
         $is_disabled = $req->data->is_disabled;
-        // append to database
-        $this->result_from_model = $this->my_report_head_spv->append_head($head_spv_name, $head_spv_phone, $head_spv_shift, $is_disabled);
+        if($id) {
+            // write to database
+            $this->result_from_model = $this->my_report_head_spv->write_head($id, $head_spv_name, $head_spv_phone, $head_spv_shift, $is_disabled);
+        } else {
+            // append to database
+            $this->result_from_model = $this->my_report_head_spv->append_head($head_spv_name, $head_spv_phone, $head_spv_shift, $is_disabled);
+        }
         // return the result
         return $this->response();
     }
