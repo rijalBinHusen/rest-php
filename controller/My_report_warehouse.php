@@ -21,7 +21,7 @@ class My_report_warehouse
         $id = $req->data->id;
         $warehouse_name = $req->data->warehouse_name;
         $warehouse_group = $req->data->warehouse_group;
-        if($id) {
+        if ($id) {
             // write the warehouse
             $this->result_from_model = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group);
         } else {
@@ -30,7 +30,8 @@ class My_report_warehouse
         }
         return $this->response();
     }
-    public function get_warehouse_by_id($id) {
+    public function get_warehouse_by_id($id)
+    {
         // myguest/8
         // the 8 will automatically becoming parameter $id
         $this->result_from_model = $this->my_report_warehouse->get_warehous_by_id($id);
@@ -41,7 +42,8 @@ class My_report_warehouse
     //     // the 8 will automatically becoming parameter $id
     //     return $this->my_report_warehouse->deleteGuest($id);
     // }
-    public function update_warehouse_by_id($id) {
+    public function update_warehouse_by_id($id)
+    {
         // catch the query string request
         $req = Flight::request();
         $warehouse_name = $req->data->warehouse_name;
@@ -49,23 +51,24 @@ class My_report_warehouse
         // initiate the column and values to update
         $keyValueToUpdate = null;
         // conditional warehouse_name
-        if($warehouse_name) {
-            $keyValueToUpdate = is_null($keyValueToUpdate) 
-                ? "warehouse_name='$warehouse_name'" 
+        if ($warehouse_name) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "warehouse_name='$warehouse_name'"
                 : "$keyValueToUpdate, warehouse_name='$warehouse_name'";
-        } 
+        }
 
         // conditional warehouse$warehouse_group
-        if($warehouse_group) {
-            $keyValueToUpdate = is_null($keyValueToUpdate) 
-                ? "warehouse_group='$warehouse_group'" 
+        if ($warehouse_group) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "warehouse_group='$warehouse_group'"
                 : "$keyValueToUpdate, warehouse_group='$warehouse_group'";
         }
         // send to myguest model
         $this->result_from_model = $this->my_report_warehouse->update_warehouse_by_id($keyValueToUpdate, $id);
         return $this->response();
     }
-    protected function response() {
+    protected function response()
+    {
         if ($this->result_from_model) {
             // set the http status code 200
             $this->code = 200;
@@ -80,6 +83,8 @@ class My_report_warehouse
             // the result
             $this->result
             // and the code
-        , $this->code);
+            ,
+            $this->code
+        );
     }
 }

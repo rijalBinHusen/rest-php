@@ -23,8 +23,11 @@ class My_report_warehouse_model
         // jika tidak ada last id
         $nextId = $lastId ? generateId($lastId['id']) : generateId('WAR22320000');
         // send to database model
-        $res = $this->database->writeData($this->table, "( id,  warehouse_name, warehouse_group )", 
-                "('$nextId', '$warehouse_name', '$warehouse_group'");
+        $res = $this->database->writeData(
+            $this->table,
+            "id,  warehouse_name, warehouse_group",
+            "'$nextId', '$warehouse_name', '$warehouse_group'"
+        );
         // ternary either success or fail
         return $res ? $nextId : 'Can not insert to database';
     }
@@ -33,19 +36,24 @@ class My_report_warehouse_model
     //         'status' => $this->database->deleteData($this->table, 'id', $id)
     //     ));
     // }
-    public function get_warehous_by_id($id) {
+    public function get_warehous_by_id($id)
+    {
         $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
         return $res;
     }
-    public function update_warehouse_by_id($keyValueToUpdate, $id) {
+    public function update_warehouse_by_id($keyValueToUpdate, $id)
+    {
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }
     public function write_warehouse($id, $warehouse_name, $warehouse_group)
     {
         // send to database model
-        $res = $this->database->writeData($this->table, "( id,  warehouse_name, warehouse_group )", 
-                "('$id', '$warehouse_name', '$warehouse_group'");
+        $res = $this->database->writeData(
+            $this->table,
+            "( id,  warehouse_name, warehouse_group )",
+            "('$id', '$warehouse_name', '$warehouse_group'"
+        );
         // ternary either success or fail
         return $res ? true : false;
     }
