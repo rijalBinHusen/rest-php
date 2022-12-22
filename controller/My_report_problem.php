@@ -26,6 +26,8 @@ class My_report_problem
             $this->result_from_model = $this->my_report_problem->get_problem_actives();
         } else if($periode1 and $periode2) {
             $this->result_from_model = $this->my_report_problem->get_problem_between_periode($periode1, $periode2);
+        }else if($item) {
+            $this->result_from_model = $this->my_report_problem->get_problem_by_item_kode($item);
         }
         // return result of response function
         return $this->response();
