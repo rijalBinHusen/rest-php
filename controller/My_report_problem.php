@@ -81,20 +81,20 @@ class My_report_problem
         //     $shift_selesai
         // ));
     }
-    // public function get_supervisor_by_id($id)
-    // {
+    public function get_problem_by_id($id)
+    {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        // append to database
+        $this->result_from_model = $this->my_report_problem->get_problem_by_id($id);
+        // return the result
+        return $this->response();
+    }
+    // public function deleteGuest($id) {
     //     // myguest/8
     //     // the 8 will automatically becoming parameter $id
-    //     // append to database
-    //     $this->result_from_model = $this->my_report_problem->get_supervisor_by_id($id);
-    //     // return the result
-    //     return $this->response();
+    //     return $this->my_report_problem->deleteGuest($id);
     // }
-    // // public function deleteGuest($id) {
-    // //     // myguest/8
-    // //     // the 8 will automatically becoming parameter $id
-    // //     return $this->my_report_problem->deleteGuest($id);
-    // // }
     // public function update_supervisor_by_id($id)
     // {
     //     // catch the query string request

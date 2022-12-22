@@ -69,10 +69,11 @@ class sqldatabase
         // initiate array
         $result = null;
         // we are gonna split string as array, so we can loop it bruh
-        $arrOfColumns = explode(", ", $allColumns);
+        $replace_all_space_from_columns = trim(preg_replace('/\s\s+/', ' ', $allColumns));
+        $arrOfColumns = explode(", ", $replace_all_space_from_columns);
         try {
-            $query = "SELECT $allColumns from $table WHERE $columnToSearch = $criteria";
-            $query = $this->conn->query($query);
+            $sql = "SELECT $allColumns from $table WHERE $columnToSearch = $criteria";
+            $query = $this->conn->query($sql);
             // set the resulting array to associative
             while ($row = $query->fetch()) {
                 $tempResult = array();
