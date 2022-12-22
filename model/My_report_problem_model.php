@@ -33,6 +33,45 @@ class My_report_problem_model
     // get problem between two periode
     public function get_problem_between_periode($periode1, $periode2)
     {
+        $sql = "SELECT 
+            problem.id, 
+            warehouse.warehouse_name, 
+            base_item.item_name, 
+            problem.masalah,
+            problem.tanggal_mulai, 
+            supervisor.supervisor_name,
+            problem.tanggal_selesai
+            FROM problem 
+            INNER JOIN warehouse ON problem.warehouse_id=warehouse.id 
+            INNER JOIN base_item ON problem.item_kode=base_item.item_kode 
+            INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
+            WHERE problem.tanggal_mulai >= $periode1 AND problem.tanggal_mulai <= $periode2
+            ";
+        try {
+            // variabel that would contain result
+            $result = array();
+            // Prepare statement
+            $stmt = $this->database->conn->prepare($sql);
+            // execute the statement
+            $stmt->execute();
+            // fetch the statement and extract row
+            while ($row = $stmt->fetch()) {
+                array_push($result, array(
+                    'id' => $row['id'],
+                    'warehouse' => $row['warehouse_name'],
+                    'item' => $row['item_name'],
+                    'masalah' => $row['masalah'],
+                    'tanggal_mulai' => $row['tanggal_mulai'],
+                    'supervisor' => $row['supervisor_name'],
+                    'tanggal_selesai' => $row['tanggal_selesai'],
+                ));
+            }
+            // return $sql;
+            return $result;
+        } catch (PDOException $e) {
+            $this->database->log_error("get problem active", "problem", $e->getMessage());
+            return false;
+        }
         return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_mulai >= $periode1 AND tanggal_mulai <= $periode2");
     }
     // get active problem

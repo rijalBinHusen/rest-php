@@ -24,6 +24,8 @@ class My_report_problem
         // sennd data tomodel and accept the result
         if(!is_null($status)) {
             $this->result_from_model = $this->my_report_problem->get_problem_actives();
+        } else if($periode1 and $periode2) {
+            $this->result_from_model = $this->my_report_problem->get_problem_between_periode($periode1, $periode2);
         }
         // return result of response function
         return $this->response();
