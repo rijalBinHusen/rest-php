@@ -1,0 +1,63 @@
+<?php
+require_once(__DIR__ . '/database.php');
+require_once(__DIR__ . '/generator_id.php');
+
+class My_report_base_file_model
+{
+    protected $database;
+
+    var $table = "base_file";
+    var $columns = "id, periode, warehouse_id, file_name, stock_sheet, clock_sheet, is_imported";
+
+    function __construct()
+    {
+        $this->database = new sqldatabase();
+    }
+    // public function get_items()
+    // {
+    //     return $this->database->getAllData($this->columns, $this->table);
+    // }
+    public function append_base_file($id, $periode, $warehouse_id)
+    {
+        $nextId = $id;
+        if(is_null($id)) {
+            $lastId = $this->database->getLastId($this->table);
+            // jika tidak ada last id
+            $nextId = $lastId ? generateId($lastId['id']) : generateId('BFL22320000');
+        }
+        // send to database model
+        $res = $this->database->writeData(
+            $this->table,
+            "$this->columns",
+            "'$nextId', '$periode', '$warehouse_id', '', '', '', 0"
+        );
+        // ternary either success or fail
+        return $res
+                    ? array( 'id' => $nextId)
+                    : 'Can not insert to database';
+    }
+    // public function delete_item($id) {
+    //     return $this->database->deleteData($this->table, 'id', "'$id'");
+    // }
+    // public function get_item_by_id($id) {
+    //     $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
+    //     return $res;
+    // }
+    // public function update_item_by_id($keyValueToUpdate, $id)
+    // {
+    //     $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
+    //     return $res;
+    // }
+    // public function write_item($id, $kode, $name, $last_used)
+    // {
+    //     $res = $this->database->writeData(
+    //         $this->table,
+    //         "$this->columns",
+    //         "'$id', '$kode', '$name', '$last_used'"
+    //     );
+    //     // ternary either success or fail
+    //     return $res
+    //                 ? true
+    //                 : false;
+    // }
+}

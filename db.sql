@@ -56,3 +56,13 @@ CREATE TABLE problem (
     tanggal_selesai FLOAT,
     shift_selesai TINYINT
 ); -- problem
+CREATE TABLE
+    base_file (
+        id VARCHAR(30) PRIMARY KEY,
+        periode FLOAT,
+        warehouse_id VARCHAR(30) NOT NULL,
+        file_name VARCHAR(30) NOT NULL,
+        stock_sheet VARCHAR(30),
+        clock_sheet VARCHAR(30),
+        is_imported BOOLEAN
+    ) -- base_file

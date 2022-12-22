@@ -1049,6 +1049,23 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of base stock end point
+  /base_file:
+    post:
+      tags:
+      - base file
+      summary: Lets a user post a new base file
+      requestBody:
+        $ref: '#/components/requestBodies/Base_file'
+      responses:
+        '200':
+          description: Successfully created a new base file
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
   /base_files:
     parameters:
         - name: periode1
@@ -1080,7 +1097,7 @@ paths:
                   $ref: '#/components/schemas/Base_file'
         '400':
           $ref: '#/components/responses/400Error'
-  /base_files/{id}:
+  /base_file/{id}:
     parameters:
         - name: id
           in: path
@@ -1121,23 +1138,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200Success'
-
-        '400':
-          $ref: '#/components/responses/400Error'
-  /base_file:
-    post:
-      tags:
-      - base file
-      summary: Lets a user post a new base file
-      requestBody:
-        $ref: '#/components/requestBodies/Base_file'
-      responses:
-        '200':
-          description: Successfully created a new base file
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Return_after_post'
 
         '400':
           $ref: '#/components/responses/400Error'
@@ -1667,7 +1667,7 @@ components:
           type: string
         clock_sheet:
           type: string
-        imported:
+        is_imported:
           type: boolean
     Base_clock:
       type: object
@@ -2035,7 +2035,7 @@ components:
                   type: string
                 clock_sheet:
                   type: string
-                imported:
+                is_imported:
                   type: boolean
     Base_clock:
         required: true
