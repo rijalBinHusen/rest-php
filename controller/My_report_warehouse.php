@@ -21,12 +21,13 @@ class My_report_warehouse
         $id = $req->data->id;
         $warehouse_name = $req->data->warehouse_name;
         $warehouse_group = $req->data->warehouse_group;
+        $warehouse_supervisors = $req->data->warehouse_supervisors;
         if ($id) {
             // write the warehouse
-            $this->result_from_model = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group);
+            $this->result_from_model = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors);
         } else {
             // append warehouse
-            $this->result_from_model = $this->my_report_warehouse->append_warehouse($warehouse_name, $warehouse_group);
+            $this->result_from_model = $this->my_report_warehouse->append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors);
         }
         return $this->response();
     }

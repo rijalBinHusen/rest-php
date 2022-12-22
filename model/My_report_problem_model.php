@@ -36,53 +36,54 @@ class My_report_problem_model
         return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_mulai >= $periode1 AND tanggal_mulai <= $periode2");
     }
     // get active problem
-    public function get_problem_active()
-    {
-        /* data that we need:
-            id, warehouse, item_name, masalah, tanggal_mulai, supervisor
-        */
-        // table that we need to join from another
-        $warehouse = "warehouse.warehouse_name";
-        $item = "base_item.item_name";
-        $supervisor = "supervisor.supervisor_name";
-        $problem = "problem.id, problem.masalah, problem.tanggal_mulai";
-        // supervisor.id, warehouse.id, head_spv.id
-        $sql = "SELECT $problem, $warehouse, $item, $supervisor
-        FROM problem
-        INNER JOIN warehouse ON problem.warehouse_id=warehouse.id
-        INNER JOIN item ON problem.item_kode=base_item.item_kode
-        INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
-        ";
-        // variabel that would contain result
-        $result = array();
-        // split the column string as array
-        $arrOfColumns = explode(", ", $this->columns);
-        try {
-            // Prepare statement
-            $stmt = $this->database->conn->prepare($sql);
-            // execute the statement
-            $stmt->execute();
-            // fetch the statement and extract row
-            while ($row = $stmt->fetch()) {
-                // $tempResult = array();
-                // // iterate the columns
-                // foreach ($arrOfColumns as $column) {
-                //     // tempResult { tempResult: row }
-                //     $tempResult[$column] = $row[$column];
-                // }
-                // push to result
-                array_push($result, $row);
-            }
-            // return $sql;
-            return $result;
-        } catch (PDOException $e) {
-            $this->database->log_error("get problem active", "problem", $e->getMessage());
-            return false;
-        }
-        return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_selesai=null");
-    }
+    // public function get_problem_active()
+    // {
+    //     /* data that we need:
+    //         id, warehouse, item_name, masalah, tanggal_mulai, supervisor
+    //     */
+    //     // table that we need to join from another
+    //     $warehouse = "warehouse.warehouse_name";
+    //     $item = "base_item.item_name";
+    //     $supervisor = "supervisor.supervisor_name";
+    //     $problem = "problem.id, problem.masalah, problem.tanggal_mulai";
+    //     // supervisor.id, warehouse.id, head_spv.id
+    //     $sql = "SELECT $problem, $warehouse, $item, $supervisor
+    //     FROM problem
+    //     INNER JOIN warehouse ON problem.warehouse_id=warehouse.id
+    //     INNER JOIN item ON problem.item_kode=base_item.item_kode
+    //     INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
+    //     ";
+    //     // variabel that would contain result
+    //     $result = array();
+    //     // split the column string as array
+    //     $arrOfColumns = explode(", ", $this->columns);
+    //     try {
+    //         // Prepare statement
+    //         $stmt = $this->database->conn->prepare($sql);
+    //         // execute the statement
+    //         $stmt->execute();
+    //         // fetch the statement and extract row
+    //         while ($row = $stmt->fetch()) {
+    //             // $tempResult = array();
+    //             // // iterate the columns
+    //             // foreach ($arrOfColumns as $column) {
+    //             //     // tempResult { tempResult: row }
+    //             //     $tempResult[$column] = $row[$column];
+    //             // }
+    //             // push to result
+    //             array_push($result, $row);
+    //         }
+    //         // return $sql;
+    //         return $result;
+    //     } catch (PDOException $e) {
+    //         $this->database->log_error("get problem active", "problem", $e->getMessage());
+    //         return false;
+    //     }
+    //     return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_selesai=null");
+    // }
     // create new problem
     public function append_problem(
+        $id,
         $warehouse_id,
         $supervisor_id,
         $head_spv_id,
@@ -100,10 +101,14 @@ class My_report_problem_model
         $tanggal_selesai,
         $shift_selesai
     ) {
-        $lastId = $this->database->getLastId($this->table);
-        // jika tidak ada last id
-        $nextId = $lastId ? generateId($lastId['id']) : generateId('SUP22320000');
+        $nextId = $id;
+        if(is_null($id)) {
+            $lastId = $this->database->getLastId($this->table);
+            // jika tidak ada last id
+            $nextId = $lastId ? generateId($lastId['id']) : generateId('SUP22320000');
+        }
         // the values
+        
         $values = "
                     '$nextId', 
                     '$warehouse_id', 

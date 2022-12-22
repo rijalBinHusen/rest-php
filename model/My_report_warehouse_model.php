@@ -7,7 +7,7 @@ class My_report_warehouse_model
     protected $database;
 
     var $table = "warehouse";
-    var $columns = "id, warehouse_name, warehouse_group";
+    var $columns = "id, warehouse_name, warehouse_group, warehouse_supervisors";
 
     function __construct()
     {
@@ -17,7 +17,7 @@ class My_report_warehouse_model
     {
         return $this->database->getData($this->columns, $this->table);
     }
-    public function append_warehouse($warehouse_name, $warehouse_group)
+    public function append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
         $lastId = $this->database->getLastId($this->table);
         // jika tidak ada last id
@@ -25,8 +25,8 @@ class My_report_warehouse_model
         // send to database model
         $res = $this->database->writeData(
             $this->table,
-            "id,  warehouse_name, warehouse_group",
-            "'$nextId', '$warehouse_name', '$warehouse_group'"
+            $this->columns,
+            "'$nextId', '$warehouse_name', '$warehouse_group', $warehouse_supervisors"
         );
         // ternary either success or fail
         return $res ? $nextId : 'Can not insert to database';
@@ -46,13 +46,13 @@ class My_report_warehouse_model
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }
-    public function write_warehouse($id, $warehouse_name, $warehouse_group)
+    public function write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
         // send to database model
         $res = $this->database->writeData(
             $this->table,
-            "( id,  warehouse_name, warehouse_group )",
-            "('$id', '$warehouse_name', '$warehouse_group'"
+            $this->columns,
+            "'$id', '$warehouse_name', '$warehouse_group', '$warehouse_supervisors'"
         );
         // ternary either success or fail
         return $res ? true : false;

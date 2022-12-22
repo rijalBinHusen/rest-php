@@ -30,23 +30,22 @@ CREATE TABLE
         head_shift INT(50),
         is_disabled BOOLEAN
     ) -- Head supervisor table
-CREATE TABLE
-    problem (
-        id VARCHAR(30) PRIMARY KEY,
-        warehouse_id VARCHAR(30) NOT NULL,
-        supervisor_id VARCHAR(30) NOT NULL,
-        head_spv_id INT(50),
-        item_kode VARCHAR NOT NULL,
-        tanggal_mulai INT(30),
-        shift_mulai INT(1),
-        pic VARCHAR(100),
-        dl INT(30),
-        masalah TEXT,
-        sumber_masalah TEXT,
-        solusi TEXT,
-        solusi_panjang TEXT,
-        dl_panjang INT(30),
-        pic_panjang VARCHAR(100),
-        tanggal_selesai INT(30),
-        shift_selesai INT(30)
-    ) -- problem
+CREATE TABLE problem (
+    id VARCHAR(30) PRIMARY KEY,
+    warehouse_id varchar(255),
+    supervisor_id varchar(255),
+    head_spv_id varchar(255),
+    item_kode varchar(255),
+    tanggal_mulai FLOAT,
+    shift_mulai int,
+    pic varchar (255),
+    dl FLOAT,
+    masalah text,
+    sumber_masalah text,
+    solusi text,
+    solusi_panjang text,
+    dl_panjang FLOAT,
+    pic_panjang varchar(255),
+    tanggal_selesai FLOAT,
+    shift_selesai int
+); -- problem
