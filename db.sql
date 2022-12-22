@@ -1,10 +1,17 @@
+CREATE TABLE warehouse (
+    id VARCHAR(30) PRIMARY KEY,
+    warehouse_name VARCHAR(255),
+    warehouse_group VARCHAR(255),
+    warehouse_supervisors VARCHAR(255)
+)
+
 CREATE TABLE
     supervisor (
         id VARCHAR(30) PRIMARY KEY,
         supervisor_name VARCHAR(30) NOT NULL,
         supervisor_phone VARCHAR(30) NOT NULL,
         supervisor_warehouse VARCHAR(50),
-        supervisor_shift INT(50),
+        supervisor_shift TINYINT,
         is_disabled BOOLEAN
     ) -- Supervisor table
 CREATE TABLE
@@ -20,14 +27,14 @@ CREATE TABLE
         id VARCHAR(30) PRIMARY KEY,
         item_kode VARCHAR(30) NOT NULL,
         item_name VARCHAR(30) NOT NULL,
-        last_used INT(50)
+        last_used FLOAT
     ) -- base_item
 CREATE TABLE
     head_spv (
         id VARCHAR(30) PRIMARY KEY,
         head_name VARCHAR(30) NOT NULL,
         head_phone VARCHAR(30) NOT NULL,
-        head_shift INT(50),
+        head_shift TINYINT,
         is_disabled BOOLEAN
     ) -- Head supervisor table
 CREATE TABLE problem (
@@ -37,7 +44,7 @@ CREATE TABLE problem (
     head_spv_id varchar(255),
     item_kode varchar(255),
     tanggal_mulai FLOAT,
-    shift_mulai int,
+    shift_mulai TINYINT,
     pic varchar (255),
     dl FLOAT,
     masalah text,
@@ -47,5 +54,5 @@ CREATE TABLE problem (
     dl_panjang FLOAT,
     pic_panjang varchar(255),
     tanggal_selesai FLOAT,
-    shift_selesai int
+    shift_selesai TINYINT
 ); -- problem

@@ -39,7 +39,7 @@ class My_report_problem_model
     // public function get_problem_active()
     // {
     //     /* data that we need:
-    //         id, warehouse, item_name, masalah, tanggal_mulai, supervisor
+    //         idv, warehousev, item_namev, masalahv, tanggal_mulaiv, supervisor
     //     */
     //     // table that we need to join from another
     //     $warehouse = "warehouse.warehouse_name";
@@ -50,7 +50,7 @@ class My_report_problem_model
     //     $sql = "SELECT $problem, $warehouse, $item, $supervisor
     //     FROM problem
     //     INNER JOIN warehouse ON problem.warehouse_id=warehouse.id
-    //     INNER JOIN item ON problem.item_kode=base_item.item_kode
+    //     INNER JOIN base_item ON problem.item_kode=base_item.item_kode
     //     INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
     //     ";
     //     // variabel that would contain result
@@ -142,9 +142,95 @@ class My_report_problem_model
     // }
     // get problem by id
     public function get_problem_by_id($id)
-    {
-        $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
-        return $res;
+    {   
+        /*  SELECT 
+            problem.id, 
+            warehouse.warehouse_name, 
+            supervisor.supervisor_name,
+            head_spv.head_name,
+            base_item.item_name, 
+            problem.tanggal_mulai, 
+            problem.shift_mulai,
+            problem.pic,
+            problem.dl,
+            problem.masalah, 
+            problem.sumber_masalah,
+            problem.solusi,
+            problem.solusi_panjang,
+            problem.dl_panjang,
+            problem.pic_panjang,
+            problem.tanggal_selesai,
+            problem.shift_selesai
+            FROM problem 
+            INNER JOIN warehouse ON problem.warehouse_id=warehouse.id 
+            INNER JOIN base_item ON problem.item_kode=base_item.item_kode 
+            INNER JOIN supervisor ON problem.supervisor_id=supervisor.id 
+            INNER JOIN head_spv ON problem.head_spv_id=head_spv.id
+            WHERE problem.id = 'PRB22050000' 
+        */
+        $sql = "
+                SELECT 
+                problem.id, 
+                warehouse.warehouse_name, 
+                supervisor.supervisor_name,
+                head_spv.head_name,
+                base_item.item_name, 
+                problem.tanggal_mulai, 
+                problem.shift_mulai,
+                problem.pic,
+                problem.dl,
+                problem.masalah, 
+                problem.sumber_masalah,
+                problem.solusi,
+                problem.solusi_panjang,
+                problem.dl_panjang,
+                problem.pic_panjang,
+                problem.tanggal_selesai,
+                problem.shift_selesai
+                FROM problem 
+                INNER JOIN warehouse ON problem.warehouse_id=warehouse.id 
+                INNER JOIN base_item ON problem.item_kode=base_item.item_kode 
+                INNER JOIN supervisor ON problem.supervisor_id=supervisor.id 
+                INNER JOIN head_spv ON problem.head_spv_id=head_spv.id
+                WHERE problem.id = '$id'
+            ";
+        try {
+            // Prepare statement
+            $stmt = $this->database->conn->prepare($sql);
+            // execute the statement
+            $stmt->execute();
+            // fetch the statement and extract row
+            $row = $stmt->fetch();
+            // extract row
+            $result = array(
+                'id' => $row['id'],
+                'warehouse' => $row['warehouse_name'],
+                'supervisor' => $row['supervisor_name'],
+                'head_spv' => $row['head_name'],
+                'item' => $row['item_name'],
+                'tanggal_mulai' => $row['tanggal_mulai'],
+                'pic' => $row['pic'],
+                'dl' => $row['dl'],
+                'masalah' => $row['masalah'],
+                'sumber_masalah' => $row['sumber_masalah'],
+                'solusi' => $row['solusi'],
+                'solusi_panjang' => $row['solusi_panjang'],
+                'dl_panjang' => $row['dl_panjang'],
+                'pic_panjang' => $row['pic_panjang'],
+                'tanggal_selesai' => $row['tanggal_selesai'],
+                'shift_selesai' => $row['shift_selesai'],
+                'shift_mulai' => $row['shift_mulai'],
+            );
+            
+            // return $sql;
+            return $result;
+        } catch (PDOException $e) {
+            $this->database->log_error("get problem active", "problem", $e->getMessage());
+            return false;
+        }
+
+        // $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
+        // return $res;
     }
     // update problem by id
     public function update_problem_by_id($keyValueToUpdate, $id)
