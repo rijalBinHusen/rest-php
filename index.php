@@ -43,7 +43,7 @@ Flight::route('PUT /myreport/head_spv/@id', array($myreport_head_spv, 'update_he
 
 // my report problem
 $myreport_problem = new My_report_problem();
-// Flight::route('GET /myreport/problems', array($myreport_problem, 'get_problems'));
+Flight::route('GET /myreport/problems', array($myreport_problem, 'get_problems'));
 Flight::route('POST /myreport/problem', array($myreport_problem, 'add_problem'));
 Flight::route('GET /myreport/problem/@id', array($myreport_problem, 'get_problem_by_id'));
 // Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_head_problem_id'));

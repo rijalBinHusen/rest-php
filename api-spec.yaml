@@ -51,8 +51,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Warehouse'
-        '400':
-          $ref: '#/components/responses/400Error'
+        '404':
+          description: Warehouses not found
   /warehouse:
     post:
       tags:
@@ -291,7 +291,23 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Problem'
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: 'PRO22500001'
+                    warehouse: 
+                      type: string
+                    supervisor: 
+                      type: string
+                    item:
+                      type: string
+                    tanggal_mulai:
+                      type: number
+                    masalah:
+                      type: string
+                    tanggal_selesai: 
+                      type: number
         '400':
           $ref: '#/components/responses/400Error'
   # End of problem end point

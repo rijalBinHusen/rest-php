@@ -12,13 +12,22 @@ class My_report_problem
     {
         $this->my_report_problem = new My_report_problem_model();
     }
-    // public function get_supervisors()
-    // {
-    //     // sennd data tomodel and accept the result
-    //     $this->result_from_model = $this->my_report_problem->get_supervisors();
-    //     // return result of response function
-    //     return $this->response();
-    // }
+    public function get_problems()
+    {
+        $req = Flight::request();
+        $status = $req->query->status;
+        $periode1 = $req->query->periode1;
+        $periode2 = $req->query->periode2;
+        $warehouse = $req->query->warehouse;
+        $supervisor = $req->query->supervisor;
+        $item = $req->query->item;
+        // sennd data tomodel and accept the result
+        if(!is_null($status)) {
+            $this->result_from_model = $this->my_report_problem->get_problem_actives();
+        }
+        // return result of response function
+        return $this->response();
+    }
     public function add_problem()
     {
         $req = Flight::request();
@@ -85,7 +94,6 @@ class My_report_problem
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        // append to database
         $this->result_from_model = $this->my_report_problem->get_problem_by_id($id);
         // return the result
         return $this->response();

@@ -36,51 +36,51 @@ class My_report_problem_model
         return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_mulai >= $periode1 AND tanggal_mulai <= $periode2");
     }
     // get active problem
-    // public function get_problem_active()
-    // {
+    public function get_problem_actives()
+    {
     //     /* data that we need:
-    //         idv, warehousev, item_namev, masalahv, tanggal_mulaiv, supervisor
+    //         id, warehouse, item_name, masalah, tanggal_mulai, supervisor
     //     */
-    //     // table that we need to join from another
-    //     $warehouse = "warehouse.warehouse_name";
-    //     $item = "base_item.item_name";
-    //     $supervisor = "supervisor.supervisor_name";
-    //     $problem = "problem.id, problem.masalah, problem.tanggal_mulai";
-    //     // supervisor.id, warehouse.id, head_spv.id
-    //     $sql = "SELECT $problem, $warehouse, $item, $supervisor
-    //     FROM problem
-    //     INNER JOIN warehouse ON problem.warehouse_id=warehouse.id
-    //     INNER JOIN base_item ON problem.item_kode=base_item.item_kode
-    //     INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
-    //     ";
-    //     // variabel that would contain result
-    //     $result = array();
-    //     // split the column string as array
-    //     $arrOfColumns = explode(", ", $this->columns);
-    //     try {
-    //         // Prepare statement
-    //         $stmt = $this->database->conn->prepare($sql);
-    //         // execute the statement
-    //         $stmt->execute();
-    //         // fetch the statement and extract row
-    //         while ($row = $stmt->fetch()) {
-    //             // $tempResult = array();
-    //             // // iterate the columns
-    //             // foreach ($arrOfColumns as $column) {
-    //             //     // tempResult { tempResult: row }
-    //             //     $tempResult[$column] = $row[$column];
-    //             // }
-    //             // push to result
-    //             array_push($result, $row);
-    //         }
-    //         // return $sql;
-    //         return $result;
-    //     } catch (PDOException $e) {
-    //         $this->database->log_error("get problem active", "problem", $e->getMessage());
-    //         return false;
-    //     }
-    //     return $this->database->get_data_by_where_query($this->columns, $this->table, "tanggal_selesai=null");
-    // }
+        $sql = "SELECT 
+            problem.id, 
+            warehouse.warehouse_name, 
+            base_item.item_name, 
+            problem.masalah,
+            problem.tanggal_mulai, 
+            supervisor.supervisor_name,
+            problem.tanggal_selesai
+            FROM problem 
+            INNER JOIN warehouse ON problem.warehouse_id=warehouse.id 
+            INNER JOIN base_item ON problem.item_kode=base_item.item_kode 
+            INNER JOIN supervisor ON problem.supervisor_id=supervisor.id
+            WHERE problem.tanggal_selesai = 0 
+            ";
+        try {
+            // variabel that would contain result
+            $result = array();
+            // Prepare statement
+            $stmt = $this->database->conn->prepare($sql);
+            // execute the statement
+            $stmt->execute();
+            // fetch the statement and extract row
+            while ($row = $stmt->fetch()) {
+                array_push($result, array(
+                    'id' => $row['id'],
+                    'warehouse' => $row['warehouse_name'],
+                    'item' => $row['item_name'],
+                    'masalah' => $row['masalah'],
+                    'tanggal_mulai' => $row['tanggal_mulai'],
+                    'supervisor' => $row['supervisor_name'],
+                    'tanggal_selesai' => $row['tanggal_selesai'],
+                ));
+            }
+            // return $sql;
+            return $result;
+        } catch (PDOException $e) {
+            $this->database->log_error("get problem active", "problem", $e->getMessage());
+            return false;
+        }
+    }
     // create new problem
     public function append_problem(
         $id,
@@ -228,9 +228,6 @@ class My_report_problem_model
             $this->database->log_error("get problem active", "problem", $e->getMessage());
             return false;
         }
-
-        // $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
-        // return $res;
     }
     // update problem by id
     public function update_problem_by_id($keyValueToUpdate, $id)
