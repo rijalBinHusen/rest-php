@@ -46,40 +46,64 @@ class My_report_base_file
     //     $this->result_from_model = $this->base_file_model->delete_item($id);
     //     return $this->response();
     // }
-    // public function update_item_by_id($id)
-    // {
-    //     // catch the query string request
-    //     $req = Flight::request();
-    //     $kode = $req->data->kode;
-    //     $name = $req->data->name;
-    //     $last_used = $req->data->last_used;
+    public function update_base_file_by_id($id)
+    {
+        // catch the query string request
+        $req = Flight::request();
+        $periode = $req->data->periode;
+        $warehouse_id = $req->data->warehouse_id;
+        $file_name = $req->data->file_name;
+        $clock_sheet = $req->data->clock_sheet;
+        $stock_sheet = $req->data->stock_sheet;
+        $is_imported = $req->data->is_imported;
         
-    //     // initiate the column and values to update
-    //     $keyValueToUpdate = null;
-    //     // conditional kode
-    //     if ($kode) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate)
-    //             ? "item_kode='$kode'"
-    //             : "$keyValueToUpdate, item_kode='$kode'";
-    //     }
+        // initiate the column and values to update
+        $keyValueToUpdate = null;
+        // conditional periode
+        if ($periode) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "periode='$periode'"
+                : "$keyValueToUpdate, periode='$periode'";
+        }
 
-    //     // conditional last_used
-    //     if ($last_used) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate)
-    //             ? "last_used='$last_used'"
-    //             : "$keyValueToUpdate, last_used='$last_used'";
-    //     }
+        // conditional warehouse_id
+        if ($warehouse_id) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "warehouse_id='$warehouse_id'"
+                : "$keyValueToUpdate, warehouse_id='$warehouse_id'";
+        }
 
-    //     // conditional name
-    //     if ($name) {
-    //         $keyValueToUpdate = is_null($keyValueToUpdate)
-    //             ? "item_name='$name'"
-    //             : "$keyValueToUpdate, item_name='$name'";
-    //     }
-    //     // send to myguest model
-    //     $this->result_from_model = $this->base_file_model->update_item_by_id($keyValueToUpdate, $id);
-    //     return $this->response();
-    // }
+        // conditional file_name
+        if ($file_name) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "file_name='$file_name'"
+                : "$keyValueToUpdate, file_name='$file_name'";
+        }
+
+        // conditional clock_sheet
+        if ($clock_sheet) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "clock_sheet='$clock_sheet'"
+                : "$keyValueToUpdate, clock_sheet='$clock_sheet'";
+        }
+
+        // conditional clock_sheet
+        if ($stock_sheet) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "stock_sheet='$stock_sheet'"
+                : "$keyValueToUpdate, stock_sheet='$stock_sheet'";
+        }
+
+        // conditional is_imported
+        if ($is_imported) {
+            $keyValueToUpdate = is_null($keyValueToUpdate)
+                ? "is_imported='$is_imported'"
+                : "$keyValueToUpdate, is_imported='$is_imported'";
+        }
+        // send to myguest model
+        $this->result_from_model = $this->base_file_model->update_base_file_by_id($keyValueToUpdate, $id);
+        return $this->response();
+    }
     protected function response()
     {
         if ($this->result_from_model) {

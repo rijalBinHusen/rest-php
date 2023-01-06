@@ -43,11 +43,11 @@ class My_report_base_file_model
         $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
         return $res;
     }
-    // public function update_item_by_id($keyValueToUpdate, $id)
-    // {
-    //     $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
-    //     return $res;
-    // }
+    public function update_base_file_by_id($keyValueToUpdate, $id)
+    {
+        $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
+        return $res;
+    }
     // public function write_item($id, $kode, $name, $last_used)
     // {
     //     $res = $this->database->writeData(

@@ -56,7 +56,7 @@ $myreport_base_file = new My_report_base_file();
 Flight::route('GET /myreport/base_files', array($myreport_base_file, 'get_base_files'));
 Flight::route('POST /myreport/base_file', array($myreport_base_file, 'add_base_file'));
 Flight::route('GET /myreport/base_file/@id', array($myreport_base_file, 'get_base_file_by_id'));
-// Flight::route('PUT /myreport/base_file/@id', array($myreport_base_file, 'update_base_file_by_id'));
+Flight::route('PUT /myreport/base_file/@id', array($myreport_base_file, 'update_base_file_by_id'));
 // Flight::route('DELETE /myreport/base_file/@id', array($myreport_base_file, 'delete_base_file_by_id'));
 // my report base file
 
