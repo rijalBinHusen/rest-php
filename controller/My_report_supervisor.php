@@ -7,6 +7,7 @@ class My_report_supervisor
     protected $result = "Failed to response request";
     protected $my_report_supervisor;
     protected $result_from_model = null;
+    protected $code = null;
 
     function __construct()
     {

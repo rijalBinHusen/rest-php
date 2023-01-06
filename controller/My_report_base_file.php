@@ -7,6 +7,7 @@ class My_report_base_file
     protected $result = "Failed to response request";
     protected $base_file_model;
     protected $result_from_model = null;
+    protected $code = null;
 
     function __construct()
     {
@@ -30,15 +31,15 @@ class My_report_base_file
         // return the result
         return $this->response();
     }
-    // public function get_item_by_id($id)
-    // {
-    //     // myguest/8
-    //     // the 8 will automatically becoming parameter $id
-    //     // append to database
-    //     $this->result_from_model = $this->base_file_model->get_item_by_id($id);
-    //     // return the result
-    //     return $this->response();
-    // }
+    public function get_base_file_by_id($id)
+    {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        // append to database
+        $this->result_from_model = $this->base_file_model->get_base_file_by_id($id);
+        // return the result
+        return $this->response();
+    }
     // public function delete_item($id) {
     //     // myguest/8
     //     // the 8 will automatically becoming parameter $id
@@ -96,5 +97,17 @@ class My_report_base_file
             $this->result
             // and the code
         , $this->code);
+    }
+    public function get_base_files_between_two_periode()
+    {
+        // catch the query string request
+        $req = Flight::request();
+        // get the url query periode 1
+        $periode1 = $req->query->periode1;
+        $periode2 = $req->query->periode2;
+        
+        // send to myguest model
+        $this->result_from_model = $this->base_file_model->get_base_files_between_two_periode($periode1, $periode2);
+        return $this->response();
     }
 }

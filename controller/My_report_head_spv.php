@@ -7,6 +7,7 @@ class My_report_head_spv
     protected $result = "Failed to response request";
     protected $my_report_head_spv;
     protected $result_from_model = null;
+    protected $code = null;
 
     function __construct()
     {

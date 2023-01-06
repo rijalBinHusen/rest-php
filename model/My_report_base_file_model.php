@@ -39,10 +39,10 @@ class My_report_base_file_model
     // public function delete_item($id) {
     //     return $this->database->deleteData($this->table, 'id', "'$id'");
     // }
-    // public function get_item_by_id($id) {
-    //     $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
-    //     return $res;
-    // }
+    public function get_base_file_by_id($id) {
+        $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
+        return $res;
+    }
     // public function update_item_by_id($keyValueToUpdate, $id)
     // {
     //     $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
@@ -60,4 +60,9 @@ class My_report_base_file_model
     //                 ? true
     //                 : false;
     // }
+    public function get_base_files_between_two_periode($periode1, $periode2) {
+        // $database = new sqldatabase()
+        $res = $this->database->get_data_by_where_query($this->columns, $this->table, "periode >= $periode1 AND periode <= $periode2");
+        return $res;
+    }
 }

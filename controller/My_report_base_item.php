@@ -7,6 +7,7 @@ class My_report_base_item
     protected $result = "Failed to response request";
     protected $base_item_model;
     protected $result_from_model = null;
+    protected $code = null;
 
     function __construct()
     {
