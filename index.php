@@ -61,6 +61,11 @@ Flight::route('DELETE /myreport/base_file/@id', array($myreport_base_file, 'dele
 // my report base file
 
 // my report field problem
+// $myreport_problem = new My_report_problem();
+// Flight::route('GET /myreport/problems', array($myreport_problem, 'get_problems'));
+// Flight::route('POST /myreport/problem', array($myreport_problem, 'add_problem'));
+// Flight::route('GET /myreport/problem/@id', array($myreport_problem, 'get_problem_by_id'));
+// Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_problem_by_id'));
 // my report field problem
 
 // my report document

@@ -66,3 +66,17 @@ CREATE TABLE
         clock_sheet VARCHAR(30),
         is_imported BOOLEAN
     ) -- base_file
+
+-- field problem
+CREATE TABLE
+    field_problem(
+        id VARCHAR(30) PRIMARY KEY,
+        periode FLOAT,
+        supervisor_id VARCHAR(30),
+        head_spv_id VARCHAR(30),
+        masalah TEXT,
+        sumber_masalah TEXT,
+        solusi TEXT,
+        pic VARCHAR(100),
+        dl FLOAT
+    ) -- field problem
