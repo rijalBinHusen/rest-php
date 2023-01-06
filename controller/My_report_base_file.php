@@ -40,12 +40,12 @@ class My_report_base_file
         // return the result
         return $this->response();
     }
-    // public function delete_item($id) {
-    //     // myguest/8
-    //     // the 8 will automatically becoming parameter $id
-    //     $this->result_from_model = $this->base_file_model->delete_item($id);
-    //     return $this->response();
-    // }
+    public function delete_base_file($id) {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        $this->result_from_model = $this->base_file_model->delete_base_file($id);
+        return $this->response();
+    }
     public function update_base_file_by_id($id)
     {
         // catch the query string request

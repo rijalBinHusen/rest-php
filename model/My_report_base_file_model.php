@@ -36,9 +36,9 @@ class My_report_base_file_model
                     ? array( 'id' => $nextId)
                     : 'Can not insert to database';
     }
-    // public function delete_item($id) {
-    //     return $this->database->deleteData($this->table, 'id', "'$id'");
-    // }
+    public function delete_base_file($id) {
+        return $this->database->deleteData($this->table, 'id', "'$id'");
+    }
     public function get_base_file_by_id($id) {
         $res = $this->database->findDataByColumnCriteria($this->table, $this->columns, 'id', "'$id'");
         return $res;
