@@ -69,7 +69,7 @@ CREATE TABLE
 
 -- field problem
 CREATE TABLE
-    field_problem(
+    my_report_field_problem(
         id VARCHAR(30) PRIMARY KEY,
         periode FLOAT,
         supervisor_id VARCHAR(30),

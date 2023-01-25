@@ -7,6 +7,7 @@ require_once('controller/My_report_base_item.php');
 require_once('controller/My_report_head_spv.php');
 require_once('controller/My_report_problem.php');
 require_once('controller/My_report_base_file.php');
+require_once('controller/My_report_field_problem.php');
 
 // My report rest api
 // My report rest api warehouse endpoint
@@ -61,11 +62,11 @@ Flight::route('DELETE /myreport/base_file/@id', array($myreport_base_file, 'dele
 // my report base file
 
 // my report field problem
-// $myreport_problem = new My_report_problem();
-// Flight::route('GET /myreport/problems', array($myreport_problem, 'get_problems'));
-// Flight::route('POST /myreport/problem', array($myreport_problem, 'add_problem'));
-// Flight::route('GET /myreport/problem/@id', array($myreport_problem, 'get_problem_by_id'));
-// Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_problem_by_id'));
+$myreport_problem = new My_report_field_problem();
+Flight::route('GET /myreport/problems', array($myreport_problem, 'get_field_problem'));
+Flight::route('POST /myreport/problem', array($myreport_problem, 'add_field_problem'));
+Flight::route('GET /myreport/problem/@id', array($myreport_problem, 'get_field_problem_by_id'));
+Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_field_problem_by_id'));
 // my report field problem
 
 // my report document

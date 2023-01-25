@@ -409,7 +409,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Field_problem'
+                  properties:
+                    id:
+                      type: string
+                    periode: 
+                      type: number
+                    supervisor_name:
+                      type: string
+                    head_name: 
+                      type: string
+                    masalah: 
+                      type: string
+    
         '400':
           $ref: '#/components/responses/400Error'
   /field_problem/{id}:
