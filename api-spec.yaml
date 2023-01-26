@@ -468,22 +468,46 @@ paths:
         '400':
           $ref: '#/components/responses/400Error'
   # End of field problem end point
-  /documents/periode/{periode1}/{periode2}:
+  /document:
+    post:
+      tags:
+      - document
+      summary: Lets a user post a new document
+      requestBody:
+        $ref: '#/components/requestBodies/Document'
+      responses:
+        '200':
+          description: Successfully created a new document
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Return_after_post'
+
+        '400':
+          $ref: '#/components/responses/400Error'
+  /documents:
     parameters:
         - name: periode1
-          in: path
+          in: query
           required: true
           description: The start periode to search, date in unix time
           schema:
             type: number
           example: 80394802938098
         - name: periode2
-          in: path
+          in: query
           required: true
           description: The end periode to search, date in unix time
           schema:
             type: number
           example: 80394802938098
+        - name: status
+          in: query
+          required: true
+          description: The status of document, either 0 (uncollected), 1 (collected) or 2 (approved)
+          schema:
+            type: number
+          example: 0
     get:
       tags:
       - document
@@ -543,47 +567,6 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
-  /document:
-    post:
-      tags:
-      - document
-      summary: Lets a user post a new document
-      requestBody:
-        $ref: '#/components/requestBodies/Document'
-      responses:
-        '200':
-          description: Successfully created a new document
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Return_after_post'
-
-        '400':
-          $ref: '#/components/responses/400Error'
-  /document/{status}:
-    parameters:
-        - name: status
-          in: path
-          required: true
-          description: status of document between 0,1,2
-          schema:
-            type: number
-          example: 1
-    get:
-      tags:
-      - document
-      summary: Get document by status.
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Document'
-        '400':
-          $ref: '#/components/responses/400Error'
   /document/last_date:
     get:
       tags:
@@ -595,7 +578,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
+                type: object
+                properties:
+                  date: 
+                    type: number
+                    example: 1029381038102381923
         '400':
           $ref: '#/components/responses/400Error'
   # End of document end point
@@ -1377,11 +1364,7 @@ components:
           example: 'warehouse001'
         warehouse_group:
           type: string
-          example: 'warehouse001, warehouse002'
-          nullable: true
-        warehouse_supervisor:
-          type: string
-          example: 'spv001, spv002, spv003'
+          example: 'warehouse002'
           nullable: true
     Supervisor:
       type: object
@@ -1512,7 +1495,7 @@ components:
           type: number
         shift:
           type: number
-        head_supervisor_id:
+        head_spv_id:
           type: string
         warehouse_id:
           type: string
@@ -1529,7 +1512,7 @@ components:
           type: string
         dl:
           type: number
-        insert:
+        inserted:
           type: number
         masalah:
           type: string
@@ -1568,9 +1551,9 @@ components:
           type: string
         nopol: 
           type: string
-        real: 
+        real_: 
           type: string
-        row: 
+        row_: 
           type: string
         spv: 
           type: string
@@ -1593,7 +1576,7 @@ components:
           type: string
         periode: 
           type: number
-        head: 
+        head_spv_id: 
           type: string
         dl: 
           type: number
@@ -1722,8 +1705,6 @@ components:
                 warehouse_name:
                   type: string
                 warehouse_group:
-                  type: string
-                warehouse_supervisors:
                   type: string
     Supervisor:
         required: true
@@ -1868,7 +1849,7 @@ components:
                   type: number
                 shift:
                   type: number
-                head_supervisor_id:
+                head_spv_id:
                   type: string
                 warehouse_id:
                   type: string
@@ -1883,11 +1864,11 @@ components:
               properties:
                 periode:
                   type: number
-                head:
+                head_spv_id:
                   type: string
                 dl:
                   type: number
-                insert:
+                inserted:
                   type: number
                 masalah:
                   type: string
@@ -1928,9 +1909,9 @@ components:
                   type: string
                 nopol: 
                   type: string
-                real: 
+                real_: 
                   type: string
-                row: 
+                row_: 
                   type: string
                 spv: 
                   type: string
@@ -1955,7 +1936,7 @@ components:
               properties:
                 periode: 
                   type: number
-                head: 
+                head_spv_id: 
                   type: string
                 dl: 
                   type: number
@@ -2013,9 +1994,9 @@ components:
                   type: string
                 awal:
                   type: number
-                in:
+                in_stock:
                   type: number
-                out:
+                out_stock:
                   type: number
                 date_in:
                   type: string
@@ -2025,7 +2006,7 @@ components:
                   type: string
                 date_end:
                   type: string
-                real:
+                real_stock:
                   type: number
                 problem:
                   type: string
