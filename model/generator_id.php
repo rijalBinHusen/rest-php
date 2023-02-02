@@ -1,20 +1,20 @@
 <?php
 function generateId($lastId)
 {
-    // base id, warehouse = war
-    $baseId = substr($lastId, 0, 3);
-    // ambil 4 angka dibelakang war22050000 jadinya 0000
-    $getNumber = substr($lastId, 7);
-    // increment, tambahkan angka 1
+    // get uniquee id, the 8 last string, SUPERVISOR_22030001 become SUPERVISOR_
+    $baseId = substr($lastId, 0, -8);
+    // get uniquee number, the last 4 string, war22050000 become 0000
+    $getNumber = substr($lastId, -4);
+    // increment uniquee number by 1
     $increment = strval(floatval($getNumber) + 1);
-    // tahun sekarang penuh
+    // full year
     $fullYearNow = date("Y") . "";
-    // week sekarang
+    // week now
     $weekNow = date("W") < 9 ? "0" . date("W") : date("W");
-    // tahun dari last id
-    $yearLastId = substr($lastId, 3, 2); //21
-    // week dari last id
-    $weekLastId = substr($lastId, 5, 2); //08
+    // year of last id
+    $yearLastId = substr($lastId, strlen($baseId), (strlen($baseId) + 2)); //22
+    // week of last id
+    $weekLastId = substr($lastId, (strlen($baseId) + 2), (strlen($baseId) + 4)); //08
     //if the week same
     if ($weekNow === $weekLastId) {
         $baseId = $baseId . $yearLastId . $weekLastId;

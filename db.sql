@@ -226,5 +226,6 @@ ALTER TABLE my_report_cases ADD FOREIGN KEY (parent) REFERENCES my_report_case_i
 ALTER TABLE my_report_base_stock ADD FOREIGN KEY (parent) REFERENCES my_report_base_report_file (id);
 
 ALTER TABLE my_report_base_clock ADD FOREIGN KEY (parent) REFERENCES my_report_base_report_file (id);
+ALTER TABLE my_report_document ADD FOREIGN KEY (problem) REFERENCES my_report_problem (id);
 
 ALTER TABLE my_report_base_stock ADD FOREIGN KEY (item) REFERENCES my_report_base_item (item_kode);
