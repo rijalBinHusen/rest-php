@@ -6,7 +6,7 @@ class My_report_warehouse_model
 {
     protected $database;
 
-    var $table = "warehouse";
+    var $table = "my_report_warehouse";
     var $columns = "id, warehouse_name, warehouse_group, warehouse_supervisors";
 
     function __construct()

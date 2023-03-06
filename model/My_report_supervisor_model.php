@@ -6,7 +6,7 @@ class My_report_supervisor_model
 {
     protected $database;
 
-    var $table = "supervisor";
+    var $table = "my_report_supervisor";
     var $columns = "id, supervisor_name, supervisor_phone, supervisor_warehouse, supervisor_shift, is_disabled";
 
     function __construct()

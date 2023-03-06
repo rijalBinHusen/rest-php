@@ -6,7 +6,7 @@ class My_report_base_item_model
 {
     protected $database;
 
-    var $table = "base_item";
+    var $table = "my_report_base_item";
     var $columns = "id, item_kode, item_name, last_used";
 
     function __construct()

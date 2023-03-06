@@ -6,7 +6,7 @@ class My_report_base_file_model
 {
     protected $database;
 
-    var $table = "base_file";
+    var $table = "my_report_base_report_file";
     var $columns = "id, periode, warehouse_id, file_name, stock_sheet, clock_sheet, is_imported";
 
     function __construct()
@@ -48,18 +48,6 @@ class My_report_base_file_model
         $res = $this->database->updateDataByCriteria($this->table, $keyValueToUpdate, 'id', "'$id'");
         return $res;
     }
-    // public function write_item($id, $kode, $name, $last_used)
-    // {
-    //     $res = $this->database->writeData(
-    //         $this->table,
-    //         "$this->columns",
-    //         "'$id', '$kode', '$name', '$last_used'"
-    //     );
-    //     // ternary either success or fail
-    //     return $res
-    //                 ? true
-    //                 : false;
-    // }
     public function get_base_files_between_two_periode($periode1, $periode2) {
         // $database = new sqldatabase()
         $res = $this->database->get_data_by_where_query($this->columns, $this->table, "periode >= $periode1 AND periode <= $periode2");

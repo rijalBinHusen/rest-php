@@ -6,7 +6,7 @@ class My_report_head_spv_model
 {
     protected $database;
 
-    var $table = "head_spv";
+    var $table = "my_report_head_spv";
     var $columns = "id, head_name, head_phone, head_shift, is_disabled";
 
     function __construct()

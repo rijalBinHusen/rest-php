@@ -95,7 +95,7 @@ CREATE TABLE my_report_document (
   shift INT,
   head_spv_id VARCHAR(30),
   warehouse_id VARCHAR(30),
-  is_generated_document VARCHAR(30)
+  is_generated_document BOOLEAN
 );
 
 CREATE TABLE my_report_complain (

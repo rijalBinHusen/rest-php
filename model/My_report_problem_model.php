@@ -6,7 +6,7 @@ class My_report_problem_model
 {
     protected $database;
 
-    var $table = "problem";
+    var $table = "my_report_problem";
     var $columns = "id, 
                     warehouse_id, 
                     supervisor_id, 
