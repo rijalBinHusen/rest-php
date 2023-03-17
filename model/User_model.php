@@ -6,7 +6,7 @@ $dotenv->load();
 
 class User_model {
   // (A) CONNECT TO DATABASE
-  public $error = "";
+  public $error = null;
   private $pdo = null;
   private $stmt = null;
   function __construct () {
@@ -72,7 +72,7 @@ class User_model {
         "iat" => $now, // issued at - time when token is generated
         "nbf" => $now, // not before - when this token is considered valid
         "exp" => $now + 3600, // expiry - 1 hr (3600 secs) from now in this example
-        "jti" => base64_encode(random_bytes(16)), // json token id
+        "jti" => "RANDOM TOKEN TOKEN RANDOM", // json token id
         "iss" => JWT_ISSUER, // issuer
         "aud" => JWT_AUD, // audience
         "data" => ["id" => $user["id"]] // whatever data you want to add

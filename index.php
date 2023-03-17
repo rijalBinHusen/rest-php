@@ -93,10 +93,16 @@ Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_fiel
 
 // My report rest api
 
-// Login
+// Register
 Flight::route('POST /register', function () {
     $user = new User();
     $user->register();
+});
+
+// login
+Flight::route('POST /login', function () {
+    $user = new User();
+    $user->login();
 });
 
 // root route for testing
