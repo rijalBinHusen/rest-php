@@ -189,6 +189,16 @@ CREATE TABLE my_report_complain_import (
   type_ VARCHAR(255)
 );
 
+CREATE TABLE users (
+  id bigint(20) PRIMARY KEY AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL
+);
+ 
+INSERT INTO users (id, name, email, password) VALUES
+  (1, 'Jon Doe', 'jon@doe.com', '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee');
+
 ALTER TABLE my_report_supervisor ADD FOREIGN KEY (supervisor_warehouse) REFERENCES my_report_warehouse (id);
 
 ALTER TABLE my_report_base_report_file ADD FOREIGN KEY (warehouse_id) REFERENCES my_report_warehouse (id);

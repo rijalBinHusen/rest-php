@@ -8,6 +8,7 @@ require_once('controller/My_report_head_spv.php');
 require_once('controller/My_report_problem.php');
 require_once('controller/My_report_base_file.php');
 require_once('controller/My_report_field_problem.php');
+require_once('controller/User.php');
 
 // My report rest api
 // My report rest api warehouse endpoint
@@ -91,6 +92,12 @@ Flight::route('PUT /myreport/problem/@id', array($myreport_problem, 'update_fiel
 // my report base clock
 
 // My report rest api
+
+// Login
+Flight::route('POST /register', function () {
+    $user = new User();
+    $user->register();
+});
 
 // root route for testing
 Flight::route('GET /', function () {
