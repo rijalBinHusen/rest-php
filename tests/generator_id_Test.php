@@ -5,11 +5,11 @@
 use PHPUnit\Framework\TestCase;
 
 // Class yang mau di TEST.
-// require_once( __DIR__. '/generator_id.php');
+require_once( __DIR__. '/../model/generator_id.php');
 // require_once "Wordcount.php";
 
 // Class untuk run Testing.
-class SimpleTest extends TestCase
+class SimpleTest extends PHPUnit_Framework_TestCase
 {
     public function testCountWords()
     {
@@ -17,10 +17,10 @@ class SimpleTest extends TestCase
         // $Wc = new WordCount();
 
         // Kita masukan parameter 4 kata, yang harusnya dapat output 4.
-        $TestSentence = generateId("SUPER_22030000"); // 4 Kata ..
+        $TestSentence = generateId("SUPER_22110000"); // 4 Kata ..
         // $WordCount = $Wc->countWords($TestSentence);
 
         // Kita assert equal, ekspektasi nya harus 4, jika benar berarti Wordcount berfungsi dengan baik.
-        $this->assertEquals("SUPER_22030001", $TestSentence); 
+        $this->assertEquals("SUPER_23110000", $TestSentence); 
     }
 }
