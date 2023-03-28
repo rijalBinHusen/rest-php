@@ -1,6 +1,7 @@
 <?php
-function generateId($lastId)
+function generateId($lastId, string $yourDate)
 {
+    $yourDate2 = date_create($yourDate);
     // get uniquee id, the 8 last string, SUPERVISOR_22030001 become SUPERVISOR_
     $baseId = substr($lastId, 0, -8);
     // get uniquee number, the last 4 string, war22050000 become 0000
@@ -8,9 +9,9 @@ function generateId($lastId)
     // increment uniquee number by 1
     $increment = strval(floatval($getNumber) + 1);
     // full year
-    $fullYearNow = date("Y") . "";
+    $fullYearNow = date("Y", $yourDate2) . "";
     // week now
-    $weekNow = date("W") < 9 ? "0" . date("W") : date("W");
+    $weekNow = date("W", $yourDate2) < 9 ? "0" . date("W", $yourDate2) : date("W", $yourDate2);
     // year of last id
     $yearLastId = substr($lastId, strlen($baseId), (strlen($baseId) + 2)); //22
     // week of last id
