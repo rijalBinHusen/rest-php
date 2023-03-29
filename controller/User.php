@@ -37,5 +37,18 @@ class User
         $name = $req->data->name;
 
         $this->user->save($name, $email, $password);
+        $errorLogin = $this->user->error;
+
+        if(is_null($errorLogin)) {
+            Flight::json([
+                'success' => true,
+                'message' => 'Registration success.',
+            ]);
+        } else {
+            Flight::json([
+                'success' => false,
+                'message' => $errorLogin,
+            ], 404);
+        }
     }
 }

@@ -41,7 +41,8 @@ class User_model {
       $isEmailExists = is_array($findEmail);
       
       if($isEmailExists) {
-        return false;
+        $this->error = "User exist.";
+        return;
       }
 
       $sql = "INSERT INTO `users` (`name`, `email`, `password`) VALUES (?,?,?)";
@@ -50,7 +51,7 @@ class User_model {
       $data[] = [$id];
     }
     $this->query($sql, $data);
-    return true;
+    return;
   }
  
   // (E) GET USER
@@ -86,8 +87,10 @@ class User_model {
         "data" => ["id" => $user["id"]] // whatever data you want to add
       ], JWT_SECRET, JWT_ALGO);
     } else {
+
       $this->error = "Invalid user/password";
-      return false;
+      return;
+
     }
   }
  
@@ -101,7 +104,7 @@ class User_model {
       $valid = is_object($jwt);
     } catch (Exception $e) {
       $this->error = $e->getMessage();
-      return false;
+      return;
     }
  
     // (G2) GET USER
@@ -112,11 +115,15 @@ class User_model {
  
     // (G3) RETURN RESULT
     if ($valid) {
+
       unset($user["password"]);
       return $user;
+
     } else {
+
       $this->error = "Invalid JWT";
-      return false;
+      return;
+
     }
   }
 }
