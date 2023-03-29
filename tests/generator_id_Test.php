@@ -10,11 +10,11 @@ class SimpleTest extends PHPUnit_Framework_TestCase
     public function testGeneratorId()
     {
         $year = 2023; // replace with the year you want to generate
-        $start_date = new DateTime("$year-01-01");
+        $start_date = new DateTime("$year-01-02");
         $end_date = new DateTime("$year-12-31");
 
         $current_date = $start_date;
-        $week = 0;
+        $week = 1;
         while ($current_date <= $end_date) {
             // echo $current_date->format("Y-m-d") . "<br>";
             // Kita masukan parameter 4 kata, yang harusnya dapat output 4.
