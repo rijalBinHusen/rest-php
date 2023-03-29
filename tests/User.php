@@ -6,9 +6,9 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // Test register must failed
     public function testRegisterEndpointFailed()
     {
-        $faker = Faker\Factory::create();
+        // $faker = Faker\Factory::create();
         // Define the request body
-        $data = array('email' => 'test@test.com', 'password' => $faker->numberBetween(10000, 100000), 'username' => $faker->name());
+        $data = array('email' => 'test@test.com', 'password' => "1233333", 'username' => "name0123");
         $data_string = json_encode($data);
         
         // Set up the request headers
@@ -30,6 +30,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals($convertToAssocArray['success'], false);
     }
     // Test register must success
     
