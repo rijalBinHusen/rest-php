@@ -35,4 +35,29 @@ class MyRestServerTest extends PHPUnit_Framework_TestCase
         // Verify that the response is "Success"
         $this->assertEquals('I received a POST request ', $response);
     }
+
+    public function testPutEndpoint()
+    {
+        // Define the request body
+        $data = array('foo' => 'baz');
+        $data_string = json_encode($data);
+        
+        // Set up the request headers
+        $headers = array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string)
+        );
+        
+        // Send a PUT request to the /endpoint URL with the request body
+        $ch = curl_init($this->url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        // Verify that the response is "Success"
+        $this->assertEquals('I received a PUT request.', $response);
+    }
 }
