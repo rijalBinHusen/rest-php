@@ -60,4 +60,17 @@ class MyRestServerTest extends PHPUnit_Framework_TestCase
         // Verify that the response is "Success"
         $this->assertEquals('I received a PUT request.', $response);
     }
+
+    public function testDeleteEndpoint()
+    {
+        // Send a DELETE request to the /endpoint URL
+        $ch = curl_init($this->url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        // Verify that the response is "Success"
+        $this->assertEquals('I received a DELETE request.', $response);
+    }
 }
