@@ -36,6 +36,14 @@ class User_model {
   function save ($name, $email, $password, $id=null) {
     $data = [$name, $email, password_hash($password, PASSWORD_DEFAULT)];
     if ($id===null) {
+      // check is the email exists or no
+      $findEmail = $this->getUser($email);
+      $isEmailExists = is_array($findEmail);
+      
+      if($isEmailExists) {
+        return false;
+      }
+
       $sql = "INSERT INTO `users` (`name`, `email`, `password`) VALUES (?,?,?)";
     } else {
       $sql = "UPDATE `users` SET `name`=?, `email`=?, `password`=? WHERE `id`=?";
@@ -46,7 +54,7 @@ class User_model {
   }
  
   // (E) GET USER
-  function get ($id) {
+  function getUser($id) {
     $this->query(
       sprintf("SELECT * FROM `users` WHERE `%s`=?", is_numeric($id) ? "id" : "email" ),
       [$id]
@@ -59,7 +67,7 @@ class User_model {
   // RETURNS JWT IF VALID
   function login ($email, $password) {
     // (F1) GET USER
-    $user = $this->get($email);
+    $user = $this->getUser($email);
     $valid = is_array($user);
  
     // (F2) CHECK PASSWORD
@@ -98,7 +106,7 @@ class User_model {
  
     // (G2) GET USER
     if ($valid) {
-      $user = $this->get($jwt->data->id);
+      $user = $this->getUser($jwt->data->id);
       $valid = is_array($user);
     }
  
