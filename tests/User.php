@@ -6,7 +6,6 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // Test register must failed
     public function testRegisterEndpointFailed()
     {
-        // $faker = Faker\Factory::create();
         // Define the request body
         $data = array('email' => 'test@test.com', 'password' => "1233333", 'username' => "name0123");
         $data_string = json_encode($data);
@@ -33,7 +32,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($convertToAssocArray['success'], false);
     }
     // Test register must success
-    
+
     // test login success
     public function testLoginEndpoint()
     {
