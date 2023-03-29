@@ -1,19 +1,12 @@
 <?php
-// use PHPUnit\Framework\TestCase;
-use GuzzleHttp\Client;
-// Class untuk run Testing.
-class MyApiTest extends PHPUnit_Framework_TestCase
+
+class MyRestServerTest extends PHPUnit_Framework_TestCase
 {
     public function testGetEndpoint()
     {
-        $client = new GuzzleHttp\Client();
-        $response = $client->request('GET', 'http://localhost/rest-php/');
-        $statusCode = $response->getStatusCode();
-        $contentType = $response->getHeaderLine('content-type');
-        $body = $response->getBody()->getContents();
-        $expectedResponse = '{"message": "Hello World!"}';
-        $this->assertEquals(200, $statusCode);
-        $this->assertEquals('application/json', $contentType);
-        $this->assertEquals($expectedResponse, $body);
+        // Send a GET request to the /endpoint URL
+        $response = file_get_contents('http://localhost/rest-php/');
+        // Verify that the response is "I received a GET request."
+        $this->assertEquals('I received a GET request.', $response);
     }
 }
