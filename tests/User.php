@@ -31,10 +31,15 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('token', $convertToAssocArray);
+
+        // save token to a .txt file
+        $myfile = fopen("token.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $convertToAssocArray['token']);
+        fclose($myfile);
     }
     
     // test login failed   
-    public function testLoginEndpointFailde()
+    public function testLoginEndpointFailed()
     {
         // Define the request body
         $data = array('email' => 'test@test.com', 'password' => '1234');
@@ -60,7 +65,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
     }
-    // test validatin must failed
+    // test validation must failed
 
     // test validation must success
 
