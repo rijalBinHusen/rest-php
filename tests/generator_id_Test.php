@@ -18,7 +18,7 @@ class SimpleTest extends PHPUnit_Framework_TestCase
         while ($current_date <= $end_date) {
             // echo $current_date->format("Y-m-d") . "<br>";
             // Kita masukan parameter 4 kata, yang harusnya dapat output 4.
-            $TestSentence = generateId("SUPER_22110000", $current_date->format("Y-m-d")); // 4 Kata ..
+            $TestSentence = generateIdWithCustomDate("SUPER_22110000", $current_date->format("Y-m-d")); // 4 Kata ..
             // $WordCount = $Wc->countWords($TestSentence);
             
             // Kita assert equal, ekspektasi nya harus 4, jika benar berarti Wordcount berfungsi dengan baik.

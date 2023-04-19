@@ -1,7 +1,13 @@
 <?php
-function generateId($lastId, $yourDate)
+
+function generateId($lastId) {
+    $date = date("Y-m-d");
+    return generateIdWithCustomDate($lastId, $date);
+}
+
+function generateIdWithCustomDate($lastId, $yourDate)
 {
-    $yourDate2 = date_create($yourDate);
+    $yourDate2 =  date_create($yourDate);
     // get uniquee id, the 8 last string, SUPERVISOR_22030001 become SUPERVISOR_
     $baseId = substr($lastId, 0, -8);
     // get uniquee number, the last 4 string, war22050000 become 0000
