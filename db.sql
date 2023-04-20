@@ -1,10 +1,10 @@
-CREATE TABLE my_report_warehouse (
+CREATE TABLE if not exists my_report_warehouse (
   id VARCHAR(30) PRIMARY KEY,
   warehouse_name VARCHAR(255),
   warehouse_group VARCHAR(255)
 );
 
-CREATE TABLE my_report_supervisor (
+CREATE TABLE if not exists my_report_supervisor (
   id VARCHAR(30) PRIMARY KEY,
   supervisor_name VARCHAR(30) NOT NULL,
   supervisor_phone VARCHAR(30) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE my_report_supervisor (
   is_disabled BOOLEAN
 );
 
-CREATE TABLE my_report_error_log (
+CREATE TABLE if not exists my_report_error_log (
   id INT(255) PRIMARY KEY AUTO_INCREMENT,
   operation VARCHAR(30) NOT NULL,
   name_table VARCHAR(30) NOT NULL,
@@ -21,14 +21,14 @@ CREATE TABLE my_report_error_log (
   time_error TIMESTAMP
 );
 
-CREATE TABLE my_report_base_item (
+CREATE TABLE if not exists my_report_base_item (
   id VARCHAR(30) PRIMARY KEY,
   item_kode VARCHAR(30) NOT NULL,
   item_name VARCHAR(30) NOT NULL,
   last_used FLOAT
 );
 
-CREATE TABLE my_report_head_spv (
+CREATE TABLE if not exists my_report_head_spv (
   id VARCHAR(30) PRIMARY KEY,
   head_name VARCHAR(30) NOT NULL,
   head_phone VARCHAR(30) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE my_report_head_spv (
   is_disabled BOOLEAN
 );
 
-CREATE TABLE my_report_problem (
+CREATE TABLE if not exists my_report_problem (
   id VARCHAR(30) PRIMARY KEY,
   warehouse_id varchar(255),
   supervisor_id varchar(255),
@@ -56,7 +56,7 @@ CREATE TABLE my_report_problem (
   shift_selesai TINYINT
 );
 
-CREATE TABLE my_report_base_report_file (
+CREATE TABLE if not exists my_report_base_report_file (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
   warehouse_id VARCHAR(30) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE my_report_base_report_file (
   is_imported BOOLEAN
 );
 
-CREATE TABLE my_report_field_problem (
+CREATE TABLE if not exists my_report_field_problem (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
   supervisor_id VARCHAR(30),
@@ -78,7 +78,7 @@ CREATE TABLE my_report_field_problem (
   dl FLOAT
 );
 
-CREATE TABLE my_report_document (
+CREATE TABLE if not exists my_report_document (
   id VARCHAR(30) PRIMARY KEY,
   collected FLOAT,
   approval FLOAT,
@@ -98,7 +98,7 @@ CREATE TABLE my_report_document (
   is_generated_document BOOLEAN
 );
 
-CREATE TABLE my_report_complain (
+CREATE TABLE if not exists my_report_complain (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
   head_spv_id VARCHAR(30),
@@ -115,7 +115,7 @@ CREATE TABLE my_report_complain (
   is_count BOOLEAN
 );
 
-CREATE TABLE my_report_cases (
+CREATE TABLE if not exists my_report_cases (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
   head_spv_id VARCHAR(30),
@@ -129,7 +129,7 @@ CREATE TABLE my_report_cases (
   sumber_masalah TEXT
 );
 
-CREATE TABLE my_report_case_import (
+CREATE TABLE if not exists my_report_case_import (
   id VARCHAR(30) PRIMARY KEY,
   bagian TEXT,
   divisi TEXT,
@@ -142,7 +142,7 @@ CREATE TABLE my_report_case_import (
   temuan TEXT
 );
 
-CREATE TABLE my_report_base_stock (
+CREATE TABLE if not exists my_report_base_stock (
   id VARCHAR(30) PRIMARY KEY,
   parent VARCHAR(30),
   shift INT,
@@ -158,7 +158,7 @@ CREATE TABLE my_report_base_stock (
   problem VARCHAR(30)
 );
 
-CREATE TABLE my_report_base_clock (
+CREATE TABLE if not exists my_report_base_clock (
   id VARCHAR(30),
   parent VARCHAR(30),
   shift INT,
@@ -169,7 +169,7 @@ CREATE TABLE my_report_base_clock (
   rehat FLOAT
 );
 
-CREATE TABLE my_report_complain_import (
+CREATE TABLE if not exists my_report_complain_import (
   id VARCHAR(30) PRIMARY KEY,
   customer VARCHAR(255),
   do_ FLOAT,
@@ -189,7 +189,7 @@ CREATE TABLE my_report_complain_import (
   type_ VARCHAR(255)
 );
 
-CREATE TABLE users (
+CREATE TABLE if not exists users (
   id bigint(20) PRIMARY KEY AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   email varchar(255) NOT NULL,
@@ -199,6 +199,7 @@ CREATE TABLE users (
 INSERT INTO users (id, name, email, password) VALUES
   (1, 'Jon Doe', 'jon@doe.com', '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee');
 
+-- password $2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee === 12345
 ALTER TABLE my_report_supervisor ADD FOREIGN KEY (supervisor_warehouse) REFERENCES my_report_warehouse (id);
 
 ALTER TABLE my_report_base_report_file ADD FOREIGN KEY (warehouse_id) REFERENCES my_report_warehouse (id);
@@ -236,6 +237,6 @@ ALTER TABLE my_report_cases ADD FOREIGN KEY (parent) REFERENCES my_report_case_i
 ALTER TABLE my_report_base_stock ADD FOREIGN KEY (parent) REFERENCES my_report_base_report_file (id);
 
 ALTER TABLE my_report_base_clock ADD FOREIGN KEY (parent) REFERENCES my_report_base_report_file (id);
-ALTER TABLE my_report_document ADD FOREIGN KEY (problem) REFERENCES my_report_problem (id);
+ALTER TABLE my_report_base_stock ADD FOREIGN KEY (problem) REFERENCES my_report_problem (id);
 
 ALTER TABLE my_report_base_stock ADD FOREIGN KEY (item) REFERENCES my_report_base_item (item_kode);
