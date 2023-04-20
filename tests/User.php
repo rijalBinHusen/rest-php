@@ -1,6 +1,6 @@
 <?php
 
-require_once("./httpCall.php");
+require_once(__DIR__ ."/../tests/httpCall.php");
 
 class MyRestServerUserTest extends PHPUnit_Framework_TestCase
 {
