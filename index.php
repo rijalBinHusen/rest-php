@@ -10,8 +10,68 @@ require_once('controller/My_report_base_file.php');
 require_once('controller/My_report_field_problem.php');
 require_once('controller/User.php');
 
+
 // My report rest api
 // My report rest api warehouse endpoint
+Flight::route('/test(/@endpoint)', function ($endpoint) {
+    $request = Flight::request();
+    // $myreport_warehouse = new My_report_warehouse();
+    // if($method === 'GET') {
+        //     echo $myreport_warehouse->get_warehouses();
+        // }
+        // url - The URL being requested
+        // base - The parent subdirectory of the URL
+        // method - The request method (GET, POST, PUT, DELETE)
+        // referrer - The referrer URL
+        // ip - IP address of the client
+        // ajax - Whether the request is an AJAX request
+        // scheme - The server protocol (http, https)
+        // user_agent - Browser information
+        // type - The content type
+        // length - The content length
+        // query - Query string parameters
+        // data - Post data or JSON data
+        // cookies - Cookie data
+        // files - Uploaded files
+        // secure - Whether the connection is secure
+        // accept - HTTP accept parameters
+        // proxy_ip - Proxy IP address of the client
+    Flight::json([
+        'url' => $request->url,
+        'base' => $request->base,
+        'method' => $request->method,
+        'referrer' => $request->referrer,
+        'ip' => $request->ip,
+        'ajax' => $request->ajax,
+        'scheme' => $request->scheme,
+        'user_agent' => $request->user_agent,
+        'type' => $request->type,
+        'length' => $request->length,
+        'query' => $request->query,
+        'data' => $request->data,
+        'cookies' => $request->cookies,
+        'files' => $request->files,
+        'secure' => $request->secure,
+        'accept' => $request->accept,
+        'proxy_ip' => $request->proxy_ip,
+        'end_point' => $endpoint,
+    ]);
+
+});
+
+// Flight::route('/myreport(/@endpoint)', function ($endpoint) {
+//     $request = Flight::request();
+//     $is_endpoint_warehouse = $endpoint === 'warehouses' || $endpoint === 'warehouse';
+//     $is_get_warehouses = $endpoint === 'warehouses' && $request->method === 'GET';
+    
+//     if($is_endpoint_warehouse) {
+//         $myreport_warehouse = new My_report_warehouse();
+//         if($is_get_warehouses) {
+//             echo $myreport_warehouse->get_warehouses();
+//         }
+//     }
+// });
+    
 $myreport_warehouse = new My_report_warehouse();
 Flight::route('GET /myreport/warehouses', array($myreport_warehouse, 'get_warehouses'));
 Flight::route('POST /myreport/warehouse', array($myreport_warehouse, 'add_warehouse'));
