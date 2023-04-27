@@ -8,6 +8,8 @@ class queryBuilderTest extends PHPUnit_Framework_TestCase
     private $name;
     private $newPassword;
     private $newName;
+    private $db;
+    private $table = "users";
     public function __construct()
     {
         $faker = Faker\Factory::create();
@@ -16,20 +18,43 @@ class queryBuilderTest extends PHPUnit_Framework_TestCase
         $this->name = $faker->name('male');
         $this->newPassword = $faker->numberBetween(404000, 505000);
         $this->newName = $faker->name('female');
+        $this->db = new Query_builder();
     }
     // insert data
     public function testInsert()
     {
-        $db = new Query_builder();
+        // $db = new Query_builder();
         $data = array(
             'email' => $this->email, 
             'password' => $this->password,
-            'username' => $this->name,
+            'name' => $this->name,
         );
-        $result = $db->insert('users', $data);
-        $this->assertEquals('1 row inserted.', $result);
+        $result = $this->db->insert($this->table, $data);
+        $this->assertEquals(true, $result);
+    }
+    // update data
+    public function testUpdate() {
+        $data = array(
+            'name' => $this->newName,
+            'password' => $this->newPassword
+        );
+        $result = $this->db->update($this->table, $data, 'email', $this->email);
+        $this->assertEquals(true, $result);
+    }
+    // read data
+    public function testRead() {
+        $result = $this->db->select_where($this->table, 'email', $this->email)->fetch();
+        echo $result;
+        $this->assertEquals($this->newName, $result['name']);
+    }
+    // delete data
+    public function testDelete() {
+        $result = $this->db->delete($this->table, 'email', $this->email);
+        $this->assertEquals(true, $result);
+    }
+    public function testRowCount() {
+        // $result = $this->db->select_from($this->table)->rowCount()
+        $result = $this->db->select_where($this->table, 'email', $this->email)->rowCount();
+        $this->assertEquals(0, $result);
     }
 }
-// update data
-// read data
-// delete data
