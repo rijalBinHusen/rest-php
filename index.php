@@ -9,7 +9,13 @@ require_once('controller/My_report_problem.php');
 require_once('controller/My_report_base_file.php');
 require_once('controller/My_report_field_problem.php');
 require_once('controller/User.php');
+require_once('model/query_database.php');
 
+Flight::route('/blank(/@endpoint)', function ($endpoint) {
+    $db = new Query_builder();
+    $stmt = $db->select_from('users')->fetchAll(PDO::FETCH_ASSOC);
+    Flight::json($stmt);
+});
 
 // My report rest api
 // My report rest api warehouse endpoint

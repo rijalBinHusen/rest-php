@@ -55,7 +55,8 @@ class Query_builder {
             . "VALUES ('" . implode("', '", $val) . "')";
 
         $row = $this->db->prepare($query);
-        return $row ->execute();
+        $row ->execute();
+        return $this->db->lastInsertId();
     }
 
     // merupakan fungsi edit data

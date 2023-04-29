@@ -310,6 +310,8 @@ paths:
                       type: number
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of problem end point
   /head_spv:
     post:
@@ -2074,6 +2076,16 @@ components:
             properties:
               message:
                 type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object 
+            properties:
+              message:
+                type: string
+                default: 'You must be authenticated to access this resource.'
 
     200Success:
       description: Success operation
