@@ -51,6 +51,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Warehouse'
+        '401':
+          $ref: '#/components/responses/401Error'
         '404':
           description: Warehouses not found
   /warehouse:
@@ -61,7 +63,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Warehouse'
       responses:
-        '200':
+        '201':
           description: Successfully created a new warehouse
           content:
             application/json:
@@ -70,6 +72,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /warehouse/{id}:
     parameters:
           - name: id
@@ -92,6 +96,8 @@ paths:
                   $ref: '#/components/schemas/Warehouse'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - warehouse
@@ -101,9 +107,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200Success'
-
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of warehouse end point
   /supervisors:
     get:
@@ -121,6 +128,8 @@ paths:
                   $ref: '#/components/schemas/Supervisor'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /supervisor:
     post:
       tags:
@@ -138,6 +147,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /supervisor/{id}:
     parameters:
         - name: id
@@ -168,6 +179,8 @@ paths:
                       $ref: '#/components/schemas/Supervisor'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - supervisor
@@ -180,6 +193,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of supeervisor end point
   /problem:
     post:
@@ -197,6 +212,8 @@ paths:
                   $ref: '#/components/schemas/Return_after_post'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /problem/{id}:
     parameters:
         - name: id
@@ -219,6 +236,8 @@ paths:
                 $ref: '#/components/schemas/Problem'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - problem
@@ -231,6 +250,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /problems:
   # problems?periode1=123123809&periode2=123123123
   # problems?status=active
@@ -330,6 +351,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /heads_spv:
     get:
       tags:
@@ -346,6 +369,8 @@ paths:
                   $ref: '#/components/schemas/Head_supervisor'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /head_spv/{id}:
     parameters:
         - name: id
@@ -368,6 +393,8 @@ paths:
                   $ref: '#/components/schemas/Head_supervisor'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - head supervisor
@@ -380,6 +407,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of head supeervisor end point
   /field_problem:
     post:
@@ -398,6 +427,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /fieLd_problems:
     get:
       tags:
@@ -425,6 +456,8 @@ paths:
     
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /field_problem/{id}:
     parameters:
         - name: id
@@ -459,6 +492,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - field problem
@@ -469,6 +504,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of field problem end point
   /document:
     post:
@@ -487,6 +524,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /documents:
     parameters:
         - name: periode1
@@ -525,6 +564,8 @@ paths:
                   $ref: '#/components/schemas/Document'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /document/{id}:
     parameters:
         - name: id
@@ -547,6 +588,8 @@ paths:
                 $ref: '#/components/schemas/Document'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - document
@@ -559,6 +602,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - document
@@ -569,6 +614,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /document/last_date:
     get:
       tags:
@@ -587,6 +634,8 @@ paths:
                     example: 1029381038102381923
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of document end point
   /complain:
     post:
@@ -605,6 +654,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /complain/{id}:
     parameters:
         - name: id
@@ -627,6 +678,8 @@ paths:
                 $ref: '#/components/schemas/Complain'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - complain
@@ -639,6 +692,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - complain
@@ -649,6 +704,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /complains:
     get:
       tags:
@@ -674,6 +731,8 @@ paths:
                   $ref: '#/components/schemas/Complain'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of complain end point
   /complain_import:
     post:
@@ -692,6 +751,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /complains_import:
     get:
       tags:
@@ -717,6 +778,8 @@ paths:
                   $ref: '#/components/schemas/Complain_import'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /complain_import/{id}:
     parameters:
         - name: id
@@ -739,6 +802,8 @@ paths:
                 $ref: '#/components/schemas/Complain_import'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - complain import
@@ -751,6 +816,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - complain import
@@ -761,6 +828,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of complain import
   /case:
     post:
@@ -779,6 +848,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /case/{id}:
     parameters:
         - name: id
@@ -801,6 +872,8 @@ paths:
                 $ref: '#/components/schemas/Case'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - case
@@ -813,6 +886,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - case
@@ -823,6 +898,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /cases:
     get:
       tags:
@@ -848,6 +925,8 @@ paths:
                   $ref: '#/components/schemas/Case'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of Case end point
   /case_import:
     post:
@@ -866,6 +945,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /case_import/{id}:
     parameters:
         - name: id
@@ -888,6 +969,8 @@ paths:
                 $ref: '#/components/schemas/Case_import'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - case import
@@ -900,6 +983,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - case import
@@ -910,6 +995,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /cases_import:
     get:
       tags:
@@ -935,6 +1022,8 @@ paths:
                   $ref: '#/components/schemas/Case'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of Case import end point
   /base_stocks:
     parameters:
@@ -977,6 +1066,8 @@ paths:
                   $ref: '#/components/schemas/Base_stock'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base stock
@@ -987,6 +1078,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_stock/{id}:
     parameters:
         - name: id
@@ -1009,6 +1102,8 @@ paths:
                 $ref: '#/components/schemas/Base_stock'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - case import
@@ -1021,6 +1116,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base stock
@@ -1048,6 +1145,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of base stock end point
   /base_file:
     post:
@@ -1066,6 +1165,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_files:
     parameters:
         - name: periode1
@@ -1097,6 +1198,8 @@ paths:
                   $ref: '#/components/schemas/Base_file'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_file/{id}:
     parameters:
         - name: id
@@ -1119,6 +1222,8 @@ paths:
                 $ref: '#/components/schemas/Base_file'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - base file
@@ -1131,6 +1236,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base file
@@ -1141,6 +1248,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of base file end point
   /base_clocks:
     parameters:
@@ -1183,6 +1292,8 @@ paths:
                   $ref: '#/components/schemas/Base_clock'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base clock
@@ -1193,6 +1304,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_clock/{id}:
     parameters:
         - name: id
@@ -1215,6 +1328,8 @@ paths:
                 $ref: '#/components/schemas/Base_clock'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - case import
@@ -1227,6 +1342,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base clock
@@ -1237,6 +1354,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_clock:
     post:
       tags:
@@ -1254,6 +1373,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   # End of base clock end point
   /base_item:
     post:
@@ -1272,6 +1393,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_items:
     parameters:
       - name: limit
@@ -1301,6 +1424,8 @@ paths:
                   $ref: '#/components/schemas/Base_item'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   /base_item/{id}:
     parameters:
         - name: id
@@ -1323,6 +1448,8 @@ paths:
                 $ref: '#/components/schemas/Base_item'
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     put:
       tags:
       - base item
@@ -1335,6 +1462,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
     delete:
       tags:
       - base item
@@ -1345,6 +1474,8 @@ paths:
 
         '400':
           $ref: '#/components/responses/400Error'
+        '401':
+          $ref: '#/components/responses/401Error'
   
 
 components:
