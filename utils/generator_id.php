@@ -16,24 +16,17 @@ function generateIdWithCustomDate($lastId, $yourDate)
     $increment = strval(floatval($getNumber) + 1);
     // full year
     $fullYearNow = $yourDate2->format("Y") . "";
+    $yearNow = substr($fullYearNow, 2, 2);
     // week now
     $weekNow = $yourDate2->format("W");
     // year of last id
-    $yearLastId = substr($lastId, strlen($baseId), (strlen($baseId) + 2)); //22
+    $yearLastId = substr($lastId, strlen($baseId), 2); //22
     // week of last id
-    $weekLastId = substr($lastId, (strlen($baseId) + 2), (strlen($baseId) + 4)); //08
-    //if the week same
-    if ($weekNow === $weekLastId) {
-        $baseId = $baseId . $yearLastId . $weekLastId;
+    $weekLastId = substr($lastId, (strlen($baseId) + 2), 2); //08
+    
+    if ($weekNow == $weekLastId && $yearNow == $yearLastId) {
+        return $baseId . $yearLastId . $weekNow . substr("0000", strlen($increment)) . $increment;
     }
-    //if the week not same
-    else {
-        // if the week 9 change to 09
-        $baseId = $baseId . substr($fullYearNow, 2, 2) . $weekNow;
-        $increment = "0";
-    }
-    // //0000
-    $result = $baseId . substr("0000", strlen($increment)) .  $increment;
-
-    return $result;
+    
+    return $baseId . $yearNow . $weekNow . "0000";
 }

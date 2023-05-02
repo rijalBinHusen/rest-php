@@ -22,7 +22,7 @@ class My_report_warehouse_model
         $lastIdQuery = "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1";
         $lastId = $this->database->sqlQuery($lastIdQuery);
         // nextId
-        $nextId = $lastId ? generateId($lastId['id']) : generateId('WAR22320000');
+        $nextId = $lastId ? generateId($lastId['id']) : generateId('WAREHOUSE_22320000');
         // data to write to database
         $res = array(
             "id" => $nextId,
