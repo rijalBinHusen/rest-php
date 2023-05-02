@@ -1,7 +1,8 @@
 CREATE TABLE if not exists my_report_warehouse (
   id VARCHAR(30) PRIMARY KEY,
   warehouse_name VARCHAR(255),
-  warehouse_group VARCHAR(255)
+  warehouse_group VARCHAR(255),
+  warehouse_supervisors VARCHAR(255),
 );
 
 CREATE TABLE if not exists my_report_supervisor (
