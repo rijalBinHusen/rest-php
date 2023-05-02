@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 // Class yang mau di TEST.
-require_once( __DIR__. '/../model/generator_id.php');
+require_once( __DIR__. '/../utils/generator_id.php');
 // require_once "Wordcount.php";
 
 // Class untuk run Testing.

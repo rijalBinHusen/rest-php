@@ -23,16 +23,29 @@ class My_report_warehouse
         $warehouse_supervisors = $req->data->warehouse_supervisors;
 
         $result = null;
-        if ($id) {
-            // write the warehouse
-            $result = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors);
-        } else {
-            // append warehouse
-            $result = $this->my_report_warehouse->append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors);
+
+        if($warehouse_name && $warehouse_group && $warehouse_supervisors) {
+            if ($id) {
+                // write the warehouse
+                $result = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors);
+            } else {
+                // append warehouse
+                $result = $this->my_report_warehouse->append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors);
+            }
+            
+            Flight::json(
+                array(
+                    'success' => 'true',
+                    'data' => $result
+                ), 200
+            );
+            return;
         }
 
         Flight::json(
-            $result
+            array(
+                'message' => 'Failed add warehouse, check the data you sent'
+            ), 400
         );
     }
     // public function get_warehouse_by_id($id)

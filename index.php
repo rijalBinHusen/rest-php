@@ -44,12 +44,16 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
 Flight::route('/myreport(/@endpoint)', function ($endpoint) {
     $request = Flight::request();
     $is_endpoint_warehouse = $endpoint === 'warehouses' || $endpoint === 'warehouse';
-    $is_get_warehouses = $endpoint === 'warehouses' && $request->method === 'GET';
     
     if($is_endpoint_warehouse) {
+        $is_get_warehouses = $endpoint === 'warehouses' && $request->method === 'GET';
+        $is_post_warehouse = $endpoint === 'warehouse' && $request->method === 'POST';
+
         $myreport_warehouse = new My_report_warehouse();
         if($is_get_warehouses) {
-            echo $myreport_warehouse->get_warehouses();
+            $myreport_warehouse->get_warehouses();
+        } else if ($is_post_warehouse) {
+            $myreport_warehouse->add_warehouse();
         }
     }
 });

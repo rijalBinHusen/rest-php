@@ -88,7 +88,7 @@ class Query_builder {
 
     function sqlQuery($query) {
         $row = $this->db->prepare($query);
-        return $row ->execute();
+        return $row->execute();
     }
 
 }

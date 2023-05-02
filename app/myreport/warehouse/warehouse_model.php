@@ -30,7 +30,8 @@ class My_report_warehouse_model
             'warehouse_group' => $warehouse_group,
             'warehouse_supervisors' => $warehouse_supervisors
         );
-        return $this->database->insert($this->table, $res);
+        $this->database->insert($this->table, $res);
+        return $nextId;
     }
     public function get_warehouse_by_id($id)
     {
