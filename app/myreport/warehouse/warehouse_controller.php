@@ -35,7 +35,7 @@ class My_report_warehouse
             
             Flight::json(
                 array(
-                    'success' => 'true',
+                    'success' => true,
                     'data' => $result
                 ), 200
             );
@@ -44,6 +44,7 @@ class My_report_warehouse
 
         Flight::json(
             array(
+                'success' => false,
                 'message' => 'Failed add warehouse, check the data you sent'
             ), 400
         );

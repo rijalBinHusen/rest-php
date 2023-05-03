@@ -5,11 +5,11 @@ require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/myreport";
+    private $url = "http://localhost/rest-php/myreport/";
     public function testGetEndpoint()
     {
         // Send a GET request to the /endpoint URL
-        $get = file_get_contents($this->url . '/warehouses');
+        $get = file_get_contents($this->url . 'warehouses');
         $response = json_decode($get);
         $responseType = gettype($response);
         // Verify that the response is "I received a GET request."
@@ -33,7 +33,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertEquals($convertToAssocArray['success'], true);
     }
 
