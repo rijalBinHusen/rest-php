@@ -4,7 +4,7 @@ require_once(__DIR__ ."/../tests/httpCall.php");
 
 class MyRestServerUserTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/";
+    private $url = "http://localhost/rest-php/user/";
     // Test register must failed
     public function testRegisterEndpointFailed()
     {

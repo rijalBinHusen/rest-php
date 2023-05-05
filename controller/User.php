@@ -48,7 +48,21 @@ class User
             Flight::json([
                 'success' => false,
                 'message' => $errorLogin,
-            ], 404);
+            ], 401);
+        }
+    }
+    public function validate($jwt_token) {
+        $is_token_valid = $this->user->validate($jwt_token);
+        if($is_token_valid) {
+            Flight::json([
+                'success' => true,
+                'message' => 'Valid token'
+            ]);
+        } else {
+            Flight::json([
+                'success' => false,
+                'message' => 'Invalid token',
+            ]);
         }
     }
 }

@@ -10,6 +10,18 @@ require_once('controller/My_report_base_file.php');
 require_once('controller/My_report_field_problem.php');
 require_once('controller/User.php');
 
+Flight::response()->header('X-Hook-Secret', "DIRK");
+
+// Flight::before('/*', function() {
+//     // Get the token from the request header
+//     $jwt_token = Flight::request()->headers['Authorization'];
+
+//     // Set the token in the request header
+//     if (!empty($jwt_token)) {
+//         Flight::response()->header('Authorization', $jwt_token);
+//     }
+// });
+
 Flight::route('/blank(/@endpoint)', function ($endpoint) {
     $db = new Query_builder();
     $stmt = $db->select_from('users')->fetchAll(PDO::FETCH_ASSOC);
@@ -18,6 +30,9 @@ Flight::route('/blank(/@endpoint)', function ($endpoint) {
 
 Flight::route('/test(/@endpoint)', function ($endpoint) {
     $request = Flight::request();
+    $jwt_token = $_SERVER['Authorization'];
+    // $jwt_token = $request->;
+
     Flight::json([
         'url' => $request->url,
         'base' => $request->base,
@@ -37,6 +52,7 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
         'accept' => $request->accept,
         'proxy_ip' => $request->proxy_ip,
         'end_point' => $endpoint,
+        'token' => $jwt_token,
     ]);
 
 });
@@ -140,15 +156,22 @@ Flight::route('/myreport(/@endpoint)', function ($endpoint) {
 // My report rest api
 
 // Register
-Flight::route('POST /register', function () {
+Flight::route('/user(/@endpoint)', function ($endpoint) {
     $user = new User();
-    $user->register();
-});
-
-// login
-Flight::route('POST /login', function () {
-    $user = new User();
-    $user->login();
+    // register
+    if($endpoint === 'register') {
+        $user->register();
+    }
+    // login
+    else if ($endpoint === 'login') {
+        $user->login();
+    }
+    // validate
+    else if ($endpoint === 'validate') {
+        // catch authorization on http header
+        $jwt_token = $_SERVER['Authorization'];
+        $user->validate($jwt_token);
+    }
 });
 
 // root route for testing
