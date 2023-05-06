@@ -39,6 +39,10 @@ class HttpCall {
     }
 
     public function addHeaders($key, $value) {
-        $this->headers[$key] = $value;
+        $this->headers = array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($this->data_string),
+            $key . ": " . $value
+        );
     }
 }
