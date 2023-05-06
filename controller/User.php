@@ -53,15 +53,15 @@ class User
     }
     public function validate($jwt_token) {
         $is_token_valid = $this->user->validate($jwt_token);
-        if($is_token_valid) {
-            Flight::json([
-                'success' => true,
-                'message' => 'Valid token'
-            ]);
-        } else {
+        if(is_null($is_token_valid) or is_null($jwt_token)) {
             Flight::json([
                 'success' => false,
                 'message' => 'Invalid token',
+            ]);
+        } else {
+            Flight::json([
+                'success' => true,
+                'message' => 'Valid token'
             ]);
         }
     }

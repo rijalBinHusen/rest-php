@@ -30,7 +30,7 @@ Flight::route('/blank(/@endpoint)', function ($endpoint) {
 
 Flight::route('/test(/@endpoint)', function ($endpoint) {
     $request = Flight::request();
-    $jwt_token = $_SERVER['Authorization'];
+    $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
     // $jwt_token = $request->;
 
     Flight::json([
@@ -169,8 +169,12 @@ Flight::route('/user(/@endpoint)', function ($endpoint) {
     // validate
     else if ($endpoint === 'validate') {
         // catch authorization on http header
-        $jwt_token = $_SERVER['Authorization'];
-        $user->validate($jwt_token);
+        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            $user->validate($jwt_token);
+        } else {
+            $user->validate(null);
+        }
     }
 });
 

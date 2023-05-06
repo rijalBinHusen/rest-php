@@ -57,7 +57,45 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('message', $convertToAssocArray);
     }
     // test validation must failed
-
+    public function testValidateEndpointFailed()
+    {
+        $http = new HttpCall($this->url . "validate");
+        // Define the request body
+        // get token
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+        // set token on header request
+        $http->addHeaders('JWT-Authorization', $token . "Invalidtoken");
+        $response = $http->getResponse("POST");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals($convertToAssocArray['success'], false);
+        $this->assertEquals($convertToAssocArray['message'], "Invalid token");
+    }
     // test validation must success
+    public function testValidateEndpoint()
+    {
+        $http = new HttpCall($this->url . "validate");
+        // Define the request body
+        // get token
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+        // set token on header request
+        $http->addHeaders('JWT-Authorization', $token);
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+        fwrite(STDERR, print_r($response, TRUE));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals($convertToAssocArray['success'], true);
+        $this->assertEquals($convertToAssocArray['message'], "Valid token");
+    }
 
 }

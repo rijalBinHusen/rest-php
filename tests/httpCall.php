@@ -37,4 +37,8 @@ class HttpCall {
         
         return $response;
     }
+
+    public function addHeaders($key, $value) {
+        $this->headers[$key] = $value;
+    }
 }

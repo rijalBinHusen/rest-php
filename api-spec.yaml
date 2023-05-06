@@ -4,7 +4,7 @@ info:
   description: Rest API for experiment.
   version: 0.1.1
 servers:
-  - url: https://example.com/myreport
+  - url: http://localhost/rest-php/myreport
     description: My report end point
 tags:
   - name: warehouse
