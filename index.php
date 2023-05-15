@@ -2,6 +2,8 @@
 
 require_once('vendor/autoload.php');
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_controller.php');
+require_once(__DIR__ . '/app/tests_route.php');
+require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
 // require_once('controller/My_report_supervisor.php');
 // require_once('controller/My_report_base_item.php');
 // require_once('controller/My_report_head_spv.php');
@@ -55,30 +57,30 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
 
 });
 
-Flight::route('/myreport(/@endpoint)', function ($endpoint) {
-    $user = new User();
-    $is_token_valid = $user->check_token();
+// Flight::route('/myreport(/@endpoint)', function ($endpoint) {
+//     $user = new User();
+//     $is_token_valid = $user->check_token();
 
-    if(!$is_token_valid) {
-        return;
-    }
-    
-    $request = Flight::request();
-    $is_endpoint_warehouse = $endpoint === 'warehouses' || $endpoint === 'warehouse';
-    
-    if($is_endpoint_warehouse) {
-        $is_get_warehouses = $endpoint === 'warehouses' && $request->method === 'GET';
-        $is_post_warehouse = $endpoint === 'warehouse' && $request->method === 'POST';
+//     if(!$is_token_valid) {
+//         return;
+//     }
 
-        $myreport_warehouse = new My_report_warehouse();
-        if($is_get_warehouses) {
-            $myreport_warehouse->get_warehouses();
-        } 
-        else if ($is_post_warehouse) {
-            $myreport_warehouse->add_warehouse();
-        }
-    }
-});
+//     $request = Flight::request();
+//     $is_endpoint_warehouse = $endpoint === 'warehouses' || $endpoint === 'warehouse';
+    
+//     if($is_endpoint_warehouse) {
+//         $is_get_warehouses = $endpoint === 'warehouses' && $request->method === 'GET';
+//         $is_post_warehouse = $endpoint === 'warehouse' && $request->method === 'POST';
+
+//         $myreport_warehouse = new My_report_warehouse();
+//         if($is_get_warehouses) {
+//             $myreport_warehouse->get_warehouses();
+//         } 
+//         else if ($is_post_warehouse) {
+//             $myreport_warehouse->add_warehouse();
+//         }
+//     }
+// });
 
 // $myreport_warehouse = new My_report_warehouse();
 // Flight::route('GET /myreport/warehouses', array($myreport_warehouse, 'get_warehouses'));
@@ -184,23 +186,10 @@ Flight::route('/user(/@endpoint)', function ($endpoint) {
     }
 });
 
-// root route for testing
-Flight::route('GET /', function () {
-    echo 'I received a GET request.';
+Flight::map('notFound', function(){
+    // Handle 404 errors
+    echo '404 - Not found';
 });
 
-Flight::route('POST /', function () {
-    $req = Flight::request()->query->name;
-    echo 'I received a POST request ' . $req;
-});
-
-Flight::route('PUT /', function () {
-    echo 'I received a PUT request.';
-});
-
-Flight::route('DELETE /', function () {
-    echo 'I received a DELETE request.';
-});
-// root route
 
 Flight::start();
