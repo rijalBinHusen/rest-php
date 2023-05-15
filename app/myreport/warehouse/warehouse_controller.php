@@ -11,7 +11,23 @@ class My_report_warehouse
     public function get_warehouses()
     { 
         $result = $this->my_report_warehouse->get_warehouses();
-        return Flight::json($result, 200);
+        
+        if($this->my_report_warehouse->is_success) {
+            Flight::json(
+                array(
+                    "success" => true,
+                    "data" => $result
+                    )
+            , 200);
+        }
+        
+        else {
+            Flight::json( array(
+                "success" => false,
+                "message" => $result
+            ), 500);
+        }
+
     }
     public function add_warehouse()
     {

@@ -9,11 +9,13 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testGetEndpoint()
     {
         // Send a GET request to the /endpoint URL
-        $get = file_get_contents($this->url . 'warehouses');
-        $response = json_decode($get);
-        $responseType = gettype($response);
-        // Verify that the response is "I received a GET request."
-        $this->assertEquals('array', $responseType);
+        $response = file_get_contents($this->url . 'warehouses');
+        
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertEquals($convertToAssocArray['success'], true);
     }
 
     public function testPostEndpoint()

@@ -8,6 +8,7 @@ class My_report_warehouse_model
 
     var $table = "my_report_warehouse";
     var $columns = "id, warehouse_name, warehouse_group, warehouse_supervisors";
+    var $is_success = true;
 
     function __construct()
     {
@@ -15,7 +16,12 @@ class My_report_warehouse_model
     }
     public function get_warehouses()
     {
-        return $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        if($this->database->connection_status !== true) {
+            $this->is_success = false;
+            return $this->database->connection_status;
+        } else {
+            return $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
     public function append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors)
     {

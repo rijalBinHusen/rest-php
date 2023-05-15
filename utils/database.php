@@ -11,7 +11,7 @@ $dotenv->load();
 class Query_builder {
 
     protected $db;
-    protected $connection_status;
+    public $connection_status;
     function __construct(){
         // get database configuration from dotenv file
         $database = getenv('DATABASE');
@@ -24,7 +24,7 @@ class Query_builder {
             // set the PDO error mode to exception
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // set value to connection status
-            $this->connection_status = "Connected successfully";
+            $this->connection_status = true;
         } catch (PDOException $e) {
             // set value to connection status
             $this->connection_status = "Connection failed: " . $e->getMessage();

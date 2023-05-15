@@ -2,15 +2,13 @@
 
 require_once('vendor/autoload.php');
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_controller.php');
-require_once('controller/My_report_supervisor.php');
-require_once('controller/My_report_base_item.php');
-require_once('controller/My_report_head_spv.php');
-require_once('controller/My_report_problem.php');
-require_once('controller/My_report_base_file.php');
-require_once('controller/My_report_field_problem.php');
-require_once('controller/User.php');
-
-Flight::response()->header('X-Hook-Secret', "DIRK");
+// require_once('controller/My_report_supervisor.php');
+// require_once('controller/My_report_base_item.php');
+// require_once('controller/My_report_head_spv.php');
+// require_once('controller/My_report_problem.php');
+// require_once('controller/My_report_base_file.php');
+// require_once('controller/My_report_field_problem.php');
+// require_once('controller/User.php');
 
 // Flight::before('/*', function() {
 //     // Get the token from the request header
@@ -68,7 +66,8 @@ Flight::route('/myreport(/@endpoint)', function ($endpoint) {
         $myreport_warehouse = new My_report_warehouse();
         if($is_get_warehouses) {
             $myreport_warehouse->get_warehouses();
-        } else if ($is_post_warehouse) {
+        } 
+        else if ($is_post_warehouse) {
             $myreport_warehouse->add_warehouse();
         }
     }
