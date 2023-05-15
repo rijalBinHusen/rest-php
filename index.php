@@ -8,7 +8,7 @@ require_once(__DIR__ . '/app/myreport/warehouse/warehouse_controller.php');
 // require_once('controller/My_report_problem.php');
 // require_once('controller/My_report_base_file.php');
 // require_once('controller/My_report_field_problem.php');
-// require_once('controller/User.php');
+require_once('controller/User.php');
 
 // Flight::before('/*', function() {
 //     // Get the token from the request header
@@ -56,6 +56,13 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
 });
 
 Flight::route('/myreport(/@endpoint)', function ($endpoint) {
+    $user = new User();
+    $is_token_valid = $user->check_token();
+
+    if(!$is_token_valid) {
+        return;
+    }
+    
     $request = Flight::request();
     $is_endpoint_warehouse = $endpoint === 'warehouses' || $endpoint === 'warehouse';
     

@@ -65,4 +65,28 @@ class User
             ]);
         }
     }
+    public function check_token () {
+        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            $is_token_valid = $this->user->validate($jwt_token);
+            
+            if($is_token_valid) {
+                return true;
+            } 
+            
+            else {
+                Flight::json([
+                    'success' => false,
+                    'message' => 'Invalid token',
+                ]);
+            }
+
+        } else {
+            Flight::json([
+                'success' => false,
+                'message' => 'You must be authenticated to access this resource.',
+            ]);
+        }
+        
+    }
 }
