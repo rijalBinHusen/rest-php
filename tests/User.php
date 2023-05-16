@@ -1,16 +1,38 @@
 <?php
 
 require_once(__DIR__ ."/../tests/httpCall.php");
+require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 
 class MyRestServerUserTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/user/";
-    // Test register must failed
+    // Test register email exists
     public function testRegisterEndpointFailed()
     {
         $http = new HttpCall($this->url . "register");
         // Define the request body
-        $data = array('email' => 'test@test.com', 'password' => "1233333", 'username' => "name0123");
+        $data = array('email' => 'test@test.com', 'password' => "1233333", 'name' => "name0123");
+        $http->setData($data);
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+        fwrite(STDERR, print_r($convertToAssocArray, TRUE));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals($convertToAssocArray['message'], 'User exist.');
+    }
+    
+    // Test register user not enter name
+    public function testRegisterEndpointWithoutName()
+    {
+        $http = new HttpCall($this->url . "register");
+        // Define the request body
+        $data = array(
+            'email' => 'test@dfsfsdfsdf.com', 
+            'password' => "1233333",
+        );
         $http->setData($data);
         $response = $http->getResponse("POST");
 
@@ -18,9 +40,30 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals($convertToAssocArray['success'], false);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals('Unprocessable Entity', $convertToAssocArray['message']);
     }
     // Test register must success
+    public function testRegisterEndpoint()
+    {
+        $http = new HttpCall($this->url . "register");
+        $faker = Faker\Factory::create();
+        // Define the request body
+        $data = array(
+            'email' => $faker->email, 
+            'password' => $faker->numberBetween(100000, 1000000), 
+            'name' => $faker->name("female")
+        );
+        $http->setData($data);
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals('Registration success.', $convertToAssocArray['message']);
+    }
 
     // test login success
     public function testLoginEndpoint()
@@ -35,6 +78,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('token', $convertToAssocArray);
+        fwrite(STDERR, print_r($convertToAssocArray, TRUE));
 
         // save token to a .txt file
         $myfile = fopen("token.txt", "w") or die("Unable to open file!");

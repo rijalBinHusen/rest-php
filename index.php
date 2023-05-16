@@ -4,13 +4,14 @@ require_once('vendor/autoload.php');
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_controller.php');
 require_once(__DIR__ . '/app/tests_route.php');
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
+require_once(__DIR__ . '/app/Users/user_route.php');
 // require_once('controller/My_report_supervisor.php');
 // require_once('controller/My_report_base_item.php');
 // require_once('controller/My_report_head_spv.php');
 // require_once('controller/My_report_problem.php');
 // require_once('controller/My_report_base_file.php');
 // require_once('controller/My_report_field_problem.php');
-require_once('controller/User.php');
+// require_once('controller/User.php');
 
 // Flight::before('/*', function() {
 //     // Get the token from the request header
@@ -163,32 +164,12 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
 
 // My report rest api
 
-// Register
-Flight::route('/user(/@endpoint)', function ($endpoint) {
-    $user = new User();
-    // register
-    if($endpoint === 'register') {
-        $user->register();
-    }
-    // login
-    else if ($endpoint === 'login') {
-        $user->login();
-    }
-    // validate
-    else if ($endpoint === 'validate') {
-        // catch authorization on http header
-        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
-            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
-            $user->validate($jwt_token);
-        } else {
-            $user->validate(null);
-        }
-    }
-});
-
 Flight::map('notFound', function(){
     // Handle 404 errors
-    echo '404 - Not found';
+    Flight::json([
+        "success" => false,
+        "message" => "Page not found" 
+    ], 404);
 });
 
 
