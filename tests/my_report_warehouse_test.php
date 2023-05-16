@@ -8,10 +8,19 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     private $url = "http://localhost/rest-php/myreport/";
     public function testGetEndpoint()
     {
+        $http = new HttpCall($this->url . 'warehouses');
+        // Define the request body
+        // get token
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+        // add headers
+        $http->addHeaders('JWT-Authorization', $token);
         // Send a GET request to the /endpoint URL
-        $response = file_get_contents($this->url . 'warehouses');
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
@@ -21,7 +30,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testPostEndpoint()
     {
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'warehouse');
+        $http = new HttpCall($this->url . "warehouse");
         // Define the request body
         $data = array(
             'warehouse_name' => $faker->name('female'),
@@ -29,10 +38,19 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
             'warehouse_supervisors' => $faker->name('female')
         );
 
-        $httpCallVar->setData($data);
-        $response = $httpCallVar->getResponse("POST");
+        $http->setData($data);
+        // Define the request body
+        // get token
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        // set token on header request
+        $http->addHeaders('JWT-Authorization', $token);
+        fclose($myfile);
+        $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
+
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
@@ -50,6 +68,14 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         );
 
         $httpCallVar->setData($data);
+
+        // get token
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+        // add headers
+        $httpCallVar->addHeaders('JWT-Authorization', $token);
+        
         $response = $httpCallVar->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
@@ -57,7 +83,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals($convertToAssocArray['success'], false);
-        $this->assertEquals($convertToAssocArray['message'], 'Failed add warehouse, check the data you sent');
+        $this->assertEquals('Failed add warehouse, check the data you sent', $convertToAssocArray['message']);
     }
 
     // public function testPutEndpoint()

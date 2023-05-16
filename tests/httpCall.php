@@ -8,6 +8,7 @@ class HttpCall {
     public function __construct($url)
     {
         $this->url = $url;
+        $this->setHeaders();
     }
 
     public function getEndPoint() {
@@ -16,7 +17,6 @@ class HttpCall {
 
     public function setData($arrayData) {
         $this->data_string = json_encode($arrayData);
-        $this->setHeaders();
     }
 
     private function setHeaders() {
