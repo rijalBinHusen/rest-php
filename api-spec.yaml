@@ -11,10 +11,10 @@ tags:
     description: Warehouse department
   - name: supervisor
     description: People who handle department
-  - name: problem
-    description: Problem that exist in department
   - name: head supervisor
     description: The people who responsible above the supervisor and all department
+  - name: problem
+    description: Problem that exist in department
   - name: field problem
     description: The problem that obstruct supervisor in field
   - name: document
@@ -196,6 +196,82 @@ paths:
         "401":
           $ref: "#/components/responses/401Error"
   # End of supeervisor end point
+  /head_spv:
+    post:
+      tags:
+        - head supervisor
+      summary: Lets a user post a new head supervisor
+      requestBody:
+        $ref: "#/components/requestBodies/Head_supervisor"
+      responses:
+        "200":
+          description: Successfully created a new supervisor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /heads_spv:
+    get:
+      tags:
+        - head supervisor
+      summary: Get all head supervisor.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Head_supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /head_spv/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the head supervisor
+        schema:
+          type: string
+        example: "HEA20220239"
+    get:
+      tags:
+        - head supervisor
+      summary: Get head supervisor by id.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Head_supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - head supervisor
+      summary: Update head supervisor by id
+      requestBody:
+        $ref: "#/components/requestBodies/Head_supervisor"
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  # End of head supeervisor end point
   /problem:
     post:
       tags:
@@ -214,44 +290,104 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /problem/{id}:
+  /problems/byperiode:
+    # problems?periode1=123123809&periode2=123123123
+    # problems?status=active
+    # problems?warehouse=war102398&supervisor=SUP1203981
+    # problems?item=ITEM120398
     parameters:
-      - name: id
-        in: path
+      - name: periode1
+        in: query
         required: true
-        description: id of problem
+        description: The start periode to search, date in unix time
         schema:
-          type: string
-        example: "PRO2204509"
+          type: number
+        example: 80394802938098
+      - name: periode2
+        in: query
+        required: true
+        description: The end periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
     get:
       tags:
         - problem
-      summary: Get problems by id.
+      summary: Get problems by query.
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Problem"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Problem"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-    put:
+  /problems/bystatus:
+    # problems?periode1=123123809&periode2=123123123
+    # problems?status=active
+    # problems?warehouse=war102398&supervisor=SUP1203981
+    # problems?item=ITEM120398
+    parameters:
+      - name: status
+        in: query
+        required: true
+        description: status of problem either active(1) or closed(0)
+        schema:
+          type: boolean
+        example: 1
+    get:
       tags:
         - problem
-      summary: Update problem by id
-      requestBody:
-        $ref: "#/components/requestBodies/Problem"
+      summary: Get problems by query.
       responses:
         "200":
-          $ref: "#/components/responses/200Success"
-
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Problem"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /problems/bysupervisor:
+    # problems?periode1=123123809&periode2=123123123
+    # problems?status=active
+    # problems?warehouse=war102398&supervisor=SUP1203981
+    # problems?item=ITEM120398
+    parameters:
+      - name: supervisor
+        in: query
+        required: true
+        description: supervisor of problem
+        schema:
+          type: string
+        example: SUP12301298
+    get:
+      tags:
+        - problem
+      summary: Get problems by query.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Problem"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+
   /problems:
     # problems?periode1=123123809&periode2=123123123
     # problems?status=active
@@ -333,74 +469,36 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  # End of problem end point
-  /head_spv:
-    post:
-      tags:
-        - head supervisor
-      summary: Lets a user post a new head supervisor
-      requestBody:
-        $ref: "#/components/requestBodies/Head_supervisor"
-      responses:
-        "200":
-          description: Successfully created a new supervisor
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Return_after_post"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-  /heads_spv:
-    get:
-      tags:
-        - head supervisor
-      summary: Get all head supervisor.
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Head_supervisor"
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-  /head_spv/{id}:
+  /problem/{id}:
     parameters:
       - name: id
         in: path
         required: true
-        description: The ID of the head supervisor
+        description: id of problem
         schema:
           type: string
-        example: "HEA20220239"
+        example: "PRO2204509"
     get:
       tags:
-        - head supervisor
-      summary: Get head supervisor by id.
+        - problem
+      summary: Get problems by id.
       responses:
         "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Head_supervisor"
+                $ref: "#/components/schemas/Problem"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
     put:
       tags:
-        - head supervisor
-      summary: Update head supervisor by id
+        - problem
+      summary: Update problem by id
       requestBody:
-        $ref: "#/components/requestBodies/Head_supervisor"
+        $ref: "#/components/requestBodies/Problem"
       responses:
         "200":
           $ref: "#/components/responses/200Success"
@@ -409,7 +507,7 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  # End of head supeervisor end point
+  # End of problem end point
   /field_problem:
     post:
       tags:
