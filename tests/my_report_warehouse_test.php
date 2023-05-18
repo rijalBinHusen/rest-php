@@ -9,13 +9,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testGetEndpoint()
     {
         $http = new HttpCall($this->url . 'warehouses');
-        // Define the request body
-        // get token
-        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
-        $token = fgets($myfile);
-        fclose($myfile);
-        // add headers
-        $http->addHeaders('JWT-Authorization', $token);
+        $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
         
@@ -25,6 +19,19 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertEquals($convertToAssocArray['success'], true);
+    }
+
+    public function testGetEndpointFailed()
+    {
+        $http = new HttpCall($this->url . 'warehouses');
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
 
     public function testPostEndpoint()
@@ -40,12 +47,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
         $http->setData($data);
         // Define the request body
-        // get token
-        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
-        $token = fgets($myfile);
-        // set token on header request
-        $http->addHeaders('JWT-Authorization', $token);
-        fclose($myfile);
+        $http->addJWTToken();
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
@@ -69,12 +71,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        // get token
-        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
-        $token = fgets($myfile);
-        fclose($myfile);
-        // add headers
-        $httpCallVar->addHeaders('JWT-Authorization', $token);
+        $http->addJWTToken();
         
         $response = $httpCallVar->getResponse("POST");
 
@@ -82,45 +79,81 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals($convertToAssocArray['success'], false);
+        $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals('Failed add warehouse, check the data you sent', $convertToAssocArray['message']);
     }
 
-    // public function testPutEndpoint()
-    // {
-    //     // Define the request body
-    //     $data = array('foo' => 'baz');
-    //     $data_string = json_encode($data);
-        
-    //     // Set up the request headers
-    //     $headers = array(
-    //         'Content-Type: application/json',
-    //         'Content-Length: ' . strlen($data_string)
-    //     );
-        
-    //     // Send a PUT request to the /endpoint URL with the request body
-    //     $ch = curl_init($this->url);
-    //     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    //     $response = curl_exec($ch);
-    //     curl_close($ch);
-        
-    //     // Verify that the response is "Success"
-    //     $this->assertEquals('I received a PUT request.', $response);
-    // }
+    public function testPutEndpointFailed()
+    {
+        $faker = Faker\Factory::create();
+        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        // Define the request body
+        $data = array(
+            'warehouse_nameddd' => $faker->name('female'),
+            'warehouse_groupddd' => $faker->name('female'),
+        );
 
-    // public function testDeleteEndpoint()
-    // {
-    //     // Send a DELETE request to the /endpoint URL
-    //     $ch = curl_init($this->url);
-    //     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     $response = curl_exec($ch);
-    //     curl_close($ch);
+        $httpCallVar->setData($data);
+
+        $http->addJWTToken();
         
-    //     // Verify that the response is "Success"
-    //     $this->assertEquals('I received a DELETE request.', $response);
-    // }
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals('Failed update warehouse, check the data you sent', $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed2()
+    {
+        $faker = Faker\Factory::create();
+        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        // Define the request body
+        $data = array(
+            'warehouse_name' => $faker->name('female'),
+            'warehouse_group' => $faker->name('female'),
+        );
+
+        $httpCallVar->setData($data);
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    public function testGetByIdEndpoint()
+    {
+        $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertEquals($convertToAssocArray['success'], true);
+    }
+
+    public function testGetByIdEndpointFailed()
+    {
+        $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 }

@@ -138,8 +138,8 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals($convertToAssocArray['success'], true);
-        $this->assertEquals($convertToAssocArray['message'], "Valid token");
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Valid token", $convertToAssocArray['message']);
     }
 
 }

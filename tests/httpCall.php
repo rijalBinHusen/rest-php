@@ -38,6 +38,19 @@ class HttpCall {
         return $response;
     }
 
+    public function addJWTToken() {
+        
+        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+
+        $this->headers = array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($this->data_string),
+            "JWT-Authorization: " . $token
+        );
+    }
+
     public function addHeaders($key, $value) {
         $this->headers = array(
             'Content-Type: application/json',
