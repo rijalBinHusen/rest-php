@@ -129,6 +129,29 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
 
+    public function testPutEndpoint()
+    {
+        $faker = Faker\Factory::create();
+        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        // Define the request body
+        $data = array(
+            'warehouse_name' => $faker->name('female'),
+            'warehouse_group' => $faker->name('female'),
+        );
+
+        $httpCallVar->setData($data);
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Update warehouse success", $convertToAssocArray['message']);
+    }
+
     public function testGetByIdEndpoint()
     {
         $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
