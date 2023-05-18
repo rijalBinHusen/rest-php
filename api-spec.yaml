@@ -17,7 +17,7 @@ tags:
     description: The people who responsible above the supervisor and all department
   - name: field problem
     description: The problem that obstruct supervisor in field
-  - name: document 
+  - name: document
     description: paper record that must be created by supervisor
   - name: complain
     description: complain from customer
@@ -40,130 +40,130 @@ paths:
   /warehouses:
     get:
       tags:
-      - warehouse
+        - warehouse
       summary: Get all warehouse.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Warehouse'
-        '401':
-          $ref: '#/components/responses/401Error'
-        '404':
+                  $ref: "#/components/schemas/Warehouse"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
           description: Warehouses not found
   /warehouse:
     post:
       tags:
-      - warehouse
+        - warehouse
       summary: Lets a user post a new warehouse
       requestBody:
-        $ref: '#/components/requestBodies/Warehouse'
+        $ref: "#/components/requestBodies/Warehouse"
       responses:
-        '201':
+        "201":
           description: Successfully created a new warehouse
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /warehouse/{id}:
     parameters:
-          - name: id
-            in: path
-            required: true
-            description: The ID of the warehouse
-            schema:
-              type: string
-            example: 'WAR220203902'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the warehouse
+        schema:
+          type: string
+        example: "WAR220203902"
     get:
       tags:
-      - warehouse
+        - warehouse
       summary: Get warehouse by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Warehouse'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Warehouse"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - warehouse
+        - warehouse
       summary: Update warehouse by id
       requestBody:
-        $ref: '#/components/requestBodies/Warehouse'
+        $ref: "#/components/requestBodies/Warehouse"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of warehouse end point
+  /supervisor:
+    post:
+      tags:
+        - supervisor
+      summary: Lets a user post a new supervisor
+      requestBody:
+        $ref: "#/components/requestBodies/Supervisor"
+      responses:
+        "200":
+          description: Successfully created a new supervisor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /supervisors:
     get:
       tags:
-      - supervisor
+        - supervisor
       summary: Get all supervisor.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Supervisor'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
-  /supervisor:
-    post:
-      tags:
-      - supervisor
-      summary: Lets a user post a new supervisor
-      requestBody:
-        $ref: '#/components/requestBodies/Supervisor'
-      responses:
-        '200':
-          description: Successfully created a new supervisor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Return_after_post'
-
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /supervisor/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the supervisor
-          schema:
-            type: string
-          example: 'SUP20220239'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the supervisor
+        schema:
+          type: string
+        example: "SUP20220239"
     get:
       tags:
-      - supervisor
+        - supervisor
       summary: Get supervisor by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
@@ -176,136 +176,136 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Supervisor'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                      $ref: "#/components/schemas/Supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - supervisor
+        - supervisor
       summary: Update supervisor by id
       requestBody:
-        $ref: '#/components/requestBodies/Supervisor'
+        $ref: "#/components/requestBodies/Supervisor"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of supeervisor end point
   /problem:
     post:
       tags:
-      - problem
+        - problem
       summary: Let a user post a new problem
       requestBody:
-        $ref: '#/components/requestBodies/Problem'
+        $ref: "#/components/requestBodies/Problem"
       responses:
-        '200':
+        "200":
           description: Successfully created a new problem
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /problem/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of problem
-          schema:
-            type: string
-          example: 'PRO2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of problem
+        schema:
+          type: string
+        example: "PRO2204509"
     get:
       tags:
-      - problem
+        - problem
       summary: Get problems by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Problem'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Problem"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - problem
+        - problem
       summary: Update problem by id
       requestBody:
-        $ref: '#/components/requestBodies/Problem'
+        $ref: "#/components/requestBodies/Problem"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /problems:
-  # problems?periode1=123123809&periode2=123123123
-  # problems?status=active
-  # problems?warehouse=war102398&supervisor=SUP1203981
-  # problems?item=ITEM120398
+    # problems?periode1=123123809&periode2=123123123
+    # problems?status=active
+    # problems?warehouse=war102398&supervisor=SUP1203981
+    # problems?item=ITEM120398
     parameters:
-        - name: periode1
-          in: query
-          required: true
-          description: The start periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
-        - name: periode2
-          in: query
-          required: true
-          description: The end periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
-        - name: status
-          in: query
-          required: true
-          description: status of problem either active or closed
-          schema:
-            type: string
-          example: active
-        - name: warehouse
-          in: query
-          required: true
-          description: warehouse of problem
-          schema:
-            type: string
-          example: WAR10293801
-        - name: supervisor
-          in: query
-          required: true
-          description: supervisor of problem
-          schema:
-            type: string
-          example: SUP12301298
-        - name: item
-          in: query
-          required: true
-          description: item of problem
-          schema:
-            type: string
-          example: ITM12983102938
+      - name: periode1
+        in: query
+        required: true
+        description: The start periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
+      - name: periode2
+        in: query
+        required: true
+        description: The end periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
+      - name: status
+        in: query
+        required: true
+        description: status of problem either active or closed
+        schema:
+          type: string
+        example: active
+      - name: warehouse
+        in: query
+        required: true
+        description: warehouse of problem
+        schema:
+          type: string
+        example: WAR10293801
+      - name: supervisor
+        in: query
+        required: true
+        description: supervisor of problem
+        schema:
+          type: string
+        example: SUP12301298
+      - name: item
+        in: query
+        required: true
+        description: item of problem
+        schema:
+          type: string
+        example: ITM12983102938
     get:
       tags:
-      - problem
+        - problem
       summary: Get problems by query.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
@@ -316,10 +316,10 @@ paths:
                   properties:
                     id:
                       type: string
-                      example: 'PRO22500001'
-                    warehouse: 
+                      example: "PRO22500001"
+                    warehouse:
                       type: string
-                    supervisor: 
+                    supervisor:
                       type: string
                     item:
                       type: string
@@ -327,115 +327,115 @@ paths:
                       type: number
                     masalah:
                       type: string
-                    tanggal_selesai: 
+                    tanggal_selesai:
                       type: number
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of problem end point
   /head_spv:
     post:
       tags:
-      - head supervisor
+        - head supervisor
       summary: Lets a user post a new head supervisor
       requestBody:
-        $ref: '#/components/requestBodies/Head_supervisor'
+        $ref: "#/components/requestBodies/Head_supervisor"
       responses:
-        '200':
+        "200":
           description: Successfully created a new supervisor
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /heads_spv:
     get:
       tags:
-      - head supervisor
+        - head supervisor
       summary: Get all head supervisor.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Head_supervisor'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Head_supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /head_spv/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the head supervisor
-          schema:
-            type: string
-          example: 'HEA20220239'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the head supervisor
+        schema:
+          type: string
+        example: "HEA20220239"
     get:
       tags:
-      - head supervisor
+        - head supervisor
       summary: Get head supervisor by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Head_supervisor'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Head_supervisor"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - head supervisor
+        - head supervisor
       summary: Update head supervisor by id
       requestBody:
-        $ref: '#/components/requestBodies/Head_supervisor'
+        $ref: "#/components/requestBodies/Head_supervisor"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of head supeervisor end point
   /field_problem:
     post:
       tags:
-      - field problem
+        - field problem
       summary: Lets a user post a new field problem
       requestBody:
-        $ref: '#/components/requestBodies/Field_problem'
+        $ref: "#/components/requestBodies/Field_problem"
       responses:
-        '200':
+        "200":
           description: Successfully created a new field problem
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /fieLd_problems:
     get:
       tags:
-      - field problem
+        - field problem
       summary: Get all field problem.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
@@ -445,271 +445,271 @@ paths:
                   properties:
                     id:
                       type: string
-                    periode: 
+                    periode:
                       type: number
                     supervisor_name:
                       type: string
-                    head_name: 
+                    head_name:
                       type: string
-                    masalah: 
+                    masalah:
                       type: string
-    
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /field_problem/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the field problem
-          schema:
-            type: string
-          example: 'FIE20220239'
+      - name: id
+        in: path
+        required: true
+        description: The ID of the field problem
+        schema:
+          type: string
+        example: "FIE20220239"
     get:
       tags:
-      - field problem
+        - field problem
       summary: Get field problem by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Field_problem'
-        '400':
-          $ref: '#/components/responses/400Error'
+                $ref: "#/components/schemas/Field_problem"
+        "400":
+          $ref: "#/components/responses/400Error"
     put:
       tags:
-      - field problem
+        - field problem
       summary: Update field problem by id
       requestBody:
-        $ref: '#/components/requestBodies/Field_problem'
+        $ref: "#/components/requestBodies/Field_problem"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - field problem
+        - field problem
       summary: Delete field problem by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of field problem end point
   /document:
     post:
       tags:
-      - document
+        - document
       summary: Lets a user post a new document
       requestBody:
-        $ref: '#/components/requestBodies/Document'
+        $ref: "#/components/requestBodies/Document"
       responses:
-        '200':
+        "200":
           description: Successfully created a new document
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /documents:
     parameters:
-        - name: periode1
-          in: query
-          required: true
-          description: The start periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
-        - name: periode2
-          in: query
-          required: true
-          description: The end periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
-        - name: status
-          in: query
-          required: true
-          description: The status of document, either 0 (uncollected), 1 (collected) or 2 (approved)
-          schema:
-            type: number
-          example: 0
+      - name: periode1
+        in: query
+        required: true
+        description: The start periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
+      - name: periode2
+        in: query
+        required: true
+        description: The end periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
+      - name: status
+        in: query
+        required: true
+        description: The status of document, either 0 (uncollected), 1 (collected) or 2 (approved)
+        schema:
+          type: number
+        example: 0
     get:
       tags:
-      - document
+        - document
       summary: Get documents between two periode.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Document'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Document"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /document/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of document
-          schema:
-            type: string
-          example: 'DOC2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of document
+        schema:
+          type: string
+        example: "DOC2204509"
     get:
       tags:
-      - document
+        - document
       summary: Get document by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Document'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Document"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - document
+        - document
       summary: Update document by id
       requestBody:
-        $ref: '#/components/requestBodies/Document'
+        $ref: "#/components/requestBodies/Document"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - document
+        - document
       summary: Delete field document by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /document/last_date:
     get:
       tags:
-      - document
+        - document
       summary: Get the higher date document.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  date: 
+                  date:
                     type: number
                     example: 1029381038102381923
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of document end point
   /complain:
     post:
       tags:
-      - complain
+        - complain
       summary: Lets a user post a new complain
       requestBody:
-        $ref: '#/components/requestBodies/Complain'
+        $ref: "#/components/requestBodies/Complain"
       responses:
-        '200':
+        "200":
           description: Successfully created a new complain
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /complain/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of complain
-          schema:
-            type: string
-          example: 'COM2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of complain
+        schema:
+          type: string
+        example: "COM2204509"
     get:
       tags:
-      - complain
+        - complain
       summary: Get complain by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Complain'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Complain"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - complain
+        - complain
       summary: Update complain by id
       requestBody:
-        $ref: '#/components/requestBodies/Complain'
+        $ref: "#/components/requestBodies/Complain"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - complain
+        - complain
       summary: Delete field complain by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /complains:
     get:
       tags:
-      - complain
+        - complain
       summary: Get complain.
       parameters:
         - name: limit
@@ -721,42 +721,42 @@ paths:
             type: number
             default: 10
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Complain'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Complain"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of complain end point
   /complain_import:
     post:
       tags:
-      - complain import
+        - complain import
       summary: Lets a user post a new complain
       requestBody:
-        $ref: '#/components/requestBodies/Complain_import'
+        $ref: "#/components/requestBodies/Complain_import"
       responses:
-        '200':
+        "200":
           description: Successfully created a new complain import from excel
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /complains_import:
     get:
       tags:
-      - complain import
+        - complain import
       summary: Get complain imported.
       parameters:
         - name: limit
@@ -768,142 +768,142 @@ paths:
             type: number
             default: 10
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Complain_import'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Complain_import"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /complain_import/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of complain
-          schema:
-            type: string
-          example: 'COM2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of complain
+        schema:
+          type: string
+        example: "COM2204509"
     get:
       tags:
-      - complain import
+        - complain import
       summary: Get complain by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Complain_import'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Complain_import"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - complain import
+        - complain import
       summary: Update complain by id
       requestBody:
-        $ref: '#/components/requestBodies/Complain_import'
+        $ref: "#/components/requestBodies/Complain_import"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - complain import
+        - complain import
       summary: Delete field complain by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of complain import
   /case:
     post:
       tags:
-      - case
+        - case
       summary: Lets a user post a new case
       requestBody:
-        $ref: '#/components/requestBodies/Case'
+        $ref: "#/components/requestBodies/Case"
       responses:
-        '200':
+        "200":
           description: Successfully created a new case
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /case/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of case
-          schema:
-            type: string
-          example: 'COM2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of case
+        schema:
+          type: string
+        example: "COM2204509"
     get:
       tags:
-      - case
+        - case
       summary: Get case by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Case'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Case"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - case
+        - case
       summary: Update case by id
       requestBody:
-        $ref: '#/components/requestBodies/Case'
+        $ref: "#/components/requestBodies/Case"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - case
+        - case
       summary: Delete field case by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /cases:
     get:
       tags:
-      - case
+        - case
       summary: Get cases.
       parameters:
         - name: limit
@@ -915,92 +915,92 @@ paths:
             type: number
             default: 10
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Case'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Case"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of Case end point
   /case_import:
     post:
       tags:
-      - case import
+        - case import
       summary: Lets a user post a new case import
       requestBody:
-        $ref: '#/components/requestBodies/Case_import'
+        $ref: "#/components/requestBodies/Case_import"
       responses:
-        '200':
+        "200":
           description: Successfully created a new case import
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /case_import/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of case import
-          schema:
-            type: string
-          example: 'COM2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of case import
+        schema:
+          type: string
+        example: "COM2204509"
     get:
       tags:
-      - case import
+        - case import
       summary: Get case import by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Case_import'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Case_import"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - case import
+        - case import
       summary: Update case import by id
       requestBody:
-        $ref: '#/components/requestBodies/Case_import'
+        $ref: "#/components/requestBodies/Case_import"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - case import
+        - case import
       summary: Delete field case import by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /cases_import:
     get:
       tags:
-      - case import
+        - case import
       summary: Get cases import.
       parameters:
         - name: limit
@@ -1012,18 +1012,18 @@ paths:
             type: number
             default: 10
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Case'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Case"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of Case import end point
   /base_stocks:
     parameters:
@@ -1053,203 +1053,203 @@ paths:
             - 3
     get:
       tags:
-      - base stock
+        - base stock
       summary: Get base stock by parent.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Base_stock'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Base_stock"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base stock
+        - base stock
       summary: Delete base stock by parent
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_stock/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of base stock
-          schema:
-            type: string
-          example: 'BAS2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of base stock
+        schema:
+          type: string
+        example: "BAS2204509"
     get:
       tags:
-      - base stock
+        - base stock
       summary: Get base stock by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Base_stock'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Base_stock"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - case import
+        - case import
       summary: Update case import by id
       requestBody:
-        $ref: '#/components/requestBodies/Base_stock'
+        $ref: "#/components/requestBodies/Base_stock"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base stock
+        - base stock
       summary: Delete base stock by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
+        "400":
+          $ref: "#/components/responses/400Error"
   /base_stock:
     post:
       tags:
-      - base stock
+        - base stock
       summary: Lets a user post a new base stock
       requestBody:
-        $ref: '#/components/requestBodies/Base_stock'
+        $ref: "#/components/requestBodies/Base_stock"
       responses:
-        '200':
+        "200":
           description: Successfully created a new base stock
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of base stock end point
   /base_file:
     post:
       tags:
-      - base file
+        - base file
       summary: Lets a user post a new base file
       requestBody:
-        $ref: '#/components/requestBodies/Base_file'
+        $ref: "#/components/requestBodies/Base_file"
       responses:
-        '200':
+        "200":
           description: Successfully created a new base file
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_files:
     parameters:
-        - name: periode1
-          in: query
-          required: true
-          description: The start periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
-        - name: periode2
-          in: query
-          required: true
-          description: The end periode to search, date in unix time
-          schema:
-            type: number
-          example: 80394802938098
+      - name: periode1
+        in: query
+        required: true
+        description: The start periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
+      - name: periode2
+        in: query
+        required: true
+        description: The end periode to search, date in unix time
+        schema:
+          type: number
+        example: 80394802938098
     get:
       tags:
-      - base file
+        - base file
       summary: Get documents between two periode.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Base_file'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Base_file"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_file/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of base file
-          schema:
-            type: string
-          example: 'BAS2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of base file
+        schema:
+          type: string
+        example: "BAS2204509"
     get:
       tags:
-      - base file
+        - base file
       summary: Get base file by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Base_file'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Base_file"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - base file
+        - base file
       summary: Update base file by id
       requestBody:
-        $ref: '#/components/requestBodies/Base_file'
+        $ref: "#/components/requestBodies/Base_file"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base file
+        - base file
       summary: Delete base file by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of base file end point
   /base_clocks:
     parameters:
@@ -1279,122 +1279,122 @@ paths:
             - 3
     get:
       tags:
-      - base clock
+        - base clock
       summary: Get base clock by parent.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Base_clock'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Base_clock"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base clock
+        - base clock
       summary: Delete base clock by parent
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_clock/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of base clock
-          schema:
-            type: string
-          example: 'BAS2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of base clock
+        schema:
+          type: string
+        example: "BAS2204509"
     get:
       tags:
-      - base clock
+        - base clock
       summary: Get base clock by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Base_clock'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Base_clock"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - case import
+        - case import
       summary: Update case import by id
       requestBody:
-        $ref: '#/components/requestBodies/Base_clock'
+        $ref: "#/components/requestBodies/Base_clock"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base clock
+        - base clock
       summary: Delete base clock by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_clock:
     post:
       tags:
-      - base clock
+        - base clock
       summary: Lets a user post a new base clock
       requestBody:
-        $ref: '#/components/requestBodies/Base_clock'
+        $ref: "#/components/requestBodies/Base_clock"
       responses:
-        '200':
+        "200":
           description: Successfully created a new base clock
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of base clock end point
   /base_item:
     post:
       tags:
-      - base item
+        - base item
       summary: Let a user post a new base item
       requestBody:
-        $ref: '#/components/requestBodies/Base_item'
+        $ref: "#/components/requestBodies/Base_item"
       responses:
-        '200':
+        "200":
           description: Successfully created a new base item
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Return_after_post'
+                $ref: "#/components/schemas/Return_after_post"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_items:
     parameters:
       - name: limit
@@ -1411,72 +1411,71 @@ paths:
             - 40
     get:
       tags:
-      - base item
+        - base item
       summary: Get base item.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Base_item'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                  $ref: "#/components/schemas/Base_item"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_item/{id}:
     parameters:
-        - name: id
-          in: path
-          required: true
-          description: id of base item
-          schema:
-            type: string
-          example: 'BAS2204509'
+      - name: id
+        in: path
+        required: true
+        description: id of base item
+        schema:
+          type: string
+        example: "BAS2204509"
     get:
       tags:
-      - base item
+        - base item
       summary: Get base item by id.
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Base_item'
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+                $ref: "#/components/schemas/Base_item"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     put:
       tags:
-      - base item
+        - base item
       summary: Update base item by id
       requestBody:
-        $ref: '#/components/requestBodies/Base_item'
+        $ref: "#/components/requestBodies/Base_item"
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
     delete:
       tags:
-      - base item
+        - base item
       summary: Delete base item by id
       responses:
-        '200':
-          $ref: '#/components/responses/200Success'
+        "200":
+          $ref: "#/components/responses/200Success"
 
-        '400':
-          $ref: '#/components/responses/400Error'
-        '401':
-          $ref: '#/components/responses/401Error'
-  
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
 
 components:
   schemas:
@@ -1485,39 +1484,39 @@ components:
       properties:
         id:
           type: string
-          example: 'WAR22500001'
+          example: "WAR22500001"
     Warehouse:
       type: object
       properties:
         id:
           type: string
-          example: 'WAR22500001'
+          example: "WAR22500001"
         warehouse_name:
           type: string
-          example: 'warehouse001'
+          example: "warehouse001"
         warehouse_group:
           type: string
-          example: 'warehouse002'
+          example: "warehouse002"
           nullable: true
     Supervisor:
       type: object
       properties:
         id:
           type: string
-          example: 'SUP22500001'
+          example: "SUP22500001"
         supervisor_name:
           type: string
-          example: 'supervisor001'
+          example: "supervisor001"
         supervisor_phone:
           type: number
           example: 629283019283098123
           nullable: true
         supervisor_warehouse:
           type: string
-          example: 'warehouse001'
+          example: "warehouse001"
           nullable: true
         supervisor_shift:
-          type: number 
+          type: number
           example: 1
         is_disabled:
           type: boolean
@@ -1528,12 +1527,12 @@ components:
       properties:
         id:
           type: string
-          example: 'PRO22500001'
-        warehouse_id: 
+          example: "PRO22500001"
+        warehouse_id:
           type: string
-        supervisor_id: 
+        supervisor_id:
           type: string
-        head_spv_id: 
+        head_spv_id:
           type: string
         item_kode:
           type: string
@@ -1541,14 +1540,14 @@ components:
           type: number
         shift_mulai:
           type: number
-        pic: 
+        pic:
           type: string
-        dl: 
+        dl:
           type: number
         masalah:
           type: string
         sumber_masalah:
-         type: string
+          type: string
         solusi:
           type: string
         solusi_panjang:
@@ -1566,13 +1565,13 @@ components:
       properties:
         id:
           type: string
-          example: 'HEA12312830'
+          example: "HEA12312830"
         head_name:
           type: string
         head_phone:
           type: number
         head_shift:
-          type: number 
+          type: number
           example: 1
         is_disabled:
           type: boolean
@@ -1581,48 +1580,48 @@ components:
       properties:
         id:
           type: string
-        periode: 
+        periode:
           type: number
         supervisor_id:
           type: string
-        head_spv_id: 
+        head_spv_id:
           type: string
-        masalah: 
-          type: string 
-        sumber_masalah: 
+        masalah:
           type: string
-        solusi: 
+        sumber_masalah:
           type: string
-        pic: 
+        solusi:
           type: string
-        dl: 
+        pic:
+          type: string
+        dl:
           type: number
     Document:
       type: object
       properties:
-        id: 
+        id:
           type: string
-        collected: 
+        collected:
           type: number
         approval:
           type: number
-        status: 
+        status:
           type: number
-        shared: 
+        shared:
           type: number
-        finished: 
+        finished:
           type: number
-        total_do: 
+        total_do:
           type: number
-        total_kendaraan: 
+        total_kendaraan:
           type: number
-        total_waktu: 
+        total_waktu:
           type: number
-        base_report_file: 
+        base_report_file:
           type: string
-        is_finished: 
+        is_finished:
           type: boolean
-        supervisor_id: 
+        supervisor_id:
           type: string
         periode:
           type: number
@@ -1637,7 +1636,7 @@ components:
     Complain:
       type: object
       properties:
-        id: 
+        id:
           type: string
         periode:
           type: number
@@ -1668,87 +1667,87 @@ components:
     Complain_import:
       type: object
       properties:
-        id: 
+        id:
           type: string
-        customer: 
+        customer:
           type: string
-        do: 
+        do:
           type: string
-        gudang: 
+        gudang:
           type: string
-        item: 
+        item:
           type: string
-        kabag: 
+        kabag:
           type: string
-        nomor_SJ: 
+        nomor_SJ:
           type: string
-        nopol: 
+        nopol:
           type: string
-        real_: 
+        real_:
           type: string
-        row_: 
+        row_:
           type: string
-        spv: 
+        spv:
           type: string
-        tally: 
+        tally:
           type: string
-        tanggal_bongkar: 
+        tanggal_bongkar:
           type: string
-        tanggal_info: 
+        tanggal_info:
           type: string
-        tanggal_komplain: 
+        tanggal_komplain:
           type: string
-        tanggal_SJ: 
+        tanggal_SJ:
           type: string
-        type: 
+        type:
           type: string
     Case:
       type: object
       properties:
-        id: 
+        id:
           type: string
-        periode: 
+        periode:
           type: number
-        head_spv_id: 
+        head_spv_id:
           type: string
-        dl: 
+        dl:
           type: number
-        masalah: 
+        masalah:
           type: string
-        supervisor_id: 
+        supervisor_id:
           type: string
-        parent: 
+        parent:
           type: string
-        pic: 
+        pic:
           type: string
-        solusi: 
+        solusi:
           type: string
-        status: 
+        status:
           type: string
-        sumber_masalah: 
+        sumber_masalah:
           type: string
     Case_import:
       type: object
       properties:
-        id: 
+        id:
           type: string
-        bagian: 
+        bagian:
           type: string
-        divisi: 
+        divisi:
           type: string
-        fokus: 
+        fokus:
           type: string
-        kabag: 
+        kabag:
           type: string
-        karu: 
+        karu:
           type: string
-        keterangan1: 
+        keterangan1:
           type: string
-        keterangan2: 
+        keterangan2:
           type: string
-        periode: 
+        periode:
           type: string
-        temuan: 
+        temuan:
           type: string
     Base_stock:
       type: object
@@ -1785,7 +1784,7 @@ components:
         id:
           type: string
         periode:
-          type: number 
+          type: number
         warehouse_id:
           type: string
         file_name:
@@ -1821,7 +1820,7 @@ components:
         id:
           type: string
         kode:
-          type: string 
+          type: string
         name:
           type: string
         last_used:
@@ -1829,373 +1828,373 @@ components:
 
   requestBodies:
     Warehouse:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                warehouse_name:
-                  type: string
-                warehouse_group:
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              warehouse_name:
+                type: string
+              warehouse_group:
+                type: string
     Supervisor:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                supervisor_name:
-                  type: string
-                supervisor_phone:
-                  type: number
-                supervisor_warehouse:
-                  type: string
-                supervisor_shift:
-                  type: number
-                is_disabled:
-                  type: boolean
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              supervisor_name:
+                type: string
+              supervisor_phone:
+                type: number
+              supervisor_warehouse:
+                type: string
+              supervisor_shift:
+                type: number
+              is_disabled:
+                type: boolean
     Problem:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                warehouse_id: 
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              warehouse_id:
+                type: string
 
-                supervisor_id: 
-                  type: string
+              supervisor_id:
+                type: string
 
-                head_spv_id: 
-                  type: string
+              head_spv_id:
+                type: string
 
-                item_kode:
-                  type: string
-                  
-                tanggal_mulai:
-                  type: number
+              item_kode:
+                type: string
 
-                shift_mulai:
-                  type: number
+              tanggal_mulai:
+                type: number
 
-                pic: 
-                  type: string
+              shift_mulai:
+                type: number
 
-                dl: 
-                  type: number
+              pic:
+                type: string
 
-                masalah:
-                  type: string
+              dl:
+                type: number
 
-                sumber_masalah:
-                  type: string
+              masalah:
+                type: string
 
-                solusi:
-                  type: string
+              sumber_masalah:
+                type: string
 
-                solusi_panjang:
-                  type: string
+              solusi:
+                type: string
 
-                dl_panjang:
-                  type: string
-                  
-                pic_panjang:
-                  type: string
+              solusi_panjang:
+                type: string
 
-                tanggal_selesai:
-                  type: number
+              dl_panjang:
+                type: string
 
-                shift_selesai:
-                  type: number
+              pic_panjang:
+                type: string
+
+              tanggal_selesai:
+                type: number
+
+              shift_selesai:
+                type: number
     Head_supervisor:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                head_name:
-                  type: string
-                head_phone:
-                  type: number
-                head_shift:
-                  type: number 
-                  example: 1
-                is_disabled:
-                  type: boolean
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              head_name:
+                type: string
+              head_phone:
+                type: number
+              head_shift:
+                type: number
+                example: 1
+              is_disabled:
+                type: boolean
     Field_problem:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                periode: 
-                  type: number
-                supervisor_id:
-                  type: string
-                head_spv_id: 
-                  type: string
-                masalah: 
-                  type: string 
-                sumber_masalah: 
-                  type: string
-                solusi: 
-                  type: string
-                pic: 
-                  type: string
-                dl: 
-                  type: number
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              periode:
+                type: number
+              supervisor_id:
+                type: string
+              head_spv_id:
+                type: string
+              masalah:
+                type: string
+              sumber_masalah:
+                type: string
+              solusi:
+                type: string
+              pic:
+                type: string
+              dl:
+                type: number
     Document:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                collected: 
-                  type: number
-                approval: 
-                  type: number
-                status: 
-                  type: number
-                shared: 
-                  type: number
-                finished: 
-                  type: number
-                total_do: 
-                  type: number
-                total_kendaraan: 
-                  type: number
-                total_waktu: 
-                  type: number
-                base_report_file: 
-                  type: string
-                is_finished: 
-                  type: boolean
-                supervisor_id: 
-                  type: string
-                periode:
-                  type: number
-                shift:
-                  type: number
-                head_spv_id:
-                  type: string
-                warehouse_id:
-                  type: string
-                is_generated_document:
-                  type: boolean
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              collected:
+                type: number
+              approval:
+                type: number
+              status:
+                type: number
+              shared:
+                type: number
+              finished:
+                type: number
+              total_do:
+                type: number
+              total_kendaraan:
+                type: number
+              total_waktu:
+                type: number
+              base_report_file:
+                type: string
+              is_finished:
+                type: boolean
+              supervisor_id:
+                type: string
+              periode:
+                type: number
+              shift:
+                type: number
+              head_spv_id:
+                type: string
+              warehouse_id:
+                type: string
+              is_generated_document:
+                type: boolean
     Complain:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                periode:
-                  type: number
-                head_spv_id:
-                  type: string
-                dl:
-                  type: number
-                inserted:
-                  type: number
-                masalah:
-                  type: string
-                supervisor_id:
-                  type: number
-                parent:
-                  type: string
-                pic:
-                  type: string
-                solusi:
-                  type: string
-                is_status_done:
-                  type: boolean
-                sumber_masalah:
-                  type: string
-                type:
-                  type: string
-                is_count:
-                  type: boolean
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              periode:
+                type: number
+              head_spv_id:
+                type: string
+              dl:
+                type: number
+              inserted:
+                type: number
+              masalah:
+                type: string
+              supervisor_id:
+                type: number
+              parent:
+                type: string
+              pic:
+                type: string
+              solusi:
+                type: string
+              is_status_done:
+                type: boolean
+              sumber_masalah:
+                type: string
+              type:
+                type: string
+              is_count:
+                type: boolean
     Complain_import:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                customer: 
-                  type: string
-                do: 
-                  type: string
-                gudang: 
-                  type: string
-                item: 
-                  type: string
-                kabag: 
-                  type: string
-                nomor_SJ: 
-                  type: string
-                nopol: 
-                  type: string
-                real_: 
-                  type: string
-                row_: 
-                  type: string
-                spv: 
-                  type: string
-                tally: 
-                  type: string
-                tanggal_bongkar: 
-                  type: string
-                tanggal_info: 
-                  type: string
-                tanggal_komplain: 
-                  type: string
-                tanggal_SJ: 
-                  type: string
-                type: 
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              customer:
+                type: string
+              do:
+                type: string
+              gudang:
+                type: string
+              item:
+                type: string
+              kabag:
+                type: string
+              nomor_SJ:
+                type: string
+              nopol:
+                type: string
+              real_:
+                type: string
+              row_:
+                type: string
+              spv:
+                type: string
+              tally:
+                type: string
+              tanggal_bongkar:
+                type: string
+              tanggal_info:
+                type: string
+              tanggal_komplain:
+                type: string
+              tanggal_SJ:
+                type: string
+              type:
+                type: string
     Case:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                periode: 
-                  type: number
-                head_spv_id: 
-                  type: string
-                dl: 
-                  type: number
-                masalah: 
-                  type: string
-                supervisor_id: 
-                  type: string
-                parent: 
-                  type: string
-                pic: 
-                  type: string
-                solusi: 
-                  type: string
-                status: 
-                  type: string
-                sumber_masalah: 
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              periode:
+                type: number
+              head_spv_id:
+                type: string
+              dl:
+                type: number
+              masalah:
+                type: string
+              supervisor_id:
+                type: string
+              parent:
+                type: string
+              pic:
+                type: string
+              solusi:
+                type: string
+              status:
+                type: string
+              sumber_masalah:
+                type: string
     Case_import:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                bagian: 
-                  type: string
-                divisi: 
-                  type: string
-                fokus: 
-                  type: string
-                kabag: 
-                  type: string
-                karu: 
-                  type: string
-                keterangan1: 
-                  type: string
-                keterangan2: 
-                  type: string
-                periode: 
-                  type: string
-                temuan: 
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bagian:
+                type: string
+              divisi:
+                type: string
+              fokus:
+                type: string
+              kabag:
+                type: string
+              karu:
+                type: string
+              keterangan1:
+                type: string
+              keterangan2:
+                type: string
+              periode:
+                type: string
+              temuan:
+                type: string
     Base_stock:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                parent:
-                  type: string
-                shift:
-                  type: string
-                item:
-                  type: string
-                awal:
-                  type: number
-                in_stock:
-                  type: number
-                out_stock:
-                  type: number
-                date_in:
-                  type: string
-                plan_out:
-                  type: number
-                date_out:
-                  type: string
-                date_end:
-                  type: string
-                real_stock:
-                  type: number
-                problem:
-                  type: string
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              parent:
+                type: string
+              shift:
+                type: string
+              item:
+                type: string
+              awal:
+                type: number
+              in_stock:
+                type: number
+              out_stock:
+                type: number
+              date_in:
+                type: string
+              plan_out:
+                type: number
+              date_out:
+                type: string
+              date_end:
+                type: string
+              real_stock:
+                type: number
+              problem:
+                type: string
     Base_file:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                periode:
-                  type: number 
-                warehouse_id:
-                  type: string
-                file_name:
-                  type: string
-                stock_sheet:
-                  type: string
-                clock_sheet:
-                  type: string
-                is_imported:
-                  type: boolean
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              periode:
+                type: number
+              warehouse_id:
+                type: string
+              file_name:
+                type: string
+              stock_sheet:
+                type: string
+              clock_sheet:
+                type: string
+              is_imported:
+                type: boolean
     Base_clock:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                parent:
-                  type: string
-                shift:
-                  type: number
-                no_do:
-                  type: string
-                reg:
-                  type: string
-                start:
-                  type: string
-                finish:
-                  type: string
-                rehat:
-                  type: number
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              parent:
+                type: string
+              shift:
+                type: number
+              no_do:
+                type: string
+              reg:
+                type: string
+              start:
+                type: string
+              finish:
+                type: string
+              rehat:
+                type: number
     Base_item:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                kode:
-                  type: string 
-                name:
-                  type: string
-                last_used:
-                  type: number
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              kode:
+                type: string
+              name:
+                type: string
+              last_used:
+                type: number
 
   responses:
     400Error:
@@ -2203,7 +2202,7 @@ components:
       content:
         application/json:
           schema:
-            type: object 
+            type: object
             properties:
               message:
                 type: string
@@ -2212,18 +2211,18 @@ components:
       content:
         application/json:
           schema:
-            type: object 
+            type: object
             properties:
               message:
                 type: string
-                default: 'You must be authenticated to access this resource.'
+                default: "You must be authenticated to access this resource."
 
     200Success:
       description: Success operation
       content:
         application/json:
           schema:
-            type: object 
+            type: object
             properties:
               message:
                 type: string
