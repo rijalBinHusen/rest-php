@@ -15,14 +15,14 @@ tags:
     description: The people who responsible above the supervisor and all department
   - name: base item
     description: base item product
+  - name: complain
+    description: complain from customer
   - name: problem
     description: Problem that exist in department
   - name: field problem
     description: The problem that obstruct supervisor in field
   - name: document
     description: paper record that must be created by supervisor
-  - name: complain
-    description: complain from customer
   - name: complain import
     description: complain that we imported from excel
   - name: case
@@ -754,56 +754,6 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /complain/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        description: id of complain
-        schema:
-          type: string
-        example: "COM2204509"
-    get:
-      tags:
-        - complain
-      summary: Get complain by id.
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Complain"
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-    put:
-      tags:
-        - complain
-      summary: Update complain by id
-      requestBody:
-        $ref: "#/components/requestBodies/Complain"
-      responses:
-        "200":
-          $ref: "#/components/responses/200Success"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-    delete:
-      tags:
-        - complain
-      summary: Delete field complain by id
-      responses:
-        "200":
-          $ref: "#/components/responses/200Success"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
   /complains:
     get:
       tags:
@@ -831,6 +781,64 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /complain/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of complain
+        schema:
+          type: string
+        example: "COM2204509"
+    get:
+      tags:
+        - complain
+      summary: Get complain by id.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complain"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    put:
+      tags:
+        - complain
+      summary: Update complain by id
+      requestBody:
+        $ref: "#/components/requestBodies/Complain"
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - complain
+      summary: Delete field complain by id
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of complain end point
   /complain_import:
     post:

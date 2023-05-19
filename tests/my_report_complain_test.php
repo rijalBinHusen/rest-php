@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/httpCall.php');
 require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 
-class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
+class MyReportComplainTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
     private $idInserted = null;
@@ -12,8 +12,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        $this->urlGets = $this->url . 'base_items/';
-        $this->urlPost = $this->url . 'base_item/';
+        $this->urlGets = $this->url . 'complains/';
+        $this->urlPost = $this->url . 'complain/';
     }
     
     public function testPostEndpoint()
@@ -22,9 +22,19 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'item_kode' => $faker->name('female'),
-            'item_name' => $faker->name('female'),
-            'item_last_used' => $faker->numberBetween(10000, 1000000),
+            'periode' => $faker->name('female'),
+            'head_spv_id' => $faker->name('female'),
+            'dl' => $faker->numberBetween(10000, 1000000),
+            'inserted' => $faker->numberBetween(10000, 1000000),
+            'masalah' => $faker->name('female'),
+            'supervisor_id' => $faker->name('female'),
+            'parent' => $faker->numberBetween(10000, 1000000),
+            'pic' => $faker->name('female'),
+            'solusi' => $faker->name('female'),
+            'is_status_done' => $faker->boolean(),
+            'sumber_masalah' => $faker->name('female'),
+            'type' => $faker->name('female'),
+            'is_count' => $faker->numberBetween(0, 100)
         );
 
         $http->setData($data);
@@ -66,7 +76,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed add base item, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed add complain, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed2()
@@ -95,7 +105,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndpoint()
     {
-        $http = new HttpCall($this->urlGets);
+        $http = new HttpCall($this->urlGets . "?limit=10");
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -106,15 +116,25 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('item_kode', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('item_name', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('last_used', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('head', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('inserted', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('is_status_done', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('is_count', $convertToAssocArray->data[0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetEndpointFailed()
     {
-        $http = new HttpCall($this->urlGets);
+        $http = new HttpCall($this->urlGets . "?limit=10");
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
@@ -138,10 +158,20 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
-        $this->assertArrayHasKey('item_kode', $convertToAssocArray->data);
-        $this->assertArrayHasKey('item_name', $convertToAssocArray->data);
-        $this->assertArrayHasKey('last_used', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('head', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('inserted', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('is_status_done', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('is_count', $convertToAssocArray->data[0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
@@ -163,7 +193,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed2()
     {
-        $http = new HttpCall($this->urlPost . $this->idInserted);
+        $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
 
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -184,9 +214,9 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'item_kode' => $faker->name('female'),
-            'item_name' => $faker->name('female'),
-            'last_used' => $faker->numberBetween(1000, 10000000)
+            'periode' => $faker->numberBetween(1000, 10000000),
+            'head_spv_id' => $faker->name('female'),
+            'dl' => $faker->numberBetween(1000, 10000000)
         );
 
         $httpCallVar->setData($data);
@@ -199,7 +229,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update base item success", $convertToAssocArray['message']);
+        $this->assertEquals("Update complain success", $convertToAssocArray['message']);
     }
 
     public function testPutEndpointFailed()
