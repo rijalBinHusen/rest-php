@@ -964,56 +964,6 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /case/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        description: id of case
-        schema:
-          type: string
-        example: "COM2204509"
-    get:
-      tags:
-        - case
-      summary: Get case by id.
-      responses:
-        "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Case"
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-    put:
-      tags:
-        - case
-      summary: Update case by id
-      requestBody:
-        $ref: "#/components/requestBodies/Case"
-      responses:
-        "200":
-          $ref: "#/components/responses/200Success"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
-    delete:
-      tags:
-        - case
-      summary: Delete field case by id
-      responses:
-        "200":
-          $ref: "#/components/responses/200Success"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
   /cases:
     get:
       tags:
@@ -1041,6 +991,63 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /case/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of case
+        schema:
+          type: string
+        example: "COM2204509"
+    get:
+      tags:
+        - case
+      summary: Get case by id.
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    put:
+      tags:
+        - case
+      summary: Update case by id
+      requestBody:
+        $ref: "#/components/requestBodies/Case"
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - case
+      summary: Delete field case by id
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of Case end point
   /case_import:
     post:
