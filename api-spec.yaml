@@ -17,18 +17,18 @@ tags:
     description: base item product
   - name: complain
     description: complain from customer
-  - name: problem
-    description: Problem that exist in department
-  - name: field problem
-    description: The problem that obstruct supervisor in field
-  - name: document
-    description: paper record that must be created by supervisor
   - name: complain import
     description: complain that we imported from excel
   - name: case
     description: case from police departmen
   - name: case import
     description: case that we imported from excel
+  - name: problem
+    description: Problem that exist in department
+  - name: field problem
+    description: The problem that obstruct supervisor in field
+  - name: document
+    description: paper record that must be created by supervisor
   - name: base stock
     description: base record as report stock
   - name: base file
@@ -886,6 +886,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   /complain_import/{id}:
     parameters:
       - name: id
@@ -910,6 +912,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     put:
       tags:
         - complain import
@@ -924,6 +928,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     delete:
       tags:
         - complain import
@@ -936,6 +942,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of complain import
   /case:
     post:
