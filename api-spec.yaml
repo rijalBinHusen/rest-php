@@ -1343,6 +1343,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     put:
       tags:
         - base file
@@ -1357,6 +1359,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     delete:
       tags:
         - base file
@@ -1369,6 +1373,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of base file end point
   /base_clocks:
     parameters:
