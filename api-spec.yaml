@@ -23,18 +23,18 @@ tags:
     description: case from police departmen
   - name: case import
     description: case that we imported from excel
-  - name: problem
-    description: Problem that exist in department
   - name: field problem
     description: The problem that obstruct supervisor in field
-  - name: document
-    description: paper record that must be created by supervisor
-  - name: base stock
-    description: base record as report stock
   - name: base file
     description: base record that parent of base stock and base clock
+  - name: base stock
+    description: base record as report stock
   - name: base clock
     description: base record as report clock
+  - name: problem
+    description: Problem that exist in department
+  - name: document
+    description: paper record that must be created by supervisor
 
 paths:
   /warehouses:
@@ -527,7 +527,7 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /fieLd_problems:
+  /field_problems:
     get:
       tags:
         - field problem
@@ -540,22 +540,14 @@ paths:
               schema:
                 type: array
                 items:
-                  properties:
-                    id:
-                      type: string
-                    periode:
-                      type: number
-                    supervisor_name:
-                      type: string
-                    head_name:
-                      type: string
-                    masalah:
-                      type: string
+                  $ref: "#/components/schemas/Field_problem"
 
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   /field_problem/{id}:
     parameters:
       - name: id
@@ -578,6 +570,10 @@ paths:
                 $ref: "#/components/schemas/Field_problem"
         "400":
           $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     put:
       tags:
         - field problem
@@ -587,11 +583,12 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     delete:
       tags:
         - field problem
@@ -599,11 +596,12 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of field problem end point
   /document:
     post:
