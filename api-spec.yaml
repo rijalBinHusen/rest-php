@@ -1380,6 +1380,24 @@ paths:
         "404":
           $ref: "#/components/responses/404Error"
   # End of base file end point
+  /base_clock:
+    post:
+      tags:
+        - base clock
+      summary: Lets a user post a new base clock
+      requestBody:
+        $ref: "#/components/requestBodies/Base_clock"
+      responses:
+        "200":
+          description: Successfully created a new base clock
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_clocks:
     parameters:
       - name: parent
@@ -1419,8 +1437,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Base_clock"
-        "400":
-          $ref: "#/components/responses/400Error"
+        "404":
+          $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
     delete:
@@ -1455,10 +1473,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Base_clock"
-        "400":
-          $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     put:
       tags:
         - base clock
@@ -1468,11 +1486,12 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     delete:
       tags:
         - base clock
@@ -1480,30 +1499,10 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
-        "400":
-          $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /base_clock:
-    post:
-      tags:
-        - base clock
-      summary: Lets a user post a new base clock
-      requestBody:
-        $ref: "#/components/requestBodies/Base_clock"
-      responses:
-        "200":
-          description: Successfully created a new base clock
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Return_after_post"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of base clock end point
   /base_item:
     post:
