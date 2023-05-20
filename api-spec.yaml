@@ -1144,6 +1144,25 @@ paths:
         "401":
           $ref: "#/components/responses/401Error"
   # End of Case import end point
+  /base_stock:
+    post:
+      tags:
+        - base stock
+      summary: Lets a user post a new base stock
+      requestBody:
+        $ref: "#/components/requestBodies/Base_stock"
+      responses:
+        "200":
+          description: Successfully created a new base stock
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /base_stocks:
     parameters:
       - name: parent
@@ -1223,6 +1242,8 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     put:
       tags:
         - base stock
@@ -1232,11 +1253,12 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
     delete:
       tags:
         - base stock
@@ -1244,28 +1266,10 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
-  /base_stock:
-    post:
-      tags:
-        - base stock
-      summary: Lets a user post a new base stock
-      requestBody:
-        $ref: "#/components/requestBodies/Base_stock"
-      responses:
-        "200":
-          description: Successfully created a new base stock
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Return_after_post"
-
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of base stock end point
   /base_file:
     post:
@@ -1457,7 +1461,7 @@ paths:
           $ref: "#/components/responses/401Error"
     put:
       tags:
-        - base stock
+        - base clock
       summary: Update base stock by id
       requestBody:
         $ref: "#/components/requestBodies/Base_clock"
