@@ -323,8 +323,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Problem"
-        "400":
-          $ref: "#/components/responses/400Error"
+        "404":
+          $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
   /problems/bystatus:
@@ -353,8 +353,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Problem"
-        "400":
-          $ref: "#/components/responses/400Error"
+        "404":
+          $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
   /problems/bysupervisor:
@@ -387,55 +387,26 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-
-  /problems:
+  /problems/bywarehouseanditem:
     # problems?periode1=123123809&periode2=123123123
     # problems?status=active
     # problems?warehouse=war102398&supervisor=SUP1203981
     # problems?item=ITEM120398
     parameters:
-      - name: periode1
-        in: query
-        required: true
-        description: The start periode to search, date in unix time
-        schema:
-          type: number
-        example: 80394802938098
-      - name: periode2
-        in: query
-        required: true
-        description: The end periode to search, date in unix time
-        schema:
-          type: number
-        example: 80394802938098
-      - name: status
-        in: query
-        required: true
-        description: status of problem either active or closed
-        schema:
-          type: string
-        example: active
       - name: warehouse
         in: query
         required: true
         description: warehouse of problem
         schema:
           type: string
-        example: WAR10293801
-      - name: supervisor
-        in: query
-        required: true
-        description: supervisor of problem
-        schema:
-          type: string
-        example: SUP12301298
+        example: WAR123123
       - name: item
         in: query
         required: true
         description: item of problem
         schema:
           type: string
-        example: ITM12983102938
+        example: ITEMSD123123
     get:
       tags:
         - problem
@@ -448,25 +419,9 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: "PRO22500001"
-                    warehouse:
-                      type: string
-                    supervisor:
-                      type: string
-                    item:
-                      type: string
-                    tanggal_mulai:
-                      type: number
-                    masalah:
-                      type: string
-                    tanggal_selesai:
-                      type: number
-        "400":
-          $ref: "#/components/responses/400Error"
+                  $ref: "#/components/schemas/Problem"
+        "404":
+          $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
   /problem/{id}:
@@ -1681,6 +1636,8 @@ components:
           type: number
         shift_selesai:
           type: number
+        is_finished:
+          type: boolean
     Head_supervisor:
       type: object
       properties:
@@ -1983,51 +1940,38 @@ components:
             properties:
               warehouse_id:
                 type: string
-
               supervisor_id:
                 type: string
-
               head_spv_id:
                 type: string
-
               item_kode:
                 type: string
-
               tanggal_mulai:
                 type: number
-
               shift_mulai:
                 type: number
-
               pic:
                 type: string
-
               dl:
                 type: number
-
               masalah:
                 type: string
-
               sumber_masalah:
                 type: string
-
               solusi:
                 type: string
-
               solusi_panjang:
                 type: string
-
               dl_panjang:
                 type: string
-
               pic_panjang:
                 type: string
-
               tanggal_selesai:
                 type: number
-
               shift_selesai:
                 type: number
+              is_finished:
+                type: boolean
     Head_supervisor:
       required: true
       content:

@@ -1,247 +1,460 @@
 <?php
 
-// require_once(__DIR__ . '/httpCall.php');
-// require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/httpCall.php');
+require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 
-// class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
-// {
-//     private $url = "http://localhost/rest-php/myreport/";
+class MyReportProblemTest extends PHPUnit_Framework_TestCase
+{
+    private $url = "http://localhost/rest-php/myreport/";
+    private $idInserted = null;
+    private $urlGetByPeriode;
+    private $urlGetByStatus;
+    private $urlGetBySupervisor;
+    private $urlGetByWarehouseAndItem;
+    private $urlPost;
+    private $dataToInsert;
+    private $dataToUpdate;
+
+    public function __construct()
+    {
+        $faker = Faker\Factory::create();
+        $parentId = $faker->text(10);
+        $shiftStock = $faker->numberBetween(1, 3);
+        $tanggalMulai = $faker->date('now');
+        $supervisor_id = $faker->text(10);
+        $warehouse_id = $faker->text(5);
+        $item_kode = $faker->text(7);
+
+        $this->dataToInsert = array(
+            'warehouse_id' => $parentId,
+            'supervisor_id' => $shiftStock,
+            'head_spv_id' => $faker->text(15),
+            'item_kode' => $faker->numberBetween(1, 10000),
+            'tanggal_mulai' => $faker->numberBetween(1, 10000),
+            'shift_mulai' => $faker->numberBetween(1, 1000000),
+            'pic' => $faker->date('now'),
+            'dl' => $faker->date('now'),
+            'masalah' => $faker->date('now'),
+            'sumber_masalah' => $faker->date('now'),
+            'solusi' => $faker->date('now'),
+            'solusi_panjang' => $faker->date('now'),
+            'dl_panjang' => $faker->date('now'),
+            'pic_panjang' => $faker->date('now'),
+            'tanggal_selesai' => $faker->date('now'),
+            'shift_selesai' => $faker->date('now'),
+            'is_finished' => false
+        );
+
+        $this->urlPost = $this->url . 'base_problem/';
+        $this->urlGetByPeriode = $this->url . "problems/byperiode?periode1=$tanggalMulai&periode2=$tanggalMulai";
+        $this->urlGetByStatus = $this->url . "problems/bystatus?status=0";
+        $this->urlGetBySupervisor = $this->url . "problems/bysupervisor?supervisor=$supervisor_id";
+        $this->urlGetByWarehouseAndItem = $this->url . "problems/bywarehouseanditem?warehouse=$warehouse_id&item=$item_kode";
+
+        $this->dataToUpdate = array(
+            'masalah' => $faker->text(100),
+            'sumber_masalah' => $faker->text(200),
+        );
+
+    }
     
-//     public function testPostEndpoint()
-//     {
-//         $faker = Faker\Factory::create();
-//         $http = new HttpCall($this->url . "problem");
-//         // Define the request body
-//         $data = array(
-//             'warehouse_id' => $faker->name('female'),
-//             'supervisor_id' => $faker->name('female'),
-//             'head_spv_id' => $faker->name('female'),
-//             'item_kode' => 1,
-//             'tanggal_muali' => 33333,
-//             'pic' => $faker->name('female'),
-//             "dl" => $faker->name('female'),
-//             "masalah" => $faker->name('female'),
-//             "sumber_masalah" => $faker->name('female'),
-//             "solusi" => $faker->name('female'),
-//             "solusi_panjang" => $faker->name('female'),
-//             "dl_panjang" => $faker->name('female'),
-//             "pic_panjang" => $faker->name('female'),
-//             "tanggal_selesai" => $faker->name('female'),
-//             "shift_selesai" => $faker->name('female')
-//         );
+    public function testPostEndpoint()
+    {
+        $http = new HttpCall($this->urlPost);
+        // Define the request body
 
-//         $http->setData($data);
-//         // Define the request body
-//         $http->addJWTToken();
-//         $response = $http->getResponse("POST");
+        $http->setData($this->dataToInsert);
+        // Define the request body
+        $http->addJWTToken();
+        $response = $http->getResponse("POST");
 
-//         $convertToAssocArray = json_decode($response, true);
+        $convertToAssocArray = json_decode($response, true);
 
-//         // fwrite(STDERR, print_r($response, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('data', $convertToAssocArray);
-//         $this->assertArrayHasKey('id', $convertToAssocArray->data);
-//         $this->assertEquals($convertToAssocArray['success'], true);
-//     }
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->idInserted = $convertToAssocArray->data['id'];
+    }
 
-//     public function testPostEndpointFailed()
-//     {
-//         $faker = Faker\Factory::create();
-//         $httpCallVar = new HttpCall($this->url . 'problem');
-//         // Define the request body
-//         $data = array(
-//             'supervisor_name' => $faker->name('female'),
-//             'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-//             'supervisor_warehouse' => $faker->name('female'),
-//             'supervisor_shift' => 1,
-//         );
+    public function testPostEndpointFailed()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->urlPost);
+        // Define the request body
+        $data = array(
+            'supervisor_name' => "false false false",
+            'supervisor_phone' => "false false false",
+            'supervisor_warehouse' => "false false",
+            'supervisor_shift' => 1,
+        );
 
-//         $httpCallVar->setData($data);
+        $http->setData($data);
 
-//         $http->addJWTToken();
+        $http->addJWTToken();
         
-//         $response = $httpCallVar->getResponse("POST");
+        $response = $http->getResponse("POST");
 
-//         $convertToAssocArray = json_decode($response, true);
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals('Failed add supervisor, check the data you sent', $convertToAssocArray['message']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals('Failed to add base clock, check the data you sent', $convertToAssocArray['message']);
+    }
 
-//     public function testPostEndpointFailed2()
-//     {
-//         $faker = Faker\Factory::create();
-//         $httpCallVar = new HttpCall($this->url . 'problem');
-//         // Define the request body
-//         $data = array(
-//             'supervisor_name' => $faker->name('female'),
-//             'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-//             'supervisor_warehouse' => $faker->name('female'),
-//             'supervisor_shift' => 1,
-//         );
+    public function testPostEndpointFailed2()
+    {
+        $httpCallVar = new HttpCall($this->urlPost);
+        // Define the request body
 
-//         $httpCallVar->setData($data);
+        $httpCallVar->setData($this->dataToInsert);
         
-//         $response = $httpCallVar->getResponse("POST");
+        $response = $httpCallVar->getResponse("POST");
 
-//         $convertToAssocArray = json_decode($response, true);
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
+    }
 
-//     public function testGetEndpoint()
-//     {
-//         $http = new HttpCall($this->url . 'supervisors');
-//         $http->addJWTToken();
-//         // Send a GET request to the /endpoint URL
-//         $response = $http->getResponse("GET");
+    public function testGetEndPointByPeriode()
+    {
+        $http = new HttpCall($this->urlGetByPeriode);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-//         $convertToAssocArray = json_decode($response, true);
-//         // fwrite(STDERR, print_r($convertToAssocArray, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('data', $convertToAssocArray);
-//         $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-//         $this->assertArrayHasKey('supervisor_name', $convertToAssocArray->data[0]);
-//         $this->assertArrayHasKey('supervisor_warehouse', $convertToAssocArray->data[0]);
-//         $this->assertArrayHasKey('supervisor_shift', $convertToAssocArray->data[0]);
-//         $this->assertArrayHasKey('is_disabled', $convertToAssocArray->data[0]);
-//         $this->assertEquals($convertToAssocArray['success'], true);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item_kode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_selesai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
-//     public function testGetEndpointFailed()
-//     {
-//         $http = new HttpCall($this->url . 'supervisors');
+
+    public function testGetEndPointByPeriodeFailed()
+    {
+        $http = new HttpCall($this->urlGetByPeriode);
+        $response = $http->getResponse("GET");
         
-//         $convertToAssocArray = json_decode($response, true);
-//         // fwrite(STDERR, print_r($convertToAssocArray, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-//     public function testGetByIdEndpoint()
-//     {
-//         $http = new HttpCall($this->url . 'supervisor/SPV23010000');
-//         $http->addJWTToken();
-//         // Send a GET request to the /endpoint URL
-//         $response = $http->getResponse("GET");
+    public function testGetEndPointByStatus()
+    {
+        $http = new HttpCall($this->urlGetByStatus);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-//         $convertToAssocArray = json_decode($response, true);
-//         // fwrite(STDERR, print_r($convertToAssocArray, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('data', $convertToAssocArray);
-//         $this->assertArrayHasKey('id', $convertToAssocArray->data);
-//         $this->assertArrayHasKey('supervisor_name', $convertToAssocArray->data);
-//         $this->assertArrayHasKey('supervisor_warehouse', $convertToAssocArray->data);
-//         $this->assertArrayHasKey('supervisor_shift', $convertToAssocArray->data);
-//         $this->assertArrayHasKey('is_disabled', $convertToAssocArray->data);
-//         $this->assertEquals(true, $convertToAssocArray['success']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item_kode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_selesai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
-//     public function testGetByIdEndpointFailed()
-//     {
-//         $http = new HttpCall($this->url . 'supervisor/SPV23010000');
+
+    public function testGetEndPointByStatusFailed()
+    {
+        $http = new HttpCall($this->urlGetByStatus);
+        $response = $http->getResponse("GET");
         
-//         $convertToAssocArray = json_decode($response, true);
-//         // fwrite(STDERR, print_r($convertToAssocArray, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-//     public function testGetByIdEndpointFailed2()
-//     {
-//         $http = new HttpCall($this->url . 'supervisor/SDFLSKDFJ');
-
-//         $http->addJWTToken();
+    public function testGetEndPointBySupervisor()
+    {
+        $http = new HttpCall($this->urlGetBySupervisor);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-//         $convertToAssocArray = json_decode($response, true);
-//         // fwrite(STDERR, print_r($convertToAssocArray, true));
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals("Supervisor not found", $convertToAssocArray['message']);
-//     }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item_kode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_selesai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
-//     public function testPutEndpointFailed()
-//     {
-//         $faker = Faker\Factory::create();
-//         $httpCallVar = new HttpCall($this->url . 'supervisor/SPV23010000');
-//         // Define the request body
-//         $data = array(
-//             'warehouse_nameddd' => $faker->name('female'),
-//             'warehouse_groupddd' => $faker->name('female'),
-//         );
 
-//         $httpCallVar->setData($data);
-
-//         $http->addJWTToken();
+    public function testGetEndPointBySupervisorFailed()
+    {
+        $http = new HttpCall($this->urlGetBySupervisor);
+        $response = $http->getResponse("GET");
         
-//         $response = $httpCallVar->getResponse("PUT");
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-//         $convertToAssocArray = json_decode($response, true);
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals('Failed update supervisor, check the data you sent', $convertToAssocArray['message']);
-//     }
-
-//     public function testPutEndpointFailed2()
-//     {
-//         $faker = Faker\Factory::create();
-//         $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
-//         // Define the request body
-//         $data = array(
-//             'warehouse_name' => $faker->name('female'),
-//             'warehouse_group' => $faker->name('female'),
-//         );
-
-//         $httpCallVar->setData($data);
+    public function testGetEndPointByWarehouseAndItem()
+    {
+        $http = new HttpCall($this->urlGetByWarehouseAndItem);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-//         $response = $httpCallVar->getResponse("PUT");
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item_kode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift_mulai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic_panjang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_selesai', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
-//         $convertToAssocArray = json_decode($response, true);
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(false, $convertToAssocArray['success']);
-//         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-//     }
 
-//     public function testPutEndpoint()
-//     {
-//         $faker = Faker\Factory::create();
-//         $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
-//         // Define the request body
-//         $data = array(
-//             'supervisor_name' => $faker->name('female'),
-//             'supervisor_shift' => 3,
-//         );
-
-//         $httpCallVar->setData($data);
-//         $httpCallVar->addJWTToken();
+    public function testGetEndPointByWarehouseAndItemFailed()
+    {
+        $http = new HttpCall($this->urlGetByWarehouseAndItem);
+        $response = $http->getResponse("GET");
         
-//         $response = $httpCallVar->getResponse("PUT");
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-//         $convertToAssocArray = json_decode($response, true);
-//         // Verify that the response same as expected
-//         $this->assertArrayHasKey('success', $convertToAssocArray);
-//         $this->assertArrayHasKey('message', $convertToAssocArray);
-//         $this->assertEquals(true, $convertToAssocArray['success']);
-//         $this->assertEquals("Update supervisor success", $convertToAssocArray['message']);
-//     }
-// }
+    public function testGetByIdEndpoint()
+    {
+        $http = new HttpCall($this->urlPost . $this->idInserted);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('item_kode', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('tanggal_mulai', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('shift_mulai', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('solusi_panjang', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('dl_panjang', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('pic_panjang', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('tanggal_selesai', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data']);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
+
+    public function testGetByIdEndpointFailed()
+    {
+        $http = new HttpCall($this->urlPost . $this->idInserted);
+        
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    public function testGetByIdEndpointFailed2()
+    {
+        $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
+
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Problem not found", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpoint()
+    {
+        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
+        // Define the request body
+
+        $httpCallVar->setData($this->dataToUpdate);
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Update problem success", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed()
+    {
+        // error 400
+        $http = new HttpCall($this->urlPost . $this->idInserted);
+        // Define the request body
+        $data = array(
+            'item_kode33' => '330303030',
+            'item_name33' => 'false false false',
+            'last_used33' => 'false false false'
+        );
+
+        $http->setData($data);
+
+        $http->addJWTToken();
+        
+        $response = $http->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals('Failed to update problem, check the data you sent', $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed2()
+    {
+        // error 401
+        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
+        // Define the request body
+
+        $httpCallVar->setData($this->dataToUpdate);
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed3()
+    {
+        // error 404
+        $faker = Faker\Factory::create();
+        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
+        // Define the request body
+
+        $httpCallVar->setData($this->dataToUpdate);
+
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Problem not found", $convertToAssocArray['message']);
+    }
+
+}
