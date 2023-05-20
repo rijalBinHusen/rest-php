@@ -195,7 +195,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Complain import not found", $convertToAssocArray['message']);
+        $this->assertEquals("Case import not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint()
@@ -204,9 +204,9 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'periode' => $faker->numberBetween(10, 100000),
-            'head_spv_id' => $faker->name('female'),
-            'masalah' => $faker->name('female')
+            'bagian' => $faker->name('female'),
+            'divisi' => $faker->name('female'),
+            'fokus' => $faker->name('female')
         );
 
         $httpCallVar->setData($data);
@@ -309,7 +309,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Delete case success", $convertToAssocArray['message']);
+        $this->assertEquals("Delete case import success", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpointFailed2()
@@ -330,7 +330,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
     public function testDeleteEndpointFailed3()
     {
         // error 404
-        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
+        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
         $httpCallVar->addJWTToken();
         
