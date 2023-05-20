@@ -1266,8 +1266,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-        "400":
-          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
   # End of base stock end point
@@ -1592,7 +1592,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200Success"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1875,8 +1874,6 @@ components:
     Base_stock:
       type: object
       properties:
-        id:
-          type: string
         parent:
           type: string
         shift:
@@ -1885,19 +1882,19 @@ components:
           type: string
         awal:
           type: number
-        in:
+        in_stock:
           type: number
-        plan_out:
-          type: number
-        out:
+        out_stock:
           type: number
         date_in:
           type: string
+        plan_out:
+          type: number
         date_out:
           type: string
         date_end:
           type: string
-        real:
+        real_stock:
           type: number
         problem:
           type: string
