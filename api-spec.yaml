@@ -44,13 +44,7 @@ paths:
       summary: Get all warehouse.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Warehouse"
+          $ref: "#/components/responses/getWarehouse200"
         "401":
           $ref: "#/components/responses/401Error"
         "404":
@@ -69,7 +63,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Return_after_post"
-
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -93,9 +86,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Warehouse"
-        "400":
-          $ref: "#/components/responses/400Error"
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/Warehouse"
+        "404":
+          $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
     put:
@@ -105,12 +105,14 @@ paths:
       requestBody:
         $ref: "#/components/requestBodies/Warehouse"
       responses:
-        "200":
+        "201":
           $ref: "#/components/responses/200Success"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   # End of warehouse end point
   /supervisor:
     post:
@@ -1575,6 +1577,9 @@ components:
     Return_after_post:
       type: object
       properties:
+        success:
+          type: boolean
+          example: true
         id:
           type: string
           example: "WAR22500001"
@@ -2284,6 +2289,9 @@ components:
           schema:
             type: object
             properties:
+              success:
+                type: boolean
+                default: false
               message:
                 type: string
     401Error:
@@ -2293,10 +2301,12 @@ components:
           schema:
             type: object
             properties:
+              success:
+                type: boolean
+                default: false
               message:
                 type: string
                 default: "You must be authenticated to access this resource."
-
     200Success:
       description: Success operation
       content:
@@ -2304,10 +2314,12 @@ components:
           schema:
             type: object
             properties:
+              success:
+                type: boolean
+                default: true
               message:
                 type: string
                 default: Update source success
-
     404Error:
       description: Source not found
       content:
@@ -2315,6 +2327,23 @@ components:
           schema:
             type: object
             properties:
+              success:
+                type: boolean
+                default: false
               message:
                 type: string
                 default: Source not found
+    getWarehouse200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Warehouse"
