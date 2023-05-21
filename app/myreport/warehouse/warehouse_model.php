@@ -14,15 +14,19 @@ class My_report_warehouse_model
     {
         $this->database = new Query_builder();
     }
+
     public function get_warehouses()
     {
         if($this->database->connection_status !== true) {
             $this->is_success = false;
             return $this->database->connection_status;
-        } else {
+        } 
+        
+        else {
             return $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
         }
     }
+    
     public function append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
         $lastIdQuery = "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1";
