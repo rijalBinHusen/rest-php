@@ -21,6 +21,7 @@ Class SummaryDatabase {
         $this->last_id = $summary['last_id'];
         // nextId
         $nextId = $this->last_id ? generateId($this->last_id) : generateId($this->table ."_22320000");
+        $this->last_id = $nextId;
         
         return $nextId;
     }

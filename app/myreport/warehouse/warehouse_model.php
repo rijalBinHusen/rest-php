@@ -1,38 +1,37 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/../../../utils/generator_id.php');
+require_once(__DIR__ . '/../../../utils/summary_db.php');
 
 class My_report_warehouse_model
 {
     protected $database;
-
     var $table = "my_report_warehouse";
     var $columns = "id, warehouse_name, warehouse_group, warehouse_supervisors";
     var $is_success = true;
+    private $summary = null;
 
     function __construct()
     {
         $this->database = new Query_builder();
+        $this->summary = new SummaryDatabase($this->table);
     }
 
     public function get_warehouses()
     {
-        if($this->database->connection_status !== true) {
-            $this->is_success = false;
-            return $this->database->connection_status;
-        } 
+        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
         
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        }
         else {
-            return $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
         }
     }
-    
+
     public function append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
-        $lastIdQuery = "SELECT * FROM $this->table ORDER BY id DESC LIMIT 1";
-        $lastId = $this->database->sqlQuery($lastIdQuery);
-        // nextId
-        $nextId = $lastId ? generateId($lastId['id']) : generateId('WAREHOUSE_22320000');
+        $nextId = $this->summary->getNextId();
         // data to write to database
         $res = array(
             "id" => $nextId,
@@ -40,19 +39,56 @@ class My_report_warehouse_model
             'warehouse_group' => $warehouse_group,
             'warehouse_supervisors' => $warehouse_supervisors
         );
+
         $this->database->insert($this->table, $res);
-        return $nextId;
+        $this->summary->updateLastId();
+
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        } else {
+            $this->summary->updateLastId();
+            return $nextId;
+        }
+
     }
+
     public function get_warehouse_by_id($id)
     {
-        return $this->database->select_where($this->table, 'id', $id);
+
+        $result = $this->database->select_where($this->table, 'id', $id);
+        
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        } else {
+            return $result;
+        }
+
     }
+
     public function update_warehouse_by_id(array $data, $where, $id)
     {
-        return $this->database->update($this->table, $data, $where, $id);
+
+        $result = $this->database->update($this->table, $data, $where, $id);
+
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        } else {
+            return $result;
+        }
+
     }
+
     public function write_warehouse(array $data)
     {
-        return $this->database->insert($this->table, $data);
+
+        $this->summary->updateLastId($data['id']);
+        $this->database->insert($this->table, $data);
+
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        } else {
+            return $data['id'];
+        }
+
     }
 }

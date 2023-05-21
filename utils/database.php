@@ -11,7 +11,8 @@ $dotenv->load();
 class Query_builder {
 
     protected $db;
-    public $connection_status;
+    public $is_error = null;
+
     function __construct(){
         // get database configuration from dotenv file
         $database = getenv('DATABASE');
@@ -19,30 +20,50 @@ class Query_builder {
         $username = getenv('DATABASE_USER');
         // get password database from dotenv file
         $password = getenv('DATABASE_PASSWORD');
+
         try {
+
             $this->db = new PDO($database, $username, $password);
             // set the PDO error mode to exception
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // set value to connection status
-            $this->connection_status = true;
+            $this->is_error = null;
+
         } catch (PDOException $e) {
             // set value to connection status
-            $this->connection_status = "Connection failed: " . $e->getMessage();
+            $this->is_error = "Connection failed: " . $e->getMessage();
         }
     }
 
     // merupakan fungsi untuk melihat tabel dari database ( select *from )
     function select_from($tabel)
     {
-        return $this->db->query("SELECT * FROM $tabel");
+        try {
+
+            $result = $this->db->query("SELECT * FROM $tabel");
+            return $result;
+
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            
+        }
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
     function select_where($tabel,$where,$id)
     {
-        $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where = ?");
-        $row->execute(array($id));
-        return $row;
+        try {
+
+            $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where = ?");
+            $row->execute(array($id));
+            return $row;
+
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            
+        }
     }
 
     // merupakan fungsi untuk tambah data
@@ -54,9 +75,17 @@ class Query_builder {
         $query = "INSERT INTO $tabel (" . implode(', ', $key) . ") "
             . "VALUES ('" . implode("', '", $val) . "')";
 
-        $row = $this->db->prepare($query);
-        $row ->execute();
-        return $this->db->lastInsertId();
+        try {   
+
+            $row = $this->db->prepare($query);
+            $row ->execute();
+            return $this->db->lastInsertId();
+
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            
+        }
     }
 
     // merupakan fungsi edit data
@@ -67,23 +96,40 @@ class Query_builder {
         {
             $setPart[] = $key."=:".$key;
         }
-        $sql = "UPDATE $tabel SET ".implode(', ', $setPart)." WHERE $where = :id";
-        $row = $this->db->prepare($sql);
-        //Bind our values.
-        $row ->bindValue(':id',$id); // where
-        foreach($data as $param => $val)
-        {
-            $row ->bindValue($param, $val);
+
+        try {
+
+            $sql = "UPDATE $tabel SET ".implode(', ', $setPart)." WHERE $where = :id";
+            $row = $this->db->prepare($sql);
+            //Bind our values.
+            $row ->bindValue(':id',$id); // where
+            foreach($data as $param => $val)
+            {
+                $row ->bindValue($param, $val);
+            }
+            return $row ->execute();
+
+        }  catch (PDOException $e) {
+
+            $this->is_error = $e;
+            
         }
-        return $row ->execute();
     }
     
     // merupakan fungsi untuk hapus data
     function delete($tabel,$where,$id)
     {
-        $sql = "DELETE FROM $tabel WHERE $where = ?";
-        $row = $this->db->prepare($sql);
-        return $row ->execute(array($id));
+        try {
+
+            $sql = "DELETE FROM $tabel WHERE $where = ?";
+            $row = $this->db->prepare($sql);
+            return $row ->execute(array($id));
+
+        }  catch (PDOException $e) {
+
+            $this->is_error = $e;
+            
+        }
     }
 
     function sqlQuery($query) {
