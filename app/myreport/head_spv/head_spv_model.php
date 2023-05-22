@@ -2,10 +2,10 @@
 require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/../../../utils/summary_db.php');
 
-class My_report_supervisor_model
+class My_report_head_spv_model
 {
     protected $database;
-    var $table = "my_report_supervisor";
+    var $table = "my_report_head_spv";
     var $is_success = true;
     private $summary = null;
 
@@ -15,7 +15,7 @@ class My_report_supervisor_model
         $this->summary = new SummaryDatabase($this->table);
     }
 
-    public function get_supervisors()
+    public function get_heads_spv()
     {
         $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
         
@@ -27,16 +27,15 @@ class My_report_supervisor_model
         }
     }
 
-    public function append_supervisor($supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled)
+    public function append_head_spv($head_name, $head_phone, $head_shift, $is_disabled)
     {
         $nextId = $this->summary->getNextId();
         // data to write to database
         $res = array(
             "id" => $nextId,
-            'supervisor_name' => $supervisor_name,
-            'supervisor_phone' => $supervisor_phone,
-            'supervisor_warehouse' => $supervisor_warehouse,
-            'supervisor_shift' => $supervisor_shift,
+            'head_name' => $head_name,
+            'head_phone' => $head_phone,
+            'head_shift' => $head_shift,
             'is_disabled' => $is_disabled
         );
 
@@ -55,7 +54,7 @@ class My_report_supervisor_model
 
     }
 
-    public function get_supervisor_by_id($id)
+    public function get_head_spv_by_id($id)
     {
 
         $result = $this->database->select_where($this->table, 'id', $id);
@@ -69,7 +68,7 @@ class My_report_supervisor_model
 
     }
 
-    public function update_supervisor_by_id(array $data, $where, $id)
+    public function update_head_spv_by_id(array $data, $where, $id)
     {
 
         $result = $this->database->update($this->table, $data, $where, $id);
@@ -86,7 +85,7 @@ class My_report_supervisor_model
 
     }
 
-    public function write_supervisor(array $data)
+    public function write_head_spv(array $data)
     {
         $this->database->insert($this->table, $data);
 
