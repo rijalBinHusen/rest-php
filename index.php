@@ -1,9 +1,8 @@
 <?php
 
 require_once('vendor/autoload.php');
-require_once(__DIR__ . '/app/myreport/warehouse/warehouse_controller.php');
 require_once(__DIR__ . '/app/tests_route.php');
-require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
+// require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
 require_once(__DIR__ . '/app/Users/user_route.php');
 // require_once('controller/My_report_supervisor.php');
 // require_once('controller/My_report_base_item.php');
@@ -31,7 +30,6 @@ Flight::route('/blank(/@endpoint)', function ($endpoint) {
 
 Flight::route('/test(/@endpoint)', function ($endpoint) {
     $request = Flight::request();
-    $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
     // $jwt_token = $request->;
 
     Flight::json([
@@ -53,7 +51,7 @@ Flight::route('/test(/@endpoint)', function ($endpoint) {
         'accept' => $request->accept,
         'proxy_ip' => $request->proxy_ip,
         'end_point' => $endpoint,
-        'token' => $jwt_token,
+        'name' => $request->data->name
     ]);
 
 });

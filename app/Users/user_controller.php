@@ -38,26 +38,30 @@ class User
         $password = $req->data->password;
         $name = $req->data->name;
 
-        if(is_null($email) || is_null($password) || is_null($name)) {
+        $invalid_request_body = is_null($email) || is_null($password) || is_null($name) || empty($email) || empty($password) || empty($name);
+
+        if($invalid_request_body) {
             Flight::json([
                 "success" => false,
                 "message" => "Unprocessable Entity"
             ], 422);
-            return;
-        }
-        $this->user->save($name, $email, $password);
-        $errorLogin = $this->user->error;
+        } 
+        else {
 
-        if(is_null($errorLogin)) {
-            Flight::json([
-                'success' => true,
-                'message' => 'Registration success.',
-            ]);
-        } else {
-            Flight::json([
-                'success' => false,
-                'message' => $errorLogin,
-            ], 422);
+            $this->user->save($name, $email, $password);
+            $errorLogin = $this->user->error;
+            
+            if(is_null($errorLogin)) {
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Registration success.',
+                ]);
+            } else {
+                Flight::json([
+                    'success' => false,
+                    'message' => $errorLogin,
+                ], 409);
+            }
         }
     }
     public function check_token () {
@@ -66,7 +70,10 @@ class User
             $is_token_valid = $this->user->validate($jwt_token);
             
             if($is_token_valid) {
-                return true;
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Valid token',
+                ], 200);
             } 
             
             else {

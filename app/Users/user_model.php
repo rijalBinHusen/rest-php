@@ -1,9 +1,9 @@
 <?php
 // Call dotenv package
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 // load dotenv package
 $dotenv->load();
-require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../../utils/database.php');
 
 define("JWT_SECRET", getenv("JWT_SECRET"));
 define("JWT_ISSUER", getenv("JWT_ISSUER"));
@@ -22,7 +22,7 @@ class User_model {
 
     if ($id===null) {
       // check is the email exists or no
-      $findEmail = $this->database->select_where("users", "email", $email);
+      $findEmail = $this->database->select_where("users", "email", $email)->fetch();
       $isEmailExists = is_array($findEmail);
       
       if($isEmailExists) {
@@ -55,7 +55,7 @@ class User_model {
   // RETURNS JWT IF VALID
   function login ($email, $password) {
     // (F1) GET USER
-    $user = $this->database->select_where("users", "email", $email);
+    $user = $this->database->select_where("users", "email", $email)->fetch();
     $valid = is_array($user);
  
     // (F2) CHECK PASSWORD
@@ -100,7 +100,7 @@ class User_model {
  
     // (G2) GET USER
     if ($valid) {
-      $user = $this->database->select_where("users", "id", $jwt->data->id);
+      $user = $this->database->select_where("users", "id", $jwt->data->id)->fetch();
       $valid = is_array($user);
     }
  

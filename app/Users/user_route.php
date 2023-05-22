@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ ."/user_controller.php");
 
 // register
 Flight::route('POST /user/register', function () {

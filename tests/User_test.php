@@ -11,17 +11,23 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     {
         $http = new HttpCall($this->url . "register");
         // Define the request body
-        $data = array('email' => 'test@test.com', 'password' => "1233333", 'name' => "name0123");
+        $data = array(
+            'email' => 'test@test.com', 
+            'password' => "1233333", 
+            'name' => "name0123"
+        );
+
         $http->setData($data);
+
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
-        fwrite(STDERR, print_r($convertToAssocArray, TRUE));
+        // fwrite(STDERR, print_r($convertToAssocArray, TRUE));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals($convertToAssocArray['message'], 'User exist.');
+        $this->assertEquals('User exist.', $convertToAssocArray['message']);
     }
     
     // Test register user not enter name
@@ -78,7 +84,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('token', $convertToAssocArray);
-        fwrite(STDERR, print_r($convertToAssocArray, TRUE));
+        // fwrite(STDERR, print_r($convertToAssocArray, TRUE));
 
         // save token to a .txt file
         $myfile = fopen("token.txt", "w") or die("Unable to open file!");
@@ -125,16 +131,12 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     {
         $http = new HttpCall($this->url . "validate");
         // Define the request body
-        // get token
-        $myfile = fopen("token.txt", "r") or die("Unable to open file!");
-        $token = fgets($myfile);
-        fclose($myfile);
         // set token on header request
-        $http->addHeaders('JWT-Authorization', $token);
+        $http->addJWTToken();
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
-        fwrite(STDERR, print_r($response, TRUE));
+        // fwrite(STDERR, print_r($token, TRUE));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
