@@ -1,11 +1,12 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
+    private $url_host_id = null;
     
     public function testPostEndpoint()
     {
@@ -14,7 +15,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'head_name' => $faker->name('female'),
-            'head_phone' => $faker->$faker->numberBetween(100000, 1000000),
+            'head_phone' => $faker->numberBetween(100000, 1000000),
             'head_shift' => 1,
             'is_disabled' => true
         );
@@ -29,9 +30,9 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
-        $this->assertEquals($convertToAssocArray['success'], true);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->url_host_id = $this->url . "head_spv/" . $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -41,13 +42,13 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'head_name' => $faker->name('female'),
-            'head_phone' => $faker->$faker->numberBetween(100000, 1000000),
+            'head_phone' => $faker->numberBetween(100000, 1000000),
             'head_shift' => 1,
         );
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("POST");
 
@@ -56,7 +57,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed add head supervisor, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add head supervisor, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed2()
@@ -66,7 +67,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'supervisor_name' => $faker->name('female'),
-            'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
+            'supervisor_phone' => $faker->numberBetween(100000, 1000000),
             'supervisor_warehouse' => $faker->name('female'),
             'supervisor_shift' => 1,
         );
@@ -95,17 +96,19 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_name', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_phone', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_shift', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_disabled', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_name', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_phone', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_shift', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_disabled', $convertToAssocArray['data'][0]);
         $this->assertEquals($convertToAssocArray['success'], true);
     }
 
     public function testGetEndpointFailed()
     {
         $http = new HttpCall($this->url . 'heads_spv');
+
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -118,7 +121,8 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
-        $http = new HttpCall($this->url . 'head_spv/HEADSPV23030001');
+        $this->testPostEndpoint();
+        $http = new HttpCall($this->url_host_id);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -128,17 +132,19 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_name', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_phone', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_shift', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_disabled', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_name', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_phone', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_shift', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_disabled', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetByIdEndpointFailed()
     {
-        $http = new HttpCall($this->url . 'head_spv/HEADSPV23030001');
+        $this->testPostEndpoint();
+        $http = new HttpCall($this->url_host_id);
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -152,8 +158,10 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
     public function testGetByIdEndpointFailed2()
     {
         $http = new HttpCall($this->url . 'head_spv/SDFLSKDFJ');
-
+        
         $http->addJWTToken();
+
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -166,8 +174,9 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed()
     {
+        $this->testPostEndpoint();
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'head_spv/HEADSPV23030001');
+        $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
             'warehouse_nameddd' => $faker->name('female'),
@@ -176,7 +185,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("PUT");
 
@@ -185,7 +194,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed update head supervisor, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to update head supervisor, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPutEndpointFailed2()
@@ -212,8 +221,9 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpoint()
     {
+        $this->testPostEndpoint();
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'head_spv/HEAD230300001');
+        $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
             'head_name' => $faker->name('female'),
