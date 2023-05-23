@@ -49,7 +49,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("POST");
 
@@ -108,6 +108,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
     public function testGetEndpointFailed()
     {
         $http = new HttpCall($this->url . 'supervisors');
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -141,6 +142,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
     public function testGetByIdEndpointFailed()
     {
         $http = new HttpCall($this->url . 'supervisor/SPV23010000');
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -154,6 +156,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
     public function testGetByIdEndpointFailed2()
     {
         $http = new HttpCall($this->url . 'supervisor/SDFLSKDFJ');
+        $response = $http->getResponse("GET");
 
         $http->addJWTToken();
         
@@ -178,7 +181,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("PUT");
 

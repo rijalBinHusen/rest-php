@@ -6,6 +6,7 @@ require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
+    private $idInserted = null;
     public function testGetEndpoint()
     {
         $http = new HttpCall($this->url . 'warehouses');
@@ -56,8 +57,9 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
         $this->assertEquals($convertToAssocArray['success'], true);
+        $this->idInserted = $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -87,7 +89,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testPutEndpointFailed()
     {
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        $httpCallVar = new HttpCall($this->url . 'warehouse/' . $this->idInserted);
         // Define the request body
         $data = array(
             'warehouse_nameddd' => $faker->name('female'),
@@ -111,7 +113,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testPutEndpointFailed2()
     {
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        $httpCallVar = new HttpCall($this->url . 'warehouse/' . $this->idInserted);
         // Define the request body
         $data = array(
             'warehouse_name' => $faker->name('female'),
@@ -133,7 +135,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testPutEndpoint()
     {
         $faker = Faker\Factory::create();
-        $httpCallVar = new HttpCall($this->url . 'warehouse/WAREHOUSE23010000');
+        $httpCallVar = new HttpCall($this->url . 'warehouse/' . $this->idInserted);
         // Define the request body
         $data = array(
             'warehouse_name' => $faker->name('female'),
@@ -155,7 +157,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
-        $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
+        $http = new HttpCall($this->url . 'warehouse/' . $this->idInserted);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -170,7 +172,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed()
     {
-        $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
+        $http = new HttpCall($this->url . 'warehouse/' . $this->idInserted);
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);

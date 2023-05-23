@@ -196,6 +196,14 @@ CREATE TABLE if not exists users (
   email varchar(255) NOT NULL,
   password varchar(255) NOT NULL
 );
+
+
+CREATE TABLE if not exists summary (
+  table_name VARCHAR(30) PRIMARY KEY,
+  total FLOAT,
+  last_id VARCHAR(30) NOT NULL
+);
+
  
 INSERT INTO users (id, name, email, password) VALUES
   (1, 'Jon Doe', 'jon@doe.com', '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee');
