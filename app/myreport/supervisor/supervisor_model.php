@@ -58,7 +58,7 @@ class My_report_supervisor_model
     public function get_supervisor_by_id($id)
     {
 
-        $result = $this->database->select_where($this->table, 'id', $id);
+        $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);;
         
         if($this->database->is_error !== null) {
             $this->is_success = $this->database->is_error;

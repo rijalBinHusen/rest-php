@@ -4,7 +4,7 @@ require_once(__DIR__ . "/supervisor_controller.php");
 
 Flight::route('GET /myreport/supervisors', function () {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -17,7 +17,7 @@ Flight::route('GET /myreport/supervisors', function () {
 
 Flight::route('POST /myreport/supervisor', function () {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -26,9 +26,9 @@ Flight::route('POST /myreport/supervisor', function () {
     $myreport_supervisor->add_supervisor();    
 });
 
-Flight::route("GET /supervisor/@id", function ($id) {
+Flight::route("GET /myreport/supervisor/@id", function ($id) {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -38,9 +38,9 @@ Flight::route("GET /supervisor/@id", function ($id) {
     $myreport_supervisor->get_supervisor_by_id($id);    
 });
 
-Flight::route("PUT /supervisor/@id", function ($id) {
+Flight::route("PUT /myreport/supervisor/@id", function ($id) {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
