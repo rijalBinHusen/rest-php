@@ -79,7 +79,7 @@ class My_report_warehouse
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->my_report_warehouse->get_warehous_by_id($id);
+        $result = $this->my_report_warehouse->get_warehouse_by_id($id);
 
         $is_success = $this->my_report_warehouse->is_success;
 

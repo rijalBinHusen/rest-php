@@ -24,6 +24,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testGetEndpointFailed()
     {
         $http = new HttpCall($this->url . 'warehouses');
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -71,7 +72,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("POST");
 
@@ -95,7 +96,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 
         $httpCallVar->setData($data);
 
-        $http->addJWTToken();
+        $httpCallVar->addJWTToken();
         
         $response = $httpCallVar->getResponse("PUT");
 
@@ -170,6 +171,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
     public function testGetByIdEndpointFailed()
     {
         $http = new HttpCall($this->url . 'warehouses/WAREHOUSE23010000');
+        $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));

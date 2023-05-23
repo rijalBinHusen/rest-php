@@ -57,6 +57,7 @@ class My_report_warehouse_model
         
         if($this->database->is_error !== null) {
             $this->is_success = $this->database->is_error;
+            return array();
         } else {
             return $result;
         }

@@ -4,7 +4,7 @@ require_once(__DIR__ . "/warehouse_controller.php");
 
 Flight::route('GET /myreport/warehouses', function () {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -17,7 +17,7 @@ Flight::route('GET /myreport/warehouses', function () {
 
 Flight::route('POST /myreport/warehouse', function () {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -28,7 +28,7 @@ Flight::route('POST /myreport/warehouse', function () {
 
 Flight::route("GET /warehouse/@id", function ($id) {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
@@ -40,7 +40,7 @@ Flight::route("GET /warehouse/@id", function ($id) {
 
 Flight::route("PUT /warehouse/@id", function ($id) {
     $user = new User();
-    $is_token_valid = $user->check_token();
+    $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;

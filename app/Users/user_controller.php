@@ -91,4 +91,15 @@ class User
         }
         
     }
+    public function is_valid_token() {
+        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+
+            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            $is_token_valid = $this->user->validate($jwt_token);
+            return $is_token_valid;
+            
+        } else {
+            return false;
+        }
+    }
 }
