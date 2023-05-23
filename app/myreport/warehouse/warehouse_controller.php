@@ -184,4 +184,15 @@ class My_report_warehouse
         }
         
     }
+
+    public function get_last_id() {
+        
+        $lastId = $this->my_report_warehouse->last_id();
+        Flight::json(
+            array(
+                'success' => false,
+                'id' => $lastId
+            )
+        );
+    }
 }

@@ -90,4 +90,9 @@ class My_report_warehouse_model
         }
 
     }
+
+    public function last_id()
+    {
+        return $this->summary->getLastId();
+    }
 }

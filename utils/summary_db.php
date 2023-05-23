@@ -17,6 +17,18 @@ Class SummaryDatabase {
         $this->table_as_id = str_replace("my_report_", "", $table);
     }
 
+    public function getLastId() {
+        $summary = $this->database->select_where("summary", 'table_name', $this->table)->fetch();
+        
+        $this->total = $summary['total'];
+        $this->last_id = $summary['last_id'];
+        // nextId
+        $lastId = $this->last_id ? $this->last_id : generateId($this->table_as_id ."_22320000");
+        
+        return $lastId;
+    }
+
+
     public function getNextId() {
         $summary = $this->database->select_where("summary", 'table_name', $this->table)->fetch();
         
