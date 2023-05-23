@@ -26,7 +26,7 @@ Flight::route('POST /myreport/warehouse', function () {
     $myreport_warehouse->add_warehouse();    
 });
 
-Flight::route("GET /warehouse/@id", function ($id) {
+Flight::route("GET /myreport/warehouse/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -38,7 +38,7 @@ Flight::route("GET /warehouse/@id", function ($id) {
     $myreport_warehouse->get_warehouse_by_id($id);    
 });
 
-Flight::route("PUT /warehouse/@id", function ($id) {
+Flight::route("PUT /myreport/warehouse/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 

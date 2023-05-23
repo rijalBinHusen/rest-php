@@ -96,9 +96,22 @@ class User
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $is_token_valid = $this->user->validate($jwt_token);
-            return $is_token_valid;
+            if($is_token_valid) {
+                return $is_token_valid;
+            } else {
+                
+                Flight::json([
+                    'success' => false,
+                    'message' => 'Invalid token',
+                ], 401);
+                return false;
+            }
             
         } else {
+            Flight::json([
+                'success' => false,
+                'message' => 'You must be authenticated to access this resource.',
+            ], 401);
             return false;
         }
     }

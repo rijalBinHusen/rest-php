@@ -134,7 +134,7 @@ class My_report_warehouse
                 array(
                     'success' => false,
                     'message' => 'Failed to update warehouse, check the data you sent'
-                )
+                ), 400
             );
             return;
         }
