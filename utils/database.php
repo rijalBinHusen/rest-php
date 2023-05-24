@@ -89,9 +89,10 @@ class Query_builder {
     }
 
     // merupakan fungsi edit data
-    function update($tabel,$data,$where,$id)
+    function update($tabel, $data, $where, $id)
     {
         $setPart = array();
+
         foreach ($data as $key => $value)
         {
             $setPart[] = $key."=:".$key;
@@ -102,12 +103,17 @@ class Query_builder {
             $sql = "UPDATE $tabel SET ".implode(', ', $setPart)." WHERE $where = :id";
             $row = $this->db->prepare($sql);
             //Bind our values.
+            
             $row ->bindValue(':id',$id); // where
+            
             foreach($data as $param => $val)
             {
                 $row ->bindValue($param, $val);
             }
-            return $row ->execute();
+
+            $row->execute();
+
+            return $row->rowCount();
 
         }  catch (PDOException $e) {
 
