@@ -22,8 +22,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'item_kode' => $faker->name('female'),
-            'item_name' => $faker->name('female'),
+            'item_kode' => $faker->firstName('female'),
+            'item_name' => $faker->firstName('female'),
             'last_used' => $faker->numberBetween(10000, 1000000),
         );
 
@@ -35,7 +35,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r($response, true));
+        fwrite(STDERR, print_r($response ."\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray);
@@ -49,9 +49,9 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
             'supervisor_phone' => $faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -75,9 +75,9 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
             'supervisor_phone' => $faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -188,8 +188,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'item_kode' => $faker->name('female'),
-            'item_name' => $faker->name('female'),
+            'item_kode' => $faker->firstName('female'),
+            'item_name' => $faker->firstName('female'),
             'last_used' => $faker->numberBetween(1000, 10000000)
         );
 
@@ -214,8 +214,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'item_kode33' => $faker->name('female'),
-            'item_name33' => $faker->name('female'),
+            'item_kode33' => $faker->firstName('female'),
+            'item_name33' => $faker->firstName('female'),
             'last_used33' => $faker->numberBetween(1000, 10000000)
         );
 
@@ -241,8 +241,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -265,8 +265,8 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
         // Define the request body
         $data = array(
-            'item_kode' => $faker->name('female'),
-            'item_name' => $faker->name('female'),
+            'item_kode' => $faker->firstName('female'),
+            'item_name' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -276,7 +276,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $response = $httpCallVar->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
-        fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);

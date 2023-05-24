@@ -103,7 +103,7 @@ class My_report_base_item_model
 
     public function remove_base_item($id)
     {
-        $this->database->delete($this->table, 'id', $id);
+        $result = $this->database->delete($this->table, 'id', $id);
 
         if($this->database->is_error !== null) {
 
@@ -111,7 +111,7 @@ class My_report_base_item_model
 
         } else {
 
-            return "Delete base item success";
+            return $result;
 
         }
 

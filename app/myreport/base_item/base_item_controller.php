@@ -114,11 +114,41 @@ class My_report_base_item
         }
     }
 
-    // public function deleteGuest($id) {
-    //     // myguest/8
-    //     // the 8 will automatically becoming parameter $id
-    //     return $this->my_report_base_item->deleteGuest($id);
-    // }
+    public function remove_base_item($id) {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        $result = $this->my_report_base_item->remove_base_item($id);
+
+        $is_success = $this->my_report_base_item->is_success;
+    
+        if($is_success === true && $result > 0) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'message' => 'Delete base item success',
+                )
+            );
+        }
+
+        else if($is_success !== true) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ), 500
+            );
+            return;
+        }
+
+        else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Base item not found'
+                )
+            );
+        }
+    }
 
     public function update_base_item_by_id($id)
     {

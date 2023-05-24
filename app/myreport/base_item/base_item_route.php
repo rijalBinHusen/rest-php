@@ -49,3 +49,15 @@ Flight::route("PUT /myreport/base_item/@id", function ($id) {
     $myreport_base_item = new My_report_base_item();
     $myreport_base_item->update_base_item_by_id($id);
 });
+
+Flight::route("DELETE /myreport/base_item/@id", function ($id) {
+    $user = new User();
+    $is_token_valid = $user->is_valid_token();
+
+    if(!$is_token_valid) {
+        return;
+    }
+
+    $myreport_base_item = new My_report_base_item();
+    $myreport_base_item->remove_base_item($id);
+});

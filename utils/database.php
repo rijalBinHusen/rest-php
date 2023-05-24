@@ -129,7 +129,8 @@ class Query_builder {
 
             $sql = "DELETE FROM $tabel WHERE $where = ?";
             $row = $this->db->prepare($sql);
-            return $row ->execute(array($id));
+            $row ->execute(array($id));
+            return $row->rowCount();
 
         }  catch (PDOException $e) {
 
