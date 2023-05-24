@@ -42,9 +42,9 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->url . "warehouse");
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
-            'warehouse_supervisors' => $faker->name('female')
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
+            'warehouse_supervisors' => $faker->firstName('female')
         );
 
         $http->setData($data);
@@ -70,8 +70,8 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url . 'warehouse');
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -96,8 +96,8 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r("OUT END POINT FAILED" . $this->url_host_id, true));
         // Define the request body
         $data = array(
-            'warehouse_nameddd' => $faker->name('female'),
-            'warehouse_groupddd' => $faker->name('female'),
+            'warehouse_nameddd' => $faker->firstName('female'),
+            'warehouse_groupddd' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -121,8 +121,8 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -144,8 +144,8 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);

@@ -76,7 +76,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     {
         $http = new HttpCall($this->url . "login");
         // Define the request body
-        $data = array('email' => 'test@test.com', 'password' => '12345');
+        $data = array('email' => 'test@test.com', 'password' => '123456');
         $http->setData($data);
         $response = $http->getResponse("POST");
         

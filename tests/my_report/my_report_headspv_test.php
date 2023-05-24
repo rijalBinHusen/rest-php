@@ -14,7 +14,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->url . "head_spv");
         // Define the request body
         $data = array(
-            'head_name' => $faker->name('female'),
+            'head_name' => $faker->firstName('female'),
             'head_phone' => $faker->numberBetween(100000, 1000000),
             'head_shift' => 1,
             'is_disabled' => true
@@ -41,7 +41,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url . 'head_spv');
         // Define the request body
         $data = array(
-            'head_name' => $faker->name('female'),
+            'head_name' => $faker->firstName('female'),
             'head_phone' => $faker->numberBetween(100000, 1000000),
             'head_shift' => 1,
         );
@@ -66,9 +66,9 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url . 'head_spv');
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
             'supervisor_phone' => $faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -179,8 +179,8 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
-            'warehouse_nameddd' => $faker->name('female'),
-            'warehouse_groupddd' => $faker->name('female'),
+            'warehouse_nameddd' => $faker->firstName('female'),
+            'warehouse_groupddd' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -203,8 +203,8 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url . 'head_spv/WAREHOUSE23010000');
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -226,7 +226,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array(
-            'head_name' => $faker->name('female'),
+            'head_name' => $faker->firstName('female'),
             'head_shift' => 3,
         );
 

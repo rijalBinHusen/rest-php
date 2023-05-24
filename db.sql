@@ -206,7 +206,7 @@ CREATE TABLE if not exists summary (
 
  
 INSERT INTO users (id, name, email, password) VALUES
-  (1, 'Jon Doe', 'jon@doe.com', '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee');
+  (1, 'Jon Doe', 'test@test.com', '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee');
 
 -- password $2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee === 12345
 ALTER TABLE my_report_supervisor ADD FOREIGN KEY (supervisor_warehouse) REFERENCES my_report_warehouse (id);
