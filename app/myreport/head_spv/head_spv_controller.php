@@ -134,7 +134,7 @@ class My_report_head_spv
         $keyValueToUpdate = array();
         // conditional head_name
         $valid_head_name = !is_null($head_name) && !empty($head_name);
-        if ($$valid_head_name) {
+        if ($valid_head_name) {
             $keyValueToUpdate["head_name"] = $head_name;
         }
 

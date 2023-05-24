@@ -240,6 +240,6 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update supervisor success", $convertToAssocArray['message']);
+        $this->assertEquals("Update head supervisor success", $convertToAssocArray['message']);
     }
 }
