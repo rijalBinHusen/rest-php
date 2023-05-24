@@ -22,18 +22,18 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'periode' => $faker->name('female'),
-            'head_spv_id' => $faker->name('female'),
+            'periode' => $faker->firstName('female'),
+            'head_spv_id' => $faker->firstName('female'),
             'dl' => $faker->numberBetween(10000, 1000000),
             'inserted' => $faker->numberBetween(10000, 1000000),
-            'masalah' => $faker->name('female'),
-            'supervisor_id' => $faker->name('female'),
+            'masalah' => $faker->firstName('female'),
+            'supervisor_id' => $faker->firstName('female'),
             'parent' => $faker->numberBetween(10000, 1000000),
-            'pic' => $faker->name('female'),
-            'solusi' => $faker->name('female'),
+            'pic' => $faker->firstName('female'),
+            'solusi' => $faker->firstName('female'),
             'is_status_done' => $faker->boolean(),
-            'sumber_masalah' => $faker->name('female'),
-            'type' => $faker->name('female'),
+            'sumber_masalah' => $faker->firstName('female'),
+            'type' => $faker->firstName('female'),
             'is_count' => $faker->numberBetween(0, 100)
         );
 
@@ -59,9 +59,9 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
-            'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
+            'supervisor_phone' => $$faker->numberBetween(100000, 1000000),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -85,9 +85,9 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
-            'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
+            'supervisor_phone' => $$faker->numberBetween(100000, 1000000),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -148,6 +148,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -177,6 +178,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         
         // Send a GET request to the /endpoint URL
@@ -193,6 +195,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed2()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
 
         $http->addJWTToken();
@@ -210,12 +213,13 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpoint()
     {
+        $this->testPostEndpoint();
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
             'periode' => $faker->numberBetween(1000, 10000000),
-            'head_spv_id' => $faker->name('female'),
+            'head_spv_id' => $faker->firstName('female'),
             'dl' => $faker->numberBetween(1000, 10000000)
         );
 
@@ -234,13 +238,14 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed()
     {
+        $this->testPostEndpoint();
         // error 400
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'item_kode33' => $faker->name('female'),
-            'item_name33' => $faker->name('female'),
+            'item_kode33' => $faker->firstName('female'),
+            'item_name33' => $faker->firstName('female'),
             'last_used33' => $faker->numberBetween(1000, 10000000)
         );
 
@@ -260,13 +265,14 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -283,13 +289,14 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -308,6 +315,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
         $httpCallVar->addJWTToken();
@@ -324,6 +332,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         
@@ -339,6 +348,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
 
