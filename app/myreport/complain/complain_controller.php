@@ -178,7 +178,6 @@ class My_report_complain
         $periode = $req->data->periode;
         $head_spv_id = $req->data->head_spv_id;
         $dl = $req->data->dl;
-        $head_spv_id = $req->data->head_spv_id;
         $inserted = $req->data->inserted;
         $masalah = $req->data->masalah;
         $supervisor_id = $req->data->supervisor_id;

@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 {
@@ -22,22 +22,22 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'customer' => $faker->name('female'),
-            'do' => $faker->name('female'),
+            'customer' => $faker->firstName('female'),
+            'do_' => $faker->firstName('female'),
             'gudang' => $faker->numberBetween(10000, 1000000),
             'item' => $faker->numberBetween(10000, 1000000),
-            'kabag' => $faker->name('female'),
-            'nomor_SJ' => $faker->name('female'),
+            'kabag' => $faker->firstName('female'),
+            'nomor_SJ' => $faker->firstName('female'),
             'nopol' => $faker->numberBetween(10000, 1000000),
-            'real_' => $faker->name('female'),
-            'row_' => $faker->name('female'),
+            'real_' => $faker->firstName('female'),
+            'row_' => $faker->firstName('female'),
             'spv' => $faker->boolean(),
-            'tally' => $faker->name('female'),
-            'tanggal_bongkar' => $faker->name('female'),
+            'tally' => $faker->firstName('female'),
+            'tanggal_bongkar' => $faker->firstName('female'),
             'tanggal_info' => $faker->numberBetween(0, 100),
             'tanggal_komplain' => $faker->numberBetween(0, 100),
             'tanggal_SJ' => $faker->numberBetween(0, 100),
-            'type' => $faker->numberBetween(0, 100)
+            'type_' => $faker->numberBetween(0, 100)
         );
 
         $http->setData($data);
@@ -50,10 +50,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->idInserted = $convertToAssocArray->data->id;
+        $this->idInserted = $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -62,9 +61,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
-            'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
+            'supervisor_phone' => $faker->numberBetween(100000, 1000000),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -79,7 +78,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed add complain import, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add complain import, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed2()
@@ -88,9 +87,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost);
         // Define the request body
         $data = array(
-            'supervisor_name' => $faker->name('female'),
-            'supervisor_phone' => $faker->$faker->numberBetween(100000, 1000000),
-            'supervisor_warehouse' => $faker->name('female'),
+            'supervisor_name' => $faker->firstName('female'),
+            'supervisor_phone' => $faker->numberBetween(100000, 1000000),
+            'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
 
@@ -118,23 +117,23 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('customer', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('do', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('gudang', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('item', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('kabag', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('nomor_SJ', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('nopol', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('real_', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('row_', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('spv', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tally', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_bongkar', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_info', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('customer', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('do_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('gudang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('kabag', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('nomor_SJ', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('nopol', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('real_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('row_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('spv', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tally', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_bongkar', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_info', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('type_', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
@@ -154,6 +153,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -165,28 +165,29 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('customer', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('do', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('gudang', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('item', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('kabag', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('nomor_SJ', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('nopol', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('real_', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('row_', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('spv', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tally', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_bongkar', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_info', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('customer', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('do_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('gudang', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('item', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('kabag', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('nomor_SJ', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('nopol', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('real_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('row_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('spv', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tally', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_bongkar', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_info', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('type_', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetByIdEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         
         // Send a GET request to the /endpoint URL
@@ -203,6 +204,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed2()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
 
         $http->addJWTToken();
@@ -220,13 +222,14 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpoint()
     {
+        $this->testPostEndpoint();
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'customer' => $faker->name('female'),
-            'do' => $faker->name('female'),
-            'item' => $faker->name('female')
+            'customer' => $faker->firstName('female'),
+            'do_' => $faker->firstName('female'),
+            'item' => $faker->firstName('female')
         );
 
         $httpCallVar->setData($data);
@@ -244,13 +247,14 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed()
     {
+        $this->testPostEndpoint();
         // error 400
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'item_kode33' => $faker->name('female'),
-            'item_name33' => $faker->name('female'),
+            'item_kode33' => $faker->firstName('female'),
+            'item_name33' => $faker->firstName('female'),
             'last_used33' => $faker->numberBetween(1000, 10000000)
         );
 
@@ -265,18 +269,19 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed update complain import, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to update complain import, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPutEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'warehouse_name' => $faker->firstName('female'),
+            'warehouse_group' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -293,13 +298,14 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->name('female'),
-            'warehouse_group' => $faker->name('female'),
+            'customer' => $faker->firstName('female'),
+            'do_' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -318,6 +324,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
         $httpCallVar->addJWTToken();
@@ -334,6 +341,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         
@@ -349,6 +357,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
 
