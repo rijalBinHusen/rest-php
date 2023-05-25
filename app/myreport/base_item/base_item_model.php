@@ -30,15 +30,9 @@ class My_report_base_item_model
     public function append_base_item($item_kode, $item_name, $last_used)
     {
         $nextId = $this->summary->getNextId();
-        // data to write to database
-        $res = array(
-            "id" => $nextId,
-            'item_kode' => $item_kode,
-            'item_name' => $item_name,
-            'last_used' => $last_used
-        );
+        // write to database
 
-        $this->database->insert($this->table, $res);
+        $this->write_base_item($nextId, $item_kode, $item_name, $last_used);
 
         if($this->database->is_error !== null) {
 
@@ -84,8 +78,15 @@ class My_report_base_item_model
 
     }
 
-    public function write_base_item(array $data)
+    public function write_base_item($id, $item_kode, $item_name, $last_used)
     {
+        $data = array(
+            "id" => $id,
+            'item_kode' => $item_kode,
+            'item_name' => $item_name,
+            'last_used' => $last_used
+        );
+
         $this->database->insert($this->table, $data);
 
         if($this->database->is_error !== null) {
@@ -94,8 +95,8 @@ class My_report_base_item_model
 
         } else {
 
-            $this->summary->updateLastId($data['id']);
-            return $data['id'];
+            $this->summary->updateLastId($id);
+            return $id;
 
         }
 

@@ -31,16 +31,8 @@ class My_report_supervisor_model
     {
         $nextId = $this->summary->getNextId();
         // data to write to database
-        $res = array(
-            "id" => $nextId,
-            'supervisor_name' => $supervisor_name,
-            'supervisor_phone' => $supervisor_phone,
-            'supervisor_warehouse' => $supervisor_warehouse,
-            'supervisor_shift' => $supervisor_shift,
-            'is_disabled' => $is_disabled
-        );
 
-        $this->database->insert($this->table, $res);
+        $this->write_supervisor($nextId, $supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled);
 
         if($this->database->is_error !== null) {
 
@@ -48,7 +40,6 @@ class My_report_supervisor_model
 
         } else {
 
-            $this->summary->updateLastId($nextId);
             return $nextId;
 
         }
@@ -86,8 +77,17 @@ class My_report_supervisor_model
 
     }
 
-    public function write_supervisor(array $data)
+    public function write_supervisor($id, $supervisor_name, $supervisor_phone, $supervisor_warehouse, $supervisor_shift, $is_disabled)
     {
+        $data = array(
+            "id" => $id,
+            'supervisor_name' => $supervisor_name,
+            'supervisor_phone' => $supervisor_phone,
+            'supervisor_warehouse' => $supervisor_warehouse,
+            'supervisor_shift' => $supervisor_shift,
+            'is_disabled' => $is_disabled
+        );
+
         $this->database->insert($this->table, $data);
 
         if($this->database->is_error !== null) {
@@ -96,8 +96,8 @@ class My_report_supervisor_model
 
         } else {
 
-            $this->summary->updateLastId($data['id']);
-            return $data['id'];
+            $this->summary->updateLastId($id);
+            return $id;
 
         }
 

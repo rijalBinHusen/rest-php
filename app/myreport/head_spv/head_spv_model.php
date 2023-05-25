@@ -30,16 +30,9 @@ class My_report_head_spv_model
     public function append_head_spv($head_name, $head_phone, $head_shift, $is_disabled)
     {
         $nextId = $this->summary->getNextId();
-        // data to write to database
-        $res = array(
-            "id" => $nextId,
-            'head_name' => $head_name,
-            'head_phone' => $head_phone,
-            'head_shift' => $head_shift,
-            'is_disabled' => $is_disabled
-        );
+        // write to database
 
-        $this->database->insert($this->table, $res);
+        $this->write_head_spv($nextId, $head_name, $head_phone, $head_shift, $is_disabled);
 
         if($this->database->is_error !== null) {
 
@@ -85,8 +78,16 @@ class My_report_head_spv_model
 
     }
 
-    public function write_head_spv(array $data)
+    public function write_head_spv($id, $head_name, $head_phone, $head_shift, $is_disabled)
     {
+        $data = array(
+            "id" => $id,
+            'head_name' => $head_name,
+            'head_phone' => $head_phone,
+            'head_shift' => $head_shift,
+            'is_disabled' => $is_disabled
+        );
+
         $this->database->insert($this->table, $data);
 
         if($this->database->is_error !== null) {
@@ -95,8 +96,8 @@ class My_report_head_spv_model
 
         } else {
 
-            $this->summary->updateLastId($data['id']);
-            return $data['id'];
+            $this->summary->updateLastId($id);
+            return $id;
 
         }
 

@@ -31,20 +31,12 @@ class My_report_warehouse_model
     public function append_warehouse($warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
         $nextId = $this->summary->getNextId();
-        // data to write to database
-        $res = array(
-            "id" => $nextId,
-            'warehouse_name' => $warehouse_name,
-            'warehouse_group' => $warehouse_group,
-            'warehouse_supervisors' => $warehouse_supervisors
-        );
-
-        $this->database->insert($this->table, $res);
+        // write to database
+        $this->write_warehouse($nextId, $warehouse_name, $warehouse_group, $warehouse_supervisors);
 
         if($this->database->is_error !== null) {
             $this->is_success = $this->database->is_error;
         } else {
-            $this->summary->updateLastId($nextId);
             return $nextId;
         }
 
@@ -77,16 +69,22 @@ class My_report_warehouse_model
 
     }
 
-    public function write_warehouse(array $data)
+    public function write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors)
     {
+        $data = array(
+            "id" => $id,
+            'warehouse_name' => $warehouse_name,
+            'warehouse_group' => $warehouse_group,
+            'warehouse_supervisors' => $warehouse_supervisors
+        );
 
         $this->database->insert($this->table, $data);
 
         if($this->database->is_error !== null) {
             $this->is_success = $this->database->is_error;
         } else {
-            $this->summary->updateLastId($data['id']);
-            return $data['id'];
+            $this->summary->updateLastId($id);
+            return $id;
         }
 
     }
