@@ -7,6 +7,7 @@ require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
 require_once(__DIR__ . '/app/myreport/supervisor/supervisor_route.php');
 require_once(__DIR__ . '/app/myreport/head_spv/head_spv_route.php');
 require_once(__DIR__ . '/app/myreport/base_item/base_item_route.php');
+require_once(__DIR__ . '/app/myreport/complain/complain_route.php');
 
 Flight::route('/blank(/@endpoint)', function ($endpoint) {
     $db = new Query_builder();

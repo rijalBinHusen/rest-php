@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportComplainTest extends PHPUnit_Framework_TestCase
 {
@@ -44,13 +44,12 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r($response, true));
+        fwrite(STDERR, print_r($response . "\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->idInserted = $convertToAssocArray->data->id;
+        $this->idInserted = $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -60,7 +59,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'supervisor_name' => $faker->firstName('female'),
-            'supervisor_phone' => $$faker->numberBetween(100000, 1000000),
+            'supervisor_phone' => $faker->numberBetween(100000, 1000000),
             'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
@@ -76,7 +75,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed add complain, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add complain, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed2()
@@ -86,7 +85,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'supervisor_name' => $faker->firstName('female'),
-            'supervisor_phone' => $$faker->numberBetween(100000, 1000000),
+            'supervisor_phone' => $faker->numberBetween(100000, 1000000),
             'supervisor_warehouse' => $faker->firstName('female'),
             'supervisor_shift' => 1,
         );
@@ -115,20 +114,20 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('periode', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('dl', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('inserted', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('masalah', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('parent', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('pic', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('solusi', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_status_done', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_count', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('inserted', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_status_done', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('type', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_count', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
@@ -159,20 +158,20 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('periode', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('dl', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('inserted', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('masalah', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('parent', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('pic', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('solusi', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_status_done', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('type', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('is_count', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('inserted', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_status_done', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('type', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_count', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
@@ -208,7 +207,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Item not found", $convertToAssocArray['message']);
+        $this->assertEquals("Complain not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint()
@@ -260,7 +259,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed update base item, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to update complain, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPutEndpointFailed2()
@@ -295,8 +294,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
         // Define the request body
         $data = array(
-            'warehouse_name' => $faker->firstName('female'),
-            'warehouse_group' => $faker->firstName('female'),
+            'periode' => $faker->firstName('female'),
         );
 
         $httpCallVar->setData($data);
@@ -310,7 +308,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Base item not found", $convertToAssocArray['message']);
+        $this->assertEquals("Complain not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint()
@@ -327,7 +325,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Delete base item success", $convertToAssocArray['message']);
+        $this->assertEquals("Delete complain success", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpointFailed2()
@@ -361,7 +359,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Base item not found", $convertToAssocArray['message']);
+        $this->assertEquals("Complain not found", $convertToAssocArray['message']);
     }
 
 }

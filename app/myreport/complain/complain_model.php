@@ -30,25 +30,23 @@ class My_report_complain_model
     public function append_complain($periode, $head_spv_id, $dl, $inserted, $masalah, $supervisor_id, $parent, $pic, $solusi, $is_status_done, $sumber_masalah, $type, $is_count)
     {
         $nextId = $this->summary->getNextId();
-        // data to write to database
-        $res = array(
-            "id" => $nextId,
-            'periode' => $periode,
-            'head_spv_id' => $head_spv_id,
-            'dl' => $dl,
-            'inserted' => $inserted,
-            'masalah' => $masalah,
-            'supervisor_id' => $supervisor_id,
-            'parent' => $parent,
-            'pic' => $pic,
-            'solusi' => $solusi,
-            'is_status_done' => $is_status_done,
-            'sumber_masalah' => $sumber_masalah,
-            'type' => $type,
-            'is_count' => $is_count,
+        // write to database
+        $this->write_complain(
+            $nextId,
+            $periode,
+            $head_spv_id,
+            $dl,
+            $inserted,
+            $masalah,
+            $supervisor_id,
+            $parent,
+            $pic,
+            $solusi,
+            $is_status_done,
+            $sumber_masalah,
+            $type,
+            $is_count
         );
-
-        $this->database->insert($this->table, $res);
 
         if($this->database->is_error !== null) {
 
@@ -56,7 +54,6 @@ class My_report_complain_model
 
         } else {
 
-            $this->summary->updateLastId($nextId);
             return $nextId;
 
         }
@@ -94,9 +91,27 @@ class My_report_complain_model
 
     }
 
-    public function write_complain(array $data)
+    public function write_complain($id, $periode, $head_spv_id, $dl, $inserted, $masalah, $supervisor_id, $parent, $pic, $solusi, $is_status_done, $sumber_masalah, $type, $is_count)
     {
-        $this->database->insert($this->table, $data);
+
+        $data_to_insert = array(
+            "id" => $id,
+            'periode' => $periode,
+            'head_spv_id' => $head_spv_id,
+            'dl' => $dl,
+            'inserted' => $inserted,
+            'masalah' => $masalah,
+            'supervisor_id' => $supervisor_id,
+            'parent' => $parent,
+            'pic' => $pic,
+            'solusi' => $solusi,
+            'is_status_done' => $is_status_done,
+            'sumber_masalah' => $sumber_masalah,
+            'type' => $type,
+            'is_count' => $is_count,
+        );
+
+        $this->database->insert($this->table, $data_to_insert);
 
         if($this->database->is_error !== null) {
 
@@ -104,8 +119,8 @@ class My_report_complain_model
 
         } else {
 
-            $this->summary->updateLastId($data['id']);
-            return $data['id'];
+            $this->summary->updateLastId($id);
+            return $id;
 
         }
 

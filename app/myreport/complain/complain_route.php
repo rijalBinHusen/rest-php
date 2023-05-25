@@ -1,8 +1,8 @@
 <?php
 require_once(__DIR__ . "/../../Users/user_controller.php");
-require_once(__DIR__ . "/base_item_controller.php");
+require_once(__DIR__ . "/complain_controller.php");
 
-Flight::route('GET /myreport/base_items', function () {
+Flight::route('GET /myreport/complains', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -10,23 +10,23 @@ Flight::route('GET /myreport/base_items', function () {
         return;
     }
 
-    $myreport_base_item = new My_report_base_item();
-    $myreport_base_item->get_base_items();
+    $myreport_complain = new My_report_complain();
+    $myreport_complain->get_complains();
 });
 
 
-Flight::route('POST /myreport/base_item', function () {
+Flight::route('POST /myreport/complain', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
     }
-    $myreport_base_item = new My_report_base_item();
-    $myreport_base_item->add_base_item();    
+    $myreport_complain = new My_report_complain();
+    $myreport_complain->add_complain();    
 });
 
-Flight::route("GET /myreport/base_item/@id", function ($id) {
+Flight::route("GET /myreport/complain/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -34,11 +34,11 @@ Flight::route("GET /myreport/base_item/@id", function ($id) {
         return;
     }
 
-    $myreport_base_item = new My_report_base_item();
-    $myreport_base_item->get_base_item_by_id($id);    
+    $myreport_complain = new My_report_complain();
+    $myreport_complain->get_complain_by_id($id);    
 });
 
-Flight::route("PUT /myreport/base_item/@id", function ($id) {
+Flight::route("PUT /myreport/complain/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -46,11 +46,11 @@ Flight::route("PUT /myreport/base_item/@id", function ($id) {
         return;
     }
 
-    $myreport_base_item = new My_report_base_item();
-    $myreport_base_item->update_base_item_by_id($id);
+    $myreport_complain = new My_report_complain();
+    $myreport_complain->update_complain_by_id($id);
 });
 
-Flight::route("DELETE /myreport/base_item/@id", function ($id) {
+Flight::route("DELETE /myreport/complain/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -58,6 +58,6 @@ Flight::route("DELETE /myreport/base_item/@id", function ($id) {
         return;
     }
 
-    $myreport_base_item = new My_report_base_item();
-    $myreport_base_item->remove_base_item($id);
+    $myreport_complain = new My_report_complain();
+    $myreport_complain->remove_complain($id);
 });
