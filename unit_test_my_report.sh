@@ -13,6 +13,22 @@ sleep 2
 phpunit tests/my_report/my_report_complain_test.php
 sleep 2
 phpunit tests/my_report/my_report_complain_import_test.php
+sleep 2
+phpunit tests/my_report/my_report_case_test.php
+sleep 2
+phpunit tests/my_report/my_report_case_import_test.php
+sleep 2
+phpunit tests/my_report/field_problem_test.php
+sleep 2
+phpunit tests/my_report/my_report_base_file_test.php
+sleep 2
+phpunit tests/my_report/my_report_base_stock_test.php
+sleep 2
+phpunit tests/my_report/my_report_base_clock_test.php
+sleep 2
+phpunit tests/my_report/my_report_problem_test.php
+sleep 2
+phpunit tests/my_report/my_report_document_test.php
 sleep 20
 
 #run all those command with this ./unit_test_my_report.sh
