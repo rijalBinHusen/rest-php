@@ -10,31 +10,45 @@ class My_report_field_problem
     }
     public function get_field_problems()
     { 
-        $result = $this->my_report_field_problem->get_field_problems();
+        $limit = Flight::request()->query->limit;
         
-        $is_exists = count($result) > 0;
+        $is_it_numeric = is_numeric($limit);
 
-        if($this->my_report_field_problem->is_success === true && $is_exists) {
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                    )
-            , 200);
-        }
+        if($is_it_numeric) {
+            $result = $this->my_report_field_problem->get_field_problems();
+            
+            $is_exists = count($result) > 0;
 
-        else if ($this->my_report_field_problem->is_success !== true) {
-            Flight::json( array(
+            if($this->my_report_field_problem->is_success === true && $is_exists) {
+                Flight::json(
+                    array(
+                        "success" => true,
+                        "data" => $result
+                        )
+                , 200);
+            }
+
+            else if ($this->my_report_field_problem->is_success !== true) {
+                Flight::json( array(
+                    "success" => false,
+                    "message" => $result
+                ), 500);
+            }
+            
+            else {
+                Flight::json( array(
                 "success" => false,
-                "message" => $result
-            ), 500);
+                "message" => "Field problem not found"
+                ), 404);
+            }
         }
         
         else {
-            Flight::json( array(
-            "success" => false,
-            "message" => "Field problem not found"
-            ), 404);
+            Flight::json(array(
+                "success" => false,
+                "message" => "The query parameter must be number"
+                )
+            , 400);
         }
 
     }

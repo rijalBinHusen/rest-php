@@ -10,31 +10,44 @@ class My_report_case
     }
     public function get_cases()
     { 
-        $result = $this->my_report_case->get_cases();
+        $limit = Flight::request()->query->limit;
         
-        $is_exists = count($result) > 0;
+        $is_it_numeric = is_numeric($limit);
 
-        if($this->my_report_case->is_success === true && $is_exists) {
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                    )
-            , 200);
-        }
+        if($is_it_numeric) {
 
-        else if ($this->my_report_case->is_success !== true) {
-            Flight::json( array(
+            $result = $this->my_report_case->get_cases();
+            
+            $is_exists = count($result) > 0;
+
+            if($this->my_report_case->is_success === true && $is_exists) {
+                Flight::json(
+                    array(
+                        "success" => true,
+                        "data" => $result
+                        )
+                , 200);
+            }
+
+            else if ($this->my_report_case->is_success !== true) {
+                Flight::json( array(
+                    "success" => false,
+                    "message" => $result
+                ), 500);
+            }
+            
+            else {
+                Flight::json( array(
                 "success" => false,
-                "message" => $result
-            ), 500);
-        }
-        
-        else {
-            Flight::json( array(
-            "success" => false,
-            "message" => "Complain import not found"
-            ), 404);
+                "message" => "Complain import not found"
+                ), 404);
+            }
+        } else {
+            Flight::json(array(
+                "success" => false,
+                "message" => "The query request must be number"
+                )
+            , 400);
         }
 
     }

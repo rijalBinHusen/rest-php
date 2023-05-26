@@ -51,7 +51,7 @@ class My_report_base_item
         else {
             Flight::json(array(
                 "success" => false,
-                "message" => "The query request must be number"
+                "message" => "The query parameter must be number"
                 )
             , 400);
         }

@@ -48,7 +48,7 @@ class My_report_complain_import
         else {
             Flight::json( array(
                 "success" => false,
-                "message" => "The query must be number"
+                "message" => "The query parameter must be number"
                 )
             , 400);
         }
