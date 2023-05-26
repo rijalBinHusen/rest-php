@@ -14,7 +14,7 @@ class My_report_base_item
         
         $is_it_numeric = is_numeric($limit);
 
-        if(!$is_it_numeric) {
+        if($is_it_numeric) {
 
             $result = $this->my_report_base_item->get_base_items($limit);
 
