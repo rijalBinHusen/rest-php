@@ -10,31 +10,47 @@ class My_report_complain_import
     }
     public function get_complains_import()
     { 
-        $result = $this->my_report_complain_import->get_complains_import();
-        
-        $is_exists = count($result) > 0;
+        $limit = Flight::request()->query->limit;
 
-        if($this->my_report_complain_import->is_success === true && $is_exists) {
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                    )
-            , 200);
-        }
+        $is_it_numeric = is_numeric($limit);
 
-        else if ($this->my_report_complain_import->is_success !== true) {
-            Flight::json( array(
+        if($is_it_numeric) {
+            
+            $result = $this->my_report_complain_import->get_complains_import($limit);
+            
+            $is_exists = count($result) > 0;
+
+            if($this->my_report_complain_import->is_success === true && $is_exists) {
+                Flight::json(
+                    array(
+                        "success" => true,
+                        "data" => $result
+                        )
+                , 200);
+            }
+
+            else if ($this->my_report_complain_import->is_success !== true) {
+                Flight::json( array(
+                    "success" => false,
+                    "message" => $result
+                ), 500);
+            }
+            
+            else {
+                Flight::json( array(
                 "success" => false,
-                "message" => $result
-            ), 500);
-        }
+                "message" => "Complain import not found"
+                ), 404);
+            }
         
+        }
+            
         else {
             Flight::json( array(
-            "success" => false,
-            "message" => "Complain import not found"
-            ), 404);
+                "success" => false,
+                "message" => "The query must be number"
+                )
+            , 400);
         }
 
     }
