@@ -10,7 +10,25 @@ class My_report_base_file
     }
     public function get_base_files()
     { 
-        $result = $this->my_report_base_file->get_base_files();
+        $request = Flight::request();
+        $periode1 = $request->query->periode1;
+        $periode2 = $request->query->periode2;
+
+        $not_valid_query_string = is_null($periode1) || empty($periode1) || is_null($periode2) || empty($periode2) || !is_numeric($periode1) || !is_numeric($periode2);
+
+        if($not_valid_query_string) {
+            Flight::json( array(
+                "success" => false,
+                "message" => "Please check query parameter"
+                )
+            , 400);
+
+            return;
+
+        }
+        // the query string is valid
+
+        $result = $this->my_report_base_file->get_base_files($periode1, $periode2);
         
         $is_exists = count($result) > 0;
 

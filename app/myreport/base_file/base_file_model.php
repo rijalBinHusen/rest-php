@@ -15,12 +15,15 @@ class My_report_base_file_model
         $this->summary = new SummaryDatabase($this->table);
     }
 
-    public function get_base_files()
+    public function get_base_files($periode1, $periode2)
     {
-        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM $this->table WHERE periode BETWEEN $periode1 AND $periode2";
+        $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error !== null) {
+
             $this->is_success = $this->database->is_error;
+            
         }
         else {
             return $result;
