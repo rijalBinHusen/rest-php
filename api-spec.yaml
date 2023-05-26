@@ -82,18 +82,7 @@ paths:
       summary: Get warehouse by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    default: true
-                  data:
-                    type: object
-                    $ref: "#/components/schemas/Warehouse"
+          $ref: "#/components/responses/getWarehouse200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -140,13 +129,7 @@ paths:
       summary: Get all supervisor.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Supervisor"
+          $ref: "#/components/responses/getSupervisor200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -224,13 +207,7 @@ paths:
       summary: Get all head supervisor.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Head_supervisor"
+          $ref: "#/components/responses/getHead_spv200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -250,11 +227,7 @@ paths:
       summary: Get head supervisor by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Head_supervisor"
+          $ref: "#/components/responses/getHead_spv200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -318,13 +291,7 @@ paths:
       summary: Get problems by query.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Problem"
+          $ref: "#/components/responses/getProblem200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -348,13 +315,7 @@ paths:
       summary: Get problems by query.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Problem"
+          $ref: "#/components/responses/getProblem200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -378,13 +339,7 @@ paths:
       summary: Get problems by query.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Problem"
+          $ref: "#/components/responses/getProblem200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -415,13 +370,7 @@ paths:
       summary: Get problems by query.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Problem"
+          $ref: "#/components/responses/getProblem200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -441,11 +390,7 @@ paths:
       summary: Get problems by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Problem"
+          $ref: "#/components/responses/getProblem200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -489,16 +434,18 @@ paths:
       tags:
         - field problem
       summary: Get all field problem.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Field_problem"
-
+          $ref: "#/components/responses/getField_problem200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -520,11 +467,7 @@ paths:
       summary: Get field problem by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Field_problem"
+          $ref: "#/components/responses/getField_problem200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -601,13 +544,7 @@ paths:
       summary: Get documents between two periode.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Document"
+          $ref: "#/components/responses/getDocument200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -627,13 +564,7 @@ paths:
       summary: Get documents by status.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Document"
+          $ref: "#/components/responses/getDocument200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -653,11 +584,7 @@ paths:
       summary: Get document by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Document"
+          $ref: "#/components/responses/getDocument200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -742,13 +669,7 @@ paths:
             default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Complain"
+          $ref: "#/components/responses/getComplain200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -770,11 +691,7 @@ paths:
       summary: Get complain by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Complain"
+          $ref: "#/components/responses/getComplain200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -847,13 +764,7 @@ paths:
             default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Complain_import"
+          $ref: "#/components/responses/getComplain200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -875,11 +786,7 @@ paths:
       summary: Get complain by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Complain_import"
+          $ref: "#/components/responses/getProblem200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -952,13 +859,7 @@ paths:
             default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Case"
+          $ref: "#/components/responses/getCase200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -980,11 +881,7 @@ paths:
       summary: Get case by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Case"
+          $ref: "#/components/responses/getCase200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1056,13 +953,7 @@ paths:
             default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Case_import"
+          $ref: "#/components/responses/getCase_import200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1082,11 +973,7 @@ paths:
       summary: Get case import by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Case_import"
+          $ref: "#/components/responses/getCase_import200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1169,13 +1056,7 @@ paths:
       summary: Get base stock by parent.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Base_stock"
+          $ref: "#/components/responses/getBase_stock200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1207,11 +1088,7 @@ paths:
       summary: Get base stock by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Base_stock"
+          $ref: "#/components/responses/getBase_stock200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1286,13 +1163,7 @@ paths:
       summary: Get documents between two periode.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Base_file"
+          $ref: "#/components/responses/getBase_file200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1312,11 +1183,7 @@ paths:
       summary: Get base file by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Base_file"
+          $ref: "#/components/responses/getBase_file200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1404,13 +1271,7 @@ paths:
       summary: Get base clock by parent.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Base_clock"
+          $ref: "#/components/responses/getBase_clock200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -1442,11 +1303,7 @@ paths:
       summary: Get base clock by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Base_clock"
+          $ref: "#/components/responses/getBase_clock200"
         "401":
           $ref: "#/components/responses/401Error"
         "404":
@@ -1501,15 +1358,18 @@ paths:
       tags:
         - base item
       summary: Get base item.
+      parameters:
+        - name: limit
+          in: query
+          description: Limit values that need to be considered
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Base_item"
+          $ref: "#/components/responses/getBase_item200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1531,11 +1391,7 @@ paths:
       summary: Get base item by id.
       responses:
         "200":
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Base_item"
+          $ref: "#/components/responses/getBase_item200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -2347,3 +2203,185 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/Warehouse"
+    getSupervisor200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Supervisor"
+    getHead_spv200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Head_supervisor"
+    getBase_item200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Base_item"
+    getComplain200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Complain"
+    getComplain_import200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Complain_import"
+    getCase200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Case"
+    getCase_import200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Case_import"
+    getField_problem200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Field_problem"
+    getBase_file200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Base_file"
+    getBase_stock200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Base_stock"
+    getBase_clock200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Base_clock"
+    getProblem200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Problem"
+    getDocument200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Document"
