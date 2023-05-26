@@ -21,7 +21,7 @@ class My_report_base_stock
         $in_stock = $req->data->in_stock;
         $out_stock = $req->data->out_stock;
         $date_in = $req->data->date_in;
-        $plan_out = $req->data->out_stock;
+        $plan_out = $req->data->plan_out;
         $date_out = $req->data->date_out;
         $date_end = $req->data->date_end;
         $real_stock = $req->data->real_stock;
@@ -30,6 +30,7 @@ class My_report_base_stock
         $result = null;
 
         $valid_request_body = !is_null($shift) 
+                                && !is_null($parent) 
                                 && !is_null($item) 
                                 && !is_null($awal) 
                                 && !is_null($in_stock) 
