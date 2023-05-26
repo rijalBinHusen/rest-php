@@ -48,7 +48,7 @@ class My_report_base_clock_model
         $data_to_insert = array(
             "id" => $id,
             'parent' => $parent,
-            '$shift' => $shift,
+            'shift' => $shift,
             'no_do' => $no_do,
             'reg' => $reg,
             'start' => $start,
