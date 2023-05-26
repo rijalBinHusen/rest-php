@@ -15,9 +15,10 @@ class My_report_base_item_model
         $this->summary = new SummaryDatabase($this->table);
     }
 
-    public function get_base_items()
+    public function get_base_items($limit)
     {
-        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM $this->table ORDER BY id DESC LIMIT $limit";
+        $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error !== null) {
             $this->is_success = $this->database->is_error;

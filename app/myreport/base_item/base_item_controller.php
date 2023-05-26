@@ -10,22 +10,50 @@ class My_report_base_item
     }
     public function get_base_items()
     { 
-        $result = $this->my_report_base_item->get_base_items();
+        $limit = Flight::request()->query->limit;
         
-        if($this->my_report_base_item->is_success) {
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
+        $is_it_numeric = is_numeric($limit);
+
+        if(!$is_it_numeric) {
+
+            $result = $this->my_report_base_item->get_base_items($limit);
+
+            $is_found = count($result) > 0;
+
+            $is_success = $this->my_report_base_item->is_success;
+            
+            if($is_success === true && $is_found) {
+                Flight::json(
+                    array(
+                        "success" => true,
+                        "data" => $result
+                        )
+                , 200);
+            }
+            
+            else if($is_success !== true) {
+                Flight::json( array(
+                    "success" => false,
+                    "message" => $result
                     )
-            , 200);
-        }
+                , 500);
+            }
+            
+            else {
+                Flight::json(array(
+                    "success" => false,
+                    "message" => "Base item not found"
+                    )
+                , 404);
+            }
+        } 
         
         else {
-            Flight::json( array(
+            Flight::json(array(
                 "success" => false,
-                "message" => $result
-            ), 500);
+                "message" => "The query request must be number"
+                )
+            , 400);
         }
 
     }

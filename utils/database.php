@@ -139,12 +139,9 @@ class Query_builder {
         }
     }
 
-    function sqlQuery($query) {
-        $row = $this->db->prepare($query);
-        $row->execute();
-        return $row->fetch();
+    function sqlQuery($your_query) {
+        return $this->db->query($your_query);
     }
-
 }
 
 ?>
