@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class My_report_base_file_model
 {
     protected $database;
-    var $table = "my_report_report_base_file";
+    var $table = "my_report_base_report_file";
     var $is_success = true;
     private $summary = null;
 
@@ -96,11 +96,11 @@ class My_report_base_file_model
         $data_to_insert = array(
             "id" => $id,
             'periode' => $periode,
-            '$warehouse_id' => $warehouse_id,
+            'warehouse_id' => $warehouse_id,
             'file_name' => $file_name,
-            '$stock_sheet' => $stock_sheet,
-            '$clock_sheet' => $clock_sheet,
-            '$is_imported' => $is_imported
+            'stock_sheet' => $stock_sheet,
+            'clock_sheet' => $clock_sheet,
+            'is_imported' => $is_imported
         );
 
         $this->database->insert($this->table, $data_to_insert);
