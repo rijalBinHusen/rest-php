@@ -143,7 +143,7 @@ class My_report_document_model
 
     public function get_documents_by_status($status)
     {
-        $result  = $this->database->select_where($this->table, 'is_finished', $status)->fetchAll(PDO::FETCH_ASSOC);
+        $result  = $this->database->select_where($this->table, 'status', $status)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error !== null) {
 
@@ -211,24 +211,44 @@ class My_report_document_model
 
     public function last_document_date()
     {
-        $query = "SELECT * FROM $this->table ORDER BY periode DESC LIMIT 1";
+        try {
+            
+            $query = "SELECT * FROM $this->table ORDER BY periode DESC LIMIT 1";
 
-        $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
+            $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
 
-        $not_exists = count($result) < 1;
+            $not_exists = count($result) < 1;
 
-        if($this->database->is_error !== null) {
+            if($this->database->is_error !== null) {
 
-            $this->is_success = $this->database->is_error;
+                throw $this->database->is_error;
 
-        } else if($not_exists) {
+            } 
+            
+            else if($not_exists) {
 
-            $this->is_success = $this->database->is_error;
-            return time();
+                // Get the current time in epoch time
+                $now = time();
 
-        } else {
+                // Subtract 15 days from the current time
+                $before = $now - (15 * 60 * 60 * 24);
 
-            return $result['periode'];
+                // Output the epoch time of 15 days before now
+                return $before;
+
+            } 
+            
+            else {
+
+                return $result['periode'];
+
+            }
+        
+        }
+
+        catch(PDOException $e) {
+
+            $this->is_success = $e;
 
         }
 

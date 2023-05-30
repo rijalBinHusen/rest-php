@@ -1,130 +1,128 @@
 <?php
-require_once(__DIR__ . '/problem_model.php');
+require_once(__DIR__ . '/document_model.php');
 
-class My_report_problem
+class My_report_document
 {
-    protected $my_report_problem;
+    protected $my_report_document;
     function __construct()
     {
-        $this->my_report_problem = new My_report_problem_model();
+        $this->my_report_document = new My_report_document_model();
     }
 
-    public function add_problem()
+    public function add_document()
     {
         // request
         $req = Flight::request();
         $id = $req->data->id;
-        $warehouse_id = $req->data->warehouse_id;
-        $supervisor_id = $req->data->supervisor_id;
-        $head_spv_id = $req->data->head_spv_id;
-        $item_kode = $req->data->item_kode;
-        $tanggal_mulai = $req->data->tanggal_mulai;
-        $shift_mulai = $req->data->shift_mulai;
-        $pic = $req->data->pic;
-        $dl = $req->data->dl;
-        $masalah = $req->data->masalah;
-        $sumber_masalah = $req->data->sumber_masalah;
-        $solusi = $req->data->solusi;
-        $solusi_panjang = $req->data->solusi_panjang;
-        $dl_panjang = $req->data->dl_panjang;
-        $pic_panjang = $req->data->pic_panjang;
-        $tanggal_selesai = $req->data->tanggal_selesai;
-        $shift_selesai = $req->data->shift_selesai;
+        $collected = $req->data->collected;
+        $approval = $req->data->approval;
+        $status = $req->data->status;
+        $shared = $req->data->shared;
+        $finished = $req->data->finished;
+        $total_do = $req->data->total_do;
+        $total_kendaraan = $req->data->total_kendaraan;
+        $total_waktu = $req->data->total_waktu;
+        $base_report_file = $req->data->base_report_file;
         $is_finished = $req->data->is_finished;
+        $supervisor_id = $req->data->supervisor_id;
+        $periode = $req->data->periode;
+        $shift = $req->data->shift;
+        $head_spv_id = $req->data->head_spv_id;
+        $warehouse_id = $req->data->warehouse_id;
+        $is_generated_document = $req->data->is_generated_document;
 
         $result = null;
 
-        $valid_request_body =   !is_null($warehouse_id) 
-                                && !is_null($supervisor_id) 
-                                && !is_null($head_spv_id) 
-                                && !is_null($item_kode) 
-                                && !is_null($tanggal_mulai) 
-                                && !is_null($shift_mulai) 
-                                && !is_null($pic)
-                                && !is_null($dl)
-                                && !is_null($masalah)
-                                && !is_null($sumber_masalah)
-                                && !is_null($solusi)
-                                && !is_null($solusi_panjang)
-                                && !is_null($dl_panjang)
-                                && !is_null($pic_panjang)
-                                && !is_null($tanggal_selesai)
-                                && !is_null($is_finished);
+        $valid_request_body =   !is_null($collected) 
+                                && !is_null($approval) 
+                                && !is_null($status) 
+                                && !is_null($shared) 
+                                && !is_null($finished) 
+                                && !is_null($total_do) 
+                                && !is_null($total_kendaraan)
+                                && !is_null($total_waktu)
+                                && !is_null($base_report_file)
+                                && !is_null($is_finished)
+                                && !is_null($supervisor_id)
+                                && !is_null($periode)
+                                && !is_null($shift)
+                                && !is_null($head_spv_id)
+                                && !is_null($warehouse_id);
         
-                                if($valid_request_body) {
-            if ($id) {
-                // write the warehouse
-                $result = $this->my_report_problem->write_problem(
-                    $id, 
-                    $warehouse_id, 
-                    $supervisor_id, 
-                    $head_spv_id, 
-                    $item_kode, 
-                    $tanggal_mulai, 
-                    $shift_mulai, 
-                    $pic,
-                    $dl,
-                    $masalah,
-                    $sumber_masalah,
-                    $solusi,
-                    $solusi_panjang,
-                    $dl_panjang,
-                    $pic_panjang,
-                    $tanggal_selesai,
-                    $shift_selesai,
-                    $is_finished
-                    );
-            } else {
-                // append warehouse
-                $result = $this->my_report_problem->append_problem(
-                                                            $warehouse_id, 
-                                                            $supervisor_id, 
-                                                            $head_spv_id, 
-                                                            $item_kode, 
-                                                            $tanggal_mulai, 
-                                                            $shift_mulai, 
-                                                            $pic,
-                                                            $dl,
-                                                            $masalah,
-                                                            $sumber_masalah,
-                                                            $solusi,
-                                                            $solusi_panjang,
-                                                            $dl_panjang,
-                                                            $pic_panjang,
-                                                            $tanggal_selesai,
-                                                            $shift_selesai,
-                                                            $is_finished
-                                                        );
-            }
+            if($valid_request_body) {
+                if ($id) {
+                    // write the warehouse
+                    $result = $this->my_report_document->write_document(
+                        $id, 
+                        $collected, 
+                        $approval, 
+                        $status, 
+                        $shared, 
+                        $finished, 
+                        $total_do, 
+                        $total_kendaraan,
+                        $total_waktu,
+                        $base_report_file,
+                        $is_finished,
+                        $supervisor_id,
+                        $periode,
+                        $shift,
+                        $head_spv_id,
+                        $warehouse_id,
+                        $is_generated_document
+                        );
+                } 
+                
+                else {
+                    // append warehouse
+                    $result = $this->my_report_document->append_document(
+                                                                $collected, 
+                                                                $approval, 
+                                                                $status, 
+                                                                $shared, 
+                                                                $finished, 
+                                                                $total_do, 
+                                                                $total_kendaraan,
+                                                                $total_waktu,
+                                                                $base_report_file,
+                                                                $is_finished,
+                                                                $supervisor_id,
+                                                                $periode,
+                                                                $shift,
+                                                                $head_spv_id,
+                                                                $warehouse_id,
+                                                                $is_generated_document
+                                                            );
+                }
 
-            if($this->my_report_problem->is_success !== true) {
+                if($this->my_report_document->is_success !== true) {
+                    Flight::json(
+                        array(
+                            'success'=> false,
+                            'message'=> $this->my_report_document->is_success
+                        ), 500
+                    );
+                    return;
+                }
+                
                 Flight::json(
                     array(
-                        'success'=> false,
-                        'message'=> $this->my_report_problem->is_success
-                    ), 500
+                        'success' => true,
+                        'id' => $result
+                    ), 201
                 );
                 return;
-            }
-            
-            Flight::json(
-                array(
-                    'success' => true,
-                    'id' => $result
-                ), 201
-            );
-            return;
         }
 
         Flight::json(
             array(
                 'success' => false,
-                'message' => 'Failed to add base clock, check the data you sent'
+                'message' => 'Failed to add document, check the data you sent'
             ), 400
         );
     }
 
-    public function get_problem_by_periode()
+    public function get_document_by_periode()
     { 
         $request = Flight::request();
         $periode1 = $request->query->periode1;
@@ -150,11 +148,11 @@ class My_report_problem
 
         // the query string is valid
 
-        $result = $this->my_report_problem->get_problem_by_periode($periode1, $periode2);
+        $result = $this->my_report_document->get_documents_by_periode($periode1, $periode2);
         
         $is_exists = count($result) > 0;
 
-        if($this->my_report_problem->is_success === true && $is_exists) {
+        if($this->my_report_document->is_success === true && $is_exists) {
 
             Flight::json(
                 array(
@@ -165,7 +163,7 @@ class My_report_problem
 
         }
 
-        else if ($this->my_report_problem->is_success !== true) {
+        else if ($this->my_report_document->is_success !== true) {
 
             Flight::json( 
                 array(
@@ -180,14 +178,14 @@ class My_report_problem
             Flight::json( 
                 array(
                     "success" => false,
-                    "message" => "Problem record not found"
+                    "message" => "Document not found"
                 )
             , 404);
         }
 
     }
 
-    public function get_problem_by_status()
+    public function get_document_by_status()
     { 
         $request = Flight::request();
         $status = $request->query->status;
@@ -196,7 +194,7 @@ class My_report_problem
                                     || empty($status) 
                                     || !is_numeric($status) 
                                     || $status > -1 
-                                    || $status < 2;
+                                    || $status < 3;
 
         if($not_valid_query_string) {
             Flight::json( array(
@@ -211,11 +209,11 @@ class My_report_problem
 
         // the query string is valid
 
-        $result = $this->my_report_problem->get_problem_by_status($status);
+        $result = $this->my_report_document->get_documents_by_status($status);
         
         $is_exists = count($result) > 0;
 
-        if($this->my_report_problem->is_success === true && $is_exists) {
+        if($this->my_report_document->is_success === true && $is_exists) {
 
             Flight::json(
                 array(
@@ -226,7 +224,7 @@ class My_report_problem
 
         }
 
-        else if ($this->my_report_problem->is_success !== true) {
+        else if ($this->my_report_document->is_success !== true) {
 
             Flight::json( 
                 array(
@@ -241,142 +239,20 @@ class My_report_problem
             Flight::json( 
                 array(
                     "success" => false,
-                    "message" => "Problem record not found"
+                    "message" => "Document not found"
                 )
             , 404);
         }
 
     }
 
-    public function get_problem_by_supervisor()
-    { 
-        $request = Flight::request();
-        $supervisor_id = $request->query->supervisor_id;
-
-        $not_valid_query_string = is_null($supervisor_id) 
-                                    || empty($supervisor_id) 
-                                    || !is_string($supervisor_id);
-
-        if($not_valid_query_string) {
-            Flight::json( array(
-                "success" => false,
-                "message" => "Please check query parameter"
-                )
-            , 400);
-
-            return;
-
-        }
-
-        // the query string is valid
-
-        $result = $this->my_report_problem->get_problem_by_supervisor($supervisor_id);
-        
-        $is_exists = count($result) > 0;
-
-        if($this->my_report_problem->is_success === true && $is_exists) {
-
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                    )
-            , 200);
-
-        }
-
-        else if ($this->my_report_problem->is_success !== true) {
-
-            Flight::json( 
-                array(
-                    "success" => false,
-                    "message" => $result
-                )
-            , 500);
-
-        }
-        
-        else {
-            Flight::json( 
-                array(
-                    "success" => false,
-                    "message" => "Problem record not found"
-                )
-            , 404);
-        }
-
-    }
-
-    public function get_problem_by_warehouse_and_item()
-    { 
-        $request = Flight::request();
-        $warehouse_id = $request->query->warehouse_id;
-        $item_kode = $request->query->item_kode;
-
-        $not_valid_query_string = is_null($warehouse_id) 
-                                    || empty($warehouse_id) 
-                                    || !is_string($warehouse_id)
-                                    || is_null($item_kode) 
-                                    || empty($item_kode) 
-                                    || !is_string($item_kode);
-
-        if($not_valid_query_string) {
-            Flight::json( array(
-                "success" => false,
-                "message" => "Please check query parameter"
-                )
-            , 400);
-
-            return;
-
-        }
-
-        // the query string is valid
-
-        $result = $this->my_report_problem->get_problem_by_warehouse_and_item($warehouse_id, $item_kode);
-        
-        $is_exists = count($result) > 0;
-
-        if($this->my_report_problem->is_success === true && $is_exists) {
-
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                    )
-            , 200);
-
-        }
-
-        else if ($this->my_report_problem->is_success !== true) {
-
-            Flight::json( 
-                array(
-                    "success" => false,
-                    "message" => $result
-                )
-            , 500);
-
-        }
-        
-        else {
-            Flight::json( 
-                array(
-                    "success" => false,
-                    "message" => "Problem record not found"
-                )
-            , 404);
-        }
-
-    }
-    
-    public function get_problem_by_id($id)
+    public function get_document_by_id($id)
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->my_report_problem->get_problem_by_id($id);
+        $result = $this->my_report_document->get_document_by_id($id);
 
-        $is_success = $this->my_report_problem->is_success;
+        $is_success = $this->my_report_document->is_success;
 
         $is_found = count($result) > 0;
 
@@ -403,152 +279,145 @@ class My_report_problem
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Problem record not found'
+                    'message' => 'Document not found'
                 )
             );
         }
     }
     
-    public function update_problem_by_id($id)
+    public function update_document_by_id($id)
     {
         // catch the query string request
         $req = Flight::request();
-        $warehouse_id = $req->data->warehouse_id;
-        $supervisor_id = $req->data->supervisor_id;
-        $head_spv_id = $req->data->head_spv_id;
-        $item_kode = $req->data->item_kode;
-        $tanggal_mulai = $req->data->tanggal_mulai;
-        $shift_mulai = $req->data->shift_mulai;
-        $pic = $req->data->pic;
-        $dl = $req->data->dl;
-        $masalah = $req->data->masalah;
-        $sumber_masalah = $req->data->sumber_masalah;
-        $solusi = $req->data->solusi;
-        $solusi_panjang = $req->data->solusi_panjang;
-        $dl_panjang = $req->data->dl_panjang;
-        $pic_panjang = $req->data->pic_panjang;
-        $tanggal_selesai = $req->data->tanggal_selesai;
-        $shift_selesai = $req->data->shift_selesai;
+        $collected = $req->data->collected;
+        $approval = $req->data->approval;
+        $status = $req->data->status;
+        $shared = $req->data->shared;
+        $finished = $req->data->finished;
+        $total_do = $req->data->total_do;
+        $total_kendaraan = $req->data->total_kendaraan;
+        $total_waktu = $req->data->total_waktu;
+        $base_report_file = $req->data->base_report_file;
         $is_finished = $req->data->is_finished;
+        $supervisor_id = $req->data->supervisor_id;
+        $periode = $req->data->periode;
+        $shift = $req->data->shift;
+        $head_spv_id = $req->data->head_spv_id;
+        $warehouse_id = $req->data->warehouse_id;
+        $is_generated_document = $req->data->is_generated_document;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
 
-        // conditional $warehouse_id
-        $valid_warehouse_id = !is_null($warehouse_id) && !empty($warehouse_id);
-        if ($valid_warehouse_id) {
-            $keyValueToUpdate["warehouse_id"] = $warehouse_id;
+        // conditional $collected
+        $valid_collected = !is_null($collected) && !empty($collected);
+        if ($valid_collected) {
+            $keyValueToUpdate["collected"] = $collected;
         }
 
-        // conditional supervisor_id
-        $valid_supervisor_id = !is_null($supervisor_id) && !empty($supervisor_id);
-        if ($valid_supervisor_id) {
-            $keyValueToUpdate["supervisor_id"] = $supervisor_id;
+        // conditional approval
+        $valid_approval = !is_null($approval) && !empty($approval);
+        if ($valid_approval) {
+            $keyValueToUpdate["approval"] = $approval;
         }
 
-        // conditional $head_spv_id
-        $valid_head_spv_id = !is_null($head_spv_id) && !empty($head_spv_id);
-        if ($valid_head_spv_id) {
-            $keyValueToUpdate["head_spv_id"] = $head_spv_id;
+        // conditional $status
+        $valid_status = !is_null($status) && !empty($status);
+        if ($valid_status) {
+            $keyValueToUpdate["status"] = $status;
         }
 
-        // conditional $item_kode
-        $valid_item_kode = !is_null($item_kode) && !empty($item_kode);
+        // conditional $shared
+        $valid_item_kode = !is_null($shared) && !empty($shared);
         if ($valid_item_kode) {
-            $keyValueToUpdate["item_kode"] = $item_kode;
+            $keyValueToUpdate["shared"] = $shared;
         }
 
-        // conditional $tanggal_mulai
-        $valid_tanggal_mulai = !is_null($tanggal_mulai) && !empty($tanggal_mulai);
+        // conditional $finished
+        $valid_tanggal_mulai = !is_null($finished) && !empty($finished);
         if ($valid_tanggal_mulai) {
-            $keyValueToUpdate["tanggal_mulai"] = $tanggal_mulai;
+            $keyValueToUpdate["finished"] = $finished;
         }
 
-        // conditional $shift_mulai
-        $shift_mulai = !is_null($shift_mulai) && !empty($shift_mulai);
-        if ($shift_mulai) {
-            $keyValueToUpdate["shift_mulai"] = $shift_mulai;
+        // conditional $total_do
+        $total_do = !is_null($total_do) && !empty($total_do);
+        if ($total_do) {
+            $keyValueToUpdate["total_do"] = $total_do;
         }
 
-        // conditional $pic
-        $valid_pic = !is_null($pic) && !empty($pic);
+        // conditional $total_kendaraan
+        $valid_pic = !is_null($total_kendaraan) && !empty($total_kendaraan);
         if ($valid_pic) {
-            $keyValueToUpdate["pic"] = $pic;
+            $keyValueToUpdate["total_kendaraan"] = $total_kendaraan;
         }
 
-        // conditional $dl
-        $valid_dl = !is_null($dl) && !empty($dl);
+        // conditional $total_waktu
+        $valid_dl = !is_null($total_waktu) && !empty($total_waktu);
         if ($valid_dl) {
-            $keyValueToUpdate["dl"] = $dl;
+            $keyValueToUpdate["total_waktu"] = $total_waktu;
         }
 
-        // conditional $masalah
-        $valid_masalah = !is_null($masalah) && !empty($masalah);
+        // conditional $base_report_file
+        $valid_masalah = !is_null($base_report_file) && !empty($base_report_file);
         if ($valid_masalah) {
-            $keyValueToUpdate["masalah"] = $masalah;
-        }
-
-        // conditional $sumber_masalah
-        $valid_sumber_masalah = !is_null($sumber_masalah) && !empty($sumber_masalah);
-        if ($valid_sumber_masalah) {
-            $keyValueToUpdate["sumber_masalah"] = $sumber_masalah;
-        }
-
-        // conditional $solusi
-        $valid_solusi = !is_null($solusi) && !empty($solusi);
-        if ($valid_solusi) {
-            $keyValueToUpdate["solusi"] = $solusi;
-        }
-
-        // conditional $solusi_panjang
-        $valid_solusi_panjang = !is_null($solusi_panjang) && !empty($solusi_panjang);
-        if ($valid_solusi_panjang) {
-            $keyValueToUpdate["solusi_panjang"] = $solusi_panjang;
-        }
-
-        // conditional $dl_panjang
-        $valid_dl_panjang = !is_null($dl_panjang) && !empty($dl_panjang);
-        if ($valid_dl_panjang) {
-            $keyValueToUpdate["dl_panjang"] = $dl_panjang;
-        }
-
-        // conditional $pic_panjang
-        $valid_pic_panjang = !is_null($pic_panjang) && !empty($pic_panjang);
-        if ($valid_pic_panjang) {
-            $keyValueToUpdate["pic_panjang"] = $pic_panjang;
-        }
-
-        // conditional $tanggal_selesai
-        $valid_tanggal_selesai = !is_null($tanggal_selesai) && !empty($tanggal_selesai);
-        if ($valid_tanggal_selesai) {
-            $keyValueToUpdate["tanggal_selesai"] = $tanggal_selesai;
-        }
-
-        // conditional $shift_selesai
-        $valid_shift_selesai = !is_null($shift_selesai) && !empty($shift_selesai);
-        if ($valid_shift_selesai) {
-            $keyValueToUpdate["shift_selesai"] = $shift_selesai;
+            $keyValueToUpdate["base_report_file"] = $base_report_file;
         }
 
         // conditional $is_finished
-        $valid_is_finished = !is_null($is_finished) && !empty($is_finished);
-        if ($valid_is_finished) {
+        $valid_sumber_masalah = !is_null($is_finished) && !empty($is_finished);
+        if ($valid_sumber_masalah) {
             $keyValueToUpdate["is_finished"] = $is_finished;
+        }
+
+        // conditional $supervisor_id
+        $valid_solusi = !is_null($supervisor_id) && !empty($supervisor_id);
+        if ($valid_solusi) {
+            $keyValueToUpdate["supervisor_id"] = $supervisor_id;
+        }
+
+        // conditional $periode
+        $valid_solusi_panjang = !is_null($periode) && !empty($periode);
+        if ($valid_solusi_panjang) {
+            $keyValueToUpdate["periode"] = $periode;
+        }
+
+        // conditional $shift
+        $valid_dl_panjang = !is_null($shift) && !empty($shift);
+        if ($valid_dl_panjang) {
+            $keyValueToUpdate["shift"] = $shift;
+        }
+
+        // conditional $head_spv_id
+        $valid_pic_panjang = !is_null($head_spv_id) && !empty($head_spv_id);
+        if ($valid_pic_panjang) {
+            $keyValueToUpdate["head_spv_id"] = $head_spv_id;
+        }
+
+        // conditional $warehouse_id
+        $valid_tanggal_selesai = !is_null($warehouse_id) && !empty($warehouse_id);
+        if ($valid_tanggal_selesai) {
+            $keyValueToUpdate["warehouse_id"] = $warehouse_id;
+        }
+
+        // conditional $is_generated_document
+        $valid_shift_selesai = !is_null($is_generated_document) && !empty($is_generated_document);
+        if ($valid_shift_selesai) {
+            $keyValueToUpdate["is_generated_document"] = $is_generated_document;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
         if($is_oke_to_update) {
 
-            $result = $this->my_report_problem->update_problem_by_id($keyValueToUpdate, "id", $id);
+            $result = $this->my_report_document->update_document_by_id($keyValueToUpdate, "id", $id);
     
-            $is_success = $this->my_report_problem->is_success;
+            $is_success = $this->my_report_document->is_success;
     
             if($is_success === true && $result > 0) {
                 Flight::json(
                     array(
                         'success' => true,
-                        'message' => 'Update problem success',
+                        'message' => 'Update document success',
                     )
                 );
             }
@@ -567,7 +436,7 @@ class My_report_problem
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'Problem record not found'
+                        'message' => 'Document not found'
                     )
                 );
             }
@@ -577,7 +446,7 @@ class My_report_problem
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update problem, check the data you sent'
+                    'message' => 'Failed to update document, check the data you sent'
                 )
             );
         }
@@ -585,4 +454,57 @@ class My_report_problem
         
     }
 
+    public function remove_document_by_id($id) {
+        $result = $this->my_report_document->remove_document_by_id($id);
+
+        $is_success = $this->my_report_document->is_success;
+
+        if($is_success === true && $result > 0) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'message' => 'Delete document success',
+                )
+            );
+        }
+
+        else if($is_success !== true) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ), 500
+            );
+            return;
+        }
+
+        else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Document not found'
+                )
+            );
+        }
+    }
+
+    public function last_date() {
+        $result = $this->my_report_document->last_document_date();
+
+        if($this->my_report_document->is_success === true) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'last_date' => $result,
+                )
+            );
+        } else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $this->my_report_document->is_success
+                )
+            );
+        }
+    }
 }

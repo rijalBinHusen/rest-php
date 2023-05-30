@@ -1,19 +1,19 @@
 <?php
 require_once(__DIR__ . "/../../Users/user_controller.php");
-require_once(__DIR__ . "/problem_controller.php");
+require_once(__DIR__ . "/document_controller.php");
 
-Flight::route('POST /myreport/problem', function () {
+Flight::route('POST /myreport/document', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
     if(!$is_token_valid) {
         return;
     }
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->add_problem();    
+    $myreport_document = new My_report_document();
+    $myreport_document->add_document();    
 });
 
-Flight::route('GET /myreport/problems/byperiode', function () {
+Flight::route('GET /myreport/documents/byperiode', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -21,11 +21,11 @@ Flight::route('GET /myreport/problems/byperiode', function () {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->get_problem_by_periode();
+    $myreport_document = new My_report_document();
+    $myreport_document->get_document_by_periode();
 });
 
-Flight::route('GET /myreport/problems/bystatus', function () {
+Flight::route('GET /myreport/documents/bystatus', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -33,11 +33,11 @@ Flight::route('GET /myreport/problems/bystatus', function () {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->get_problem_by_status();
+    $myreport_document = new My_report_document();
+    $myreport_document->get_document_by_status();
 });
 
-Flight::route('GET /myreport/problems/bysupervisor', function () {
+Flight::route("GET /myreport/document/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -45,11 +45,11 @@ Flight::route('GET /myreport/problems/bysupervisor', function () {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->get_problem_by_supervisor();
+    $myreport_document = new My_report_document();
+    $myreport_document->get_document_by_id($id);    
 });
 
-Flight::route('GET /myreport/problems/bywarehouseanditem', function () {
+Flight::route("PUT /myreport/document/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -57,11 +57,11 @@ Flight::route('GET /myreport/problems/bywarehouseanditem', function () {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->get_problem_by_warehouse_and_item();
+    $myreport_document = new My_report_document();
+    $myreport_document->update_document_by_id($id);
 });
 
-Flight::route("GET /myreport/problem/@id", function ($id) {
+Flight::route("DELETE /myreport/document/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -69,11 +69,11 @@ Flight::route("GET /myreport/problem/@id", function ($id) {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->get_problem_by_id($id);    
+    $myreport_document = new My_report_document();
+    $myreport_document->remove_document_by_id($id);
 });
 
-Flight::route("PUT /myreport/problem/@id", function ($id) {
+Flight::route("GET /myreport/document/last_date", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -81,6 +81,6 @@ Flight::route("PUT /myreport/problem/@id", function ($id) {
         return;
     }
 
-    $myreport_problem = new My_report_problem();
-    $myreport_problem->update_problem_by_id($id);
+    $myreport_document = new My_report_document();
+    $myreport_document->last_date($id);
 });
