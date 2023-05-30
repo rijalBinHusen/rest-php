@@ -12,9 +12,9 @@ class My_report_complain
     { 
         $limit = Flight::request()->query->limit;
 
-        $is_it_numeric = is_numeric($limit);
+        $is_query_string_oke = is_numeric($limit) && $limit > 0;
 
-        if($is_it_numeric) {
+        if($is_query_string_oke) {
             
             $result = $this->my_report_complain->get_complains($limit);
             
@@ -47,7 +47,7 @@ class My_report_complain
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "The query parameter must be number"
+            "message" => "The query parameter must be number and greater than 0"
             ), 400);
         }
 

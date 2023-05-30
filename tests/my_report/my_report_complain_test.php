@@ -129,6 +129,7 @@ class MyReportComplainTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('type', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('is_count', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals(10, count($convertToAssocArray['data']));
     }
 
     public function testGetEndpointFailed()
