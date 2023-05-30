@@ -69,7 +69,7 @@ class My_report_case
 
         $result = null;
 
-        $is_request_body_oke = !is_null($head_spv_id) && !is_null($dl) && !is_null($masalah) && !is_null($supervisor_id) && !is_null($parent) && !is_null($pic) && !is_null($solusi) && !is_null($status) && !is_null($sumber_masalah);
+        $is_request_body_oke = !is_null($periode) && !is_null($head_spv_id) && !is_null($dl) && !is_null($masalah) && !is_null($supervisor_id) && !is_null($parent) && !is_null($pic) && !is_null($solusi) && !is_null($status) && !is_null($sumber_masalah);
 
         if($is_request_body_oke) {
             if ($id) {
