@@ -11,6 +11,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
     private $urlPost;
     private $dataToInsert;
     private $dataToUpdate;
+    private $urlDeleteByParents;
 
     public function __construct()
     {
@@ -29,6 +30,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
         $this->urlPost = $this->url . 'base_clock/';
         $this->urlGets = $this->url . "base_clocks?parent=$parentId&shift=$shiftStock";
+        $this->urlDeleteByParents =  $this->url . "base_clocks?parent=$parentId";
 
         $this->dataToUpdate = array(
             'reg' => $faker->numberBetween(1, 1000000),
@@ -158,6 +160,23 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('finish', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('rehat', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
+    }
+    
+    public function testDeleteByParentEndpoint()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->urlDeleteByParents);
+
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("DELETE");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Delete base clock success", $convertToAssocArray['message']);
     }
 
     public function testGetByIdEndpointFailed()

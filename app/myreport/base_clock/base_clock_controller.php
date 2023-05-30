@@ -153,7 +153,7 @@ class My_report_base_clock
             Flight::json(
                 array(
                     "success" => true,
-                    "data" => $result
+                    "message" => "Delete base clock success"
                     )
             , 200);
 

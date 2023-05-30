@@ -34,7 +34,7 @@ Flight::route('DELETE /myreport/base_clocks', function () {
     }
 
     $myreport_base_clock = new My_report_base_clock();
-    $myreport_base_clock->get_base_clock_by_parent();
+    $myreport_base_clock->remove_base_clock_by_parent();
 });
 
 Flight::route("GET /myreport/base_clock/@id", function ($id) {
