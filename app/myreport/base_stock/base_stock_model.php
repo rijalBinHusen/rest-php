@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class My_report_base_stock_model
 {
     protected $database;
-    var $table = "my_report_report_base_stock";
+    var $table = "my_report_base_stock";
     var $is_success = true;
     private $summary = null;
 
@@ -53,7 +53,7 @@ class My_report_base_stock_model
         $data_to_insert = array(
             "id" => $id,
             'parent' => $parent,
-            '$shift' => $shift,
+            'shift' => $shift,
             'item' => $item,
             'awal' => $awal,
             'in_stock' => $in_stock,
