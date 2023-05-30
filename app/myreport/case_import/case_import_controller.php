@@ -15,7 +15,7 @@ class My_report_case_import
         $is_it_numeric = is_numeric($limit);
 
         if($is_it_numeric) {
-            $result = $this->my_report_case_import->get_cases_import();
+            $result = $this->my_report_case_import->get_cases_import($limit);
             
             $is_exists = count($result) > 0;
 
