@@ -326,7 +326,7 @@ paths:
     # problems?warehouse=war102398&supervisor=SUP1203981
     # problems?item=ITEM120398
     parameters:
-      - name: supervisor
+      - name: supervisor_id
         in: query
         required: true
         description: supervisor of problem
@@ -350,14 +350,14 @@ paths:
     # problems?warehouse=war102398&supervisor=SUP1203981
     # problems?item=ITEM120398
     parameters:
-      - name: warehouse
+      - name: warehouse_id
         in: query
         required: true
         description: warehouse of problem
         schema:
           type: string
         example: WAR123123
-      - name: item
+      - name: item_kode
         in: query
         required: true
         description: item of problem

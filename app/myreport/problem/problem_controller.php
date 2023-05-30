@@ -193,15 +193,14 @@ class My_report_problem
         $status = $request->query->status;
 
         $not_valid_query_string = is_null($status) 
-                                    || empty($status) 
                                     || !is_numeric($status) 
-                                    || $status > -1 
-                                    || $status < 2;
+                                    || $status < -1 
+                                    || $status > 2;
 
         if($not_valid_query_string) {
             Flight::json( array(
                 "success" => false,
-                "message" => "Please check query parameter"
+                "message" => "'Please check query parameter'" . !is_numeric($status)
                 )
             , 400);
 

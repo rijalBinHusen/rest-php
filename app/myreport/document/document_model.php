@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class My_report_document_model
 {
     protected $database;
-    var $table = "my_report_report_document";
+    var $table = "my_report_document";
     var $is_success = true;
     private $summary = null;
 

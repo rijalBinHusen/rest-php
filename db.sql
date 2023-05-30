@@ -54,6 +54,7 @@ CREATE TABLE if not exists my_report_problem (
   dl_panjang FLOAT,
   pic_panjang varchar(255),
   tanggal_selesai FLOAT,
+  is_finished BOOLEAN,
   shift_selesai TINYINT
 );
 

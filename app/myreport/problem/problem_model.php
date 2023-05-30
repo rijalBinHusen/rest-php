@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class My_report_problem_model
 {
     protected $database;
-    var $table = "my_report_report_problem";
+    var $table = "my_report_problem";
     var $is_success = true;
     private $summary = null;
 
@@ -130,7 +130,7 @@ class My_report_problem_model
 
     public function get_problem_by_periode($periode1, $periode2)
     {
-        $query = "SELECT * FROM $this->table where periode BETWEEN $periode1 AND $periode2";
+        $query = "SELECT * FROM $this->table where tanggal_mulai BETWEEN $periode1 AND $periode2";
         $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error !== null) {
@@ -181,7 +181,7 @@ class My_report_problem_model
 
     public function get_problem_by_warehouse_and_item($warehouse, $item)
     {
-        $query = "SELECT * FROM $this->table WHERE warehouse_id = '$warehouse' AND item = '$item'";
+        $query = "SELECT * FROM $this->table WHERE warehouse_id = '$warehouse' AND item_kode = '$item'";
         $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error !== null) {
