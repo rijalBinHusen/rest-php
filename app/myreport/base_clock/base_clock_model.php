@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class My_report_base_clock_model
 {
     protected $database;
-    var $table = "my_report_report_base_clock";
+    var $table = "my_report_base_clock";
     var $is_success = true;
     private $summary = null;
 

@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 {
@@ -14,9 +14,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function __construct()
     {
+        $faker = Faker\Factory::create();
         $parentId = $faker->text(10);
         $shiftStock = $faker->numberBetween(1, 3);
-        $faker = Faker\Factory::create();
         $this->dataToInsert = array(
             'parent' => $parentId,
             'shift' => $shiftStock,
@@ -52,10 +52,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->idInserted = $convertToAssocArray->data['id'];
+        $this->idInserted = $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -103,6 +102,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndpoint()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGets);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -140,6 +140,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -148,19 +149,20 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
-        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('parent', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('shift', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('no_do', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('reg', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('start', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('finish', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('rehat', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('no_do', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('reg', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('start', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('finish', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('rehat', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetByIdEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         
         // Send a GET request to the /endpoint URL
@@ -177,6 +179,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed2()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
 
         $http->addJWTToken();
@@ -194,6 +197,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
 
@@ -212,6 +216,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed()
     {
+        $this->testPostEndpoint();
         // error 400
         $http = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
@@ -232,11 +237,12 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed update to base clock, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to update base clock, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPutEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
@@ -255,6 +261,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
@@ -276,6 +283,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
         $httpCallVar->addJWTToken();
@@ -287,11 +295,12 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Delete base stock success", $convertToAssocArray['message']);
+        $this->assertEquals("Delete base clock success", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         
@@ -307,6 +316,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed3()
     {
+        $this->testDeleteEndpoint();
         // error 404
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
