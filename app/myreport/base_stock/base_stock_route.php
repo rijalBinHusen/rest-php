@@ -34,7 +34,7 @@ Flight::route('DELETE /myreport/base_stocks', function () {
     }
 
     $myreport_base_stock = new My_report_base_stock();
-    $myreport_base_stock->get_base_stock_by_parent();
+    $myreport_base_stock->remove_base_stock_by_parent();
 });
 
 Flight::route("GET /myreport/base_stock/@id", function ($id) {

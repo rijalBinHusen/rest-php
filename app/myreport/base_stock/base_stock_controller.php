@@ -164,7 +164,7 @@ class My_report_base_stock
             Flight::json(
                 array(
                     "success" => true,
-                    "data" => $result
+                    "message" => "Delete base stock success"
                     )
             , 200);
 

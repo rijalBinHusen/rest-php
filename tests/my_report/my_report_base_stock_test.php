@@ -11,11 +11,12 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
     private $urlPost;
     private $dataToInsert;
     private $dataToUpdate;
+    private $urlDeleteByParents;
 
     public function __construct()
     {
         $faker = Faker\Factory::create();
-        $parentId = $faker->text(10);
+        $parentId = $faker->text(5);
         $shiftStock = $faker->numberBetween(1, 3);
         $this->dataToInsert = array(
             'parent' => $parentId,
@@ -34,6 +35,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
 
         $this->urlPost = $this->url . 'base_stock/';
         $this->urlGets = $this->url . "base_stocks?parent=$parentId&shift=$shiftStock";
+        $this->urlDeleteByParents =  $this->url . "base_stocks?parent=$parentId";
 
         $this->dataToUpdate = array(
             'awal' => $faker->numberBetween(1, 1000000),
@@ -115,7 +117,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        fwrite(STDERR, print_r("\n" .$this->urlGets . "\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
@@ -147,6 +149,26 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
+
+    
+    
+    public function testDeleteByParentEndpoint()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->urlDeleteByParents);
+
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("DELETE");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Delete base stock success", $convertToAssocArray['message']);
+    }
+
 
     public function testGetByIdEndpoint()
     {
