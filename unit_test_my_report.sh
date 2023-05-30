@@ -18,7 +18,7 @@ phpunit tests/my_report/my_report_case_test.php
 sleep 2
 phpunit tests/my_report/my_report_case_import_test.php
 sleep 2
-phpunit tests/my_report/field_problem_test.php
+phpunit tests/my_report/my_report_field_problem_test.php
 sleep 2
 phpunit tests/my_report/my_report_base_file_test.php
 sleep 2

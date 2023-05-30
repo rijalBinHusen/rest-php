@@ -15,7 +15,7 @@ class My_report_field_problem
         $is_it_numeric = is_numeric($limit);
 
         if($is_it_numeric) {
-            $result = $this->my_report_field_problem->get_field_problems();
+            $result = $this->my_report_field_problem->get_field_problems($limit);
             
             $is_exists = count($result) > 0;
 
