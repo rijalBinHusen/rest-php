@@ -16,7 +16,7 @@ class My_report_case
 
         if($is_it_numeric) {
 
-            $result = $this->my_report_case->get_cases();
+            $result = $this->my_report_case->get_cases($limit);
             
             $is_exists = count($result) > 0;
 

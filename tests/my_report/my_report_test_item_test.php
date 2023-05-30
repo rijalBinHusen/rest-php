@@ -95,7 +95,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndpoint()
     {
-        $http = new HttpCall($this->urlGets);
+        $http = new HttpCall($this->urlGets . "?limit=10");
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -114,7 +114,7 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndpointFailed()
     {
-        $http = new HttpCall($this->urlGets);
+        $http = new HttpCall($this->urlGets . "?limit=10");
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
@@ -125,6 +125,22 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
+
+    public function testGetEndpointFailed2()
+    {
+        $http = new HttpCall($this->urlGets);
+        $http->addJWTToken();
+        $response = $http->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("The query parameter must be number", $convertToAssocArray['message']);
+    }
+
 
     public function testGetByIdEndpoint()
     {
