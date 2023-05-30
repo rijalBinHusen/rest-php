@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportCaseTest extends PHPUnit_Framework_TestCase
 {
@@ -44,10 +44,9 @@ class MyReportCaseTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->idInserted = $convertToAssocArray->data->id;
+        $this->idInserted = $convertToAssocArray['data']->id;
     }
 
     public function testPostEndpointFailed()
@@ -112,18 +111,19 @@ class MyReportCaseTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('periode', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('dl', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('masalah', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('parent', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('pic', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('solusi', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('status', $convertToAssocArray->data[0]);
-        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data[0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('parent', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('status', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals(10, $convertToAssocArray['0']);
     }
 
     public function testGetEndpointFailed()
@@ -152,17 +152,17 @@ class MyReportCaseTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
-        $this->assertArrayHasKey('periode', $convertToAssocArray->data);
-        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray->data);
-        $this->assertArrayHasKey('dl', $convertToAssocArray->data);
-        $this->assertArrayHasKey('masalah', $convertToAssocArray->data);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray->data);
-        $this->assertArrayHasKey('parent', $convertToAssocArray->data);
-        $this->assertArrayHasKey('pic', $convertToAssocArray->data);
-        $this->assertArrayHasKey('solusi', $convertToAssocArray->data);
-        $this->assertArrayHasKey('status', $convertToAssocArray->data);
-        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('dl', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('masalah', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('parent', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('pic', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('solusi', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('status', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('sumber_masalah', $convertToAssocArray['data']);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
