@@ -73,7 +73,7 @@ Flight::route("DELETE /myreport/document/@id", function ($id) {
     $myreport_document->remove_document_by_id($id);
 });
 
-Flight::route("GET /myreport/document/last_date", function ($id) {
+Flight::route("GET /myreport/document_/last_date", function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -82,5 +82,5 @@ Flight::route("GET /myreport/document/last_date", function ($id) {
     }
 
     $myreport_document = new My_report_document();
-    $myreport_document->last_date($id);
+    $myreport_document->last_date();
 });

@@ -1,9 +1,9 @@
 <?php
 
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
-class MyReportProblemTest extends PHPUnit_Framework_TestCase
+class MyReportDocumentTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
     private $idInserted = null;
@@ -64,10 +64,9 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray->data);
+        $this->assertArrayHasKey('id', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->idInserted = $convertToAssocArray->data['id'];
+        $this->idInserted = $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -114,6 +113,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndPointByPeriode()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGetByPeriode);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -147,6 +147,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndPointByPeriodeFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGetByPeriode);
         $response = $http->getResponse("GET");
         
@@ -161,39 +162,41 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndPointByStatus()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGetByStatus);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r("\n testGetEndPointByStatus: " .$this->urlGetByStatus ."\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('collected', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('approval', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('status', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('shared', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('finished', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_do', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_kendaraan', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_waktu', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('base_report_file', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('periode', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('shift', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('is_generated_document', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('collected', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('approval', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('status', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shared', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('finished', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_do', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_kendaraan', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_waktu', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('base_report_file', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_generated_document', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
 
     public function testGetEndPointByStatusFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGetByStatus);
         $response = $http->getResponse("GET");
         
@@ -208,6 +211,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpoint()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -218,28 +222,29 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('collected', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('approval', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('status', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('shared', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('finished', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_do', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_kendaraan', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('total_waktu', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('base_report_file', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('periode', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('shift', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data']);
-        $this->assertArrayHasKey('is_generated_document', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('collected', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('approval', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('status', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shared', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('finished', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_do', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_kendaraan', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('total_waktu', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('base_report_file', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_finished', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('supervisor_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('shift', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('head_spv_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('warehouse_id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_generated_document', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetByIdEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
         
         // Send a GET request to the /endpoint URL
@@ -256,6 +261,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetByIdEndpointFailed2()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted . "11123");
 
         $http->addJWTToken();
@@ -273,6 +279,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
 
@@ -283,6 +290,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
+        fwrite(STDERR, print_r($this->urlPost . $this->idInserted, true));
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -291,6 +299,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed()
     {
+        $this->testPostEndpoint();
         // error 400
         $http = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
@@ -316,6 +325,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         // Define the request body
@@ -334,6 +344,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed3()
     {
+        $this->testPostEndpoint();
         // error 404
         $faker = Faker\Factory::create();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
@@ -350,11 +361,12 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Problem not found", $convertToAssocArray['message']);
+        $this->assertEquals("Document not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint()
     {
+        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
 
         $httpCallVar->addJWTToken();
@@ -371,6 +383,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed2()
     {
+        $this->testPostEndpoint();
         // error 401
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
         
@@ -386,6 +399,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteEndpointFailed3()
     {
+        $this->testDeleteEndpoint();
         // error 404
         $httpCallVar = new HttpCall($this->urlPost . $this->idInserted . '333');
 
@@ -403,7 +417,7 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
 
     public function testGetLastDate()
     {
-        $http = new HttpCall($this->urlPost . "/last_date");
+        $http = new HttpCall($this->url. "document_/last_date");
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -412,14 +426,13 @@ class MyReportProblemTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('date', $convertToAssocArray['data']);
+        $this->assertArrayHasKey('last_date', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
     public function testGetLastDateFailed()
     {
-        $http = new HttpCall($this->urlPost . "/last_date");
+        $http = new HttpCall($this->url. "document_/last_date");
         
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");

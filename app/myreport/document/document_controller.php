@@ -190,11 +190,10 @@ class My_report_document
         $request = Flight::request();
         $status = $request->query->status;
 
-        $not_valid_query_string = is_null($status) 
-                                    || empty($status) 
+        $not_valid_query_string = is_null($status)
                                     || !is_numeric($status) 
-                                    || $status > -1 
-                                    || $status < 3;
+                                    || $status < -1 
+                                    || $status > 3;
 
         if($not_valid_query_string) {
             Flight::json( array(
@@ -328,26 +327,26 @@ class My_report_document
         }
 
         // conditional $shared
-        $valid_item_kode = !is_null($shared) && !empty($shared);
-        if ($valid_item_kode) {
+        $valid_shared = !is_null($shared) && !empty($shared);
+        if ($valid_shared) {
             $keyValueToUpdate["shared"] = $shared;
         }
 
         // conditional $finished
-        $valid_tanggal_mulai = !is_null($finished) && !empty($finished);
-        if ($valid_tanggal_mulai) {
+        $valid_finished = !is_null($finished) && !empty($finished);
+        if ($valid_finished) {
             $keyValueToUpdate["finished"] = $finished;
         }
 
         // conditional $total_do
-        $total_do = !is_null($total_do) && !empty($total_do);
-        if ($total_do) {
+        $valid_total_do = !is_null($total_do) && !empty($total_do);
+        if ($valid_total_do) {
             $keyValueToUpdate["total_do"] = $total_do;
         }
 
         // conditional $total_kendaraan
-        $valid_pic = !is_null($total_kendaraan) && !empty($total_kendaraan);
-        if ($valid_pic) {
+        $valid_total_kendaraan = !is_null($total_kendaraan) && !empty($total_kendaraan);
+        if ($valid_total_kendaraan) {
             $keyValueToUpdate["total_kendaraan"] = $total_kendaraan;
         }
 
@@ -364,44 +363,44 @@ class My_report_document
         }
 
         // conditional $is_finished
-        $valid_sumber_masalah = !is_null($is_finished) && !empty($is_finished);
-        if ($valid_sumber_masalah) {
+        $valid_is_finished = !is_null($is_finished) && !empty($is_finished);
+        if ($valid_is_finished) {
             $keyValueToUpdate["is_finished"] = $is_finished;
         }
 
         // conditional $supervisor_id
-        $valid_solusi = !is_null($supervisor_id) && !empty($supervisor_id);
-        if ($valid_solusi) {
+        $valid_supervisor_id = !is_null($supervisor_id) && !empty($supervisor_id);
+        if ($valid_supervisor_id) {
             $keyValueToUpdate["supervisor_id"] = $supervisor_id;
         }
 
         // conditional $periode
-        $valid_solusi_panjang = !is_null($periode) && !empty($periode);
-        if ($valid_solusi_panjang) {
+        $valid_periode = !is_null($periode) && !empty($periode);
+        if ($valid_periode) {
             $keyValueToUpdate["periode"] = $periode;
         }
 
         // conditional $shift
-        $valid_dl_panjang = !is_null($shift) && !empty($shift);
-        if ($valid_dl_panjang) {
+        $valid_shift = !is_null($shift) && !empty($shift);
+        if ($valid_shift) {
             $keyValueToUpdate["shift"] = $shift;
         }
 
         // conditional $head_spv_id
-        $valid_pic_panjang = !is_null($head_spv_id) && !empty($head_spv_id);
-        if ($valid_pic_panjang) {
+        $valid_head_spv_id = !is_null($head_spv_id) && !empty($head_spv_id);
+        if ($valid_head_spv_id) {
             $keyValueToUpdate["head_spv_id"] = $head_spv_id;
         }
 
         // conditional $warehouse_id
-        $valid_tanggal_selesai = !is_null($warehouse_id) && !empty($warehouse_id);
-        if ($valid_tanggal_selesai) {
+        $valid_warehouse_id = !is_null($warehouse_id) && !empty($warehouse_id);
+        if ($valid_warehouse_id) {
             $keyValueToUpdate["warehouse_id"] = $warehouse_id;
         }
 
         // conditional $is_generated_document
-        $valid_shift_selesai = !is_null($is_generated_document) && !empty($is_generated_document);
-        if ($valid_shift_selesai) {
+        $valid_is_generated_document = !is_null($is_generated_document) && !empty($is_generated_document);
+        if ($valid_is_generated_document) {
             $keyValueToUpdate["is_generated_document"] = $is_generated_document;
         }
 
@@ -436,7 +435,7 @@ class My_report_document
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'Document not found'
+                        'message' => "Document not found",
                     )
                 );
             }

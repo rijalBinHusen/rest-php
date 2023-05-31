@@ -240,7 +240,7 @@ class My_report_document_model
             
             else {
 
-                return $result['periode'];
+                return $result[0]['periode'];
 
             }
         

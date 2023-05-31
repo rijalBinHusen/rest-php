@@ -16,6 +16,7 @@ require_once(__DIR__ . '/app/myreport/base_file/base_file_route.php');
 require_once(__DIR__ . '/app/myreport/base_stock/base_stock_route.php');
 require_once(__DIR__ . '/app/myreport/base_clock/base_clock_route.php');
 require_once(__DIR__ . '/app/myreport/problem/problem_route.php');
+require_once(__DIR__ . '/app/myreport/document/document_route.php');
 
 Flight::route('/blank(/@endpoint)', function ($endpoint) {
     $db = new Query_builder();
