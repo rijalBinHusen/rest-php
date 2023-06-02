@@ -72,7 +72,7 @@ Class SummaryDatabase {
                 'last_id' => $row['last_id']
             );
         }
-
+        
         return self::$summary_database;
     }
 
