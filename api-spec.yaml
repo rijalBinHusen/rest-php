@@ -1792,6 +1792,8 @@ components:
                 type: string
               warehouse_group:
                 type: string
+              warehouse_supervisors:
+                type: string
     Supervisor:
       required: true
       content:

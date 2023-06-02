@@ -93,29 +93,36 @@ Class SummaryDatabase {
         $findLastId = self::$summary_database[$this->table]['last_id'];
         // nextId
         $nextId = $findLastId ? generateId($findLastId) : generateId($this->table_as_id ."_22320000");
-
-        $findLastId = $nextId;
         
         return $nextId;
     }
 
     public function updateLastId($your_last_id) {
 
-        $all_last_id = array($your_last_id, $this->last_id);
+        // total record
+        $total_record = self::$summary_database[$this->table]['total'];
+        $last_id_record = self::$summary_database[$this->table]['last_id'];
+        $all_last_id = array($your_last_id, $last_id_record);
 
         $what_last_id_to_set = max($all_last_id);
-                
+        // set last id in global state
+        self::$summary_database[$this->table] = array(
+            'total' => $total_record + 1,
+            'last_id' => $what_last_id_to_set
+        );
+
         $data = array(
-            'last_id' => $what_last_id_to_set,
-            'total' => $this->total + 1,
+            'table_name' => $this->table,
+            'total' => $total_record + 1,
+            'last_id' => $what_last_id_to_set
         );
         
         if($this->is_table_exists) {
-            $this->database->update('summary', $data, 'table_name', $this->table);
+            self::$database->update('summary', self::$summary_database[$this->table], 'table_name', $this->table);
 
         } else {
             $array['table_name'] = $this->table;
-            $this->database->insert('summary', $data);
+            self::$database->insert('summary', $data);
         }
         
     }
