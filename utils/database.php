@@ -1,11 +1,11 @@
 <?php 
 
-require_once(__DIR__ ."/../vendor/autoload.php");
+// require_once(__DIR__ ."/../vendor/autoload.php");
 
-// Call dotenv package
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-// load dotenv package
-$dotenv->load();
+// // Call dotenv package
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+// // load dotenv package
+// $dotenv->load();
 
 
 class Query_builder {
@@ -15,24 +15,24 @@ class Query_builder {
 
     function __construct(){
         // get database configuration from dotenv file
-        $database = getenv('DATABASE');
-        // get username database from dotenv file
-        $username = getenv('DATABASE_USER');
-        // get password database from dotenv file
-        $password = getenv('DATABASE_PASSWORD');
+        // $database = getenv('DATABASE');
+        // // get username database from dotenv file
+        // $username = getenv('DATABASE_USER');
+        // // get password database from dotenv file
+        // $password = getenv('DATABASE_PASSWORD');
 
-        try {
+        // try {
 
-            $this->db = new PDO($database, $username, $password);
+            $this->db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
             // set the PDO error mode to exception
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // set value to connection status
             $this->is_error = null;
 
-        } catch (PDOException $e) {
-            // set value to connection status
-            $this->is_error = "Connection failed: " . $e->getMessage();
-        }
+        // } catch (PDOException $e) {
+        //     // set value to connection status
+        //     $this->is_error = "Connection failed: " . $e->getMessage();
+        // }
     }
 
     // merupakan fungsi untuk melihat tabel dari database ( select *from )
@@ -141,6 +141,11 @@ class Query_builder {
 
     function sqlQuery($your_query) {
         return $this->db->query($your_query);
+    }
+
+    function __destruct()
+    {
+        $this->db = null;
     }
 }
 
