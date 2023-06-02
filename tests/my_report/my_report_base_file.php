@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
-class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
+class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
     private $idInserted = null;

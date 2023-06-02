@@ -1,38 +1,21 @@
 <?php 
 
-// require_once(__DIR__ ."/../vendor/autoload.php");
-
-// // Call dotenv package
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-// // load dotenv package
-// $dotenv->load();
-
-
 class Query_builder {
 
+    private static $instance;
     protected $db;
     public $is_error = null;
 
-    function __construct(){
-        // get database configuration from dotenv file
-        // $database = getenv('DATABASE');
-        // // get username database from dotenv file
-        // $username = getenv('DATABASE_USER');
-        // // get password database from dotenv file
-        // $password = getenv('DATABASE_PASSWORD');
+    function __construct(PDO $connection){
+        $this->db = $connection;            
+    }
 
-        // try {
+    public static function getInstance(PDO $connection) {
+        if (self::$instance === null) {
+            self::$instance = new static($connection);
+        }
 
-            $this->db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
-            // set the PDO error mode to exception
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // set value to connection status
-            $this->is_error = null;
-
-        // } catch (PDOException $e) {
-        //     // set value to connection status
-        //     $this->is_error = "Connection failed: " . $e->getMessage();
-        // }
+        return self::$instance;
     }
 
     // merupakan fungsi untuk melihat tabel dari database ( select *from )
@@ -141,11 +124,6 @@ class Query_builder {
 
     function sqlQuery($your_query) {
         return $this->db->query($your_query);
-    }
-
-    function __destruct()
-    {
-        $this->db = null;
     }
 }
 

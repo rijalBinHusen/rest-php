@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
-class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
+class MyReportBaseClockTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/myreport/";
     private $idInserted = null;
@@ -16,8 +16,9 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
     public function __construct()
     {
         $faker = Faker\Factory::create();
-        $parentId = $faker->text(10);
+        $parentId = $faker->text(7);
         $shiftStock = $faker->numberBetween(1, 3);
+
         $this->dataToInsert = array(
             'parent' => $parentId,
             'shift' => $shiftStock,

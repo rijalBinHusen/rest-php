@@ -11,7 +11,10 @@ class My_report_case_import_model
 
     function __construct()
     {
-        $this->database = new Query_builder();
+        $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+        $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->database = Query_builder::getInstance($connection_db);
+      
         $this->summary = new SummaryDatabase($this->table);
     }
 

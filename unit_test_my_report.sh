@@ -1,6 +1,6 @@
 source .env
 
-# phpunit tests/User_test.php
+phpunit tests/User_test.php
 # sleep 2
 phpunit tests/my_report/my_report_warehouse_test.php
 # sleep 2
@@ -29,6 +29,6 @@ phpunit tests/my_report/my_report_base_clock_test.php
 phpunit tests/my_report/my_report_problem_test.php
 # sleep 2
 phpunit tests/my_report/my_report_document_test.php
-# sleep 20
+sleep 60
 
 #run all those command with this ./unit_test_my_report.sh

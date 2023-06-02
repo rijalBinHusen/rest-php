@@ -1,20 +1,23 @@
 <?php
 // Call dotenv package
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
 // load dotenv package
-$dotenv->load();
+// $dotenv->load();
 require_once(__DIR__ . '/../../utils/database.php');
 
-define("JWT_SECRET", getenv("JWT_SECRET"));
-define("JWT_ISSUER", getenv("JWT_ISSUER"));
-define("JWT_AUD", getenv("JWT_AUD"));
-define("JWT_ALGO", getenv("JWT_ALGO"));
+define("JWT_SECRET", "SECRET-KEY");
+define("JWT_ISSUER", "johndoe");
+define("JWT_AUD", "site.com");
+define("JWT_ALGO", "HS256");
+
 
 class User_model {
   private $database = null;
   public $error = null;
   function __construct () {
-    $this->database = new Query_builder();
+    $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+    $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $this->database = Query_builder::getInstance($connection_db);
   }
  
   // (D) SAVE USER

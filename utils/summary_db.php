@@ -12,7 +12,10 @@ Class SummaryDatabase {
     private $table_as_id = null;
     
     public function __construct ($table) {
-        $this->database = new Query_builder();
+        $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+        $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->database = Query_builder::getInstance($connection_db);
+      
         $this->table = $table;
         $this->table_as_id = str_replace("my_report_", "", $table);
         $this->getLastId();
