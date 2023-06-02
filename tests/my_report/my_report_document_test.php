@@ -290,7 +290,7 @@ class MyReportDocumentTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
-        fwrite(STDERR, print_r($this->urlPost . $this->idInserted, true));
+        // fwrite(STDERR, print_r($this->urlPost . $this->idInserted, true));
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);

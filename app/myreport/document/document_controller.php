@@ -408,7 +408,7 @@ class My_report_document
 
         if($is_oke_to_update) {
 
-            $result = $this->my_report_document->update_document_by_id($keyValueToUpdate, "id", $id);
+            $result = $this->my_report_document->update_document_by_id($keyValueToUpdate, $id);
     
             $is_success = $this->my_report_document->is_success;
     
