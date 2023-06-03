@@ -15,7 +15,7 @@ class My_report_problem_model
         $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->database = Query_builder::getInstance($connection_db);
       
-        $this->summary = new SummaryDatabase($this->table);
+        $this->summary = SummaryDatabase::getInstance($this->table);
     }
 
     public function append_problem(

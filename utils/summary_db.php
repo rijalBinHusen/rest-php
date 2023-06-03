@@ -4,21 +4,29 @@ require_once(__DIR__ . './database.php');
 require_once(__DIR__ . './generator_id.php');
 
 Class SummaryDatabase {
+    private static $instance;
     private $table = null;
     private static $database = null;
-    private $total = null;
-    private $last_id = null;
     private $table_as_id = null;
     public static $summary_database = array();
     
     public function __construct ($table) {
-        $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
-        $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        self::$database = Query_builder::getInstance($connection_db);
 
         self::$summary_database = self::getData();
         $this->table = $table;
         $this->table_as_id = str_replace("my_report_", "", $table);
+
+    }
+
+    public static function getInstance($table) {
+        if(self::$instance === null) {
+            $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+            $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$database = Query_builder::getInstance($connection_db);
+            self::$instance = new static($table);
+        }
+
+        return self::$instance;
     }
 
     public static function getData() {

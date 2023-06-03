@@ -15,7 +15,7 @@ class My_report_supervisor_model
         $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->database = Query_builder::getInstance($connection_db);
       
-        $this->summary = new SummaryDatabase($this->table);
+        $this->summary = SummaryDatabase::getInstance($this->table);;
     }
 
     public function get_supervisors()

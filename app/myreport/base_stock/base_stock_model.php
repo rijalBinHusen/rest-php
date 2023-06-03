@@ -15,7 +15,7 @@ class My_report_base_stock_model
         $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->database = Query_builder::getInstance($connection_db);
       
-        $this->summary = new SummaryDatabase($this->table);
+        $this->summary = SummaryDatabase::getInstance($this->table);
     }
 
     public function append_base_stock($parent, $shift, $item, $awal, $in_stock, $out_stock, $date_in, $plan_out, $date_out, $date_end, $real_stock, $problem)
