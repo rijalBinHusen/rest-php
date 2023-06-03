@@ -8,7 +8,6 @@ Class SummaryDatabase {
     private static $database = null;
     private $total = null;
     private $last_id = null;
-    private $is_table_exists = false;
     private $table_as_id = null;
     public static $summary_database = array();
     
@@ -83,7 +82,6 @@ Class SummaryDatabase {
         // if doesnt exists creat new one
         // nextId
         $lastId = $findLastId ? $findLastId : generateId($this->table_as_id ."_22320000");
-        $this->is_table_exists = !empty($findLastId) || !is_null($findLastId);
         
         return $lastId;
     }
@@ -98,32 +96,39 @@ Class SummaryDatabase {
     }
 
     public function updateLastId($your_last_id) {
-
         // total record
         $total_record = self::$summary_database[$this->table]['total'];
         $last_id_record = self::$summary_database[$this->table]['last_id'];
+
         $all_last_id = array($your_last_id, $last_id_record);
 
         $what_last_id_to_set = max($all_last_id);
+        
+        if($total_record > 0) {
+            $data_to_update = array(
+                'total' => $total_record + 1,
+                'last_id' => $what_last_id_to_set
+            );
+
+            self::$database->update('summary', $data_to_update, 'table_name', $this->table);
+
+
+        } else {
+        
+            $data_to_insert = array(
+                'table_name' => $this->table,
+                'total' => $total_record + 1,
+                'last_id' => $what_last_id_to_set
+            );
+            
+            self::$database->insert('summary', $data_to_insert);
+        }
+        
         // set last id in global state
         self::$summary_database[$this->table] = array(
             'total' => $total_record + 1,
             'last_id' => $what_last_id_to_set
         );
-
-        $data = array(
-            'table_name' => $this->table,
-            'total' => $total_record + 1,
-            'last_id' => $what_last_id_to_set
-        );
-        
-        if($this->is_table_exists) {
-            self::$database->update('summary', self::$summary_database[$this->table], 'table_name', $this->table);
-
-        } else {
-            $array['table_name'] = $this->table;
-            self::$database->insert('summary', $data);
-        }
         
     }
 }
