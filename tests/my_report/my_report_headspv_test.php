@@ -30,7 +30,7 @@ class MyReportHeadSupervisorTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, "\n failed post response :" .$response . "\n");
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->url_host_id = $this->url . "head_spv/" . $convertToAssocArray['id'];
     }

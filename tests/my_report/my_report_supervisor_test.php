@@ -32,7 +32,7 @@ class MyReportSupervisorsTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->url_host_id = $this->url . "supervisor/" . $convertToAssocArray['id'];
     }

@@ -52,7 +52,7 @@ class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, "\n failed post response :" .$response . "\n");
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->idInserted = $convertToAssocArray['id'];
     }

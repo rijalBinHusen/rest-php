@@ -57,7 +57,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals($convertToAssocArray['success'], true);
         $this->url_host_id = $this->url . 'warehouse/' . $convertToAssocArray['id'];
         // fwrite(STDERR, print_r("INSERTED ID: " . $this->url_host_id, true));]

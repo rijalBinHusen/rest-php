@@ -40,10 +40,10 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r($response, true));
+        // fwrite(STDERR, print_r("\n". $response ."\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, "\n failed post response :" .$response . "\n");
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->idInserted = $convertToAssocArray['id'];
     }
