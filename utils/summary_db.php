@@ -9,6 +9,7 @@ Class SummaryDatabase {
     private static $database = null;
     private $table_as_id = null;
     public static $summary_database = array();
+    private $is_on_process = false;
     
     public function __construct ($table) {
 
@@ -23,8 +24,8 @@ Class SummaryDatabase {
             $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
             $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$database = Query_builder::getInstance($connection_db);
-            self::$instance = new static($table);
         }
+        self::$instance = new static($table);
 
         return self::$instance;
     }
@@ -96,10 +97,23 @@ Class SummaryDatabase {
 
 
     public function getNextId() {
+
         $findLastId = self::$summary_database[$this->table]['last_id'];
         // nextId
         $nextId = $findLastId ? generateId($findLastId) : generateId($this->table_as_id ."_22320000");
-        
+
+        if($this->is_on_process === true) {
+
+            $nextId = generateId($nextId);
+
+        } else {
+            
+            $this->updateLastId($nextId);
+            
+            $this->is_on_process = true;
+            
+        }
+
         return $nextId;
     }
 
@@ -112,10 +126,25 @@ Class SummaryDatabase {
 
         $what_last_id_to_set = max($all_last_id);
         
+        // set last id in global state
+        self::$summary_database[$this->table] = array(
+            'total' => $total_record + 1,
+            'last_id' => $what_last_id_to_set
+        );
+
+        $this->is_on_process = false;
+        
+    }
+
+    public function __destruct()
+    {
+        $total_record = self::$summary_database[$this->table]['total'];
+        $last_id_record = self::$summary_database[$this->table]['last_id'];
+
         if($total_record > 0) {
             $data_to_update = array(
                 'total' => $total_record + 1,
-                'last_id' => $what_last_id_to_set
+                'last_id' => $last_id_record
             );
 
             self::$database->update('summary', $data_to_update, 'table_name', $this->table);
@@ -125,18 +154,12 @@ Class SummaryDatabase {
         
             $data_to_insert = array(
                 'table_name' => $this->table,
-                'total' => $total_record + 1,
-                'last_id' => $what_last_id_to_set
+                'total' => 0,
+                'last_id' => $last_id_record
             );
             
             self::$database->insert('summary', $data_to_insert);
         }
-        
-        // set last id in global state
-        self::$summary_database[$this->table] = array(
-            'total' => $total_record + 1,
-            'last_id' => $what_last_id_to_set
-        );
         
     }
 }

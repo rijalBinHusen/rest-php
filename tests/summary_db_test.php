@@ -7,7 +7,7 @@ class SummaryDatabaseTest extends PHPUnit_Framework_TestCase {
     
     public function testSummary() {
 
-        $summary = new SummaryDatabase("my_report_warehouse");
+        $summary = SummaryDatabase::getInstance("my_report_warehouse");
         
         // get last id from summary
         $last_id = $summary->getLastId();
@@ -15,10 +15,13 @@ class SummaryDatabaseTest extends PHPUnit_Framework_TestCase {
 
         // get next id with generator id
         $next_id_from_generator = generateId($last_id);
+        $next_id_from_generator2 = generateId($next_id_from_generator);
         // get next id from summary
         $next_id_from_summary = $summary->getNextId();
+        $next_id_from_summary2 = $summary->getNextId();
         // assert equal next id
         $this->assertEquals($next_id_from_generator, $next_id_from_summary);
+        $this->assertEquals($next_id_from_generator2, $next_id_from_summary2);
 
         // update last id
         $summary->updateLastId($next_id_from_summary);
