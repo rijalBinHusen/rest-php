@@ -2,7 +2,11 @@ CREATE TABLE if not exists my_report_warehouse (
   id VARCHAR(30) PRIMARY KEY,
   warehouse_name VARCHAR(255),
   warehouse_group VARCHAR(255),
-  warehouse_supervisors VARCHAR(255),
+  warehouse_supervisors VARCHAR(255)
+);
+
+CREATE TABLE if not exists my_report_warehouse_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_supervisor (
@@ -12,6 +16,10 @@ CREATE TABLE if not exists my_report_supervisor (
   supervisor_warehouse VARCHAR(50),
   supervisor_shift TINYINT,
   is_disabled BOOLEAN
+);
+
+CREATE TABLE if not exists my_report_supervisor_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_error_log (
@@ -29,12 +37,20 @@ CREATE TABLE if not exists my_report_base_item (
   last_used FLOAT
 );
 
+CREATE TABLE if not exists my_report_base_item_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_head_spv (
   id VARCHAR(30) PRIMARY KEY,
   head_name VARCHAR(30) NOT NULL,
   head_phone VARCHAR(30) NOT NULL,
   head_shift TINYINT,
   is_disabled BOOLEAN
+);
+
+CREATE TABLE if not exists my_report_head_spv_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_problem (
@@ -58,6 +74,10 @@ CREATE TABLE if not exists my_report_problem (
   shift_selesai TINYINT
 );
 
+CREATE TABLE if not exists my_report_problem_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_base_report_file (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
@@ -66,6 +86,10 @@ CREATE TABLE if not exists my_report_base_report_file (
   stock_sheet VARCHAR(30),
   clock_sheet VARCHAR(30),
   is_imported BOOLEAN
+);
+
+CREATE TABLE if not exists my_report_base_report_file_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_field_problem (
@@ -78,6 +102,10 @@ CREATE TABLE if not exists my_report_field_problem (
   solusi TEXT,
   pic VARCHAR(100),
   dl FLOAT
+);
+
+CREATE TABLE if not exists my_report_field_problem_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_document (
@@ -100,6 +128,10 @@ CREATE TABLE if not exists my_report_document (
   is_generated_document BOOLEAN
 );
 
+CREATE TABLE if not exists my_report_document_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_complain (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
@@ -117,6 +149,10 @@ CREATE TABLE if not exists my_report_complain (
   is_count BOOLEAN
 );
 
+CREATE TABLE if not exists my_report_complain_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_cases (
   id VARCHAR(30) PRIMARY KEY,
   periode FLOAT,
@@ -131,6 +167,10 @@ CREATE TABLE if not exists my_report_cases (
   sumber_masalah TEXT
 );
 
+CREATE TABLE if not exists my_report_cases_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_case_import (
   id VARCHAR(30) PRIMARY KEY,
   bagian TEXT,
@@ -142,6 +182,10 @@ CREATE TABLE if not exists my_report_case_import (
   keterangan2 TEXT,
   periode FLOAT,
   temuan TEXT
+);
+
+CREATE TABLE if not exists my_report_case_import_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_base_stock (
@@ -160,6 +204,10 @@ CREATE TABLE if not exists my_report_base_stock (
   problem VARCHAR(30)
 );
 
+CREATE TABLE if not exists my_report_base_stock_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists my_report_base_clock (
   id VARCHAR(30),
   parent VARCHAR(30),
@@ -169,6 +217,10 @@ CREATE TABLE if not exists my_report_base_clock (
   start VARCHAR(30),
   finish VARCHAR(30),
   rehat FLOAT
+);
+
+CREATE TABLE if not exists my_report_base_clock_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE if not exists my_report_complain_import (
@@ -191,6 +243,10 @@ CREATE TABLE if not exists my_report_complain_import (
   type_ VARCHAR(255)
 );
 
+CREATE TABLE if not exists my_report_complain_import_seq(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE if not exists users (
   id bigint(20) PRIMARY KEY AUTO_INCREMENT,
   name varchar(255) NOT NULL,
@@ -198,12 +254,178 @@ CREATE TABLE if not exists users (
   password varchar(255) NOT NULL
 );
 
-
 CREATE TABLE if not exists summary (
   table_name VARCHAR(30) PRIMARY KEY,
   total FLOAT,
   last_id VARCHAR(30) NOT NULL
 );
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_warehouse_insert
+BEFORE INSERT ON my_report_warehouse
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_warehouse_seq VALUES (NULL);
+  SET NEW.id = CONCAT('WRH', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+DELIMITER $$
+CREATE TRIGGER tg_my_report_supervisor_insert
+BEFORE INSERT ON my_report_supervisor
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_supervisor_seq VALUES (NULL);
+  SET NEW.id = CONCAT('SPV', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_base_item_insert
+BEFORE INSERT ON my_report_base_item
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_base_item_seq VALUES (NULL);
+  SET NEW.id = CONCAT('BITM', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_head_spv_insert
+BEFORE INSERT ON my_report_head_spv
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_head_spv_seq VALUES (NULL);
+  SET NEW.id = CONCAT('HEA', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_problem_insert
+BEFORE INSERT ON my_report_problem
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_problem_seq VALUES (NULL);
+  SET NEW.id = CONCAT('PRB', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_base_report_file_insert
+BEFORE INSERT ON my_report_base_report_file
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_base_report_file_seq VALUES (NULL);
+  SET NEW.id = CONCAT('BSFIL', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_field_problem_insert
+BEFORE INSERT ON my_report_field_problem
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_field_problem_seq VALUES (NULL);
+  SET NEW.id = CONCAT('FILDPRB', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_document_insert
+BEFORE INSERT ON my_report_document
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_document_seq VALUES (NULL);
+  SET NEW.id = CONCAT('DOC', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_complain_insert
+BEFORE INSERT ON my_report_complain
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_complain_seq VALUES (NULL);
+  SET NEW.id = CONCAT('COMPL', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_cases_insert
+BEFORE INSERT ON my_report_cases
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_cases_seq VALUES (NULL);
+  SET NEW.id = CONCAT('CSE', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_case_import_insert
+BEFORE INSERT ON my_report_case_import
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_case_import_seq VALUES (NULL);
+  SET NEW.id = CONCAT('CSEIMPRT', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_base_stock_insert
+BEFORE INSERT ON my_report_base_stock
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_base_stock_seq VALUES (NULL);
+  SET NEW.id = CONCAT('BSTOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_base_clock_insert
+BEFORE INSERT ON my_report_base_clock
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_base_clock_seq VALUES (NULL);
+  SET NEW.id = CONCAT('BSCLOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
+
+DELIMITER $$
+CREATE TRIGGER tg_my_report_complain_import_insert
+BEFORE INSERT ON my_report_complain_import
+FOR EACH ROW
+BEGIN
+  INSERT INTO my_report_complain_import_seq VALUES (NULL);
+  SET NEW.id = CONCAT('COMP_', LPAD(LAST_INSERT_ID(), 3, '0'));
+END$$
+DELIMITER ;
+
+-- BORDER BORDER BORDER BORDER BORDER
 
  
 INSERT INTO users (id, name, email, password) VALUES
@@ -249,4 +471,4 @@ ALTER TABLE my_report_base_stock ADD FOREIGN KEY (parent) REFERENCES my_report_b
 ALTER TABLE my_report_base_clock ADD FOREIGN KEY (parent) REFERENCES my_report_base_report_file (id);
 ALTER TABLE my_report_base_stock ADD FOREIGN KEY (problem) REFERENCES my_report_problem (id);
 
-ALTER TABLE my_report_base_stock ADD FOREIGN KEY (item) REFERENCES my_report_base_item (item_kode);
+-- ALTER TABLE my_report_base_stock ADD FOREIGN KEY (item) REFERENCES my_report_base_item (item_kode);
