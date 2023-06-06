@@ -11,9 +11,7 @@ class My_report_complain_model
 
     function __construct()
     {
-        $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
-        $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->database = Query_builder::getInstance($connection_db);
+        $this->database = Query_builder::getInstance();
       
         $this->summary =  SummaryDatabase::getInstance($this->table);
     }

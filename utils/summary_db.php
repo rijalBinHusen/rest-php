@@ -21,9 +21,7 @@ Class SummaryDatabase {
 
     public static function getInstance($table) {
         if(self::$instance === null) {
-            $connection_db = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
-            $connection_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$database = Query_builder::getInstance($connection_db);
+            self::$database = Query_builder::getInstance();
         }
         self::$instance = new static($table);
 

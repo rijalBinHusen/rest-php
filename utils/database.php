@@ -10,8 +10,10 @@ class Query_builder {
         $this->db = $connection;            
     }
 
-    public static function getInstance(PDO $connection) {
+    public static function getInstance() {
         if (self::$instance === null) {
+            $connection = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+            $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$instance = new static($connection);
         }
 
