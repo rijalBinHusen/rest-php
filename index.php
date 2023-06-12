@@ -17,12 +17,13 @@ require_once(__DIR__ . '/app/myreport/base_stock/base_stock_route.php');
 require_once(__DIR__ . '/app/myreport/base_clock/base_clock_route.php');
 require_once(__DIR__ . '/app/myreport/problem/problem_route.php');
 require_once(__DIR__ . '/app/myreport/document/document_route.php');
+require_once(__DIR__ . '/app/AccessCode/access_code_router.php');
 
-Flight::route('/blank(/@endpoint)', function ($endpoint) {
-    $db = new Query_builder();
-    $stmt = $db->select_from('users')->fetchAll(PDO::FETCH_ASSOC);
-    Flight::json($stmt);
-});
+// Flight::route('/blank(/@endpoint)', function ($endpoint) {
+//     $db = new Query_builder();
+//     $stmt = $db->select_from('users')->fetchAll(PDO::FETCH_ASSOC);
+//     Flight::json($stmt);
+// });
 
 Flight::route('/test(/@endpoint)', function ($endpoint) {
     $request = Flight::request();

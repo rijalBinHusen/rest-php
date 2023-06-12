@@ -5,9 +5,9 @@ CREATE TABLE if not exists my_report_warehouse (
   warehouse_supervisors VARCHAR(255)
 );
 
-CREATE TABLE if not exists my_report_warehouse_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_warehouse_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_supervisor (
   id VARCHAR(30) PRIMARY KEY,
@@ -18,9 +18,9 @@ CREATE TABLE if not exists my_report_supervisor (
   is_disabled BOOLEAN
 );
 
-CREATE TABLE if not exists my_report_supervisor_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_supervisor_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_error_log (
   id INT(255) PRIMARY KEY AUTO_INCREMENT,
@@ -37,9 +37,9 @@ CREATE TABLE if not exists my_report_base_item (
   last_used FLOAT
 );
 
-CREATE TABLE if not exists my_report_base_item_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_base_item_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_head_spv (
   id VARCHAR(30) PRIMARY KEY,
@@ -49,9 +49,9 @@ CREATE TABLE if not exists my_report_head_spv (
   is_disabled BOOLEAN
 );
 
-CREATE TABLE if not exists my_report_head_spv_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_head_spv_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_problem (
   id VARCHAR(30) PRIMARY KEY,
@@ -74,9 +74,9 @@ CREATE TABLE if not exists my_report_problem (
   shift_selesai TINYINT
 );
 
-CREATE TABLE if not exists my_report_problem_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_problem_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_base_report_file (
   id VARCHAR(30) PRIMARY KEY,
@@ -88,9 +88,9 @@ CREATE TABLE if not exists my_report_base_report_file (
   is_imported BOOLEAN
 );
 
-CREATE TABLE if not exists my_report_base_report_file_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_base_report_file_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_field_problem (
   id VARCHAR(30) PRIMARY KEY,
@@ -104,9 +104,9 @@ CREATE TABLE if not exists my_report_field_problem (
   dl FLOAT
 );
 
-CREATE TABLE if not exists my_report_field_problem_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_field_problem_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_document (
   id VARCHAR(30) PRIMARY KEY,
@@ -128,9 +128,9 @@ CREATE TABLE if not exists my_report_document (
   is_generated_document BOOLEAN
 );
 
-CREATE TABLE if not exists my_report_document_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_document_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_complain (
   id VARCHAR(30) PRIMARY KEY,
@@ -149,9 +149,9 @@ CREATE TABLE if not exists my_report_complain (
   is_count BOOLEAN
 );
 
-CREATE TABLE if not exists my_report_complain_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_complain_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_cases (
   id VARCHAR(30) PRIMARY KEY,
@@ -167,9 +167,9 @@ CREATE TABLE if not exists my_report_cases (
   sumber_masalah TEXT
 );
 
-CREATE TABLE if not exists my_report_cases_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_cases_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_case_import (
   id VARCHAR(30) PRIMARY KEY,
@@ -184,9 +184,9 @@ CREATE TABLE if not exists my_report_case_import (
   temuan TEXT
 );
 
-CREATE TABLE if not exists my_report_case_import_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_case_import_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_base_stock (
   id VARCHAR(30) PRIMARY KEY,
@@ -204,9 +204,9 @@ CREATE TABLE if not exists my_report_base_stock (
   problem VARCHAR(30)
 );
 
-CREATE TABLE if not exists my_report_base_stock_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_base_stock_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_base_clock (
   id VARCHAR(30),
@@ -219,9 +219,9 @@ CREATE TABLE if not exists my_report_base_clock (
   rehat FLOAT
 );
 
-CREATE TABLE if not exists my_report_base_clock_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_base_clock_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists my_report_complain_import (
   id VARCHAR(30) PRIMARY KEY,
@@ -243,9 +243,9 @@ CREATE TABLE if not exists my_report_complain_import (
   type_ VARCHAR(255)
 );
 
-CREATE TABLE if not exists my_report_complain_import_seq(
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-);
+-- CREATE TABLE if not exists my_report_complain_import_seq(
+--   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+-- );
 
 CREATE TABLE if not exists users (
   id bigint(20) PRIMARY KEY AUTO_INCREMENT,
@@ -260,170 +260,175 @@ CREATE TABLE if not exists summary (
   last_id VARCHAR(30) NOT NULL
 );
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_warehouse_insert
-BEFORE INSERT ON my_report_warehouse
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_warehouse_seq VALUES (NULL);
-  SET NEW.id = CONCAT('WRH', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+CREATE TABLE if not exists access_code (
+  source_name VARCHAR(30) PRIMARY KEY,
+  code FLOAT
+);
 
--- BORDER BORDER BORDER BORDER BORDER
-DELIMITER $$
-CREATE TRIGGER tg_my_report_supervisor_insert
-BEFORE INSERT ON my_report_supervisor
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_supervisor_seq VALUES (NULL);
-  SET NEW.id = CONCAT('SPV', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_warehouse_insert
+-- BEFORE INSERT ON my_report_warehouse
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_warehouse_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('WRH', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
--- BORDER BORDER BORDER BORDER BORDER
+-- -- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_supervisor_insert
+-- BEFORE INSERT ON my_report_supervisor
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_supervisor_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('SPV', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_base_item_insert
-BEFORE INSERT ON my_report_base_item
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_base_item_seq VALUES (NULL);
-  SET NEW.id = CONCAT('BITM', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_base_item_insert
+-- BEFORE INSERT ON my_report_base_item
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_base_item_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('BITM', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_head_spv_insert
-BEFORE INSERT ON my_report_head_spv
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_head_spv_seq VALUES (NULL);
-  SET NEW.id = CONCAT('HEA', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_head_spv_insert
+-- BEFORE INSERT ON my_report_head_spv
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_head_spv_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('HEA', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_problem_insert
-BEFORE INSERT ON my_report_problem
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_problem_seq VALUES (NULL);
-  SET NEW.id = CONCAT('PRB', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_problem_insert
+-- BEFORE INSERT ON my_report_problem
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_problem_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('PRB', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_base_report_file_insert
-BEFORE INSERT ON my_report_base_report_file
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_base_report_file_seq VALUES (NULL);
-  SET NEW.id = CONCAT('BSFIL', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_base_report_file_insert
+-- BEFORE INSERT ON my_report_base_report_file
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_base_report_file_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('BSFIL', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_field_problem_insert
-BEFORE INSERT ON my_report_field_problem
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_field_problem_seq VALUES (NULL);
-  SET NEW.id = CONCAT('FILDPRB', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_field_problem_insert
+-- BEFORE INSERT ON my_report_field_problem
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_field_problem_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('FILDPRB', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_document_insert
-BEFORE INSERT ON my_report_document
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_document_seq VALUES (NULL);
-  SET NEW.id = CONCAT('DOC', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_document_insert
+-- BEFORE INSERT ON my_report_document
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_document_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('DOC', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_complain_insert
-BEFORE INSERT ON my_report_complain
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_complain_seq VALUES (NULL);
-  SET NEW.id = CONCAT('COMPL', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_complain_insert
+-- BEFORE INSERT ON my_report_complain
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_complain_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('COMPL', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_cases_insert
-BEFORE INSERT ON my_report_cases
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_cases_seq VALUES (NULL);
-  SET NEW.id = CONCAT('CSE', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_cases_insert
+-- BEFORE INSERT ON my_report_cases
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_cases_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('CSE', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_case_import_insert
-BEFORE INSERT ON my_report_case_import
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_case_import_seq VALUES (NULL);
-  SET NEW.id = CONCAT('CSEIMPRT', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_case_import_insert
+-- BEFORE INSERT ON my_report_case_import
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_case_import_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('CSEIMPRT', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_base_stock_insert
-BEFORE INSERT ON my_report_base_stock
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_base_stock_seq VALUES (NULL);
-  SET NEW.id = CONCAT('BSTOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_base_stock_insert
+-- BEFORE INSERT ON my_report_base_stock
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_base_stock_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('BSTOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_base_clock_insert
-BEFORE INSERT ON my_report_base_clock
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_base_clock_seq VALUES (NULL);
-  SET NEW.id = CONCAT('BSCLOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
 
--- BORDER BORDER BORDER BORDER BORDER
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_base_clock_insert
+-- BEFORE INSERT ON my_report_base_clock
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_base_clock_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('BSCLOCK', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
-DELIMITER $$
-CREATE TRIGGER tg_my_report_complain_import_insert
-BEFORE INSERT ON my_report_complain_import
-FOR EACH ROW
-BEGIN
-  INSERT INTO my_report_complain_import_seq VALUES (NULL);
-  SET NEW.id = CONCAT('COMP_', LPAD(LAST_INSERT_ID(), 3, '0'));
-END$$
-DELIMITER ;
+-- -- BORDER BORDER BORDER BORDER BORDER
+
+-- DELIMITER $$
+-- CREATE TRIGGER tg_my_report_complain_import_insert
+-- BEFORE INSERT ON my_report_complain_import
+-- FOR EACH ROW
+-- BEGIN
+--   INSERT INTO my_report_complain_import_seq VALUES (NULL);
+--   SET NEW.id = CONCAT('COMP_', LPAD(LAST_INSERT_ID(), 3, '0'));
+-- END$$
+-- DELIMITER ;
 
 -- BORDER BORDER BORDER BORDER BORDER
 

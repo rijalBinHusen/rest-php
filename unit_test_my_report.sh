@@ -1,5 +1,6 @@
-source .env
+# source .env
 
+phpunit tests/access_code_test.php
 phpunit tests/User_test.php
 # sleep 2
 phpunit tests/my_report/my_report_warehouse_test.php
