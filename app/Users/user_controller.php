@@ -28,8 +28,9 @@ class User
         else {
             Flight::json([
                 'success' => false,
-                'message' => $errorLogin,
-            ], 404);
+                'email' => $email,
+                'password' => $password
+            ], 401);
         }
     }
     public function register() {
