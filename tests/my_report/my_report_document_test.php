@@ -34,7 +34,16 @@ class MyReportDocumentTest extends PHPUnit_Framework_TestCase
             'shift' => 1,
             'head_spv_id' => $faker->text(10),
             'warehouse_id' => $faker->text(11),
-            'is_generated_document' => 0
+            'is_generated_document' => 0,
+            'item_variance' => 0,
+            'parent' => $faker->text(7),
+            'parent_document' => $faker->text(9),
+            'plan_out' => $faker->numberBetween(100, 1000),
+            'total_item_keluar' => $faker->numberBetween(100, 1000),
+            'total_item_moving' => $faker->numberBetween(1, 60),
+            'total_product_not_FIFO' => 10,
+            'total_qty_in' => $faker->numberBetween(10, 1000),
+            'total_qty_out' => $faker->numberBetween(100, 1000),
         );
 
         $this->urlPost = $this->url . 'document/';

@@ -30,6 +30,15 @@ class My_report_document
         $head_spv_id = $req->data->head_spv_id;
         $warehouse_id = $req->data->warehouse_id;
         $is_generated_document = $req->data->is_generated_document;
+        $item_variance = $req->data->item_variance;
+        $parent = $req->data->parent;
+        $parent_document = $req->data->parent_document;
+        $plan_out = $req->data->plan_out;
+        $total_item_keluar = $req->data->total_item_keluar;
+        $total_item_moving = $req->data->total_item_moving;
+        $total_product_not_FIFO = $req->data->total_product_not_FIFO;
+        $total_qty_in = $req->data->total_qty_in;
+        $total_qty_out = $req->data->total_qty_out;
 
         $result = null;
 
@@ -47,7 +56,17 @@ class My_report_document
                                 && !is_null($periode)
                                 && !is_null($shift)
                                 && !is_null($head_spv_id)
-                                && !is_null($warehouse_id);
+                                && !is_null($warehouse_id)
+                                && !is_null($is_generated_document)
+                                && !is_null($item_variance)
+                                && !is_null($parent)
+                                && !is_null($parent_document)
+                                && !is_null($plan_out)
+                                && !is_null($total_item_keluar)
+                                && !is_null($total_item_moving)
+                                && !is_null($total_product_not_FIFO)
+                                && !is_null($total_qty_in)
+                                && !is_null($total_qty_out);
         
             if($valid_request_body) {
                 if ($id) {
@@ -69,7 +88,16 @@ class My_report_document
                         $shift,
                         $head_spv_id,
                         $warehouse_id,
-                        $is_generated_document
+                        $is_generated_document,
+                        $item_variance,
+                        $parent,
+                        $parent_document,
+                        $plan_out,
+                        $total_item_keluar,
+                        $total_item_moving,
+                        $total_product_not_FIFO,
+                        $total_qty_in,
+                        $total_qty_out
                         );
                 } 
                 
@@ -91,7 +119,16 @@ class My_report_document
                                                                 $shift,
                                                                 $head_spv_id,
                                                                 $warehouse_id,
-                                                                $is_generated_document
+                                                                $is_generated_document,
+                                                                $item_variance,
+                                                                $parent,
+                                                                $parent_document,
+                                                                $plan_out,
+                                                                $total_item_keluar,
+                                                                $total_item_moving,
+                                                                $total_product_not_FIFO,
+                                                                $total_qty_in,
+                                                                $total_qty_out
                                                             );
                 }
 
@@ -304,6 +341,15 @@ class My_report_document
         $head_spv_id = $req->data->head_spv_id;
         $warehouse_id = $req->data->warehouse_id;
         $is_generated_document = $req->data->is_generated_document;
+        $item_variance = $req->data->item_variance;
+        $parent = $req->data->parent;
+        $parent_document = $req->data->parent_document;
+        $plan_out = $req->data->plan_out;
+        $total_item_keluar = $req->data->total_item_keluar;
+        $total_item_moving = $req->data->total_item_moving;
+        $total_product_not_FIFO = $req->data->total_product_not_FIFO;
+        $total_qty_in = $req->data->total_qty_in;
+        $total_qty_out = $req->data->total_qty_out;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
@@ -402,6 +448,60 @@ class My_report_document
         $valid_is_generated_document = !is_null($is_generated_document) && !empty($is_generated_document);
         if ($valid_is_generated_document) {
             $keyValueToUpdate["is_generated_document"] = $is_generated_document;
+        }
+
+        // conditional $item_variance
+        $valid_item_variance = !is_null($item_variance) && !empty($item_variance);
+        if ($valid_item_variance) {
+            $keyValueToUpdate["item_variance"] = $item_variance;
+        }
+
+        // conditional $parent
+        $valid_parent = !is_null($parent) && !empty($parent);
+        if ($valid_parent) {
+            $keyValueToUpdate["parent"] = $parent;
+        }
+
+        // conditional $parent_document
+        $valid_parent_document = !is_null($parent_document) && !empty($parent_document);
+        if ($valid_parent_document) {
+            $keyValueToUpdate["parent_document"] = $parent_document;
+        }
+
+        // conditional $plan_out
+        $valid_plan_out = !is_null($plan_out) && !empty($plan_out);
+        if ($valid_plan_out) {
+            $keyValueToUpdate["plan_out"] = $plan_out;
+        }
+
+        // conditional $total_item_keluar
+        $valid_total_item_keluar = !is_null($total_item_keluar) && !empty($total_item_keluar);
+        if ($valid_total_item_keluar) {
+            $keyValueToUpdate["total_item_keluar"] = $total_item_keluar;
+        }
+
+        // conditional $total_item_moving
+        $valid_total_item_moving = !is_null($total_item_moving) && !empty($total_item_moving);
+        if ($valid_total_item_moving) {
+            $keyValueToUpdate["total_item_moving"] = $total_item_moving;
+        }
+
+        // conditional $total_product_not_FIFO
+        $valid_total_product_not_FIFO = !is_null($total_product_not_FIFO) && !empty($total_product_not_FIFO);
+        if ($valid_total_product_not_FIFO) {
+            $keyValueToUpdate["total_product_not_FIFO"] = $total_product_not_FIFO;
+        }
+
+        // conditional $total_qty_in
+        $valid_total_qty_in = !is_null($total_qty_in) && !empty($total_qty_in);
+        if ($valid_total_qty_in) {
+            $keyValueToUpdate["total_qty_in"] = $total_qty_in;
+        }
+
+        // conditional $total_qty_out
+        $valid_total_qty_out = !is_null($total_qty_out) && !empty($total_qty_out);
+        if ($valid_total_qty_out) {
+            $keyValueToUpdate["total_qty_out"] = $total_qty_out;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;

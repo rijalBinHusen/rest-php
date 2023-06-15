@@ -1589,6 +1589,24 @@ components:
           type: string
         is_generated_document:
           type: boolean
+        item_variance:
+          type: number
+        parent:
+          type: string
+        parent_document:
+          type: string
+        plan_out:
+          type: number
+        total_item_keluar:
+          type: number
+        total_item_moving:
+          type: number
+        total_product_not_FIFO:
+          type: number
+        total_qty_in:
+          type: number
+        total_qty_out:
+          type: number
     Complain:
       type: object
       properties:
@@ -1930,6 +1948,24 @@ components:
                 type: string
               is_generated_document:
                 type: boolean
+              item_variance:
+                type: number
+              parent:
+                type: string
+              parent_document:
+                type: string
+              plan_out:
+                type: number
+              total_item_keluar:
+                type: number
+              total_item_moving:
+                type: number
+              total_product_not_FIFO:
+                type: number
+              total_qty_in:
+                type: number
+              total_qty_out:
+                type: number
     Complain:
       required: true
       content:

@@ -32,7 +32,16 @@ class My_report_document_model
         $shift,
         $head_spv_id,
         $warehouse_id,
-        $is_generated_document
+        $is_generated_document,
+        $item_variance,
+        $parent,
+        $parent_document,
+        $plan_out,
+        $total_item_keluar,
+        $total_item_moving,
+        $total_product_not_FIFO,
+        $total_qty_in,
+        $total_qty_out
     )
     {
         $nextId = $this->summary->getNextId();
@@ -54,7 +63,16 @@ class My_report_document_model
             $shift,
             $head_spv_id,
             $warehouse_id,
-            $is_generated_document
+            $is_generated_document,
+            $item_variance,
+            $parent,
+            $parent_document,
+            $plan_out,
+            $total_item_keluar,
+            $total_item_moving,
+            $total_product_not_FIFO,
+            $total_qty_in,
+            $total_qty_out
         );
 
         if($this->database->is_error !== null) {
@@ -86,7 +104,16 @@ class My_report_document_model
         $shift,
         $head_spv_id,
         $warehouse_id,
-        $is_generated_document
+        $is_generated_document,
+        $item_variance,
+        $parent,
+        $parent_document,
+        $plan_out,
+        $total_item_keluar,
+        $total_item_moving,
+        $total_product_not_FIFO,
+        $total_qty_in,
+        $total_qty_out
     )
     {
 
@@ -107,7 +134,16 @@ class My_report_document_model
             'shift' => $shift,
             'head_spv_id' => $head_spv_id,
             'warehouse_id' => $warehouse_id,
-            'is_generated_document' => $is_generated_document
+            'is_generated_document' => $is_generated_document,
+            'item_variance' => $item_variance,
+            'parent' => $parent,
+            'parent_document' => $parent_document,
+            'plan_out' => $plan_out,
+            'total_item_keluar' => $total_item_keluar,
+            'total_item_moving' => $total_item_moving,
+            'total_product_not_FIFO' => $total_product_not_FIFO,
+            'total_qty_in' => $total_qty_in,
+            'total_qty_out' => $total_qty_out
         );
 
         $this->database->insert($this->table, $data_to_insert);

@@ -125,7 +125,16 @@ CREATE TABLE if not exists my_report_document (
   shift INT,
   head_spv_id VARCHAR(30),
   warehouse_id VARCHAR(30),
-  is_generated_document BOOLEAN
+  is_generated_document BOOLEAN,
+  item_variance FLOAT,
+  parent VARCHAR(50),
+  parent_document VARCHAR(50),
+  plan_out FLOAT,
+  total_item_keluar FLOAT,
+  total_item_moving FLOAT,
+  total_product_not_FIFO FLOAT,
+  total_qty_in FLOAT,
+  total_qty_out FLOAT
 );
 
 -- CREATE TABLE if not exists my_report_document_seq(
