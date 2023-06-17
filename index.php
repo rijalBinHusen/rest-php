@@ -2,6 +2,7 @@
 
 require_once('vendor/autoload.php');
 require_once(__DIR__ . '/app/tests_route.php');
+require_once(__DIR__ . '/utils/cors.php');
 require_once(__DIR__ . '/app/Users/user_route.php');
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
 require_once(__DIR__ . '/app/myreport/supervisor/supervisor_route.php');

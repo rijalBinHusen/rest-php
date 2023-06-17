@@ -2,12 +2,8 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
-<!-- Header add Access-Control-Allow-Origin "*"
-Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT" -->
-<!-- Allow CORS -->
-Header set Access-Control-Allow-Origin: "*"
-Header set Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
-Header set Access-Control-Allow-Headers: "Content-Type, X-Requested-With"
+#Header add Access-Control-Allow-Origin "*"
+#Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
 Options -Indexes 
 
 <Files .env>
