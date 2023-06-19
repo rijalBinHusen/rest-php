@@ -68,7 +68,7 @@ class User_model {
       return Firebase\JWT\JWT::encode([
         "iat" => $now, // issued at - time when token is generated
         "nbf" => $now, // not before - when this token is considered valid
-        "exp" => $now + 3600, // expiry - 1 hr (3600 secs) from now in this example
+        "exp" => $now + (3600 * 24), // expiry - 1 day (3600 secs * 24) from now in this example
         "jti" => "RANDOM TOKEN TOKEN RANDOM", // json token id
         "iss" => JWT_ISSUER, // issuer
         "aud" => JWT_AUD, // audience
