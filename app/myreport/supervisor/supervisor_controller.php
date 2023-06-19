@@ -36,15 +36,19 @@ class My_report_supervisor
         $id = $req->data->id;
         $supervisor_name = $req->data->supervisor_name;
         $supervisor_phone = $req->data->supervisor_phone;
-        $supervisor_warehouse = $req->data->supervisor_warehouse;
         $supervisor_shift = $req->data->supervisor_shift;
+        $supervisor_warehouse = $req->data->supervisor_warehouse;
         $is_disabled = $req->data->is_disabled;
 
-        $invalid_request_body = is_null($supervisor_name) || is_null($supervisor_phone) || is_null($supervisor_warehouse) || is_null($supervisor_shift) || is_null($is_disabled) || empty($supervisor_name) || empty($supervisor_phone) || empty($supervisor_warehouse) || empty($supervisor_shift) || empty($is_disabled);        
+        $is_request_body_oke = !is_null($supervisor_name) 
+                                && !is_null($supervisor_phone) 
+                                && !is_null($supervisor_warehouse) 
+                                && !is_null($supervisor_shift) 
+                                && !is_null($is_disabled);        
 
         $result = null;
 
-        if($invalid_request_body) {
+        if(!$is_request_body_oke) {
             Flight::json(
                 array(
                     'success' => false,

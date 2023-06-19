@@ -41,7 +41,9 @@ class My_report_head_spv
 
         $result = null;
 
-        if($head_name && $head_phone && $head_shift && $is_disabled) {
+        $is_request_body_oke = !is_null($head_name) && !is_null($head_phone) && !is_null($head_shift) && !is_null($is_disabled);
+
+        if($is_request_body_oke) {
             if ($id) {
                 // write the warehouse
                 $result = $this->my_report_head_spv->write_head_spv($id, $head_name, $head_phone, $head_shift, $is_disabled);

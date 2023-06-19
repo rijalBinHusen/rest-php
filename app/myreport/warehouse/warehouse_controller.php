@@ -40,7 +40,9 @@ class My_report_warehouse
 
         $result = null;
 
-        if($warehouse_name && $warehouse_group && $warehouse_supervisors) {
+        $is_request_body_oke = !is_null($warehouse_name) && !is_null($warehouse_group) && !is_null($warehouse_supervisors);
+
+        if($is_request_body_oke) {
             if ($id) {
                 // write the warehouse
                 $result = $this->my_report_warehouse->write_warehouse($id, $warehouse_name, $warehouse_group, $warehouse_supervisors);
