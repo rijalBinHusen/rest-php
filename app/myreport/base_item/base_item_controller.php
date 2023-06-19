@@ -66,9 +66,13 @@ class My_report_base_item
         $item_name = $req->data->item_name;
         $last_used = $req->data->last_used;
 
+        $valid_request_body = !is_null($item_kode)
+                                && !is_null($item_name)
+                                && !is_null($last_used);
+
         $result = null;
 
-        if($item_kode && $item_name && $last_used) {
+        if($valid_request_body) {
             if ($id) {
                 // write the warehouse
                 $result = $this->my_report_base_item->write_base_item($id, $item_kode, $item_name, $last_used);
