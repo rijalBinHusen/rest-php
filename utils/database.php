@@ -1,5 +1,7 @@
 <?php 
 
+require_once(__DIR__ . "/piece/addslahes_array.php");
+
 class Query_builder {
 
     private static $instance;
@@ -55,7 +57,7 @@ class Query_builder {
     function insert($tabel,$paramsArr)
     {
         $key = array_keys($paramsArr);
-        $val = array_values($paramsArr);
+        $val = adslashes_array(array_values($paramsArr));
 
         $query = "INSERT INTO $tabel (" . implode(', ', $key) . ") "
             . "VALUES ('" . implode("', '", $val) . "')";
