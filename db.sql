@@ -110,11 +110,11 @@ CREATE TABLE if not exists my_report_field_problem (
 
 CREATE TABLE if not exists my_report_document (
   id VARCHAR(30) PRIMARY KEY,
-  collected FLOAT,
-  approval FLOAT,
+  collected VARCHAR(30),
+  approval VARCHAR(30),
   status INT,
-  shared FLOAT,
-  finished FLOAT,
+  shared VARCHAR(30),
+  finished VARCHAR(30),
   total_do FLOAT,
   total_kendaraan FLOAT,
   total_waktu FLOAT,
