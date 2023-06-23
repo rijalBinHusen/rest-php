@@ -154,7 +154,7 @@ Class SummaryDatabase {
 
         if($this->is_table_exists) {
             $data_to_update = array(
-                'total' => $total_record + 1,
+                'total' => $total_record,
                 'last_id' => $last_id_record
             );
 
@@ -165,7 +165,7 @@ Class SummaryDatabase {
         
             $data_to_insert = array(
                 'table_name' => $this->table,
-                'total' => 0,
+                'total' => $total_record,
                 'last_id' => $last_id_record
             );
             
