@@ -10,6 +10,7 @@ Class SummaryDatabase {
     private $table_as_id = null;
     public static $summary_database = array();
     private $is_on_process = false;
+    private $is_table_exists = false;
     
     public function __construct ($table) {
 
@@ -116,9 +117,21 @@ Class SummaryDatabase {
     }
 
     public function updateLastId($your_last_id) {
+
+        $this->is_table_exists = array_key_exists($this->table, self::$summary_database);
+
+        $total_record = 0;
+        $last_id_record = null;
+
+        if($this->is_table_exists) {
+
+            $total_record = self::$summary_database[$this->table]['total'];
+            $last_id_record = self::$summary_database[$this->table]['last_id'];
+
+        }
+        
         // total record
-        $total_record = self::$summary_database[$this->table]['total'];
-        $last_id_record = self::$summary_database[$this->table]['last_id'];
+
 
         $all_last_id = array($your_last_id, $last_id_record);
 
@@ -139,7 +152,7 @@ Class SummaryDatabase {
         $total_record = self::$summary_database[$this->table]['total'];
         $last_id_record = self::$summary_database[$this->table]['last_id'];
 
-        if($total_record > 0) {
+        if($this->is_table_exists) {
             $data_to_update = array(
                 'total' => $total_record + 1,
                 'last_id' => $last_id_record
