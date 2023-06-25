@@ -31,7 +31,7 @@ class My_report_base_file_model
         }
     }
 
-    public function append_base_file($periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported)
+    public function append_base_file($periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished)
     {
         $nextId = $this->summary->getNextId();
         // write to database
@@ -42,7 +42,8 @@ class My_report_base_file_model
             $file_name,
             $stock_sheet,
             $clock_sheet,
-            $is_imported
+            $is_imported,
+            $is_record_finished
         );
 
         if($this->database->is_error !== null) {
@@ -91,7 +92,7 @@ class My_report_base_file_model
 
     }
 
-    public function write_base_file($id, $periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported)
+    public function write_base_file($id, $periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished)
     {
 
         $data_to_insert = array(
@@ -101,7 +102,8 @@ class My_report_base_file_model
             'file_name' => $file_name,
             'stock_sheet' => $stock_sheet,
             'clock_sheet' => $clock_sheet,
-            'is_imported' => $is_imported
+            'is_imported' => $is_imported,
+            'is_record_finished' => $is_record_finished
         );
 
         $this->database->insert($this->table, $data_to_insert);

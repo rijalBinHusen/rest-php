@@ -1767,6 +1767,8 @@ components:
           type: string
         is_imported:
           type: boolean
+        is_record_finished:
+          type: boolean
     Base_clock:
       type: object
       properties:
@@ -2139,6 +2141,8 @@ components:
               clock_sheet:
                 type: string
               is_imported:
+                type: boolean
+              is_record_finished:
                 type: boolean
     Base_clock:
       required: true
