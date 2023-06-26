@@ -67,24 +67,25 @@ class My_report_base_file
         $stock_sheet = $req->data->stock_sheet;
         $clock_sheet = $req->data->clock_sheet;
         $is_imported = $req->data->is_imported;
-        $is_record_finsished = $req->data->is_record_finsished;
+        $is_record_finished = $req->data->is_record_finished;
 
         $result = null;
 
         $is_request_body_oke = !is_null($warehouse_id) 
+                                && !is_null($periode)
                                 && !is_null($file_name) 
                                 && !is_null($stock_sheet) 
                                 && !is_null($clock_sheet) 
                                 && !is_null($is_imported)
-                                && !is_null($is_record_finsished);
+                                && !is_null($is_record_finished);
 
         if($is_request_body_oke) {
             if ($id) {
                 // write the warehouse
-                $result = $this->my_report_base_file->write_base_file($id, $periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finsished);
+                $result = $this->my_report_base_file->write_base_file($id, $periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished);
             } else {
                 // append warehouse
-                $result = $this->my_report_base_file->append_base_file($periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finsished);
+                $result = $this->my_report_base_file->append_base_file($periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished);
             }
 
             if($this->my_report_base_file->is_success !== true) {
@@ -109,7 +110,9 @@ class My_report_base_file
         Flight::json(
             array(
                 'success' => false,
-                'message' => 'Failed to add base file, check the data you sent'
+                'message' => 'Failed to add base file, check the data you sent',
+                'data' => array($warehouse_id, $periode
+                , $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished)
             ), 400
         );
     }
@@ -198,7 +201,7 @@ class My_report_base_file
         $stock_sheet = $req->data->stock_sheet;
         $clock_sheet = $req->data->clock_sheet;
         $is_imported = $req->data->is_imported;
-        $is_record_finsished = $req->data->is_record_finsished;
+        $is_record_finished = $req->data->is_record_finished;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
@@ -238,10 +241,10 @@ class My_report_base_file
             $keyValueToUpdate["periode"] = $periode;
         }
 
-        // conditional $is_record_finsished
-        $valid_is_record_finsished = !is_null($is_record_finsished) && !empty($is_record_finsished);
-        if ($valid_is_record_finsished) {
-            $keyValueToUpdate["is_record_finsished"] = $is_record_finsished;
+        // conditional $is_record_finished
+        $valid_is_record_finished = !is_null($is_record_finished) && !empty($is_record_finished);
+        if ($valid_is_record_finished) {
+            $keyValueToUpdate["is_record_finished"] = $is_record_finished;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;

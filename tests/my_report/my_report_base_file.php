@@ -23,6 +23,7 @@ class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
             'stock_sheet' => $faker->text(400),
             'clock_sheet' => $faker->text(200),
             'is_imported' => false,
+            'is_record_finished' => false,
         );
 
         $this->urlPost = $this->url . 'base_file/';
@@ -32,7 +33,8 @@ class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
             'file_name' => $faker->text(10),
             'stock_sheet' => $faker->text(15),
             'clock_sheet' => $faker->text(17),
-            'is_imported' => true
+            'is_imported' => true,
+            'is_record_finished' => true
         );
 
     }

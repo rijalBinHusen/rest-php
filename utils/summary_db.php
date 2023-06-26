@@ -14,7 +14,7 @@ Class SummaryDatabase {
     
     public function __construct ($table) {
 
-        self::$summary_database = self::getData();
+        self::$summary_database = self::getData($table);
         $this->table = $table;
         $this->table_as_id = str_replace("my_report_", "", $table);
 
@@ -29,7 +29,7 @@ Class SummaryDatabase {
         return self::$instance;
     }
 
-    public static function getData() {
+    public static function getData($table) {
         $retrieveData = self::$database->select_from("summary")->fetchAll(PDO::FETCH_ASSOC);
         // self::$summary_database = $retrieveData;
         /*
@@ -73,11 +73,22 @@ Class SummaryDatabase {
                 )
             )
          */
-        foreach($retrieveData as $row) {
-            self::$summary_database[$row['table_name']] = array(
-                'total' => $row['total'],
-                'last_id' => $row['last_id']
+        if(empty($retrieveData)) {
+            
+            self::$summary_database[$table] = array (
+                'total' => 0,
+                'last_id' => 0
             );
+
+        } else {
+
+            foreach($retrieveData as $row) {
+                self::$summary_database[$row['table_name']] = array(
+                    'total' => $row['total'],
+                    'last_id' => $row['last_id']
+                );
+            }
+
         }
         
         return self::$summary_database;
@@ -149,6 +160,7 @@ Class SummaryDatabase {
 
     public function __destruct()
     {
+
         $total_record = self::$summary_database[$this->table]['total'];
         $last_id_record = self::$summary_database[$this->table]['last_id'];
 
