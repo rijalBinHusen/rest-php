@@ -108,7 +108,16 @@ Class SummaryDatabase {
 
     public function getNextId() {
 
-        $findLastId = self::$summary_database[$this->table]['last_id'];
+        $this->is_table_exists = array_key_exists($this->table, self::$summary_database);
+
+        $findLastId = null;
+
+        if($this->is_table_exists) {
+
+            $findLastId = self::$summary_database[$this->table]['last_id'];
+
+        }
+
         // nextId
         $nextId = $findLastId ? generateId($findLastId) : generateId($this->table_as_id ."_22320000");
 
@@ -128,8 +137,6 @@ Class SummaryDatabase {
     }
 
     public function updateLastId($your_last_id) {
-
-        $this->is_table_exists = array_key_exists($this->table, self::$summary_database);
 
         $total_record = 0;
         $last_id_record = null;
