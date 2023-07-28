@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . './database.php');
-require_once(__DIR__ . './generator_id.php');
+require_once(__DIR__ . '/database.php');
+require_once(__DIR__ . '/generator_id.php');
 
 Class SummaryDatabase {
     private static $instance;

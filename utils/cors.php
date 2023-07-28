@@ -18,3 +18,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 	}
 	exit(0);
 }
+
+// <?php
+
+// // Get the origin of the request
+// $origin = $_SERVER['HTTP_ORIGIN'];
+
+// // Check if the origin is allowed
+// $allowed_origins = ['https://www.example.com', 'https://localhost'];
+// if (!in_array($origin, $allowed_origins)) {
+//   // Deny the request
+//   header('Access-Control-Allow-Origin:');
+//   exit();
+// }
+
+// // Allow the request
+// header('Access-Control-Allow-Origin: ' . $origin);
+
+// // Other CORS headers...
+// header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+// header('Access-Control-Allow-Headers: Content-Type, Authorization');

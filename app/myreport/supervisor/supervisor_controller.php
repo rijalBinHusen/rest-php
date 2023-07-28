@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . './supervisor_model.php');
+require_once(__DIR__ . '/supervisor_model.php');
 
 class My_report_supervisor
 {

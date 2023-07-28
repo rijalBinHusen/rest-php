@@ -42,7 +42,7 @@ CREATE TABLE
         id VARCHAR(30) PRIMARY KEY,
         item_kode VARCHAR(30) NOT NULL,
         item_name VARCHAR(30) NOT NULL,
-        last_used FLOAT
+        last_used VARCHAR(30)
     );
 
 -- CREATE TABLE if not exists my_report_base_item_seq(
@@ -97,7 +97,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_base_report_file (
         id VARCHAR(30) PRIMARY KEY,
-        periode FLOAT,
+        periode VARCHAR(30),
         warehouse_id VARCHAR(30) NOT NULL,
         file_name VARCHAR(30) NOT NULL,
         stock_sheet VARCHAR(30),
@@ -115,7 +115,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_field_problem (
         id VARCHAR(30) PRIMARY KEY,
-        periode FLOAT,
+        periode VARCHAR(30),
         supervisor_id VARCHAR(30),
         head_spv_id VARCHAR(30),
         masalah TEXT,
@@ -145,7 +145,7 @@ CREATE TABLE
         base_report_file VARCHAR(30),
         is_finished BOOLEAN,
         supervisor_id VARCHAR(30),
-        periode FLOAT,
+        periode VARCHAR(30),
         shift INT,
         head_spv_id VARCHAR(30),
         warehouse_id VARCHAR(30),
@@ -170,7 +170,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_complain (
         id VARCHAR(30) PRIMARY KEY,
-        periode FLOAT,
+        periode VARCHAR(30),
         head_spv_id VARCHAR(30),
         dl FLOAT,
         inserted FLOAT,
@@ -194,7 +194,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_cases (
         id VARCHAR(30) PRIMARY KEY,
-        periode FLOAT,
+        periode VARCHAR(30),
         head_spv_id VARCHAR(30),
         dl FLOAT,
         masalah TEXT,
@@ -222,7 +222,7 @@ CREATE TABLE
         karu TEXT,
         keterangan1 TEXT,
         keterangan2 TEXT,
-        periode FLOAT,
+        periode VARCHAR(30),
         temuan TEXT
     );
 
