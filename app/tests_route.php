@@ -2,7 +2,7 @@
 
 // root route for testing
 Flight::route('GET /', function () {
-    include('/../html/under_contruction/default.html');
+    include('html/under_contruction/default.html');
 });
 
 Flight::route('POST /', function () {
