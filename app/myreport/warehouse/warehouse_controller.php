@@ -111,7 +111,7 @@ class My_report_warehouse
                 array(
                     'success' => false,
                     'message' => 'Warehouse not found'
-                )
+                ), 404
             );
         }
     }

@@ -112,7 +112,7 @@ class My_report_head_spv
                 array(
                     'success' => false,
                     'message' => 'Head supervisor not found'
-                )
+                ), 404
             );
         }
     }

@@ -140,7 +140,7 @@ class My_report_case_import
                 array(
                     'success' => false,
                     'message' => 'Case import not found'
-                )
+                ), 404
             );
         }
     }

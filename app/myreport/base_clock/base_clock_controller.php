@@ -215,7 +215,7 @@ class My_report_base_clock
                 array(
                     'success' => false,
                     'message' => 'Base clock not found'
-                )
+                ), 404
             );
         }
     }

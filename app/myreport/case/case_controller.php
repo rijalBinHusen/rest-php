@@ -140,7 +140,7 @@ class My_report_case
                 array(
                     'success' => false,
                     'message' => 'Case not found'
-                )
+                ), 404
             );
         }
     }

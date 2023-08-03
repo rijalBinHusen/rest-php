@@ -118,7 +118,7 @@ class My_report_supervisor
                 array(
                     'success' => false,
                     'message' => 'Supervisor not found'
-                )
+                ), 404
             );
         }
     }

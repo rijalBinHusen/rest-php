@@ -316,7 +316,7 @@ class My_report_document
                 array(
                     'success' => false,
                     'message' => 'Document not found'
-                )
+                ), 404
             );
         }
     }
