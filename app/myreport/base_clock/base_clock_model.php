@@ -133,6 +133,11 @@ class My_report_base_clock_model
 
         } else {
 
+            if($result == 0) {
+                $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
+                return $this->database->sqlQuery($query)->fetchColumn();
+            }
+
             return $result;
 
         }

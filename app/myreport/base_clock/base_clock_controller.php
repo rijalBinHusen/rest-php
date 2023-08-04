@@ -266,8 +266,8 @@ class My_report_base_clock
         }
 
         // conditional $finish
-        $finish = !is_null($finish) && !empty($finish);
-        if ($finish) {
+        $valid_finish = !is_null($finish) && !empty($finish);
+        if ($valid_finish) {
             $keyValueToUpdate["finish"] = $finish;
         }
 
