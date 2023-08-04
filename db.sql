@@ -15,7 +15,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_supervisor (
         id VARCHAR(30) PRIMARY KEY,
-        supervisor_name VARCHAR(30) NOT NULL,
+        supervisor_name VARCHAR(255) NOT NULL,
         supervisor_phone VARCHAR(30) NOT NULL,
         supervisor_warehouse VARCHAR(50),
         supervisor_shift TINYINT,
@@ -33,7 +33,7 @@ CREATE TABLE
         id INT(255) PRIMARY KEY AUTO_INCREMENT,
         operation VARCHAR(30) NOT NULL,
         name_table VARCHAR(30) NOT NULL,
-        message_error VARCHAR(50),
+        message_error VARCHAR(255),
         time_error TIMESTAMP
     );
 
@@ -41,7 +41,7 @@ CREATE TABLE
     if not exists my_report_base_item (
         id VARCHAR(30) PRIMARY KEY,
         item_kode VARCHAR(30) NOT NULL,
-        item_name VARCHAR(30) NOT NULL,
+        item_name VARCHAR(255) NOT NULL,
         last_used VARCHAR(30)
     );
 
@@ -54,7 +54,7 @@ CREATE TABLE
 CREATE TABLE
     if not exists my_report_head_spv (
         id VARCHAR(30) PRIMARY KEY,
-        head_name VARCHAR(30) NOT NULL,
+        head_name VARCHAR(255) NOT NULL,
         head_phone VARCHAR(30) NOT NULL,
         head_shift TINYINT,
         is_disabled BOOLEAN
@@ -99,9 +99,9 @@ CREATE TABLE
         id VARCHAR(30) PRIMARY KEY,
         periode VARCHAR(30),
         warehouse_id VARCHAR(30) NOT NULL,
-        file_name VARCHAR(30) NOT NULL,
-        stock_sheet VARCHAR(30),
-        clock_sheet VARCHAR(30),
+        file_name VARCHAR(255) NOT NULL,
+        stock_sheet VARCHAR(255),
+        clock_sheet VARCHAR(255),
         is_imported BOOLEAN,
         is_record_finished BOOLEAN
     );
