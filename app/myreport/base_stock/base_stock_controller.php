@@ -275,8 +275,8 @@ class My_report_base_stock
         }
 
         // conditional $out_stock
-        $out_stock = !is_null($out_stock) && !empty($out_stock);
-        if ($out_stock) {
+        $valid_out_stock = !is_null($out_stock) && !empty($out_stock);
+        if ($valid_out_stock) {
             $keyValueToUpdate["out_stock"] = $out_stock;
         }
 

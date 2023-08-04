@@ -230,8 +230,8 @@ class My_report_base_file
         }
 
         // conditional $is_imported
-        $is_imported = !is_null($is_imported) && !empty($is_imported);
-        if ($is_imported) {
+        $valid_is_imported = !is_null($is_imported) && !empty($is_imported);
+        if ($valid_is_imported) {
             $keyValueToUpdate["is_imported"] = $is_imported;
         }
 

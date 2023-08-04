@@ -155,9 +155,11 @@ class My_report_warehouse
 
         $result = $this->my_report_warehouse->update_warehouse_by_id($keyValueToUpdate, "id", $id);
 
+        $is_found = count($result) > 0;
+
         $is_success = $this->my_report_warehouse->is_success;
 
-        if($is_success === true) {
+        if($is_success === true && $is_found) {
             Flight::json(
                 array(
                     'success' => true,
@@ -181,7 +183,8 @@ class My_report_warehouse
                 array(
                     'success' => false,
                     'message' => 'Warehouse not found'
-                )
+                ),
+                404
             );
         }
         

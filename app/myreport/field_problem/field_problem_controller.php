@@ -220,8 +220,8 @@ class My_report_field_problem
         }
 
         // conditional $solusi
-        $solusi = !is_null($solusi) && !empty($solusi);
-        if ($solusi) {
+        $valid_solusi = !is_null($solusi) && !empty($solusi);
+        if ($valid_solusi) {
             $keyValueToUpdate["solusi"] = $solusi;
         }
 

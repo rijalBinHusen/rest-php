@@ -464,8 +464,8 @@ class My_report_problem
         }
 
         // conditional $shift_mulai
-        $shift_mulai = !is_null($shift_mulai) && !empty($shift_mulai);
-        if ($shift_mulai) {
+        $valid_shift_mulai = !is_null($shift_mulai) && !empty($shift_mulai);
+        if ($valid_shift_mulai) {
             $keyValueToUpdate["shift_mulai"] = $shift_mulai;
         }
 
