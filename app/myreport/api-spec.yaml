@@ -1367,6 +1367,14 @@ paths:
           schema:
             type: number
             default: 10
+        - name: last_used
+          in: query
+          description: Last used item more than periode  as epoch time
+          required: false
+          explode: true
+          schema:
+            type: number
+            default: 10190238019238
       responses:
         "200":
           $ref: "#/components/responses/getBase_item200"

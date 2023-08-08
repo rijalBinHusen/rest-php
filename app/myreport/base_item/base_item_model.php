@@ -29,6 +29,19 @@ class My_report_base_item_model
         }
     }
 
+    public function get_items_by_last_used_more_than($periode)
+    {
+        $query = "SELECT * FROM $this->table where last_used > $periode";
+        $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($this->database->is_error !== null) {
+            $this->is_success = $this->database->is_error;
+        }
+        else {
+            return $result;
+        }
+    }
+
     public function append_base_item($item_kode, $item_name, $last_used)
     {
         $nextId = $this->summary->getNextId();

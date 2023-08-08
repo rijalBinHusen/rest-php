@@ -11,12 +11,25 @@ class My_report_base_item
     public function get_base_items()
     { 
         $limit = Flight::request()->query->limit;
+        $last_used = Flight::request()->query->last_used;
         
-        $is_it_numeric = is_numeric($limit);
+        $is_get_by_limit = !is_null($limit) && is_numeric($limit);
+        $is_get_by_last_used = !is_null($last_used) && is_numeric($last_used);
 
-        if($is_it_numeric) {
+        if($is_get_by_limit || $is_get_by_last_used) {
 
-            $result = $this->my_report_base_item->get_base_items($limit);
+            $result = array();
+
+            if($is_get_by_limit) {
+
+                $result = $this->my_report_base_item->get_base_items($limit);
+
+            } else if($is_get_by_last_used) {
+
+                $result = $this->my_report_base_item->get_items_by_last_used_more_than($last_used);
+
+            }
+
 
             $is_found = count($result) > 0;
 
@@ -46,12 +59,12 @@ class My_report_base_item
                     )
                 , 404);
             }
-        } 
+        }
         
         else {
             Flight::json(array(
                 "success" => false,
-                "message" => "The query parameter must be number"
+                "message" => "The query parameter must be number $last_used"
                 )
             , 400);
         }
