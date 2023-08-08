@@ -39,7 +39,7 @@ class My_report_case
             else {
                 Flight::json( array(
                 "success" => false,
-                "message" => "Complain import not found"
+                "message" => "Case import not found"
                 ), 404);
             }
         } else {
@@ -176,7 +176,7 @@ class My_report_case
                 array(
                     'success' => false,
                     'message' => 'Case not found'
-                )
+                ), 404
             );
         }
     }
@@ -290,7 +290,7 @@ class My_report_case
                     array(
                         'success' => false,
                         'message' => 'Case not found'
-                    )
+                    ), 404
                 );
             }
         } 

@@ -567,7 +567,7 @@ class My_report_problem
                     array(
                         'success' => false,
                         'message' => 'Problem record not found'
-                    )
+                    ), 404
                 );
             }
         } 

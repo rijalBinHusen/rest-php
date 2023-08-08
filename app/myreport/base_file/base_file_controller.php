@@ -186,7 +186,7 @@ class My_report_base_file
                 array(
                     'success' => false,
                     'message' => 'Base file not found'
-                )
+                ), 404
             );
         }
     }
@@ -279,7 +279,7 @@ class My_report_base_file
                     array(
                         'success' => false,
                         'message' => 'Base file not found'
-                    )
+                    ), 404
                 );
             }
         } 

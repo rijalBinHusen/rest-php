@@ -175,7 +175,7 @@ class My_report_field_problem
                 array(
                     'success' => false,
                     'message' => 'Field problem not found'
-                )
+                ), 404
             );
         }
     }
@@ -275,7 +275,7 @@ class My_report_field_problem
                     array(
                         'success' => false,
                         'message' => 'Field problem not found'
-                    )
+                    ), 404
                 );
             }
         } 

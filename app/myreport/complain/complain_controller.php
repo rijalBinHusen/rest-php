@@ -180,7 +180,7 @@ class My_report_complain
                 array(
                     'success' => false,
                     'message' => 'Complain not found'
-                )
+                ), 404
             );
         }
     }
@@ -315,7 +315,7 @@ class My_report_complain
                     array(
                         'success' => false,
                         'message' => 'Complain not found'
-                    )
+                    ), 404
                 );
             }
         } 

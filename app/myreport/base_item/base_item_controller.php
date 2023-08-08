@@ -177,7 +177,7 @@ class My_report_base_item
                 array(
                     'success' => false,
                     'message' => 'Base item not found'
-                )
+                ), 404
             );
         }
     }
@@ -242,7 +242,7 @@ class My_report_base_item
                     array(
                         'success' => false,
                         'message' => 'Base item not found'
-                    )
+                    ), 404
                 );
             }
         } 

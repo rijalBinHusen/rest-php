@@ -354,7 +354,7 @@ class My_report_base_stock
                     array(
                         'success' => false,
                         'message' => 'Base stock not found'
-                    )
+                    ), 404
                 );
             }
         } 
@@ -402,7 +402,7 @@ class My_report_base_stock
                 array(
                     'success' => false,
                     'message' => 'Base stock not found'
-                )
+                ), 404
             );
         }
     }

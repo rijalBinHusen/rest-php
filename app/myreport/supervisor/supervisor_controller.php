@@ -204,7 +204,7 @@ class My_report_supervisor
                     array(
                         'success' => false,
                         'message' => 'Warehouse not found'
-                    )
+                    ), 404
                 );
             }
         } 

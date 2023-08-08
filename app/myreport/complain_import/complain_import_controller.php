@@ -185,7 +185,7 @@ class My_report_complain_import
                 array(
                     'success' => false,
                     'message' => 'Complain import not found'
-                )
+                ), 404
             );
         }
     }
@@ -341,7 +341,7 @@ class My_report_complain_import
                     array(
                         'success' => false,
                         'message' => 'Complain import not found'
-                    )
+                    ), 404
                 );
             }
         } 
