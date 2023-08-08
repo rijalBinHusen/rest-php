@@ -764,7 +764,7 @@ paths:
             default: 10
       responses:
         "200":
-          $ref: "#/components/responses/getComplain200"
+          $ref: "#/components/responses/getComplain_import200"
         "400":
           $ref: "#/components/responses/400Error"
         "401":
@@ -1460,6 +1460,13 @@ components:
           type: string
           example: "warehouse002"
           nullable: true
+        warehouse_supervisors:
+          type: string
+          example: "warehouse002, warehouse003"
+          nullable: true
+        is_warehouse_disabled:
+          type: string
+          example: 0
     Supervisor:
       type: object
       properties:

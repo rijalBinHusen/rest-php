@@ -4,6 +4,7 @@ CREATE TABLE
         warehouse_name VARCHAR(255),
         warehouse_group VARCHAR(255),
         warehouse_supervisors VARCHAR(255)
+        is_warehouse_disabled BOOLEAN
     );
 
 -- CREATE TABLE if not exists my_report_warehouse_seq(
