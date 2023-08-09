@@ -127,9 +127,9 @@ Class SummaryDatabase {
 
         } else {
             
-            $this->updateLastId($nextId);
-            
             $this->is_on_process = true;
+            
+            $this->updateLastId($nextId);
             
         }
 

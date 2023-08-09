@@ -19,6 +19,8 @@ class SummaryDatabaseTest extends PHPUnit_Framework_TestCase {
         // get next id from summary
         $next_id_from_summary = $summary->getNextId();
         $next_id_from_summary2 = $summary->getNextId();
+        fwrite(STDERR, print_r("next_id_from_summary: " .$next_id_from_summary ." \n", true));
+        fwrite(STDERR, print_r("next_id_from_summary2: " .$next_id_from_summary2 ." \n", true));
         // assert equal next id
         $this->assertEquals($next_id_from_generator, $next_id_from_summary);
         $this->assertEquals($next_id_from_generator2, $next_id_from_summary2);
@@ -29,7 +31,7 @@ class SummaryDatabaseTest extends PHPUnit_Framework_TestCase {
         // get last id from summary
         $last_id_after_generate_next_id = $summary->getLastId();
         // assert equals
-        $this->assertEquals($next_id_from_generator, $last_id_after_generate_next_id);
+        $this->assertEquals($next_id_from_generator2, $last_id_after_generate_next_id);
         
         fwrite(STDERR, print_r("Last id: " . $last_id_after_generate_next_id ." after update\n", true));
 
