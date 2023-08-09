@@ -5,26 +5,23 @@ require_once(__DIR__ . '/generator_id.php');
 
 Class SummaryDatabase {
     private static $instance;
-    private $table = null;
+    private static $table_name = null;
     private static $database = null;
-    private $table_as_id = null;
     public static $summary_database = array();
-    private $is_on_process = false;
-    private $is_table_exists = false;
+    private static $is_table_exists = false;
     
     public function __construct ($table) {
 
         self::$summary_database = self::getData($table);
-        $this->table = $table;
-        $this->table_as_id = str_replace("my_report_", "", $table);
+        self::$table_name = $table;
 
     }
 
     public static function getInstance($table) {
         if(self::$instance === null) {
             self::$database = Query_builder::getInstance();
+            self::$instance = new static($table);
         }
-        self::$instance = new static($table);
 
         return self::$instance;
     }
@@ -83,10 +80,12 @@ Class SummaryDatabase {
         } else {
 
             foreach($retrieveData as $row) {
+
                 self::$summary_database[$row['table_name']] = array(
                     'total' => $row['total'],
                     'last_id' => $row['last_id']
                 );
+
             }
 
         }
@@ -96,11 +95,11 @@ Class SummaryDatabase {
 
     public function getLastId() {
         // find last in global state
-        $findLastId = self::$summary_database[$this->table]['last_id'];
+        $findLastId = self::$summary_database[self::$table_name]['last_id'];
 
         // if doesnt exists creat new one
         // nextId
-        $lastId = $findLastId ? $findLastId : generateId($this->table_as_id ."_22320000");
+        $lastId = $findLastId ? $findLastId : generateId(self::$table_name ."_22320000");
         
         return $lastId;
     }
@@ -108,43 +107,36 @@ Class SummaryDatabase {
 
     public function getNextId() {
 
-        $this->is_table_exists = array_key_exists($this->table, self::$summary_database);
-
         $findLastId = null;
 
-        if($this->is_table_exists) {
+        $isExists = $this->is_table_name_exists();
 
-            $findLastId = self::$summary_database[$this->table]['last_id'];
+        if($isExists) {
+
+            $findLastId = self::$summary_database[self::$table_name]['last_id'];
 
         }
 
         // nextId
-        $nextId = $findLastId ? generateId($findLastId) : generateId($this->table_as_id ."_22320000");
+        $nextId = $findLastId ? generateId($findLastId) : generateId(self::$table_name ."_22320000");
 
-        if($this->is_on_process === true) {
 
-            $nextId = generateId($nextId);
-
-        } else {
-            
-            $this->is_on_process = true;
-            
-            $this->updateLastId($nextId);
-            
-        }
-
-        return $nextId;
+        $nextId = generateId($nextId);
+        
+        $this->updateLastId($nextId);
     }
 
     public function updateLastId($your_last_id) {
 
+        $isExists = $this->is_table_name_exists();
+        
         $total_record = 0;
         $last_id_record = null;
 
-        if($this->is_table_exists) {
+        if($isExists) {
 
-            $total_record = self::$summary_database[$this->table]['total'];
-            $last_id_record = self::$summary_database[$this->table]['last_id'];
+            $total_record = self::$summary_database[self::$table_name]['total'];
+            $last_id_record = self::$summary_database[self::$table_name]['last_id'];
 
         }
         
@@ -156,34 +148,49 @@ Class SummaryDatabase {
         $what_last_id_to_set = max($all_last_id);
         
         // set last id in global state
-        self::$summary_database[$this->table] = array(
+        self::$summary_database[self::$table_name] = array(
             'total' => $total_record + 1,
             'last_id' => $what_last_id_to_set
         );
 
-        $this->is_on_process = false;
+        return self::$summary_database;
         
+    }
+
+    public function is_table_name_exists() {
+        $is_exists = array_key_exists(self::$table_name, self::$summary_database);
+
+        return $is_exists;
     }
 
     public function __destruct()
     {
 
-        $total_record = self::$summary_database[$this->table]['total'];
-        $last_id_record = self::$summary_database[$this->table]['last_id'];
+        $isExists = $this->is_table_name_exists();
+        
+        $total_record = 0;
+        $last_id_record = null;
 
-        if($this->is_table_exists) {
+        if($isExists) {
+
+            $total_record = self::$summary_database[self::$table_name]['total'];
+            $last_id_record = self::$summary_database[self::$table_name]['last_id'];
+
+        }
+
+        if($isExists) {
             $data_to_update = array(
                 'total' => $total_record,
                 'last_id' => $last_id_record
             );
 
-            self::$database->update('summary', $data_to_update, 'table_name', $this->table);
+            self::$database->update('summary', $data_to_update, 'table_name', self::$table_name);
 
 
         } else {
         
             $data_to_insert = array(
-                'table_name' => $this->table,
+                'table_name' => self::$table_name,
                 'total' => $total_record,
                 'last_id' => $last_id_record
             );
