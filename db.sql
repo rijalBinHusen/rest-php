@@ -224,7 +224,8 @@ CREATE TABLE
         keterangan1 TEXT,
         keterangan2 TEXT,
         periode VARCHAR(30),
-        temuan TEXT
+        temuan TEXT,
+        is_inserted BOOLEAN
     );
 
 -- CREATE TABLE if not exists my_report_case_import_seq(
@@ -292,7 +293,8 @@ CREATE TABLE
         tanggal_info VARCHAR(255),
         tanggal_komplain VARCHAR(255),
         tanggal_SJ VARCHAR(255),
-        type_ VARCHAR(255)
+        type_ VARCHAR(255),
+        is_inserted BOOLEAN
     );
 
 -- CREATE TABLE if not exists my_report_complain_import_seq(

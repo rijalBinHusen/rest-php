@@ -66,18 +66,27 @@ class My_report_case_import
         $keterangan2 = $req->data->keterangan2;
         $periode = $req->data->periode;
         $temuan = $req->data->temuan;
+        $is_inserted= $req->data->is_inserted;
 
         $result = null;
 
-        $is_request_body_oke = !is_null($divisi) && !is_null($fokus) && !is_null($kabag) && !is_null($karu) && !is_null($keterangan1) && !is_null($keterangan2) && !is_null($periode) && !is_null($temuan);
+        $is_request_body_oke = !is_null($divisi) 
+                                && !is_null($fokus) 
+                                && !is_null($kabag) 
+                                && !is_null($karu) 
+                                && !is_null($keterangan1) 
+                                && !is_null($keterangan2) 
+                                && !is_null($periode) 
+                                && !is_null($temuan)
+                                && !is_null($is_inserted);
 
         if($is_request_body_oke) {
             if ($id) {
                 // write the warehouse
-                $result = $this->my_report_case_import->write_case_import($id, $bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan);
+                $result = $this->my_report_case_import->write_case_import($id, $bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan, $is_inserted);
             } else {
                 // append warehouse
-                $result = $this->my_report_case_import->append_case_import($bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan);
+                $result = $this->my_report_case_import->append_case_import($bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan, $is_inserted);
             }
 
             if($this->my_report_case_import->is_success !== true) {

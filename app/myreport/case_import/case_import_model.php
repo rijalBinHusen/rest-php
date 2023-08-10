@@ -29,7 +29,7 @@ class My_report_case_import_model
         }
     }
 
-    public function append_case_import($bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan)
+    public function append_case_import($bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan, $is_inserted)
     {
         $nextId = $this->summary->getNextId();
         // write to database
@@ -43,7 +43,8 @@ class My_report_case_import_model
             $keterangan1,
             $keterangan2,
             $periode,
-            $temuan
+            $temuan, 
+            $is_inserted
         );
 
         if($this->database->is_error !== null) {
@@ -97,7 +98,7 @@ class My_report_case_import_model
 
     }
 
-    public function write_case_import($id, $bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan)
+    public function write_case_import($id, $bagian, $divisi, $fokus, $kabag, $karu, $keterangan1, $keterangan2, $periode, $temuan, $is_inserted)
     {
 
         $data_to_insert = array(
@@ -111,6 +112,7 @@ class My_report_case_import_model
             'keterangan2' => $keterangan2,
             'periode' => $periode,
             'temuan' => $temuan,
+            'is_inserted' => $is_inserted,
         );
 
         $this->database->insert($this->table, $data_to_insert);

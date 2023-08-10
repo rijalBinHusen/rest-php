@@ -29,7 +29,7 @@ class My_report_complain_import_model
         }
     }
 
-    public function append_complain_import($customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type)
+    public function append_complain_import($customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type, $is_inserted)
     {
         $nextId = $this->summary->getNextId();
         // write to database
@@ -50,7 +50,8 @@ class My_report_complain_import_model
             $tanggal_info,
             $tanggal_komplain,
             $tanggal_SJ,
-            $type
+            $type,
+            $is_inserted
         );
 
         if($this->database->is_error !== null) {
@@ -104,7 +105,7 @@ class My_report_complain_import_model
 
     }
 
-    public function write_complain_import($id, $customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type)
+    public function write_complain_import($id, $customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type, $is_inserted)
     {
 
         $data_to_insert = array(
@@ -125,6 +126,7 @@ class My_report_complain_import_model
             'tanggal_komplain' => $tanggal_komplain,
             'tanggal_SJ' => $tanggal_SJ,
             'type_' => $type,
+            'is_inserted' => $is_inserted,
         );
 
         $this->database->insert($this->table, $data_to_insert);

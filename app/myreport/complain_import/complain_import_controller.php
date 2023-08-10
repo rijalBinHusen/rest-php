@@ -75,18 +75,34 @@ class My_report_complain_import
         $tanggal_komplain = $req->data->tanggal_komplain;
         $tanggal_SJ = $req->data->tanggal_SJ;
         $type_ = $req->data->type_;
+        $is_inserted = $req->data->is_inserted;
 
         $result = null;
 
-        $is_request_body_oke = !is_null($do_) && !is_null($gudang) && !is_null($item) && !is_null($kabag) && !is_null($nomor_SJ) && !is_null($nopol) && !is_null($real_) && !is_null($row_) && !is_null($spv) && !is_null($tally) && !is_null($tanggal_bongkar) && !is_null($tanggal_info) && !is_null($tanggal_komplain) && !is_null($tanggal_SJ) && !is_null($type_);
+        $is_request_body_oke = !is_null($do_) 
+                                && !is_null($gudang) 
+                                && !is_null($item) 
+                                && !is_null($kabag) 
+                                && !is_null($nomor_SJ) 
+                                && !is_null($nopol) 
+                                && !is_null($real_) 
+                                && !is_null($row_) 
+                                && !is_null($spv) 
+                                && !is_null($tally) 
+                                && !is_null($tanggal_bongkar) 
+                                && !is_null($tanggal_info) 
+                                && !is_null($tanggal_komplain) 
+                                && !is_null($tanggal_SJ) 
+                                && !is_null($type_)
+                                && !is_null($is_inserted);
 
         if($is_request_body_oke) {
             if ($id) {
                 // write the warehouse
-                $result = $this->my_report_complain_import->write_complain_import($id, $customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type_);
+                $result = $this->my_report_complain_import->write_complain_import($id, $customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type_, $is_inserted);
             } else {
                 // append warehouse
-                $result = $this->my_report_complain_import->append_complain_import($customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type_);
+                $result = $this->my_report_complain_import->append_complain_import($customer, $do_, $gudang, $item, $kabag, $nomor_SJ, $nopol, $real_, $row_, $spv, $tally, $tanggal_bongkar, $tanggal_info, $tanggal_komplain, $tanggal_SJ, $type_, $is_inserted);
             }
 
             if($this->my_report_complain_import->is_success !== true) {
