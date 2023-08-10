@@ -8,7 +8,7 @@ Class SummaryDatabase {
     private static $table_name = null;
     private static $database = null;
     public static $summary_database = array();
-    private static $is_table_exists = false;
+    public $is_update_summary = false;
     
     public function __construct ($table) {
 
@@ -153,6 +153,10 @@ Class SummaryDatabase {
             'last_id' => $what_last_id_to_set
         );
 
+        if($what_last_id_to_set != $last_id_record) {
+            $this->is_update_summary = true;
+        }
+
         return self::$summary_database;
         
     }
@@ -165,6 +169,10 @@ Class SummaryDatabase {
 
     public function __destruct()
     {
+        $is_summary_no_need_to_update = !$this->is_update_summary;
+        if($is_summary_no_need_to_update) {
+            return;
+        }
 
         $isExists = $this->is_table_name_exists();
         
