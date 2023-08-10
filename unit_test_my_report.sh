@@ -30,6 +30,7 @@ phpunit tests/my_report/my_report_base_clock_test.php
 phpunit tests/my_report/my_report_problem_test.php
 # sleep 2
 phpunit tests/my_report/my_report_document_test.php
+phpunit tests/my_report/my_report_user_test.php
 sleep 6
 
 #run all those command with this ./unit_test_my_report.sh

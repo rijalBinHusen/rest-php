@@ -23,6 +23,13 @@ CREATE TABLE
         is_disabled BOOLEAN
     );
 
+CREATE TABLE
+    if not exists my_report_users (
+        id VARCHAR(30) PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL
+    );
+
 -- CREATE TABLE if not exists my_report_supervisor_seq(
 
 --   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY

@@ -107,26 +107,26 @@ Class SummaryDatabase {
 
     public function getNextId() {
 
-        $findLastId = null;
+        $lastId = self::$table_name ."_22320000";
 
         $isExists = $this->is_table_name_exists();
 
         if($isExists) {
 
-            $findLastId = self::$summary_database[self::$table_name]['last_id'];
+            $lastId = self::$summary_database[self::$table_name]['last_id'];
 
         }
 
         // nextId
-        $nextId = $findLastId ? generateId($findLastId) : generateId(self::$table_name ."_22320000");
+        $nextId = generateId($lastId);
 
-
-        $nextId = generateId($nextId);
-        
         $this->updateLastId($nextId);
+        
+        return $nextId;
     }
 
     public function updateLastId($your_last_id) {
+
 
         $isExists = $this->is_table_name_exists();
         
@@ -139,6 +139,9 @@ Class SummaryDatabase {
             $last_id_record = self::$summary_database[self::$table_name]['last_id'];
 
         }
+
+        
+        if($last_id_record == $your_last_id) { return; }
         
         // total record
 
@@ -153,11 +156,7 @@ Class SummaryDatabase {
             'last_id' => $what_last_id_to_set
         );
 
-        if($what_last_id_to_set != $last_id_record) {
-            $this->is_update_summary = true;
-        }
-
-        return self::$summary_database;
+        $this->is_update_summary = true;
         
     }
 
@@ -169,10 +168,6 @@ Class SummaryDatabase {
 
     public function __destruct()
     {
-        $is_summary_no_need_to_update = !$this->is_update_summary;
-        if($is_summary_no_need_to_update) {
-            return;
-        }
 
         $isExists = $this->is_table_name_exists();
         

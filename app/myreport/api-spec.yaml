@@ -35,6 +35,8 @@ tags:
     description: Problem that exist in department
   - name: document
     description: paper record that must be created by supervisor
+  - name: user
+    description: user and password that embedo on client side
 
 paths:
   /warehouses:
@@ -1435,7 +1437,91 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
+  # users
+  /user:
+    post:
+      tags:
+        - user
+      summary: Store new user that will implant on client side
+      requestBody:
+        $ref: "#/components/requestBodies/User"
+      responses:
+        "200":
+          description: Successfully store a new user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /users:
+    get:
+      tags:
+        - user
+      summary: Get users.
+      responses:
+        "200":
+          $ref: "#/components/responses/getUser200"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /user/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of user
+        schema:
+          type: string
+        example: "USR2204509"
+    get:
+      tags:
+        - user
+      summary: Get user by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/getUser200"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    put:
+      tags:
+        - user
+      summary: Update user by id
+      requestBody:
+        $ref: "#/components/requestBodies/User"
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
 
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - user
+      summary: Delete user by id
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  
 components:
   schemas:
     Return_after_post:
@@ -1690,6 +1776,8 @@ components:
           type: string
         type_:
           type: string
+        is_inserted:
+          type: string
     Case:
       type: object
       properties:
@@ -1737,6 +1825,8 @@ components:
         periode:
           type: string
         temuan:
+          type: string
+        is_inserted:
           type: string
     Base_stock:
       type: object
@@ -1814,6 +1904,15 @@ components:
           type: string
         last_used:
           type: number
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
 
   requestBodies:
     Warehouse:
@@ -2055,6 +2154,8 @@ components:
                 type: string
               type_:
                 type: string
+              is_inserted:
+                type: boolean
     Case:
       required: true
       content:
@@ -2107,6 +2208,8 @@ components:
                 type: string
               temuan:
                 type: string
+              is_inserted:
+                type: boolean
     Base_stock:
       required: true
       content:
@@ -2193,6 +2296,17 @@ components:
                 type: string
               last_used:
                 type: number
+    User:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
 
   responses:
     400Error:
@@ -2442,3 +2556,17 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/Document"
+    getUser200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
