@@ -37,6 +37,8 @@ tags:
     description: paper record that must be created by supervisor
   - name: user
     description: user and password that embedo on client side
+  - name: report
+    description: Report that need to show
 
 paths:
   /warehouses:
@@ -1521,7 +1523,51 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-  
+  # report
+  /report/weekly:
+    parameters:
+      - name: supervisor_id
+        in: query
+        required: true
+        description: id supervisor
+        schema:
+          type: string
+        example: "USR2204509"
+      - name: head_supervisor_id
+        in: query
+        required: false
+        description: id of head supervisor
+        schema:
+          type: string
+        example: "USR2204509"
+      - name: periode1
+        in: query
+        required: true
+        description: periode start
+        schema:
+          type: string
+        example: "USR2204509"
+      - name: periode2
+        in: query
+        required: true
+        description: periode end
+        schema:
+          type: string
+        example: "USR2204509"
+    get:
+      tags:
+        - report
+      summary: Get user by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/get_report_weekly"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+
 components:
   schemas:
     Return_after_post:
@@ -2570,3 +2616,78 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
+    get_report_weekly:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: object
+                properties:
+                  dailyReport:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                        collected:
+                          type: number
+                        approval:
+                          type: number
+                        status:
+                          type: number
+                        shared:
+                          type: number
+                        finished:
+                          type: number
+                        total_do:
+                          type: number
+                        total_kendaraan:
+                          type: number
+                        total_waktu:
+                          type: number
+                        base_report_file:
+                          type: string
+                        is_finished:
+                          type: boolean
+                        supervisor_id:
+                          type: string
+                        periode:
+                          type: number
+                        shift:
+                          type: number
+                        head_spv_id:
+                          type: string
+                        warehouse_id:
+                          type: string
+                        is_generated_document:
+                          type: boolean
+                        item_variance:
+                          type: number
+                        parent:
+                          type: string
+                        parent_document:
+                          type: string
+                        plan_out:
+                          type: number
+                        total_item_keluar:
+                          type: number
+                        total_item_moving:
+                          type: number
+                        total_product_not_FIFO:
+                          type: number
+                        total_qty_in:
+                          type: number
+                        total_qty_out:
+                          type: number
+                        total_komplain_muat:
+                          type: number
+                  problems:
+                    type: array
+                    items:
+                        type: string
