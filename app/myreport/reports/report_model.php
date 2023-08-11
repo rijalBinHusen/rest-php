@@ -13,32 +13,59 @@ class My_report_base_item_model
 
     public function weekly_report($supervisor_id, $head_supervisor_id, $periode1, $periode2)
     {
-        // get documents
-        // supervisor_id VARCHAR(30),
-        // head_spv_id VARCHAR(30),
-        $query = "SELECT * FROM $this->table WHERE periode BETWEEN $periode1 AND $periode2";
-        $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error !== null) {
+        $result = array();
+
+        // get documents, my_report_document periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_document = "SELECT * FROM my_report_document WHERE periode BETWEEN $periode1 AND $periode2";
+        // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_complain = "SELECT * FROM my_report_complain WHERE periode BETWEEN $periode1 AND $periode2";
+        // retrieve problem, my_report_problem tanggal_mulai $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_problem = "SELECT * FROM my_report_problem WHERE tanggal_mulai BETWEEN $periode1 AND $periode2";
+        // retrieve field problem, my_report_field_problem periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode BETWEEN $periode1 AND $periode2";
+        // retrieve case, my_report_cases periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_case = "SELECT * FROM my_report_cases WHERE periode BETWEEN $periode1 AND $periode2";
+        if ($head_supervisor_id) {
+
+            $query_document = $query_document . " AND head_spv_id = '$head_supervisor_id'";
+            $query_complain = $query_complain . " AND head_spv_id = '$head_supervisor_id'";
+            $query_problem = $query_problem . " AND head_spv_id = '$head_supervisor_id'";
+            $query_field_problem = $query_field_problem . " AND head_spv_id = '$head_supervisor_id'";
+            $query_case = $query_case . " AND head_spv_id = '$head_supervisor_id'";
+        } else {
+
+            $query_document = $query_document . " AND supervisor_id = '$supervisor_id'";
+            $query_complain = $query_complain . " AND supervisor_id = '$supervisor_id'";
+            $query_problem = $query_problem . " AND supervisor_id = '$supervisor_id'";
+            $query_field_problem = $query_field_problem . " AND supervisor_id = '$supervisor_id'";
+            $query_case = $query_case . " AND supervisor_id = '$supervisor_id'";
+        }
+
+        $result_documents  = $this->database->sqlQuery($query_document)->fetchAll(PDO::FETCH_ASSOC);
+
+        $is_documents_not_exists = count($result_documents) === 0;
+        if ($is_documents_not_exists) {
+            return $result;
+        }
+
+        $result_complains = $this->database->sqlQuery($query_complain)->fetchAll(PDO::FETCH_ASSOC);
+        $result_problems = $this->database->sqlQuery($query_problem)->fetchAll(PDO::FETCH_ASSOC);
+        $result_field_problems = $this->database->sqlQuery($query_field_problem)->fetchAll(PDO::FETCH_ASSOC);
+        $result_cases = $this->database->sqlQuery($query_case)->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->database->is_error !== null) {
 
             $this->is_success = $this->database->is_error;
-            
-        }
-        else {
+        } else {
 
             return $result;
-
         }
-        // get komplain
-        // retrieve problem
-        // retrieve field problem
-        // retrieve case
 
 
 
         // $query = "SELECT * FROM $this->table ORDER BY id DESC LIMIT $limit";
         // $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // if($this->database->is_error !== null) {
         //     $this->is_success = $this->database->is_error;
         // }
