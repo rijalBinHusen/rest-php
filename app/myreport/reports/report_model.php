@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
 
-class My_report_base_item_model
+class My_report_report_model
 {
     protected $database;
     var $is_success = true;
@@ -11,7 +11,7 @@ class My_report_base_item_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function weekly_report($supervisor_id, $head_supervisor_id, $periode1, $periode2)
+    public function retrieve_weekly_report($supervisor_id, $head_supervisor_id, $periode1, $periode2)
     {
         $result = array();
 
@@ -53,6 +53,12 @@ class My_report_base_item_model
         $result_field_problems = $this->database->sqlQuery($query_field_problem)->fetchAll(PDO::FETCH_ASSOC);
         $result_cases = $this->database->sqlQuery($query_case)->fetchAll(PDO::FETCH_ASSOC);
 
+        $result['documents'] = $result_documents;
+        $result['complains'] = $result_complains;
+        $result['problems'] = $result_problems;
+        $result['field_problems'] = $result_field_problems;
+        $result_cases = $result_cases;
+
         if ($this->database->is_error !== null) {
 
             $this->is_success = $this->database->is_error;
@@ -61,16 +67,5 @@ class My_report_base_item_model
             return $result;
         }
 
-
-
-        // $query = "SELECT * FROM $this->table ORDER BY id DESC LIMIT $limit";
-        // $result  = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
-
-        // if($this->database->is_error !== null) {
-        //     $this->is_success = $this->database->is_error;
-        // }
-        // else {
-        //     return $result;
-        // }
     }
 }

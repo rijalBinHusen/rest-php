@@ -64,7 +64,7 @@ class My_report_base_item
         else {
             Flight::json(array(
                 "success" => false,
-                "message" => "The query parameter must be number $last_used"
+                "message" => "The query parameter must be number"
                 )
             , 400);
         }
