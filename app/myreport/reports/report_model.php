@@ -35,6 +35,35 @@ class My_report_report_model
             return $result;
         }
 
+        $grouping_document_with_same_periode = [];
+
+        // Calculate summaries based on the 'oeruide' key
+        foreach ($result_documents as $document) {
+            $periode = $document['periode'];
+            if (!isset($grouping_document_with_same_periode[$periode])) {
+                $grouping_document_with_same_periode[$periode] = ['sum' => 0, 'count' => 0];
+                // total_do: number,
+                // total_kendaraan: number,
+                // total_waktu: number,
+                // periode: number|string,
+                // shift: number,
+                // is_generated_document: boolean,
+                // item_variance: number,
+                // plan_out: number,
+                // total_item_keluar: number,
+                // total_item_moving: number,
+                // total_product_not_FIFO: number,
+                // total_qty_in: number,
+                // total_qty_out: number,
+                // total_komplain_muat: number
+            }
+            $grouping_document_with_same_periode[$periode]['sum'] += $document['value'];
+            $grouping_document_with_same_periode[$periode]['count']++;
+        }
+
+        // // Display the grouping_document_with_same_periode
+        // print_r($grouping_document_with_same_periode);
+
         $result = array("problems" => array());
         
         for($index = 0; $index < count($result_documents); $index++) {
