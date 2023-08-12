@@ -62,7 +62,7 @@ class My_report_report_model
                     $result_documents[$index]['total_komplain_muat'] += $complain['is_count'];
                     
                     $complain_key_value_to_push['periode'] = $complain['periode'];
-                    $complain_key_value_to_push['masalah'] = $complain['masalah'];
+                    $complain_key_value_to_push['masalah'] = "[ KOMPLAIN MUAT ] " .$complain['masalah'];
                     $complain_key_value_to_push['sumber_masalah'] = $complain['sumber_masalah'];
                     $complain_key_value_to_push['solusi'] = $complain['solusi'];
                     $complain_key_value_to_push['pic'] = $complain['pic'];
@@ -83,7 +83,7 @@ class My_report_report_model
                 foreach($result_problems as $problem) {
 
                     $problem_key_value_to_push['periode'] = $problem['tanggal_mulai'];
-                    $problem_key_value_to_push['masalah'] = $problem['masalah'];
+                    $problem_key_value_to_push['masalah'] = "[ MASALAH DI LAPANGAN ] " .$problem['masalah'];
                     $problem_key_value_to_push['sumber_masalah'] = $problem['sumber_masalah'];
                     $problem_key_value_to_push['solusi'] = $problem['solusi'];
                     $problem_key_value_to_push['pic'] = $problem['pic'];
@@ -104,7 +104,7 @@ class My_report_report_model
                 foreach($result_field_problems as $field_problem) {
 
                     $field_problem_key_value_to_push['periode'] = $field_problem['periode'];
-                    $field_problem_key_value_to_push['masalah'] = $field_problem['masalah'];
+                    $field_problem_key_value_to_push['masalah'] = "[ KENDALA LAPANGAN ] " .$field_problem['masalah'];
                     $field_problem_key_value_to_push['sumber_masalah'] = $field_problem['sumber_masalah'];
                     $field_problem_key_value_to_push['solusi'] = $field_problem['solusi'];
                     $field_problem_key_value_to_push['pic'] = $field_problem['pic'];
@@ -125,7 +125,7 @@ class My_report_report_model
                 foreach($result_cases as $case) {
 
                     $case_key_value_to_push['periode'] = $case['periode'];
-                    $case_key_value_to_push['masalah'] = $case['masalah'];
+                    $case_key_value_to_push['masalah'] = "[ KASUS ] " .$case['masalah'];
                     $case_key_value_to_push['sumber_masalah'] = $case['sumber_masalah'];
                     $case_key_value_to_push['solusi'] = $case['solusi'];
                     $case_key_value_to_push['pic'] = $case['pic'];
