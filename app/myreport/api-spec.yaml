@@ -2629,7 +2629,7 @@ components:
               data:
                 type: object
                 properties:
-                  dailyReport:
+                  daily_reports:
                     type: array
                     items:
                       properties:
@@ -2690,4 +2690,16 @@ components:
                   problems:
                     type: array
                     items:
-                        type: string
+                      properties:
+                        periode:
+                          type: string
+                        masalah:
+                          type: string
+                        sumber_masalah:
+                          type: string
+                        solusi:
+                          type: string
+                        pic:
+                          type: string
+                        dead_line:
+                          type: string
