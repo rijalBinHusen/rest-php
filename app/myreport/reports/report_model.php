@@ -75,8 +75,12 @@ class My_report_report_model
             // problems
             // // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
             $query_complain = "SELECT * FROM my_report_complain WHERE periode = $periode" . $query_leader;
+
             // retrieve problem, my_report_problem tanggal_mulai $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_problem = "SELECT * FROM my_report_problem WHERE tanggal_mulai = $periode" . $query_leader;
+            $problem_column_to_select = "my_report_base_item.item_name, my_report_problem.tanggal_mulai, my_report_problem.masalah, my_report_problem.sumber_masalah, my_report_problem.solusi, my_report_problem.pic, my_report_problem.dl, my_report_supervisor.supervisor_name";
+            $problem_inner_join = "INNER JOIN my_report_supervisor ON (my_report_problem.supervisor_id = my_report_supervisor.id) INNER JOIN my_report_base_item ON (my_report_problem.item_kode = my_report_base_item.item_kode)";
+            $query_problem = "SELECT $problem_column_to_select FROM `my_report_problem` $problem_inner_join  WHERE tanggal_mulai = $periode" . $query_leader;
+            
             // // retrieve field problem, my_report_field_problem periode between $periode1 and $periode2 by supervisor_id or head_spv_id
             $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode = $periode" . $query_leader;
             // // retrieve case, my_report_cases periode between $periode1 and $periode2 by supervisor_id or head_spv_id
@@ -93,7 +97,7 @@ class My_report_report_model
                     $grouping_document_with_same_periode[$periode]['total_komplain_muat'] += $complain['is_count'];
                     
                     $complain_key_value_to_push['periode'] = $complain['periode'];
-                    $complain_key_value_to_push['masalah'] = "[ KOMPLAIN MUAT ] " .$complain['masalah'];
+                    $complain_key_value_to_push['masalah'] = $complain['masalah'];
                     $complain_key_value_to_push['sumber_masalah'] = $complain['sumber_masalah'];
                     $complain_key_value_to_push['solusi'] = $complain['solusi'];
                     $complain_key_value_to_push['pic'] = $complain['pic'];
@@ -114,7 +118,7 @@ class My_report_report_model
                 foreach($result_problems as $problem) {
 
                     $problem_key_value_to_push['periode'] = $problem['tanggal_mulai'];
-                    $problem_key_value_to_push['masalah'] = "[ MASALAH DI LAPANGAN ] " .$problem['masalah'];
+                    $problem_key_value_to_push['masalah'] = "[ MASALAH DI LAPANGAN ] " .$problem['item_name'] ." " .$problem['masalah'] . " Karu " .$problem['supervisor_name'];
                     $problem_key_value_to_push['sumber_masalah'] = $problem['sumber_masalah'];
                     $problem_key_value_to_push['solusi'] = $problem['solusi'];
                     $problem_key_value_to_push['pic'] = $problem['pic'];
