@@ -37,48 +37,50 @@ class My_report_report_model
 
         $grouping_document_with_same_periode = [];
 
+        $result = array("problems" => array());
         // Calculate summaries based on the 'oeruide' key
         foreach ($result_documents as $document) {
             $periode = $document['periode'];
-            if (!isset($grouping_document_with_same_periode[$periode])) {
-                $grouping_document_with_same_periode[$periode] = ['sum' => 0, 'count' => 0];
-                // total_do: number,
-                // total_kendaraan: number,
-                // total_waktu: number,
-                // periode: number|string,
-                // shift: number,
-                // is_generated_document: boolean,
-                // item_variance: number,
-                // plan_out: number,
-                // total_item_keluar: number,
-                // total_item_moving: number,
-                // total_product_not_FIFO: number,
-                // total_qty_in: number,
-                // total_qty_out: number,
-                // total_komplain_muat: number
+
+            if (isset($grouping_document_with_same_periode[$periode])) {
+                // increment document info
+                $grouping_document_with_same_periode[$periode]['total_do'] += $document['total_do'];
+                $grouping_document_with_same_periode[$periode]['total_kendaraan'] += $document['total_kendaraan'];
+                $grouping_document_with_same_periode[$periode]['total_waktu'] += $document['total_waktu'];
+                $grouping_document_with_same_periode[$periode]['item_variance'] += $document['item_variance'];
+                $grouping_document_with_same_periode[$periode]['plan_out'] += $document['plan_out'];
+                $grouping_document_with_same_periode[$periode]['total_item_keluar'] += $document['total_item_keluar'];
+                $grouping_document_with_same_periode[$periode]['total_item_moving'] += $document['total_item_moving'];
+                $grouping_document_with_same_periode[$periode]['total_product_not_FIFO'] += $document['total_product_not_FIFO'];
+                $grouping_document_with_same_periode[$periode]['total_qty_in'] += $document['total_qty_in'];
+                $grouping_document_with_same_periode[$periode]['total_qty_out'] += $document['total_qty_out'];
+                continue;
             }
-            $grouping_document_with_same_periode[$periode]['sum'] += $document['value'];
-            $grouping_document_with_same_periode[$periode]['count']++;
-        }
 
-        // // Display the grouping_document_with_same_periode
-        // print_r($grouping_document_with_same_periode);
+            // document info
+            $grouping_document_with_same_periode[$periode]['periode'] = $document['periode'];
+            $grouping_document_with_same_periode[$periode]['shift'] = $document['shift'];
+            $grouping_document_with_same_periode[$periode]['total_do'] = $document['total_do'];
+            $grouping_document_with_same_periode[$periode]['total_kendaraan'] = $document['total_kendaraan'];
+            $grouping_document_with_same_periode[$periode]['total_waktu'] = $document['total_waktu'];
+            $grouping_document_with_same_periode[$periode]['item_variance'] = $document['item_variance'];
+            $grouping_document_with_same_periode[$periode]['plan_out'] = $document['plan_out'];
+            $grouping_document_with_same_periode[$periode]['total_item_keluar'] = $document['total_item_keluar'];
+            $grouping_document_with_same_periode[$periode]['total_item_moving'] = $document['total_item_moving'];
+            $grouping_document_with_same_periode[$periode]['total_product_not_FIFO'] = $document['total_product_not_FIFO'];
+            $grouping_document_with_same_periode[$periode]['total_qty_in'] = $document['total_qty_in'];
+            $grouping_document_with_same_periode[$periode]['total_qty_out'] = $document['total_qty_out'];
+            $grouping_document_with_same_periode[$periode]['total_komplain_muat'] = 0;
 
-        $result = array("problems" => array());
-        
-        for($index = 0; $index < count($result_documents); $index++) {
-            // set komplain count
-            $result_documents[$index]['total_komplain_muat'] = 0;
-            $periode_document = $result_documents[$index]['periode'];
-
+            // problems
             // // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_complain = "SELECT * FROM my_report_complain WHERE periode = $periode_document" . $query_leader;
+            $query_complain = "SELECT * FROM my_report_complain WHERE periode = $periode" . $query_leader;
             // retrieve problem, my_report_problem tanggal_mulai $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_problem = "SELECT * FROM my_report_problem WHERE tanggal_mulai = $periode_document" . $query_leader;
+            $query_problem = "SELECT * FROM my_report_problem WHERE tanggal_mulai = $periode" . $query_leader;
             // // retrieve field problem, my_report_field_problem periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode = $periode_document" . $query_leader;
+            $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode = $periode" . $query_leader;
             // // retrieve case, my_report_cases periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_case = "SELECT * FROM my_report_cases WHERE periode  = $periode_document" . $query_leader;
+            $query_case = "SELECT * FROM my_report_cases WHERE periode  = $periode" . $query_leader;
             
             $result_complains = $this->database->sqlQuery($query_complain)->fetchAll(PDO::FETCH_ASSOC);
             $is_complain_exists = count($result_complains) > 0;
@@ -88,7 +90,7 @@ class My_report_report_model
                 
                 foreach($result_complains as $complain) {
 
-                    $result_documents[$index]['total_komplain_muat'] += $complain['is_count'];
+                    $grouping_document_with_same_periode[$periode]['total_komplain_muat'] += $complain['is_count'];
                     
                     $complain_key_value_to_push['periode'] = $complain['periode'];
                     $complain_key_value_to_push['masalah'] = "[ KOMPLAIN MUAT ] " .$complain['masalah'];
@@ -165,13 +167,15 @@ class My_report_report_model
 
                 array_push($result['problems'], $case_key_value_to_push);
             }
-
         }
 
+        $result['daily_reports'] = array();
         
-
-        $result['daily_reports'] = $result_documents;
-
+        foreach ($grouping_document_with_same_periode as $key => $value) {
+            array_push($result['daily_reports'], $value);
+            # code...
+        }
+        
         if ($this->database->is_error !== null) {
 
             $this->is_success = $this->database->is_error;

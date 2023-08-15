@@ -81,7 +81,7 @@ CREATE TABLE
         supervisor_id varchar(255),
         head_spv_id varchar(255),
         item_kode varchar(255),
-        tanggal_mulai FLOAT,
+        tanggal_mulai VARCHAR(15),
         shift_mulai TINYINT,
         pic varchar(255),
         dl FLOAT,
