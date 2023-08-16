@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: products
+    description: a bunch of products
+
+paths:
+  /products/landing_page:
+    get:
+      tags:
+        - products
+      summary: Get products for landing page.
+      responses:
+        "200":
+          $ref: "#/components/responses/getProductsLandingPage200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: Warehouses not found
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        image: 
+          type: string
+          example: "IMG22500001, IMG22500002, IMG22500003"
+        name:
+          type: string
+          example: "name of product"
+        descriptionProduct: 
+          type: string
+          example: "will contain very length of string"
+        price: 
+          type: number
+          example: 1000000
+        isAvailable: 
+          type: boolean
+          example: false
+        categories: 
+          type: string
+          example: "CAT22500001, CAT22500002, CAT22500003"
+        weight: 
+          type: number
+          example: 1000
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    getProductsLandingPage200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  properties:
+                    category:
+                      type: string
+                      example: "Shoes"
+                    products:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/product"
