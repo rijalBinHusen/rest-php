@@ -7,32 +7,32 @@ servers:
   - url: http://localhost/rest-php/binhusenstore
     description: Binhusenstore end point
 tags:
-  - name: products
-    description: a bunch of products
+  - name: testimony
+    description: testimony of products
 
 paths:
-  /products:
+  /testimonies:
     get:
       tags:
-        - products
-      summary: Get all products.
+        - testimony
+      summary: Get all testimonies.
       responses:
         "200":
-          $ref: "#/components/responses/getProducts200"
+          $ref: "#/components/responses/getTestimony200"
         "401":
           $ref: "#/components/responses/401Error"
         "404":
-          description: products not found
-  /product:
+          description: testimony not found
+  /testimony:
     post:
       tags:
-        - products
-      summary: Lets a user post a new product
+        - testimony
+      summary: Lets a user post a new testimony
       requestBody:
-        $ref: "#/components/requestBodies/product"
+        $ref: "#/components/requestBodies/testimony"
       responses:
         "201":
-          description: Successfully created a new product
+          description: Successfully created a new testimony
           content:
             application/json:
               schema:
@@ -41,32 +41,32 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  /product/{id}:
+  /testimony/{id}:
     parameters:
       - name: id
         in: path
         required: true
-        description: The ID of the product
+        description: The ID of the testimony
         schema:
           type: string
         example: "WAR220203902"
     get:
       tags:
-        - products
-      summary: Get product by id.
+        - testimony
+      summary: Get testimony by id.
       responses:
         "200":
-          $ref: "#/components/responses/getProducts200"
+          $ref: "#/components/responses/getTestimony200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
           $ref: "#/components/responses/401Error"
     put:
       tags:
-        - products
-      summary: Update product by id
+        - testimony
+      summary: Update testimony by id
       requestBody:
-        $ref: "#/components/requestBodies/product"
+        $ref: "#/components/requestBodies/testimony"
       responses:
         "201":
           $ref: "#/components/responses/200Success"
@@ -78,8 +78,8 @@ paths:
           $ref: "#/components/responses/404Error"
     delete:
       tags:
-        - products
-      summary: Delete product by id
+        - testimony
+      summary: Delete testimony by id
       responses:
         "201":
           $ref: "#/components/responses/200Success"
@@ -89,19 +89,7 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-  # End of product end point
-  /products/landing_page:
-    get:
-      tags:
-        - products
-      summary: Get products for landing page.
-      responses:
-        "200":
-          $ref: "#/components/responses/getProductsLandingPage200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          description: products not found
+  # End of testimony end point
 
 components:
   schemas:
@@ -114,33 +102,24 @@ components:
         id:
           type: string
           example: "WAR22500001"
-    product:
+    testimony:
       type: object
       properties:
         id:
           type: string
           example: "WAR22500001"
-        image:
+        id_user:
           type: string
-          example: "IMG22500001, IMG22500002, IMG22500003"
-        name:
+          example: "QWERTYASDW"
+        id_product:
           type: string
-          example: "name of product"
-        description_product:
-          type: string
-          example: "will contain very length of string"
-        price:
+          example: "QWERTYASDW"
+        rating:
           type: number
-          example: 1000000
-        is_available:
-          type: boolean
-          example: false
-        categories:
+          example: 5
+        content:
           type: string
-          example: "CAT22500001, CAT22500002, CAT22500003"
-        weight:
-          type: number
-          example: 1000
+          example: "QWERTYASDW"
   responses:
     400Error:
       description: Invalid request
@@ -193,7 +172,7 @@ components:
               message:
                 type: string
                 default: Source not found
-    getProductsLandingPage200:
+    getTestimony200:
       description: Success operation
       content:
         application/json:
@@ -206,54 +185,24 @@ components:
               data:
                 type: array
                 items:
-                  properties:
-                    category:
-                      type: string
-                      example: "Shoes"
-                    products:
-                      type: array
-                      items:
-                        $ref: "#/components/schemas/product"
-    getProducts200:
-      description: Success operation
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              data:
-                type: array
-                items:
-                  $ref: "#/components/schemas/product"
+                  $ref: "#/components/schemas/testimony"
   requestBodies:
-    product:
+    testimony:
       required: true
       content:
         application/json:
           schema:
             type: object
             properties:
-              image:
+              id_user:
                 type: string
-                example: "IMG22500001, IMG22500002, IMG22500003"
-              name:
+                example: "QWERTYASDW"
+              id_product:
                 type: string
-                example: "name of product"
-              description_product:
-                type: string
-                example: "will contain very length of string"
-              price:
+                example: "QWERTYASDW"
+              rating:
                 type: number
-                example: 1000000
-              is_available:
-                type: boolean
-                example: false
-              categories:
+                example: 5
+              content:
                 type: string
-                example: "CAT22500001, CAT22500002, CAT22500003"
-              weight:
-                type: number
-                example: 1000
+                example: "QWERTYASDW"
