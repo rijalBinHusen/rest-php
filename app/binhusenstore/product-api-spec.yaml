@@ -1,0 +1,259 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: products
+    description: a bunch of products
+
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Get all products.
+      responses:
+        "200":
+          $ref: "#/components/responses/getProducts200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: products not found
+  /product:
+    post:
+      tags:
+        - products
+      summary: Lets a user post a new product
+      requestBody:
+        $ref: "#/components/requestBodies/product"
+      responses:
+        "201":
+          description: Successfully created a new product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /product/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the product
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - products
+      summary: Get product by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/getProducts200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - products
+      summary: Update product by id
+      requestBody:
+        $ref: "#/components/requestBodies/product"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - products
+      summary: Delete product by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of product end point
+  /products/landing_page:
+    get:
+      tags:
+        - products
+      summary: Get products for landing page.
+      responses:
+        "200":
+          $ref: "#/components/responses/getProductsLandingPage200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: products not found
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        image:
+          type: string
+          example: "IMG22500001, IMG22500002, IMG22500003"
+        name:
+          type: string
+          example: "name of product"
+        descriptionProduct:
+          type: string
+          example: "will contain very length of string"
+        price:
+          type: number
+          example: 1000000
+        isAvailable:
+          type: boolean
+          example: false
+        categories:
+          type: string
+          example: "CAT22500001, CAT22500002, CAT22500003"
+        weight:
+          type: number
+          example: 1000
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getProductsLandingPage200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  properties:
+                    category:
+                      type: string
+                      example: "Shoes"
+                    products:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/product"
+    getProducts200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/product"
+  requestBodies:
+    product:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              image:
+                type: string
+                example: "IMG22500001, IMG22500002, IMG22500003"
+              name:
+                type: string
+                example: "name of product"
+              descriptionProduct:
+                type: string
+                example: "will contain very length of string"
+              price:
+                type: number
+                example: 1000000
+              isAvailable:
+                type: boolean
+                example: false
+              categories:
+                type: string
+                example: "CAT22500001, CAT22500002, CAT22500003"
+              weight:
+                type: number
+                example: 1000
