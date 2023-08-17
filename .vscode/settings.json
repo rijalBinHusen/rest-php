@@ -1,5 +1,6 @@
 {
     "yaml.schemas": {
-        "swaggerviewer:openapi": "file:///var/www/html/Belajar/php/rest-php/api-spec.yaml"
+        "swaggerviewer:openapi": "file:///var/www/html/Belajar/php/rest-php/api-spec.yaml",
+        "openapi:v3": "file:///var/www/html/Belajar/php/rest-php/app/binhusenstore/orders/api-spec.yaml"
     }
 }

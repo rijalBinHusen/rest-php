@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: order
+    description: order of products
+
+paths:
+  /orders:
+    get:
+      tags:
+        - order
+      summary: Get all orders.
+      responses:
+        "200":
+          $ref: "#/components/responses/getorder200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
+  /order:
+    post:
+      tags:
+        - order
+      summary: Lets a user post a new order
+      requestBody:
+        $ref: "#/components/requestBodies/order"
+      responses:
+        "201":
+          description: Successfully created a new order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /order/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the order
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - order
+      summary: Get order by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/getorder200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - order
+      summary: Update order by id
+      requestBody:
+        $ref: "#/components/requestBodies/order"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - order
+      summary: Delete order by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of order end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    order:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        date_order:
+          type: string
+          example: "2023-07-23"
+        id_group:
+          type: string
+        is_group:
+          type: boolean
+        id_product:
+          type: string
+        name_of_customer:
+          type: string
+        sent:
+          type: string
+        title:
+          type: string
+        total_balance:
+          type: number
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getorder200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/order"
+  requestBodies:
+    order:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              date_order:
+                type: string
+                example: "2023-07-23"
+              id_group:
+                type: string
+              is_group:
+                type: boolean
+              id_product:
+                type: string
+              name_of_customer:
+                type: string
+              sent:
+                type: string
+              title:
+                type: string
+              total_balance:
+                type: number
