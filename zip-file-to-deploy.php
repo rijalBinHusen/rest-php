@@ -117,7 +117,8 @@ function clear_concole() {
     echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
 }
 
-function select_directory_to_exclude() {
+function select_directory_to_exclude(&$include_directories = array()) {
+    $include_directories = array();
     // clear the terminal
     clear_concole();
     echo "Please select file or folder that you won't put it into zip file:\n\n";
@@ -129,7 +130,6 @@ function select_directory_to_exclude() {
     // show in prompt ask user, 
     // prompt, is there any file to not include to zip?.
 
-    $include_directories = array();
     foreach($directories as $key => $value) {
         $is_directory_excluded = in_array($value, $exclude_directories);
 
@@ -153,7 +153,7 @@ function select_directory_to_exclude() {
 
     if($input !== "F") {
 
-        select_directory_to_exclude();        
+        select_directory_to_exclude($include_directories);        
     }
     
     clear_concole();
