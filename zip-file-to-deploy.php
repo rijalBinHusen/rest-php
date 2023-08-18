@@ -94,7 +94,7 @@ function select_directory_to_exclude(&$include_directories = array()) {
         }
     }
     
-    echo "\nSelect file or folder that you won't put it into zip file, Input F for finish\n\n";
+    echo "\nSelect file or folder that you won't put it into zip file, Press enter for finish\n\n";
     $input = trim(fgets(STDIN));
 
     if(is_numeric($input)) {
@@ -104,11 +104,13 @@ function select_directory_to_exclude(&$include_directories = array()) {
         write_array_to_file($exclude_directories_file_name, $exclude_directories);
     }
 
-    if($input !== "F") {
+    if($input !== "") {
 
         select_directory_to_exclude($include_directories);        
     }
-    
+
+    clear_concole();
+    echo "Please wait...\n";
     return $include_directories;       
 }
 
@@ -152,19 +154,19 @@ function start_to_zip_all () {
     // ask user, 
     // prompt, is there any file to not include to zip?, and save it into somewhere
     $directory_to_zip = select_directory_to_exclude();
-    clear_concole();
+    sleep(1);
     echo "Directories that would wrap into zip file\n\n";
 
     foreach($directory_to_zip as $key => $value) {
         echo "[". $key ."] " .$value ."\n";
     }
     
-    echo "Press enter to continue, Input C to escape...\n\n";
+    echo "Press enter to continue, Input any key to cancel...\n\n";
     $input = trim(fgets(STDIN));
 
-    if($input == "C") {
+    if($input != "") {
         
-        echo "Cancelled...";
+        echo "Cancelled...\n";
     }
 
     else {
