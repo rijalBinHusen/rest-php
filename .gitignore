@@ -4,3 +4,4 @@ vendor
 .env
 token.txt
 *.txt
+*.zip

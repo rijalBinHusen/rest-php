@@ -62,22 +62,32 @@
 
 // ============== This function is working very well
 
-function getDirContents($dir, &$results = array()) {
-    $black_list_to_not_zip = array(".", "..", ".git");
+function getDirContents($dir, $is_nested, $directories_black_list = array(), &$results = array()) {
+    $default_directories_exclude = array(".", "..", ".git");
+
+    $directories_exclude = array_merge($default_directories_exclude, $directories_black_list);
 
     $files = scandir($dir);
 
     foreach ($files as $file) {
-      $is_on_black_list = in_array($file, $black_list_to_not_zip);
-
         $location = $dir . "/" . $file;
+
+        $is_location_in_blacklist = in_array($location, $directories_black_list);
+        $is_directory_in_blacklist = in_array($file, $directories_exclude);
         
-        if (!is_dir($location)) {
-          
-          $results[] = $location;
+        $is_on_black_list = $is_location_in_blacklist || $is_directory_in_blacklist;
+        
+        if (!is_dir($location) && $is_on_black_list === false) {
+            
+            $results[] = $location;
         } else if ($is_on_black_list === false) {
 
-          $results[] = $location;
+            $results[] = $location;
+            if($is_nested) {
+
+                getDirContents($location, true, $directories_black_list, $results);
+            }
+
         }
     }
 
@@ -121,12 +131,11 @@ function select_directory_to_exclude(&$include_directories = array()) {
     $include_directories = array();
     // clear the terminal
     clear_concole();
-    echo "Please select file or folder that you won't put it into zip file:\n\n";
 
     $exclude_directories_file_name = "excluded_file_name.txt";
     $exclude_directories = read_file_to_array($exclude_directories_file_name);
     // scan all file and folder
-    $directories = getDirContents(".");
+    $directories = getDirContents(".", false, array());
     // show in prompt ask user, 
     // prompt, is there any file to not include to zip?.
 
@@ -140,8 +149,7 @@ function select_directory_to_exclude(&$include_directories = array()) {
         }
     }
     
-    echo "\nInput F for finish\n\n";
-    
+    echo "\nSelect file or folder that you won't put it into zip file, Input F for finish\n\n";
     $input = trim(fgets(STDIN));
 
     if(is_numeric($input)) {
@@ -156,17 +164,75 @@ function select_directory_to_exclude(&$include_directories = array()) {
         select_directory_to_exclude($include_directories);        
     }
     
-    clear_concole();
     return $include_directories;       
 }
+
+function zip_all_file_and_folder ($locations) {
+  
+    $zip_archive = new ZipArchive;
+  
+    // this should be contain date now and time
+    $zip_file_name = "Ready_to_deploy.zip";
+  
+    $zip_archive_open = $zip_archive->open($zip_file_name, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
+  
+    if ($zip_archive_open !== true) {
+      die("Faild to create archive!\n");
+    }
+  
+    foreach ($locations as $location) {
+  
+      if (is_dir($location)) {
+  
+        $zip_archive->addEmptyDir($location);
+      } else {
+  
+        $zip_archive->addGlob($location);
+      }
+  
+      $is_failed_to_zip = $zip_archive->status != ZipArchive::ER_OK;
+  
+      if ($is_failed_to_zip) {
+        echo "Failed to write " . $location . " files to zip\n";
+      }
+    }
+  
+    $zip_archive->close();
+  }
+  
 
 function start_to_zip_all () {
     
     // ask user, 
     // prompt, is there any file to not include to zip?, and save it into somewhere
     $directory_to_zip = select_directory_to_exclude();
-    echo "Daftar directory yang akan di zip\n";
-    var_dump($directory_to_zip);
+    clear_concole();
+    echo "Directories that would wrap into zip file\n\n";
+
+    foreach($directory_to_zip as $key => $value) {
+        echo "[". $key ."] " .$value ."\n";
+    }
+    
+    echo "Press enter to continue, Input C to escape...\n\n";
+    $input = trim(fgets(STDIN));
+
+    if($input == "C") {
+        
+        echo "Cancelled...";
+    }
+
+    else {
+
+        echo "zipping file....\n";
+
+        $exclude_directories_file_name = "excluded_file_name.txt";
+        $exclude_directories = read_file_to_array($exclude_directories_file_name);
+
+        $file_and_folder_to_zip = getDirContents(".", true, $exclude_directories);
+        zip_all_file_and_folder($file_and_folder_to_zip);
+        
+        echo "zip finished...";
+    }
     
     // prompt, is it the first time to deploy to server
     // if yes include the vendor directory
@@ -175,4 +241,5 @@ function start_to_zip_all () {
     // dont include the vendor directory
 
 }
+
 start_to_zip_all();
