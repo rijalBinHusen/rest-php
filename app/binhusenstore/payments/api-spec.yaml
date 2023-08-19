@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: payment
+    description: payment for product
+
+paths:
+  /payments:
+    get:
+      tags:
+        - payment
+      summary: Get all payments.
+      responses:
+        "200":
+          $ref: "#/components/responses/getPayment200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /payment:
+    post:
+      tags:
+        - payment
+      summary: Lets a user post a new product
+      requestBody:
+        $ref: "#/components/requestBodies/payment"
+      responses:
+        "201":
+          description: Successfully created a new product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /payment/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the payment
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - payment
+      summary: Get product by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/getPayment200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - payment
+      summary: Update product by id
+      requestBody:
+        $ref: "#/components/requestBodies/payment"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - payment
+      summary: Delete payment by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    payment:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          example: "2023-07-23"
+        id_order:
+          type: string
+        balance:
+          type: number
+        is_paid:
+          type: boolean
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getPayment200:
+      description: Succes operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/payment"
+  requestBodies:
+    payment:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/payment"
