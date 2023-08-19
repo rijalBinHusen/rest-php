@@ -1,0 +1,205 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: cart
+    description: cart user
+
+paths:
+  /carts:
+    get:
+      tags:
+        - cart
+      summary: Get all cart.
+      parameters:
+        - name: user_id
+          in: query
+          description: the user of id
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: user_001
+      responses:
+        "200":
+          $ref: "#/components/responses/getCart200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /cart:
+    post:
+      tags:
+        - cart
+      summary: Lets a user post a new cart
+      requestBody:
+        $ref: "#/components/requestBodies/cart"
+      responses:
+        "201":
+          description: Successfully created a new cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /cart/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the cart
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - cart
+      summary: Get cart by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/getCart200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - cart
+      summary: Update cart by id
+      requestBody:
+        $ref: "#/components/requestBodies/cart"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - cart
+      summary: Delete cart by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of cart end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    cart:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        id_user:
+          type: string
+        product_id:
+          type: string
+        qty: 
+          type: number
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getCart200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/cart"
+  requestBodies:
+    cart:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id_user:
+                type: string
+              product_id:
+                type: string
+              qty: 
+                type: number
