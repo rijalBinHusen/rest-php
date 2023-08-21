@@ -207,55 +207,55 @@ class My_report_case_import
         // initiate the column and values to update
         $keyValueToUpdate = array();
         // conditional divisi
-        $valid_divisi = !is_null($divisi) && !empty($divisi);
+        $valid_divisi = !is_null($divisi);
         if ($valid_divisi) {
             $keyValueToUpdate["divisi"] = $divisi;
         }
 
         // conditional $fokus
-        $valid_fokus = !is_null($fokus) && !empty($fokus);
+        $valid_fokus = !is_null($fokus);
         if ($valid_fokus) {
             $keyValueToUpdate["fokus"] = $fokus;
         }
 
         // conditional $kabag
-        $valid_kabag = !is_null($kabag) && !empty($kabag);
+        $valid_kabag = !is_null($kabag);
         if ($valid_kabag) {
             $keyValueToUpdate["kabag"] = $kabag;
         }
 
         // conditional $karu
-        $valid_karu = !is_null($karu) && !empty($karu);
+        $valid_karu = !is_null($karu);
         if ($valid_karu) {
             $keyValueToUpdate["karu"] = $karu;
         }
 
         // conditional $keterangan1
-        $valid_keterangan1 = !is_null($keterangan1) && !empty($keterangan1);
+        $valid_keterangan1 = !is_null($keterangan1);
         if ($valid_keterangan1) {
             $keyValueToUpdate["keterangan1"] = $keterangan1;
         }
 
         // conditional $kabag
-        $valid_keterangan2 = !is_null($keterangan2) && !empty($keterangan2);
+        $valid_keterangan2 = !is_null($keterangan2);
         if ($valid_keterangan2) {
             $keyValueToUpdate["keterangan2"] = $keterangan2;
         }
 
         // conditional $periode
-        $valid_periode = !is_null($periode) && !empty($periode);
+        $valid_periode = !is_null($periode);
         if ($valid_periode) {
             $keyValueToUpdate["periode"] = $periode;
         }
 
         // conditional $temuan
-        $valid_temuan = !is_null($temuan) && !empty($temuan);
+        $valid_temuan = !is_null($temuan);
         if ($valid_temuan) {
             $keyValueToUpdate["temuan"] = $temuan;
         }
 
         // conditional $bagian
-        $valid_bagian = !is_null($bagian) && !empty($bagian);
+        $valid_bagian = !is_null($bagian);
         if ($valid_bagian) {
             $keyValueToUpdate["bagian"] = $bagian;
         }

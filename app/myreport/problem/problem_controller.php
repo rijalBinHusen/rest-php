@@ -434,103 +434,103 @@ class My_report_problem
         $keyValueToUpdate = array();
 
         // conditional $warehouse_id
-        $valid_warehouse_id = !is_null($warehouse_id) && !empty($warehouse_id);
+        $valid_warehouse_id = !is_null($warehouse_id);
         if ($valid_warehouse_id) {
             $keyValueToUpdate["warehouse_id"] = $warehouse_id;
         }
 
         // conditional supervisor_id
-        $valid_supervisor_id = !is_null($supervisor_id) && !empty($supervisor_id);
+        $valid_supervisor_id = !is_null($supervisor_id);
         if ($valid_supervisor_id) {
             $keyValueToUpdate["supervisor_id"] = $supervisor_id;
         }
 
         // conditional $head_spv_id
-        $valid_head_spv_id = !is_null($head_spv_id) && !empty($head_spv_id);
+        $valid_head_spv_id = !is_null($head_spv_id);
         if ($valid_head_spv_id) {
             $keyValueToUpdate["head_spv_id"] = $head_spv_id;
         }
 
         // conditional $item_kode
-        $valid_item_kode = !is_null($item_kode) && !empty($item_kode);
+        $valid_item_kode = !is_null($item_kode);
         if ($valid_item_kode) {
             $keyValueToUpdate["item_kode"] = $item_kode;
         }
 
         // conditional $tanggal_mulai
-        $valid_tanggal_mulai = !is_null($tanggal_mulai) && !empty($tanggal_mulai);
+        $valid_tanggal_mulai = !is_null($tanggal_mulai);
         if ($valid_tanggal_mulai) {
             $keyValueToUpdate["tanggal_mulai"] = $tanggal_mulai;
         }
 
         // conditional $shift_mulai
-        $valid_shift_mulai = !is_null($shift_mulai) && !empty($shift_mulai);
+        $valid_shift_mulai = !is_null($shift_mulai);
         if ($valid_shift_mulai) {
             $keyValueToUpdate["shift_mulai"] = $shift_mulai;
         }
 
         // conditional $pic
-        $valid_pic = !is_null($pic) && !empty($pic);
+        $valid_pic = !is_null($pic);
         if ($valid_pic) {
             $keyValueToUpdate["pic"] = $pic;
         }
 
         // conditional $dl
-        $valid_dl = !is_null($dl) && !empty($dl);
+        $valid_dl = !is_null($dl);
         if ($valid_dl) {
             $keyValueToUpdate["dl"] = $dl;
         }
 
         // conditional $masalah
-        $valid_masalah = !is_null($masalah) && !empty($masalah);
+        $valid_masalah = !is_null($masalah);
         if ($valid_masalah) {
             $keyValueToUpdate["masalah"] = $masalah;
         }
 
         // conditional $sumber_masalah
-        $valid_sumber_masalah = !is_null($sumber_masalah) && !empty($sumber_masalah);
+        $valid_sumber_masalah = !is_null($sumber_masalah);
         if ($valid_sumber_masalah) {
             $keyValueToUpdate["sumber_masalah"] = $sumber_masalah;
         }
 
         // conditional $solusi
-        $valid_solusi = !is_null($solusi) && !empty($solusi);
+        $valid_solusi = !is_null($solusi);
         if ($valid_solusi) {
             $keyValueToUpdate["solusi"] = $solusi;
         }
 
         // conditional $solusi_panjang
-        $valid_solusi_panjang = !is_null($solusi_panjang) && !empty($solusi_panjang);
+        $valid_solusi_panjang = !is_null($solusi_panjang);
         if ($valid_solusi_panjang) {
             $keyValueToUpdate["solusi_panjang"] = $solusi_panjang;
         }
 
         // conditional $dl_panjang
-        $valid_dl_panjang = !is_null($dl_panjang) && !empty($dl_panjang);
+        $valid_dl_panjang = !is_null($dl_panjang);
         if ($valid_dl_panjang) {
             $keyValueToUpdate["dl_panjang"] = $dl_panjang;
         }
 
         // conditional $pic_panjang
-        $valid_pic_panjang = !is_null($pic_panjang) && !empty($pic_panjang);
+        $valid_pic_panjang = !is_null($pic_panjang);
         if ($valid_pic_panjang) {
             $keyValueToUpdate["pic_panjang"] = $pic_panjang;
         }
 
         // conditional $tanggal_selesai
-        $valid_tanggal_selesai = !is_null($tanggal_selesai) && !empty($tanggal_selesai);
+        $valid_tanggal_selesai = !is_null($tanggal_selesai);
         if ($valid_tanggal_selesai) {
             $keyValueToUpdate["tanggal_selesai"] = $tanggal_selesai;
         }
 
         // conditional $shift_selesai
-        $valid_shift_selesai = !is_null($shift_selesai) && !empty($shift_selesai);
+        $valid_shift_selesai = !is_null($shift_selesai);
         if ($valid_shift_selesai) {
             $keyValueToUpdate["shift_selesai"] = $shift_selesai;
         }
 
         // conditional $is_finished
-        $valid_is_finished = !is_null($is_finished) && !empty($is_finished);
+        $valid_is_finished = !is_null($is_finished);
         if ($valid_is_finished) {
             $keyValueToUpdate["is_finished"] = $is_finished;
         }

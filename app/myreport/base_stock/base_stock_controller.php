@@ -251,73 +251,73 @@ class My_report_base_stock
         // initiate the column and values to update
         $keyValueToUpdate = array();
         // conditional shift
-        $valid_shift = !is_null($shift) && !empty($shift);
+        $valid_shift = !is_null($shift);
         if ($valid_shift) {
             $keyValueToUpdate["shift"] = $shift;
         }
 
         // conditional $item
-        $valid_item = !is_null($item) && !empty($item);
+        $valid_item = !is_null($item);
         if ($valid_item) {
             $keyValueToUpdate["item"] = $item;
         }
 
         // conditional $awal
-        $valid_awal = !is_null($awal) && !empty($awal);
+        $valid_awal = !is_null($awal);
         if ($valid_awal) {
             $keyValueToUpdate["awal"] = $awal;
         }
 
         // conditional $in_stock
-        $valid_in_stock = !is_null($in_stock) && !empty($in_stock);
+        $valid_in_stock = !is_null($in_stock);
         if ($valid_in_stock) {
             $keyValueToUpdate["in_stock"] = $in_stock;
         }
 
         // conditional $out_stock
-        $valid_out_stock = !is_null($out_stock) && !empty($out_stock);
+        $valid_out_stock = !is_null($out_stock);
         if ($valid_out_stock) {
             $keyValueToUpdate["out_stock"] = $out_stock;
         }
 
         // conditional $parent
-        $valid_parent = !is_null($parent) && !empty($parent);
+        $valid_parent = !is_null($parent);
         if ($valid_parent) {
             $keyValueToUpdate["parent"] = $parent;
         }
 
         // conditional $date_in
-        $valid_date_in = !is_null($date_in) && !empty($date_in);
+        $valid_date_in = !is_null($date_in);
         if ($valid_date_in) {
             $keyValueToUpdate["date_in"] = $date_in;
         }
 
         // conditional $plan_out
-        $valid_plan_out = !is_null($plan_out) && !empty($plan_out);
+        $valid_plan_out = !is_null($plan_out);
         if ($valid_plan_out) {
             $keyValueToUpdate["plan_out"] = $plan_out;
         }
 
         // conditional $date_out
-        $valid_date_out = !is_null($date_out) && !empty($date_out);
+        $valid_date_out = !is_null($date_out);
         if ($valid_date_out) {
             $keyValueToUpdate["date_out"] = $date_out;
         }
 
         // conditional $date_end
-        $valid_date_end = !is_null($date_end) && !empty($date_end);
+        $valid_date_end = !is_null($date_end);
         if ($valid_date_end) {
             $keyValueToUpdate["date_end"] = $date_end;
         }
 
         // conditional $real_stock
-        $valid_real_stock = !is_null($real_stock) && !empty($real_stock);
+        $valid_real_stock = !is_null($real_stock);
         if ($valid_real_stock) {
             $keyValueToUpdate["real_stock"] = $real_stock;
         }
 
         // conditional $problem
-        $valid_problem = !is_null($problem) && !empty($problem);
+        $valid_problem = !is_null($problem);
         if ($valid_problem) {
             $keyValueToUpdate["problem"] = $problem;
         }

@@ -212,37 +212,37 @@ class My_report_base_file
         }
 
         // conditional $file_name
-        $valid_file_name = !is_null($file_name) && !empty($file_name);
+        $valid_file_name = !is_null($file_name);
         if ($valid_file_name) {
             $keyValueToUpdate["file_name"] = $file_name;
         }
 
         // conditional $stock_sheet
-        $valid_stock_sheet = !is_null($stock_sheet) && !empty($stock_sheet);
+        $valid_stock_sheet = !is_null($stock_sheet);
         if ($valid_stock_sheet) {
             $keyValueToUpdate["stock_sheet"] = $stock_sheet;
         }
 
         // conditional $clock_sheet
-        $valid_clock_sheet = !is_null($clock_sheet) && !empty($clock_sheet);
+        $valid_clock_sheet = !is_null($clock_sheet);
         if ($valid_clock_sheet) {
             $keyValueToUpdate["clock_sheet"] = $clock_sheet;
         }
 
         // conditional $is_imported
-        $valid_is_imported = !is_null($is_imported) && !empty($is_imported);
+        $valid_is_imported = !is_null($is_imported);
         if ($valid_is_imported) {
             $keyValueToUpdate["is_imported"] = $is_imported;
         }
 
         // conditional $periode
-        $valid_periode = !is_null($periode) && !empty($periode);
+        $valid_periode = !is_null($periode);
         if ($valid_periode) {
             $keyValueToUpdate["periode"] = $periode;
         }
 
         // conditional $is_record_finished
-        $valid_is_record_finished = !is_null($is_record_finished) && !empty($is_record_finished);
+        $valid_is_record_finished = !is_null($is_record_finished);
         if ($valid_is_record_finished) {
             $keyValueToUpdate["is_record_finished"] = $is_record_finished;
         }

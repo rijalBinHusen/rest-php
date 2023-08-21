@@ -214,19 +214,19 @@ class My_report_field_problem
         }
 
         // conditional $sumber_masalah
-        $valid_sumber_masalah = !is_null($sumber_masalah) && !empty($sumber_masalah);
+        $valid_sumber_masalah = !is_null($sumber_masalah);
         if ($valid_sumber_masalah) {
             $keyValueToUpdate["sumber_masalah"] = $sumber_masalah;
         }
 
         // conditional $solusi
-        $valid_solusi = !is_null($solusi) && !empty($solusi);
+        $valid_solusi = !is_null($solusi);
         if ($valid_solusi) {
             $keyValueToUpdate["solusi"] = $solusi;
         }
 
         // conditional $masalah
-        $valid_pic = !is_null($pic) && !empty($pic);
+        $valid_pic = !is_null($pic);
         if ($valid_pic) {
             $keyValueToUpdate["pic"] = $pic;
         }
@@ -238,7 +238,7 @@ class My_report_field_problem
         }
 
         // conditional $dl
-        $valid_dl = !is_null($dl) && !empty($dl);
+        $valid_dl = !is_null($dl);
         if ($valid_dl) {
             $keyValueToUpdate["dl"] = $dl;
         }

@@ -230,97 +230,97 @@ class My_report_complain_import
         // initiate the column and values to update
         $keyValueToUpdate = array();
         // conditional do_
-        $valid_do_ = !is_null($do_) && !empty($do_);
+        $valid_do_ = !is_null($do_);
         if ($valid_do_) {
             $keyValueToUpdate["do_"] = $do_;
         }
 
         // conditional $gudang
-        $valid_gudang = !is_null($gudang) && !empty($gudang);
+        $valid_gudang = !is_null($gudang);
         if ($valid_gudang) {
             $keyValueToUpdate["gudang"] = $gudang;
         }
 
         // conditional $item
-        $valid_item = !is_null($item) && !empty($item);
+        $valid_item = !is_null($item);
         if ($valid_item) {
             $keyValueToUpdate["item"] = $item;
         }
 
         // conditional $kabag
-        $valid_kabag = !is_null($kabag) && !empty($kabag);
+        $valid_kabag = !is_null($kabag);
         if ($valid_kabag) {
             $keyValueToUpdate["kabag"] = $kabag;
         }
 
         // conditional $nomor_SJ
-        $valid_nomor_SJ = !is_null($nomor_SJ) && !empty($nomor_SJ);
+        $valid_nomor_SJ = !is_null($nomor_SJ);
         if ($valid_nomor_SJ) {
             $keyValueToUpdate["nomor_SJ"] = $nomor_SJ;
         }
 
         // conditional $item
-        $valid_nopol = !is_null($nopol) && !empty($nopol);
+        $valid_nopol = !is_null($nopol);
         if ($valid_nopol) {
             $keyValueToUpdate["nopol"] = $nopol;
         }
 
         // conditional $real_
-        $valid_real_ = !is_null($real_) && !empty($real_);
+        $valid_real_ = !is_null($real_);
         if ($valid_real_) {
             $keyValueToUpdate["real_"] = $real_;
         }
 
         // conditional $row_
-        $valid_row_ = !is_null($row_) && !empty($row_);
+        $valid_row_ = !is_null($row_);
         if ($valid_row_) {
             $keyValueToUpdate["row_"] = $row_;
         }
 
         // conditional $spv
-        $valid_spv = !is_null($spv) && !empty($spv);
+        $valid_spv = !is_null($spv);
         if ($valid_spv) {
             $keyValueToUpdate["spv"] = $spv;
         }
 
         // conditional $tally
-        $valid_tally = !is_null($tally) && !empty($tally);
+        $valid_tally = !is_null($tally);
         if ($valid_tally) {
             $keyValueToUpdate["tally"] = $tally;
         }
 
         // conditional $tanggal_bongkar
-        $valid_tanggal_bongkar = !is_null($tanggal_bongkar) && !empty($tanggal_bongkar);
+        $valid_tanggal_bongkar = !is_null($tanggal_bongkar);
         if ($valid_tanggal_bongkar) {
             $keyValueToUpdate["tanggal_bongkar"] = $tanggal_bongkar;
         }
 
         // conditional $tanggal_info
-        $valid_tanggal_info = !is_null($tanggal_info) && !empty($tanggal_info);
+        $valid_tanggal_info = !is_null($tanggal_info);
         if ($valid_tanggal_info) {
             $keyValueToUpdate["tanggal_info"] = $tanggal_info;
         }
 
         // conditional $tanggal_komplain
-        $valid_tanggal_komplain = !is_null($tanggal_komplain) && !empty($tanggal_komplain);
+        $valid_tanggal_komplain = !is_null($tanggal_komplain);
         if ($valid_tanggal_komplain) {
             $keyValueToUpdate["tanggal_komplain"] = $tanggal_komplain;
         }
 
         // conditional $customer
-        $valid_customer = !is_null($customer) && !empty($customer);
+        $valid_customer = !is_null($customer);
         if ($valid_customer) {
             $keyValueToUpdate["customer"] = $customer;
         }
 
         // conditional $tanggal_SJ
-        $valid_tanggal_SJ = !is_null($tanggal_SJ) && !empty($tanggal_SJ);
+        $valid_tanggal_SJ = !is_null($tanggal_SJ);
         if ($valid_tanggal_SJ) {
             $keyValueToUpdate["tanggal_SJ"] = $tanggal_SJ;
         }
 
         // conditional $type_
-        $valid_type_ = !is_null($type_) && !empty($type_);
+        $valid_type_ = !is_null($type_);
         if ($valid_type_) {
             $keyValueToUpdate["type_"] = $type_;
         }

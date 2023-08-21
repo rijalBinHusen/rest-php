@@ -236,43 +236,43 @@ class My_report_base_clock
         $keyValueToUpdate = array();
 
         // conditional $parent
-        $valid_parent = !is_null($parent) && !empty($parent);
+        $valid_parent = !is_null($parent);
         if ($valid_parent) {
             $keyValueToUpdate["parent"] = $parent;
         }
 
         // conditional shift
-        $valid_shift = !is_null($shift) && !empty($shift);
+        $valid_shift = !is_null($shift);
         if ($valid_shift) {
             $keyValueToUpdate["shift"] = $shift;
         }
 
         // conditional $no_do
-        $valid_no_do = !is_null($no_do) && !empty($no_do);
+        $valid_no_do = !is_null($no_do);
         if ($valid_no_do) {
             $keyValueToUpdate["no_do"] = $no_do;
         }
 
         // conditional $reg
-        $valid_reg = !is_null($reg) && !empty($reg);
+        $valid_reg = !is_null($reg);
         if ($valid_reg) {
             $keyValueToUpdate["reg"] = $reg;
         }
 
         // conditional $start
-        $valid_start = !is_null($start) && !empty($start);
+        $valid_start = !is_null($start);
         if ($valid_start) {
             $keyValueToUpdate["start"] = $start;
         }
 
         // conditional $finish
-        $valid_finish = !is_null($finish) && !empty($finish);
+        $valid_finish = !is_null($finish);
         if ($valid_finish) {
             $keyValueToUpdate["finish"] = $finish;
         }
 
         // conditional $rehat
-        $valid_rehat = !is_null($rehat) && !empty($rehat);
+        $valid_rehat = !is_null($rehat);
         if ($valid_rehat) {
             $keyValueToUpdate["rehat"] = $rehat;
         }

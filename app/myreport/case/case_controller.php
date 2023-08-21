@@ -199,61 +199,61 @@ class My_report_case
         // initiate the column and values to update
         $keyValueToUpdate = array();
         // conditional head_spv_id
-        $valid_head_spv_id = !is_null($head_spv_id) && !empty($head_spv_id);
+        $valid_head_spv_id = !is_null($head_spv_id);
         if ($valid_head_spv_id) {
             $keyValueToUpdate["head_spv_id"] = $head_spv_id;
         }
 
         // conditional $dl
-        $valid_dl = !is_null($dl) && !empty($dl);
+        $valid_dl = !is_null($dl);
         if ($valid_dl) {
             $keyValueToUpdate["dl"] = $dl;
         }
 
         // conditional $masalah
-        $valid_masalah = !is_null($masalah) && !empty($masalah);
+        $valid_masalah = !is_null($masalah);
         if ($valid_masalah) {
             $keyValueToUpdate["masalah"] = $masalah;
         }
 
         // conditional $supervisor_id
-        $valid_supervisor_id = !is_null($supervisor_id) && !empty($supervisor_id);
+        $valid_supervisor_id = !is_null($supervisor_id);
         if ($valid_supervisor_id) {
             $keyValueToUpdate["supervisor_id"] = $supervisor_id;
         }
 
         // conditional $parent
-        $valid_parent = !is_null($parent) && !empty($parent);
+        $valid_parent = !is_null($parent);
         if ($valid_parent) {
             $keyValueToUpdate["parent"] = $parent;
         }
 
         // conditional $masalah
-        $valid_pic = !is_null($pic) && !empty($pic);
+        $valid_pic = !is_null($pic);
         if ($valid_pic) {
             $keyValueToUpdate["pic"] = $pic;
         }
 
         // conditional $solusi
-        $valid_solusi = !is_null($solusi) && !empty($solusi);
+        $valid_solusi = !is_null($solusi);
         if ($valid_solusi) {
             $keyValueToUpdate["solusi"] = $solusi;
         }
 
         // conditional $status
-        $valid_status = !is_null($status) && !empty($status);
+        $valid_status = !is_null($status);
         if ($valid_status) {
             $keyValueToUpdate["status"] = $status;
         }
 
         // conditional $sumber_masalah
-        $valid_sumber_masalah = !is_null($sumber_masalah) && !empty($sumber_masalah);
+        $valid_sumber_masalah = !is_null($sumber_masalah);
         if ($valid_sumber_masalah) {
             $keyValueToUpdate["sumber_masalah"] = $sumber_masalah;
         }
 
         // conditional $periode
-        $valid_periode = !is_null($periode) && !empty($periode);
+        $valid_periode = !is_null($periode);
         if ($valid_periode) {
             $keyValueToUpdate["periode"] = $periode;
         }

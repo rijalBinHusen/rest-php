@@ -149,7 +149,7 @@ class My_report_warehouse
         }
 
         // conditional warehouse$warehouse_group
-        if ($warehouse_group) {
+        if (!is_null($warehouse_group)) {
             $keyValueToUpdate["warehouse_group"] = $warehouse_group;
         }
 

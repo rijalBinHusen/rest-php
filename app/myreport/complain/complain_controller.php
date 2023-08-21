@@ -218,13 +218,13 @@ class My_report_complain
         }
 
         // conditional $dl
-        $valid_dl = !is_null($dl) && !empty($dl);
+        $valid_dl = !is_null($dl);
         if ($valid_dl) {
             $keyValueToUpdate["dl"] = $dl;
         }
 
         // conditional $inserted
-        $valid_inserted = !is_null($inserted) && !empty($inserted);
+        $valid_inserted = !is_null($inserted);
         if ($valid_inserted) {
             $keyValueToUpdate["inserted"] = $inserted;
         }
@@ -248,37 +248,37 @@ class My_report_complain
         }
 
         // conditional $pic
-        $valid_pic = !is_null($pic) && !empty($pic);
+        $valid_pic = !is_null($pic);
         if ($valid_pic) {
             $keyValueToUpdate["pic"] = $pic;
         }
 
         // conditional $solusi
-        $valid_solusi = !is_null($solusi) && !empty($solusi);
+        $valid_solusi = !is_null($solusi);
         if ($valid_solusi) {
             $keyValueToUpdate["solusi"] = $solusi;
         }
 
         // conditional $is_status_done
-        $valid_is_status_done = !is_null($is_status_done) && !empty($is_status_done);
+        $valid_is_status_done = !is_null($is_status_done);
         if ($valid_is_status_done) {
             $keyValueToUpdate["is_status_done"] = $is_status_done;
         }
 
         // conditional $sumber_masalah
-        $valid_sumber_masalah = !is_null($sumber_masalah) && !empty($sumber_masalah);
+        $valid_sumber_masalah = !is_null($sumber_masalah);
         if ($valid_sumber_masalah) {
             $keyValueToUpdate["sumber_masalah"] = $sumber_masalah;
         }
 
         // conditional $type
-        $valid_type = !is_null($type) && !empty($type);
+        $valid_type = !is_null($type);
         if ($valid_type) {
             $keyValueToUpdate["type"] = $type;
         }
 
         // conditional $is_count
-        $valid_is_count = !is_null($is_count) && !empty($is_count);
+        $valid_is_count = !is_null($is_count);
         if ($valid_is_count) {
             $keyValueToUpdate["is_count"] = $is_count;
         }

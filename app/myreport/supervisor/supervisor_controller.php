@@ -149,7 +149,7 @@ class My_report_supervisor
         }
 
         // conditional $supervisor_phone
-        $valid_supervisor_phone = !is_null($supervisor_phone) && !empty($supervisor_phone);
+        $valid_supervisor_phone = !is_null($supervisor_phone);
         if ($valid_supervisor_phone) {
             $keyValueToUpdate["supervisor_phone"] = $supervisor_phone;
         }
@@ -161,13 +161,13 @@ class My_report_supervisor
         }
 
         // conditional $supervisor_shift
-        $valid_supervisor_shift = !is_null($supervisor_shift) && !empty($supervisor_shift);
+        $valid_supervisor_shift = !is_null($supervisor_shift);
         if ($valid_supervisor_shift) {
             $keyValueToUpdate["supervisor_shift"] = $supervisor_shift;
         }
 
         // conditional $is_disabled
-        $valid_is_disabled = !is_null($is_disabled) && !empty($is_disabled);
+        $valid_is_disabled = !is_null($is_disabled);
         if ($valid_is_disabled) {
             $keyValueToUpdate["is_disabled"] = $is_disabled;
         }

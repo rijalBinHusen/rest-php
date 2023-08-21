@@ -141,19 +141,19 @@ class My_report_head_spv
         }
 
         // conditional $head_phone
-        $valid_head_phone = !is_null($head_phone) && !empty($head_phone);
+        $valid_head_phone = !is_null($head_phone);
         if ($valid_head_phone) {
             $keyValueToUpdate["head_phone"] = $head_phone;
         }
 
         // conditional $head_shift
-        $valid_head_shift = !is_null($head_shift) && !empty($head_shift);
+        $valid_head_shift = !is_null($head_shift);
         if ($valid_head_shift) {
             $keyValueToUpdate["head_shift"] = $head_shift;
         }
 
         // conditional $is_disabled
-        $valid_is_disabled = !is_null($is_disabled) && !empty($is_disabled);
+        $valid_is_disabled = !is_null($is_disabled);
         if ($valid_is_disabled) {
             $keyValueToUpdate["is_disabled"] = $is_disabled;
         }

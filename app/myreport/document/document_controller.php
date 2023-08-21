@@ -355,151 +355,151 @@ class My_report_document
         $keyValueToUpdate = array();
 
         // conditional $collected
-        $valid_collected = !is_null($collected) && !empty($collected);
+        $valid_collected = !is_null($collected);
         if ($valid_collected) {
             $keyValueToUpdate["collected"] = $collected;
         }
 
         // conditional approval
-        $valid_approval = !is_null($approval) && !empty($approval);
+        $valid_approval = !is_null($approval);
         if ($valid_approval) {
             $keyValueToUpdate["approval"] = $approval;
         }
 
         // conditional $status
-        $valid_status = !is_null($status) && !empty($status);
+        $valid_status = !is_null($status);
         if ($valid_status) {
             $keyValueToUpdate["status"] = $status;
         }
 
         // conditional $shared
-        $valid_shared = !is_null($shared) && !empty($shared);
+        $valid_shared = !is_null($shared);
         if ($valid_shared) {
             $keyValueToUpdate["shared"] = $shared;
         }
 
         // conditional $finished
-        $valid_finished = !is_null($finished) && !empty($finished);
+        $valid_finished = !is_null($finished);
         if ($valid_finished) {
             $keyValueToUpdate["finished"] = $finished;
         }
 
         // conditional $total_do
-        $valid_total_do = !is_null($total_do) && !empty($total_do);
+        $valid_total_do = !is_null($total_do);
         if ($valid_total_do) {
             $keyValueToUpdate["total_do"] = $total_do;
         }
 
         // conditional $total_kendaraan
-        $valid_total_kendaraan = !is_null($total_kendaraan) && !empty($total_kendaraan);
+        $valid_total_kendaraan = !is_null($total_kendaraan);
         if ($valid_total_kendaraan) {
             $keyValueToUpdate["total_kendaraan"] = $total_kendaraan;
         }
 
         // conditional $total_waktu
-        $valid_dl = !is_null($total_waktu) && !empty($total_waktu);
+        $valid_dl = !is_null($total_waktu);
         if ($valid_dl) {
             $keyValueToUpdate["total_waktu"] = $total_waktu;
         }
 
         // conditional $base_report_file
-        $valid_masalah = !is_null($base_report_file) && !empty($base_report_file);
+        $valid_masalah = !is_null($base_report_file);
         if ($valid_masalah) {
             $keyValueToUpdate["base_report_file"] = $base_report_file;
         }
 
         // conditional $is_finished
-        $valid_is_finished = !is_null($is_finished) && !empty($is_finished);
+        $valid_is_finished = !is_null($is_finished);
         if ($valid_is_finished) {
             $keyValueToUpdate["is_finished"] = $is_finished;
         }
 
         // conditional $supervisor_id
-        $valid_supervisor_id = !is_null($supervisor_id) && !empty($supervisor_id);
+        $valid_supervisor_id = !is_null($supervisor_id);
         if ($valid_supervisor_id) {
             $keyValueToUpdate["supervisor_id"] = $supervisor_id;
         }
 
         // conditional $periode
-        $valid_periode = !is_null($periode) && !empty($periode);
+        $valid_periode = !is_null($periode);
         if ($valid_periode) {
             $keyValueToUpdate["periode"] = $periode;
         }
 
         // conditional $shift
-        $valid_shift = !is_null($shift) && !empty($shift);
+        $valid_shift = !is_null($shift);
         if ($valid_shift) {
             $keyValueToUpdate["shift"] = $shift;
         }
 
         // conditional $head_spv_id
-        $valid_head_spv_id = !is_null($head_spv_id) && !empty($head_spv_id);
+        $valid_head_spv_id = !is_null($head_spv_id);
         if ($valid_head_spv_id) {
             $keyValueToUpdate["head_spv_id"] = $head_spv_id;
         }
 
         // conditional $warehouse_id
-        $valid_warehouse_id = !is_null($warehouse_id) && !empty($warehouse_id);
+        $valid_warehouse_id = !is_null($warehouse_id);
         if ($valid_warehouse_id) {
             $keyValueToUpdate["warehouse_id"] = $warehouse_id;
         }
 
         // conditional $is_generated_document
-        $valid_is_generated_document = !is_null($is_generated_document) && !empty($is_generated_document);
+        $valid_is_generated_document = !is_null($is_generated_document);
         if ($valid_is_generated_document) {
             $keyValueToUpdate["is_generated_document"] = $is_generated_document;
         }
 
         // conditional $item_variance
-        $valid_item_variance = !is_null($item_variance) && !empty($item_variance);
+        $valid_item_variance = !is_null($item_variance);
         if ($valid_item_variance) {
             $keyValueToUpdate["item_variance"] = $item_variance;
         }
 
         // conditional $parent
-        $valid_parent = !is_null($parent) && !empty($parent);
+        $valid_parent = !is_null($parent);
         if ($valid_parent) {
             $keyValueToUpdate["parent"] = $parent;
         }
 
         // conditional $parent_document
-        $valid_parent_document = !is_null($parent_document) && !empty($parent_document);
+        $valid_parent_document = !is_null($parent_document);
         if ($valid_parent_document) {
             $keyValueToUpdate["parent_document"] = $parent_document;
         }
 
         // conditional $plan_out
-        $valid_plan_out = !is_null($plan_out) && !empty($plan_out);
+        $valid_plan_out = !is_null($plan_out);
         if ($valid_plan_out) {
             $keyValueToUpdate["plan_out"] = $plan_out;
         }
 
         // conditional $total_item_keluar
-        $valid_total_item_keluar = !is_null($total_item_keluar) && !empty($total_item_keluar);
+        $valid_total_item_keluar = !is_null($total_item_keluar);
         if ($valid_total_item_keluar) {
             $keyValueToUpdate["total_item_keluar"] = $total_item_keluar;
         }
 
         // conditional $total_item_moving
-        $valid_total_item_moving = !is_null($total_item_moving) && !empty($total_item_moving);
+        $valid_total_item_moving = !is_null($total_item_moving);
         if ($valid_total_item_moving) {
             $keyValueToUpdate["total_item_moving"] = $total_item_moving;
         }
 
         // conditional $total_product_not_FIFO
-        $valid_total_product_not_FIFO = !is_null($total_product_not_FIFO) && !empty($total_product_not_FIFO);
+        $valid_total_product_not_FIFO = !is_null($total_product_not_FIFO);
         if ($valid_total_product_not_FIFO) {
             $keyValueToUpdate["total_product_not_FIFO"] = $total_product_not_FIFO;
         }
 
         // conditional $total_qty_in
-        $valid_total_qty_in = !is_null($total_qty_in) && !empty($total_qty_in);
+        $valid_total_qty_in = !is_null($total_qty_in);
         if ($valid_total_qty_in) {
             $keyValueToUpdate["total_qty_in"] = $total_qty_in;
         }
 
         // conditional $total_qty_out
-        $valid_total_qty_out = !is_null($total_qty_out) && !empty($total_qty_out);
+        $valid_total_qty_out = !is_null($total_qty_out);
         if ($valid_total_qty_out) {
             $keyValueToUpdate["total_qty_out"] = $total_qty_out;
         }
