@@ -2,9 +2,13 @@
 
 Flight micro framework website [Official](https://flightphp.com/)
 
-[PHP unit test](https://phpunit.de/manual/4.8/en/database.html)
+## Unit testing
+I do unit testing with php unit [PHP unit test](https://phpunit.de/manual/4.8/en/database.html)
 
-# Example .env file
+## SQL Full text search
+I learn Full text search sql from [here](https://www.w3resource.com/mysql/mysql-full-text-search-functions.php)
+
+## Example .env file
 ```bash
 APP_ENV=DEV
 DATABASE=mysql:host=localhost;dbname=myreport

@@ -11,6 +11,24 @@ tags:
     description: a bunch of products
 
 paths:
+  /product:
+      post:
+        tags:
+          - products
+        summary: Lets a user post a new product
+        requestBody:
+          $ref: "#/components/requestBodies/product"
+        responses:
+          "201":
+            description: Successfully created a new product
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/Return_after_post"
+          "400":
+            $ref: "#/components/responses/400Error"
+          "401":
+            $ref: "#/components/responses/401Error"
   /products:
     get:
       tags:
@@ -23,24 +41,6 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           description: products not found
-  /product:
-    post:
-      tags:
-        - products
-      summary: Lets a user post a new product
-      requestBody:
-        $ref: "#/components/requestBodies/product"
-      responses:
-        "201":
-          description: Successfully created a new product
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Return_after_post"
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
   /product/{id}:
     parameters:
       - name: id
@@ -120,27 +120,30 @@ components:
         id:
           type: string
           example: "WAR22500001"
-        image:
-          type: string
-          example: "IMG22500001, IMG22500002, IMG22500003"
         name:
           type: string
           example: "name of product"
-        description_product:
-          type: string
-          example: "will contain very length of string"
-        price:
-          type: number
-          example: 1000000
-        is_available:
-          type: boolean
-          example: false
         categories:
           type: string
           example: "CAT22500001, CAT22500002, CAT22500003"
+        price:
+          type: number
+          example: 1000000
         weight:
           type: number
           example: 1000
+        image:
+          type: string
+          example: "IMG22500001, IMG22500002, IMG22500003"
+        description:
+          type: string
+          example: "will contain very length of string"
+        default_total_week:
+          type: number
+          example: 59
+        is_available:
+          type: boolean
+          example: false
   responses:
     400Error:
       description: Invalid request
@@ -236,24 +239,4 @@ components:
           schema:
             type: object
             properties:
-              image:
-                type: string
-                example: "IMG22500001, IMG22500002, IMG22500003"
-              name:
-                type: string
-                example: "name of product"
-              description_product:
-                type: string
-                example: "will contain very length of string"
-              price:
-                type: number
-                example: 1000000
-              is_available:
-                type: boolean
-                example: false
-              categories:
-                type: string
-                example: "CAT22500001, CAT22500002, CAT22500003"
-              weight:
-                type: number
-                example: 1000
+            $ref: "#/components/schemas/product"
