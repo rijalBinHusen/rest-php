@@ -13,7 +13,7 @@ Flight::route('POST /binhusenstore/product', function () {
     }
 });
 
-Flight::route('GET /binhusenstore/prodcuts', function () {
+Flight::route('GET /binhusenstore/products', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 

@@ -94,7 +94,7 @@ class Binhusenstore_product
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "Base file not found"
+            "message" => "Product not found"
             ), 404);
         }
 
@@ -133,7 +133,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Base file not found'
+                    'message' => 'Product not found'
                 ), 404
             );
         }
@@ -150,7 +150,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => true,
-                    'message' => 'Delete base file success',
+                    'message' => 'Delete product success',
                 )
             );
         }
@@ -169,7 +169,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Base file not found'
+                    'message' => 'Product not found'
                 ), 404
             );
         }
@@ -269,7 +269,7 @@ class Binhusenstore_product
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'Base file not found'
+                        'message' => 'Product not found'
                     ), 404
                 );
             }
@@ -280,7 +280,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update base file, check the data you sent'
+                    'message' => 'Failed to update product, check the data you sent'
                 )
             );
         }
@@ -319,7 +319,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Base file not found'
+                    'message' => 'Product not found'
                 ), 404
             );
         }

@@ -11,27 +11,6 @@ tags:
     description: cart user
 
 paths:
-  /carts:
-    get:
-      tags:
-        - cart
-      summary: Get all cart.
-      parameters:
-        - name: user_id
-          in: query
-          description: the user of id
-          required: true
-          explode: true
-          schema:
-            type: string
-            default: user_001
-      responses:
-        "200":
-          $ref: "#/components/responses/getCart200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          $ref: "#/components/responses/404Error"
   /cart:
     post:
       tags:
@@ -50,6 +29,27 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /carts:
+    get:
+      tags:
+        - cart
+      summary: Get all cart.
+      parameters:
+        - name: id_user
+          in: query
+          description: the user of id
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: user_001
+      responses:
+        "200":
+          $ref: "#/components/responses/getCart200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   /cart/{id}:
     parameters:
       - name: id
