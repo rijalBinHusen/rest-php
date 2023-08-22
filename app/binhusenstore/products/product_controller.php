@@ -1,38 +1,81 @@
 <?php
-require_once(__DIR__ . '/base_file_model.php');
+require_once(__DIR__ . '/product_model.php.php');
 
-class My_report_base_file
+class Binhusenstore_product
 {
-    protected $my_report_base_file;
+    protected $Binhusenstore_product;
     function __construct()
     {
-        $this->my_report_base_file = new My_report_base_file_model();
+        $this->Binhusenstore_product = new Binhusenstore_product_model();
     }
-    public function get_base_files()
-    { 
-        $request = Flight::request();
-        $periode1 = $request->query->periode1;
-        $periode2 = $request->query->periode2;
+    
+    public function add_product()
+    {
+        // request
+        $req = Flight::request();
+        $id = $req->data->id;
+        $name = $req->data->name;
+        $categories = $req->data->categories;
+        $price = $req->data->price;
+        $weight = $req->data->weight;
+        $image = $req->data->image;
+        $description = $req->data->description;
+        $default_total_week = $req->data->default_total_week;
+        $is_available = $req->data->is_available;
 
-        $not_valid_query_string = is_null($periode1) || empty($periode1) || is_null($periode2) || empty($periode2) || !is_numeric($periode1) || !is_numeric($periode2);
+        $result = null;
 
-        if($not_valid_query_string) {
-            Flight::json( array(
-                "success" => false,
-                "message" => "Please check query parameter"
-                )
-            , 400);
+        $is_request_body_not_oke = is_null($categories) 
+                                || is_null($name)
+                                || is_null($price) 
+                                || is_null($weight) 
+                                || is_null($image) 
+                                || is_null($description)
+                                || is_null($is_available)
+                                || is_null($default_total_week);
 
+        if($is_request_body_not_oke) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to add product, check the data you sent'
+                ), 400
+            );
             return;
-
         }
-        // the query string is valid
 
-        $result = $this->my_report_base_file->get_base_files($periode1, $periode2);
+        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $image, $description, $default_total_week, $is_available);
+
+        if($this->Binhusenstore_product->is_success === true) {
+        
+            Flight::json(
+                array(
+                    'success' => true,
+                    'id' => $result
+                ), 201
+            );
+        } 
+        
+        else {
+            
+            Flight::json(
+                array(
+                    'success'=> false,
+                    'message'=> $this->Binhusenstore_product->is_success
+                ), 500
+            );
+        }
+    }
+    
+    public function get_products()
+    {
+
+        $result = $this->Binhusenstore_product->get_products();
         
         $is_exists = count($result) > 0;
 
-        if($this->my_report_base_file->is_success === true && $is_exists) {
+        if($this->Binhusenstore_product->is_success === true && $is_exists) {
             Flight::json(
                 array(
                     "success" => true,
@@ -41,7 +84,7 @@ class My_report_base_file
             , 200);
         }
 
-        else if ($this->my_report_base_file->is_success !== true) {
+        else if ($this->Binhusenstore_product->is_success !== true) {
             Flight::json( array(
                 "success" => false,
                 "message" => $result
@@ -56,73 +99,14 @@ class My_report_base_file
         }
 
     }
-    public function add_base_file()
-    {
-        // request
-        $req = Flight::request();
-        $id = $req->data->id;
-        $periode = $req->data->periode;
-        $warehouse_id = $req->data->warehouse_id;
-        $file_name = $req->data->file_name;
-        $stock_sheet = $req->data->stock_sheet;
-        $clock_sheet = $req->data->clock_sheet;
-        $is_imported = $req->data->is_imported;
-        $is_record_finished = $req->data->is_record_finished;
-
-        $result = null;
-
-        $is_request_body_oke = !is_null($warehouse_id) 
-                                && !is_null($periode)
-                                && !is_null($file_name) 
-                                && !is_null($stock_sheet) 
-                                && !is_null($clock_sheet) 
-                                && !is_null($is_imported)
-                                && !is_null($is_record_finished);
-
-        if($is_request_body_oke) {
-            if ($id) {
-                // write the warehouse
-                $result = $this->my_report_base_file->write_base_file($id, $periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished);
-            } else {
-                // append warehouse
-                $result = $this->my_report_base_file->append_base_file($periode, $warehouse_id, $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished);
-            }
-
-            if($this->my_report_base_file->is_success !== true) {
-                Flight::json(
-                    array(
-                        'success'=> false,
-                        'message'=> $this->my_report_base_file->is_success
-                    ), 500
-                );
-                return;
-            }
-            
-            Flight::json(
-                array(
-                    'success' => true,
-                    'id' => $result
-                ), 201
-            );
-            return;
-        }
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'Failed to add base file, check the data you sent',
-                'data' => array($warehouse_id, $periode
-                , $file_name, $stock_sheet, $clock_sheet, $is_imported, $is_record_finished)
-            ), 400
-        );
-    }
-    public function get_base_file_by_id($id)
+    
+    public function get_product_by_id($id)
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->my_report_base_file->get_base_file_by_id($id);
+        $result = $this->Binhusenstore_product->get_product_by_id($id);
 
-        $is_success = $this->my_report_base_file->is_success;
+        $is_success = $this->Binhusenstore_product->is_success;
 
         $is_found = count($result) > 0;
 
@@ -155,12 +139,12 @@ class My_report_base_file
         }
     }
 
-    public function remove_base_file($id) {
+    public function remove_product($id) {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->my_report_base_file->remove_base_file($id);
+        $result = $this->Binhusenstore_product->remove_product_by_id($id);
 
-        $is_success = $this->my_report_base_file->is_success;
+        $is_success = $this->Binhusenstore_product->is_success;
     
         if($is_success === true && $result > 0) {
             Flight::json(
@@ -191,75 +175,82 @@ class My_report_base_file
         }
     }
 
-    public function update_base_file_by_id($id)
+    public function update_product_by_id($id)
     {
         // catch the query string request
         $req = Flight::request();
-        $warehouse_id = $req->data->warehouse_id;
-        $periode = $req->data->periode;
-        $file_name = $req->data->file_name;
-        $stock_sheet = $req->data->stock_sheet;
-        $clock_sheet = $req->data->clock_sheet;
-        $is_imported = $req->data->is_imported;
-        $is_record_finished = $req->data->is_record_finished;
+        $categories = $req->data->categories;
+        $name = $req->data->name;
+        $price = $req->data->price;
+        $weight = $req->data->weight;
+        $image = $req->data->image;
+        $description = $req->data->description;
+        $default_total_week = $req->data->default_total_week;
+        $is_available = $req->data->is_available;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
-        // conditional warehouse_id
-        $valid_warehouse_id = !is_null($warehouse_id) && !empty($warehouse_id);
-        if ($valid_warehouse_id) {
-            $keyValueToUpdate["warehouse_id"] = $warehouse_id;
+        // conditional categories
+        $valid_categories = !is_null($categories);
+        if ($valid_categories) {
+            $keyValueToUpdate["categories"] = $categories;
         }
 
-        // conditional $file_name
-        $valid_file_name = !is_null($file_name);
-        if ($valid_file_name) {
-            $keyValueToUpdate["file_name"] = $file_name;
+        // conditional $price
+        $valid_price = !is_null($price);
+        if ($valid_price) {
+            $keyValueToUpdate["price"] = $price;
         }
 
-        // conditional $stock_sheet
-        $valid_stock_sheet = !is_null($stock_sheet);
-        if ($valid_stock_sheet) {
-            $keyValueToUpdate["stock_sheet"] = $stock_sheet;
+        // conditional $weight
+        $valid_weight = !is_null($weight);
+        if ($valid_weight) {
+            $keyValueToUpdate["weight"] = $weight;
         }
 
-        // conditional $clock_sheet
-        $valid_clock_sheet = !is_null($clock_sheet);
-        if ($valid_clock_sheet) {
-            $keyValueToUpdate["clock_sheet"] = $clock_sheet;
+        // conditional $image
+        $valid_image = !is_null($image);
+        if ($valid_image) {
+            $keyValueToUpdate["image"] = $image;
         }
 
-        // conditional $is_imported
-        $valid_is_imported = !is_null($is_imported);
-        if ($valid_is_imported) {
-            $keyValueToUpdate["is_imported"] = $is_imported;
+        // conditional $description
+        $valid_description = !is_null($description);
+        if ($valid_description) {
+            $keyValueToUpdate["description"] = $description;
         }
 
-        // conditional $periode
-        $valid_periode = !is_null($periode);
-        if ($valid_periode) {
-            $keyValueToUpdate["periode"] = $periode;
+        // conditional $name
+        $valid_name = !is_null($name);
+        if ($valid_name) {
+            $keyValueToUpdate["name"] = $name;
         }
 
-        // conditional $is_record_finished
-        $valid_is_record_finished = !is_null($is_record_finished);
-        if ($valid_is_record_finished) {
-            $keyValueToUpdate["is_record_finished"] = $is_record_finished;
+        // conditional $default_total_week
+        $valid_default_total_week = !is_null($default_total_week);
+        if ($valid_default_total_week) {
+            $keyValueToUpdate["default_total_week"] = $default_total_week;
+        }
+
+        // conditional $is_available
+        $valid_is_available = !is_null($is_available);
+        if ($valid_is_available) {
+            $keyValueToUpdate["is_available"] = $is_available;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
         if($is_oke_to_update) {
 
-            $result = $this->my_report_base_file->update_base_file_by_id($keyValueToUpdate, "id", $id);
+            $result = $this->Binhusenstore_product->update_product_by_id($keyValueToUpdate, "id", $id);
     
-            $is_success = $this->my_report_base_file->is_success;
+            $is_success = $this->Binhusenstore_product->is_success;
     
             if($is_success === true && $result > 0) {
                 Flight::json(
                     array(
                         'success' => true,
-                        'message' => 'Update base file success',
+                        'message' => 'Update product success',
                     )
                 );
             }
@@ -285,6 +276,7 @@ class My_report_base_file
         } 
         
         else {
+
             Flight::json(
                 array(
                     'success' => false,
@@ -292,7 +284,44 @@ class My_report_base_file
                 )
             );
         }
+    }
+    
+    public function get_products_for_landing_page()
+    {
+        $result = $this->Binhusenstore_product->get_products_landing_page();
 
-        
+        $is_success = $this->Binhusenstore_product->is_success;
+
+        $is_found = count($result) > 0;
+
+        if($is_success === true && $is_found) {
+            
+            Flight::json(
+                array(
+                    'success' => true,
+                    'data' => $result
+                )
+            );
+        }
+
+        else if($is_success !== true) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ), 500
+            );
+        }
+
+        else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Base file not found'
+                ), 404
+            );
+        }
     }
 }

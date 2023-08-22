@@ -1,32 +1,44 @@
 <?php
 require_once(__DIR__ . "/../../Users/user_controller.php");
-require_once(__DIR__ . "/base_file_controller.php");
+require_once(__DIR__ . "/product_controller.php.php");
 
-Flight::route('GET /myreport/base_files', function () {
+Flight::route('POST /binhusenstore/product', function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
-    if(!$is_token_valid) {
-        return;
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->add_product();    
+    }
+});
+
+Flight::route('GET /binhusenstore/prodcuts', function () {
+    $user = new User();
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->get_products();
     }
 
-    $myreport_base_file = new My_report_base_file();
-    $myreport_base_file->get_base_files();
 });
 
 
-Flight::route('POST /myreport/base_file', function () {
+Flight::route("GET /binhusenstore/product/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
-    if(!$is_token_valid) {
-        return;
+    if($is_token_valid) {
+       
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->get_product_by_id($id);    
     }
-    $myreport_base_file = new My_report_base_file();
-    $myreport_base_file->add_base_file();    
+
 });
 
-Flight::route("GET /myreport/base_file/@id", function ($id) {
+Flight::route("PUT /binhusenstore/product/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -34,11 +46,11 @@ Flight::route("GET /myreport/base_file/@id", function ($id) {
         return;
     }
 
-    $myreport_base_file = new My_report_base_file();
-    $myreport_base_file->get_base_file_by_id($id);    
+    $myreport_base_file = new Binhusenstore_product();
+    $myreport_base_file->update_product_by_id($id);
 });
 
-Flight::route("PUT /myreport/base_file/@id", function ($id) {
+Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
@@ -46,18 +58,17 @@ Flight::route("PUT /myreport/base_file/@id", function ($id) {
         return;
     }
 
-    $myreport_base_file = new My_report_base_file();
-    $myreport_base_file->update_base_file_by_id($id);
+    $myreport_base_file = new Binhusenstore_product();
+    $myreport_base_file->remove_product($id);
 });
 
-Flight::route("DELETE /myreport/base_file/@id", function ($id) {
+Flight::route("GET /binhusenstore/products/landing_page", function () {
     $user = new User();
     $is_token_valid = $user->is_valid_token();
 
-    if(!$is_token_valid) {
-        return;
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->get_products_for_landing_page();
     }
-
-    $myreport_base_file = new My_report_base_file();
-    $myreport_base_file->remove_base_file($id);
 });

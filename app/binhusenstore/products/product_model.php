@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/../../../utils/summary_db.php');
 
-class Binhusenstore_product
+class Binhusenstore_product_model
 {
     protected $database;
     var $table = "binhusen_products";
@@ -143,7 +143,7 @@ class Binhusenstore_product
         $table_product = $this->table;
         foreach ($categories as $value) {
             $category_id = $value['id'];
-            $query_product = "SELECT * FROM $table_product WHERE MATCH(categories) AGAINST ('$category_id' IN NATURAL LANGUAGE MODE)";
+            $query_product = "SELECT * FROM $table_product WHERE MATCH(categories) AGAINST ('$category_id' IN NATURAL LANGUAGE MODE) ORDER BY id DESC LIMIT 4";
             $get_products = $this->database->sqlQuery($query_product)->fetchAll(PDO::FETCH_ASSOC);
             
             $is_product_exists = count($get_products) > 0;
