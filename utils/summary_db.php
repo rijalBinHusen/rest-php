@@ -107,18 +107,17 @@ Class SummaryDatabase {
 
     public function getNextId() {
 
-        $lastId = self::$table_name ."_22320000";
+        $lastId = self::$table_name ."22320000";
 
         $isExists = $this->is_table_name_exists();
 
         if($isExists) {
 
             $lastId = self::$summary_database[self::$table_name]['last_id'];
-
         }
 
         // nextId
-        $nextId = generateId($lastId);
+        $nextId = generateId(substr($lastId, -30));
 
         $this->updateLastId($nextId);
         

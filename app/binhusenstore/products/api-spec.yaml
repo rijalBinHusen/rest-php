@@ -132,7 +132,7 @@ components:
         weight:
           type: number
           example: 1000
-        image:
+        images:
           type: string
           example: "IMG22500001, IMG22500002, IMG22500003"
         description:

@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../../utils/summary_db.php');
 class Binhusenstore_product_model
 {
     protected $database;
-    var $table = "binhusen_products";
+    var $table = "binhusenstore_products";
     var $is_success = true;
     private $summary = null;
 
