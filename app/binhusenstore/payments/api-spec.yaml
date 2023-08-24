@@ -11,18 +11,6 @@ tags:
     description: payment for product
 
 paths:
-  /payments:
-    get:
-      tags:
-        - payment
-      summary: Get all payments.
-      responses:
-        "200":
-          $ref: "#/components/responses/getPayment200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          $ref: "#/components/responses/404Error"
   /payment:
     post:
       tags:
@@ -41,6 +29,27 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /payments:
+    get:
+      parameters:
+        - name: id_order
+          in: query
+          description: Id of order
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: O23060001
+      tags:
+        - payment
+      summary: Get all payments.
+      responses:
+        "200":
+          $ref: "#/components/responses/getPayment200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   /payment/{id}:
     parameters:
       - name: id
