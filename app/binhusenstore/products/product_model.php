@@ -1,52 +1,22 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
-require_once(__DIR__ . '/../../../utils/summary_db.php');
 
 class Binhusenstore_product_model
 {
     protected $database;
     var $table = "binhusenstore_products";
     var $is_success = true;
-    private $summary = null;
 
     function __construct()
     {
         
         $this->database = Query_builder::getInstance();
-        $this->summary = SummaryDatabase::getInstance($this->table);
     }
 
     public function append_product($name, $categories, $price, $weight, $image, $description, $default_total_week, $is_available)
     {
-        $nextId = $this->summary->getNextId();
-        // write to database
-        $this->write_product(
-            $nextId,
-            $name,
-            $categories,
-            $price,
-            $weight,
-            $image,
-            $description,
-            $default_total_week,
-            $is_available
-        );
-
-        if($this->database->is_error === null) {
-
-            return $nextId;
-        }
-        
-
-        $this->is_success = $this->database->is_error;
-
-    }
-
-    public function write_product($id, $name, $categories, $price, $weight, $image, $description, $default_total_week, $is_available)
-    {
 
         $data_to_insert = array(
-            "id" => $id,
             'name' => $name,
             'categories' => $categories,
             'price' => $price,
@@ -61,12 +31,10 @@ class Binhusenstore_product_model
 
         if($this->database->is_error === null) {
     
-            $this->summary->updateLastId($id);
-            return $id;
+            return $this->database->lastInsertId();
         }   
             
         $this->is_success = $this->database->is_error;
-            
 
     }
 

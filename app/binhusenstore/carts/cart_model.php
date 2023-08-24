@@ -1,11 +1,9 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
-require_once(__DIR__ . '/../../../utils/summary_db.php');
 
 class Binhusenstore_cart_model
 {
     protected $database;
-    private $summary = null;
     var $table = "binhusenstore_carts";
     var $is_success = true;
 
@@ -13,30 +11,12 @@ class Binhusenstore_cart_model
     {
         
         $this->database = Query_builder::getInstance();
-        $this->summary = SummaryDatabase::getInstance($this->table);
     }
 
     public function append_cart($id_user, $product_id, $qty)
     {
-        $nextId = $this->summary->getNextId();
-        // write to database
-        $this->write_cart($nextId, $id_user, $product_id, $qty);
-
-        if($this->database->is_error === null) {
-
-            return $nextId;
-        }
-        
-
-        $this->is_success = $this->database->is_error;
-
-    }
-
-    public function write_cart($id, $id_user, $product_id, $qty)
-    {
 
         $data_to_insert = array(
-            "id" => $id,
             'id_user' => $id_user,
             'product_id' => $product_id,
             'qty' => $qty
@@ -46,12 +26,10 @@ class Binhusenstore_cart_model
 
         if($this->database->is_error === null) {
     
-            $this->summary->updateLastId($id);
-            return $id;
+            return $this->database->lastInsertId();
         }   
             
         $this->is_success = $this->database->is_error;
-            
 
     }
 
