@@ -106,7 +106,7 @@ components:
       properties:
         id:
           type: string
-        date:
+        date_payment:
           type: string
           example: "2023-07-23"
         id_order:
