@@ -2629,6 +2629,18 @@ components:
               data:
                 type: object
                 properties:
+                  info:
+                    type: object
+                    properties:
+                      supervisor_name:
+                        type: string
+                        example: name of supervisor
+                      periode: 
+                        type: string
+                        example: Periode 2023-07-31 sampai dengan 2023-08-05
+                      bagian:
+                        type: string
+                        example: Gudang jadi X dan Gudang jadi Y
                   daily_reports:
                     type: array
                     items:

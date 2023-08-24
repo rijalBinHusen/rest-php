@@ -43,7 +43,7 @@ class My_report_report_model
             $periode = $document['periode'];
 
             if (isset($grouping_document_with_same_periode[$periode])) {
-                // increment document info
+                // increment document report
                 $grouping_document_with_same_periode[$periode]['total_do'] += $document['total_do'];
                 $grouping_document_with_same_periode[$periode]['total_kendaraan'] += $document['total_kendaraan'];
                 $grouping_document_with_same_periode[$periode]['total_waktu'] += $document['total_waktu'];
@@ -57,7 +57,7 @@ class My_report_report_model
                 continue;
             }
 
-            // document info
+            // document report
             $grouping_document_with_same_periode[$periode] = array (
                     'periode' => $document['periode'],
                     'shift' => $document['shift'],
@@ -71,6 +71,7 @@ class My_report_report_model
                     'total_product_not_FIFO' => $document['total_product_not_FIFO'],
                     'total_qty_in' => $document['total_qty_in'],
                     'total_qty_out' => $document['total_qty_out'],
+                    'warehouse_id' => $document['warehouse_id'],
                     'total_komplain_muat' => 0
                 );
         }
@@ -182,12 +183,50 @@ class My_report_report_model
             }
         }
 
+        $divisions = array();
         $result['daily_reports'] = array();
         
         foreach ($grouping_document_with_same_periode as $key => $value) {
 
             array_push($result['daily_reports'], $value);
+
+            // find warehouse name
+            if(!isset($divisions[$value['warehouse_id']])) {
+
+                $warehouse_id = $value['warehouse_id'];
+                // $warehouse_names  = $this->database->select_where('my_report_warehouse', 'id', 'WHS22050001')->fetchAll(PDO::FETCH_ASSOC);
+                $warehouse_query = "SELECT * from my_report_warehouse WHERE id = '$warehouse_id'";
+                $warehouse_names = $this->database->sqlQuery($warehouse_query)->fetchAll(PDO::FETCH_ASSOC);
+                if(count($warehouse_names) > 0) {
+                    $divisions[$value['warehouse_id']] = $warehouse_names[0]['warehouse_name'];
+                }
+            }
         }
+
+        // report info
+        // fungsi level name name
+        // $PIC_query = "SELECT supervisor_name from my_report_supervisor WHERE id = '$supervisor_id'";
+        // if($head_supervisor_id) {
+            
+        //     $PIC_query = "SELECT head_name from my_report_head_spv WHERE id = '$head_supervisor_id'";
+        // }
+        // $result_PIC = $this->database->sqlQuery($PIC_query)->fetchAll(PDO::FETCH_ASSOC);
+        // $PIC_name = $result_PIC[0]['supervisor_name'];
+
+        // // periode start until end
+        // $periode_info = date('Y-m-d', $periode1) ." sampai dengan" .date('Y-m-d', $periode2);
+
+        // // division
+        // $division = "";
+        // foreach ($divisions as $key => $value) {
+        //     $division = $division .$value ." | ";
+        // }
+
+        // $result['info'] = array(
+        //     'PIC_name' => $PIC_name,
+        //     'periode' => $periode_info,
+        //     'bagian' => $division
+        // );
         
         if ($this->database->is_error !== null) {
 
