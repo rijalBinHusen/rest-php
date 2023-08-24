@@ -11,18 +11,6 @@ tags:
     description: testimony of products
 
 paths:
-  /testimonies:
-    get:
-      tags:
-        - testimony
-      summary: Get all testimonies.
-      responses:
-        "200":
-          $ref: "#/components/responses/getTestimony200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          description: testimony not found
   /testimony:
     post:
       tags:
@@ -41,6 +29,18 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /testimonies:
+    get:
+      tags:
+        - testimony
+      summary: Get all testimonies.
+      responses:
+        "200":
+          $ref: "#/components/responses/getTestimony200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: testimony not found
   /testimony/{id}:
     parameters:
       - name: id
