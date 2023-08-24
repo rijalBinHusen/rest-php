@@ -147,3 +147,32 @@ CREATE EVENT truncate_binhusenstore_payments_prefix_seq_event
 ON SCHEDULE EVERY 1 WEEK
 DO
     TRUNCATE TABLE binhusenstore_payments_prefix;
+
+-- ============================== BORDER ======================
+CREATE TABLE if not exists binhusenstore_testimonies (
+    id VARCHAR(9) NOT NULL PRIMARY KEY,
+    id_user VARCHAR(30),
+    id_product VARCHAR(30),
+    rating TINYINT(1)
+    content TEXT
+);
+
+-- THE PREFIX FOR CUSTOM ID binhusenstore_testimonies
+CREATE TABLE if not exists binhusenstore_testimonies_prefix(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY);
+
+-- CUSTOM UNIQUEEE ID BASED ON PREFIX
+DELIMITER $$
+    CREATE TRIGGER tg_binhusenstore_testimonies_insert
+    BEFORE INSERT ON binhusenstore_testimonies
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO binhusenstore_testimonies_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        SET NEW.id = CONCAT('O', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
+    END$$
+DELIMITER ;
+
+-- RESET PREFIX TO 0 EVERY WEEK
+CREATE EVENT truncate_binhusenstore_testimonies_prefix_seq_event
+ON SCHEDULE EVERY 1 WEEK
+DO
+    TRUNCATE TABLE binhusenstore_testimonies_prefix;
