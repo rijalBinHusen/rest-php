@@ -1,42 +1,38 @@
 <?php
-require_once(__DIR__ . '/cart_model.php.php');
+require_once(__DIR__ . '/category_model.php.php');
 
-class Binhusenstore_cart
+class Binhusenstore_category
 {
-    protected $Binhusenstore_cart;
+    protected $Binhusenstore_category;
     function __construct()
     {
-        $this->Binhusenstore_cart = new Binhusenstore_cart_model();
+        $this->Binhusenstore_category = new Binhusenstore_category_model();
     }
     
-    public function add_cart()
+    public function add_category()
     {
         // request
         $req = Flight::request();
-        $id_user = $req->data->id_user;
-        $product_id = $req->data->product_id;
-        $qty = $req->data->qty;
+        $name_category = $req->data->name_category;
 
         $result = null;
 
-        $is_request_body_not_oke = is_null($product_id) 
-                                || is_null($id_user)
-                                || is_null($qty);
+        $is_request_body_not_oke = is_null($name_category);
 
         if($is_request_body_not_oke) {
 
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to add cart, check the data you sent'
+                    'message' => 'Failed to add category, check the data you sent'
                 ), 400
             );
             return;
         }
 
-        $result = $this->Binhusenstore_cart->append_cart($id_user, $product_id, $qty);
+        $result = $this->Binhusenstore_category->append_category($name_category);
 
-        if($this->Binhusenstore_cart->is_success === true) {
+        if($this->Binhusenstore_category->is_success === true) {
         
             Flight::json(
                 array(
@@ -51,26 +47,20 @@ class Binhusenstore_cart
             Flight::json(
                 array(
                     'success'=> false,
-                    'message'=> $this->Binhusenstore_cart->is_success
+                    'message'=> $this->Binhusenstore_category->is_success
                 ), 500
             );
         }
     }
     
-    public function get_carts()
+    public function get_categories()
     {
-        $id_user = Flight::request()->query->id_user;
 
-        $result = array();
-        if($id_user) {
-
-            $result = $this->Binhusenstore_cart->get_carts($id_user);
-        }
-
-        
+        $result = $this->Binhusenstore_category->get_categories();
+                
         $is_exists = count($result) > 0;
 
-        if($this->Binhusenstore_cart->is_success === true && $is_exists) {
+        if($this->Binhusenstore_category->is_success === true && $is_exists) {
             Flight::json(
                 array(
                     "success" => true,
@@ -79,7 +69,7 @@ class Binhusenstore_cart
             , 200);
         }
 
-        else if ($this->Binhusenstore_cart->is_success !== true) {
+        else if ($this->Binhusenstore_category->is_success !== true) {
             Flight::json( array(
                 "success" => false,
                 "message" => $result
@@ -89,19 +79,19 @@ class Binhusenstore_cart
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "Cart not found"
+            "message" => "category not found"
             ), 404);
         }
 
     }
     
-    public function get_cart_by_id($id)
+    public function get_category_by_id($id)
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_cart->get_cart_by_id($id);
+        $result = $this->Binhusenstore_category->get_category_by_id($id);
 
-        $is_success = $this->Binhusenstore_cart->is_success;
+        $is_success = $this->Binhusenstore_category->is_success;
 
         $is_found = count($result) > 0;
 
@@ -128,24 +118,24 @@ class Binhusenstore_cart
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Cart not found'
+                    'message' => 'category not found'
                 ), 404
             );
         }
     }
 
-    public function remove_cart($id) {
+    public function remove_category($id) {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_cart->remove_cart_by_id($id);
+        $result = $this->Binhusenstore_category->remove_category_by_id($id);
 
-        $is_success = $this->Binhusenstore_cart->is_success;
+        $is_success = $this->Binhusenstore_category->is_success;
     
         if($is_success === true && $result > 0) {
             Flight::json(
                 array(
                     'success' => true,
-                    'message' => 'Delete cart success',
+                    'message' => 'Delete category success',
                 )
             );
         }
@@ -164,53 +154,40 @@ class Binhusenstore_cart
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Cart not found'
+                    'message' => 'Category not found'
                 ), 404
             );
         }
     }
 
-    public function update_cart_by_id($id)
+    public function update_category_by_id($id)
     {
         // catch the query string request
         $req = Flight::request();
-        $product_id = $req->data->product_id;
-        $id_user = $req->data->id_user;
-        $qty = $req->data->qty;
+        $name_category = $req->data->name_category;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
-        // conditional product_id
-        $valid_product_id = !is_null($product_id);
-        if ($valid_product_id) {
-            $keyValueToUpdate["product_id"] = $product_id;
-        }
 
-        // conditional $qty
-        $valid_qty = !is_null($qty);
-        if ($valid_qty) {
-            $keyValueToUpdate["qty"] = $qty;
-        }
-
-        // conditional $id_user
-        $valid_id_user = !is_null($id_user);
-        if ($valid_id_user) {
-            $keyValueToUpdate["id_user"] = $id_user;
+        // conditional $name_category
+        $valid_name_category = !is_null($name_category);
+        if ($valid_name_category) {
+            $keyValueToUpdate["name_category"] = $name_category;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
         if($is_oke_to_update) {
 
-            $result = $this->Binhusenstore_cart->update_cart_by_id($keyValueToUpdate, "id", $id);
+            $result = $this->Binhusenstore_category->update_category_by_id($keyValueToUpdate, "id", $id);
     
-            $is_success = $this->Binhusenstore_cart->is_success;
+            $is_success = $this->Binhusenstore_category->is_success;
     
             if($is_success === true && $result > 0) {
                 Flight::json(
                     array(
                         'success' => true,
-                        'message' => 'Update cart success',
+                        'message' => 'Update category success',
                     )
                 );
             }
@@ -229,7 +206,7 @@ class Binhusenstore_cart
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'Cart not found'
+                        'message' => 'Category not found'
                     ), 404
                 );
             }
@@ -240,7 +217,7 @@ class Binhusenstore_cart
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update Product, check the data you sent'
+                    'message' => 'Failed to update Category, check the data you sent'
                 )
             );
         }

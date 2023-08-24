@@ -11,18 +11,6 @@ tags:
     description: category of products
 
 paths:
-  /categories:
-    get:
-      tags:
-        - category
-      summary: Get all categories.
-      responses:
-        "200":
-          $ref: "#/components/responses/getCategory200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          description: category not found
   /category:
     post:
       tags:
@@ -41,6 +29,18 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /categories:
+    get:
+      tags:
+        - category
+      summary: Get all categories.
+      responses:
+        "200":
+          $ref: "#/components/responses/getCategory200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: category not found
   /category/{id}:
     parameters:
       - name: id
