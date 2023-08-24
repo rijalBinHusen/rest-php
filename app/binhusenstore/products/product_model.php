@@ -27,11 +27,11 @@ class Binhusenstore_product_model
             'is_available' => $is_available
         );
 
-        $this->database->insert($this->table, $data_to_insert);
+        $inserted_id = $this->database->insert($this->table, $data_to_insert);
 
         if($this->database->is_error === null) {
     
-            return $this->database->lastInsertId();
+            return $inserted_id;
         }   
             
         $this->is_success = $this->database->is_error;
