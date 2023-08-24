@@ -108,7 +108,7 @@ components:
         id:
           type: string
           example: "WAR22500001"
-        name:
+        name_category:
           type: string
           example: "name of category"
   responses:
@@ -185,6 +185,6 @@ components:
           schema:
             type: object
             properties:
-              name:
+              name_category:
                 type: string
                 example: "name of category"

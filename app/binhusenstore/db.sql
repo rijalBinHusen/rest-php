@@ -50,7 +50,7 @@ DELIMITER $$
     FOR EACH ROW
     BEGIN
         INSERT INTO binhusenstore_carts_prefix VALUES (NULL, WEEK(CURRENT_DATE));
-        SET NEW.id = CONCAT('P', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
+        SET NEW.id = CONCAT('C', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
 
@@ -59,3 +59,29 @@ CREATE EVENT truncate_binhusenstore_carts_prefix_seq_event
 ON SCHEDULE EVERY 1 WEEK
 DO
     TRUNCATE TABLE binhusenstore_carts_prefix;
+
+-- ============================== BORDER ======================
+CREATE TABLE if not exists binhusenstore_categories (
+    id VARCHAR(9) NOT NULL PRIMARY KEY, 
+    name_category VARCHAR(30)
+);
+
+-- THE PREFIX FOR CUSTOM ID binhusenstore_categories
+CREATE TABLE if not exists binhusenstore_categories_prefix(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY);
+
+-- CUSTOM UNIQUEEE ID BASED ON PREFIX
+DELIMITER $$
+    CREATE TRIGGER tg_binhusenstore_categories_insert
+    BEFORE INSERT ON binhusenstore_categories
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO binhusenstore_categories_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        SET NEW.id = CONCAT('T', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
+    END$$
+DELIMITER ;
+
+-- RESET PREFIX TO 0 EVERY WEEK
+CREATE EVENT truncate_binhusenstore_categories_prefix_seq_event
+ON SCHEDULE EVERY 1 WEEK
+DO
+    TRUNCATE TABLE binhusenstore_categories_prefix;
