@@ -58,126 +58,135 @@ class My_report_report_model
             }
 
             // document info
-            $grouping_document_with_same_periode[$periode]['periode'] = $document['periode'];
-            $grouping_document_with_same_periode[$periode]['shift'] = $document['shift'];
-            $grouping_document_with_same_periode[$periode]['total_do'] = $document['total_do'];
-            $grouping_document_with_same_periode[$periode]['total_kendaraan'] = $document['total_kendaraan'];
-            $grouping_document_with_same_periode[$periode]['total_waktu'] = $document['total_waktu'];
-            $grouping_document_with_same_periode[$periode]['item_variance'] = $document['item_variance'];
-            $grouping_document_with_same_periode[$periode]['plan_out'] = $document['plan_out'];
-            $grouping_document_with_same_periode[$periode]['total_item_keluar'] = $document['total_item_keluar'];
-            $grouping_document_with_same_periode[$periode]['total_item_moving'] = $document['total_item_moving'];
-            $grouping_document_with_same_periode[$periode]['total_product_not_FIFO'] = $document['total_product_not_FIFO'];
-            $grouping_document_with_same_periode[$periode]['total_qty_in'] = $document['total_qty_in'];
-            $grouping_document_with_same_periode[$periode]['total_qty_out'] = $document['total_qty_out'];
-            $grouping_document_with_same_periode[$periode]['total_komplain_muat'] = 0;
-
-            // problems
-            // // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_complain = "SELECT * FROM my_report_complain WHERE periode = $periode" . $query_leader;
-
-            // retrieve problem, my_report_problem tanggal_mulai $periode1 and $periode2 by supervisor_id or head_spv_id
-            $problem_column_to_select = "my_report_base_item.item_name, my_report_problem.tanggal_mulai, my_report_problem.masalah, my_report_problem.sumber_masalah, my_report_problem.solusi, my_report_problem.pic, my_report_problem.dl, my_report_supervisor.supervisor_name";
-            $problem_inner_join = "INNER JOIN my_report_supervisor ON (my_report_problem.supervisor_id = my_report_supervisor.id) INNER JOIN my_report_base_item ON (my_report_problem.item_kode = my_report_base_item.item_kode)";
-            $query_problem = "SELECT $problem_column_to_select FROM `my_report_problem` $problem_inner_join  WHERE tanggal_mulai = $periode" . $query_leader;
+            $grouping_document_with_same_periode[$periode] = array (
+                    'periode' => $document['periode'],
+                    'shift' => $document['shift'],
+                    'total_do' => $document['total_do'],
+                    'total_kendaraan' => $document['total_kendaraan'],
+                    'total_waktu' => $document['total_waktu'],
+                    'item_variance' => $document['item_variance'],
+                    'plan_out' => $document['plan_out'],
+                    'total_item_keluar' => $document['total_item_keluar'],
+                    'total_item_moving' => $document['total_item_moving'],
+                    'total_product_not_FIFO' => $document['total_product_not_FIFO'],
+                    'total_qty_in' => $document['total_qty_in'],
+                    'total_qty_out' => $document['total_qty_out'],
+                    'total_komplain_muat' => 0
+                );
+        }
+        
+        // problems
+        // // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $complain_column_to_select = "my_report_complain.is_count, my_report_complain.periode, my_report_complain.masalah, my_report_complain.sumber_masalah, my_report_complain.solusi, my_report_complain.pic, my_report_complain.dl, my_report_supervisor.supervisor_name";
+        $complain_inner_join = "INNER JOIN my_report_supervisor ON (my_report_complain.supervisor_id = my_report_supervisor.id)";
+        $query_complain = "SELECT $complain_column_to_select FROM `my_report_complain` $complain_inner_join  WHERE periode BETWEEN $periode1 AND $periode2" . $query_leader;
+        // $query_complain = "SELECT * FROM my_report_complain WHERE periode BETWEEN $periode1 AND $periode2" . $query_leader;
+       
+        $result_complains = $this->database->sqlQuery($query_complain)->fetchAll(PDO::FETCH_ASSOC);
+        $is_complain_exists = count($result_complains) > 0;
+        if($is_complain_exists) {
             
-            // // retrieve field problem, my_report_field_problem periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode = $periode" . $query_leader;
-            // // retrieve case, my_report_cases periode between $periode1 and $periode2 by supervisor_id or head_spv_id
-            $query_case = "SELECT * FROM my_report_cases WHERE periode  = $periode" . $query_leader;
-            
-            $result_complains = $this->database->sqlQuery($query_complain)->fetchAll(PDO::FETCH_ASSOC);
-            $is_complain_exists = count($result_complains) > 0;
-            if($is_complain_exists) {
+            foreach($result_complains as $complain) {
+
+                $grouping_document_with_same_periode[$periode]['total_komplain_muat'] += $complain['is_count'];
+
+                $complain_to_push = array(
+
+                    'periode' => $complain['periode'],
+                    'masalah' => $complain['masalah'] .' Karu ' .$complain['supervisor_name'],
+                    'sumber_masalah' => $complain['sumber_masalah'],
+                    'solusi' => $complain['solusi'],
+                    'pic' => $complain['pic'],
+                    'dead_line' => $complain['dl'],
+                );
                 
-                $complain_key_value_to_push = array();
                 
-                foreach($result_complains as $complain) {
-
-                    $grouping_document_with_same_periode[$periode]['total_komplain_muat'] += $complain['is_count'];
-                    
-                    $complain_key_value_to_push['periode'] = $complain['periode'];
-                    $complain_key_value_to_push['masalah'] = $complain['masalah'];
-                    $complain_key_value_to_push['sumber_masalah'] = $complain['sumber_masalah'];
-                    $complain_key_value_to_push['solusi'] = $complain['solusi'];
-                    $complain_key_value_to_push['pic'] = $complain['pic'];
-                    $complain_key_value_to_push['dead_line'] = $complain['dl'];
-                    
-                }
-
-
-                array_push($result['problems'], $complain_key_value_to_push);
+                array_push($result['problems'], $complain_to_push);
             }
+        }
 
-            $result_problems = $this->database->sqlQuery($query_problem)->fetchAll(PDO::FETCH_ASSOC);
-            $is_problems_exists = count($result_problems) > 0;
-            if($is_problems_exists) {
+        // ==================================================================================
 
-                $problem_key_value_to_push = array();
+        // retrieve problem, my_report_problem tanggal_mulai $periode1 and $periode2 by supervisor_id or head_spv_id
+        $problem_column_to_select = "my_report_base_item.item_name, my_report_problem.tanggal_mulai, my_report_problem.masalah, my_report_problem.sumber_masalah, my_report_problem.solusi, my_report_problem.pic, my_report_problem.dl, my_report_supervisor.supervisor_name";
+        $problem_inner_join = "INNER JOIN my_report_supervisor ON (my_report_problem.supervisor_id = my_report_supervisor.id) INNER JOIN my_report_base_item ON (my_report_problem.item_kode = my_report_base_item.item_kode)";
+        $query_problem = "SELECT $problem_column_to_select FROM `my_report_problem` $problem_inner_join  WHERE tanggal_mulai BETWEEN $periode1 AND $periode2" . $query_leader;
 
-                foreach($result_problems as $problem) {
+        $result_problems = $this->database->sqlQuery($query_problem)->fetchAll(PDO::FETCH_ASSOC);
+        $is_problems_exists = count($result_problems) > 0;
+        if($is_problems_exists) {
 
-                    $problem_key_value_to_push['periode'] = $problem['tanggal_mulai'];
-                    $problem_key_value_to_push['masalah'] = "[ MASALAH DI LAPANGAN ] " .$problem['item_name'] ." " .$problem['masalah'] . " Karu " .$problem['supervisor_name'];
-                    $problem_key_value_to_push['sumber_masalah'] = $problem['sumber_masalah'];
-                    $problem_key_value_to_push['solusi'] = $problem['solusi'];
-                    $problem_key_value_to_push['pic'] = $problem['pic'];
-                    $problem_key_value_to_push['dead_line'] = $problem['dl'];
-                    
-                }
+            foreach($result_problems as $problem) {
 
+                $problem_to_push = array(
 
-                array_push($result['problems'], $problem_key_value_to_push);
+                    'periode' => $problem['tanggal_mulai'],
+                    'masalah' => "[ MASALAH DI LAPANGAN ] " .$problem['item_name'] ." " .$problem['masalah'] . " Karu " .$problem['supervisor_name'],
+                    'sumber_masalah' => $problem['sumber_masalah'],
+                    'solusi' => $problem['solusi'],
+                    'pic' => $problem['pic'],
+                    'dead_line' => $problem['dl']
+                );
+                
+                array_push($result['problems'], $problem_to_push);
             }
+        }
 
-            $result_field_problems = $this->database->sqlQuery($query_field_problem)->fetchAll(PDO::FETCH_ASSOC);
-            $is_field_problems_exists = count($result_field_problems) > 0;
-            if($is_field_problems_exists) {
+        // ==================================================================================
 
-                $field_problem_key_value_to_push = array();
+        // // retrieve field problem, my_report_field_problem periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_field_problem = "SELECT * FROM my_report_field_problem WHERE periode BETWEEN $periode1 AND $periode2" . $query_leader;
 
-                foreach($result_field_problems as $field_problem) {
+        $result_field_problems = $this->database->sqlQuery($query_field_problem)->fetchAll(PDO::FETCH_ASSOC);
+        $is_field_problems_exists = count($result_field_problems) > 0;
+        if($is_field_problems_exists) {
 
-                    $field_problem_key_value_to_push['periode'] = $field_problem['periode'];
-                    $field_problem_key_value_to_push['masalah'] = "[ KENDALA LAPANGAN ] " .$field_problem['masalah'];
-                    $field_problem_key_value_to_push['sumber_masalah'] = $field_problem['sumber_masalah'];
-                    $field_problem_key_value_to_push['solusi'] = $field_problem['solusi'];
-                    $field_problem_key_value_to_push['pic'] = $field_problem['pic'];
-                    $field_problem_key_value_to_push['dead_line'] = $field_problem['dl'];
-                    
-                }
+            foreach($result_field_problems as $field_problem) {
 
+                $field_problem_to_push = array (
 
-                array_push($result['problems'], $field_problem_key_value_to_push);
+                    'periode' => $field_problem['periode'],
+                    'masalah' => "[ KENDALA LAPANGAN ] " .$field_problem['masalah'],
+                    'sumber_masalah' => $field_problem['sumber_masalah'],
+                    'solusi' => $field_problem['solusi'],
+                    'pic' => $field_problem['pic'],
+                    'dead_line' => $field_problem['dl'],
+                );
+                
+                array_push($result['problems'], $field_problem_to_push);
             }
+        }
 
-            $result_cases = $this->database->sqlQuery($query_case)->fetchAll(PDO::FETCH_ASSOC);
-            $is_cases_exists = count($result_cases) > 0;
-            if($is_cases_exists) {
+        // ==================================================================================
+        
+        // // retrieve case, my_report_cases periode between $periode1 and $periode2 by supervisor_id or head_spv_id
+        $query_case = "SELECT * FROM my_report_cases WHERE periode BETWEEN $periode1 AND $periode2" . $query_leader;
 
-                $case_key_value_to_push = array();
+        $result_cases = $this->database->sqlQuery($query_case)->fetchAll(PDO::FETCH_ASSOC);
+        $is_cases_exists = count($result_cases) > 0;
+        if($is_cases_exists) {
 
-                foreach($result_cases as $case) {
+            foreach($result_cases as $case) {
 
-                    $case_key_value_to_push['periode'] = $case['periode'];
-                    $case_key_value_to_push['masalah'] = "[ KASUS ] " .$case['masalah'];
-                    $case_key_value_to_push['sumber_masalah'] = $case['sumber_masalah'];
-                    $case_key_value_to_push['solusi'] = $case['solusi'];
-                    $case_key_value_to_push['pic'] = $case['pic'];
-                    $case_key_value_to_push['dead_line'] = $case['dl'];
-                    
-                }
+                $case_to_push = array(
 
+                    'periode' => $case['periode'],
+                    'masalah' => "[ KASUS ] " .$case['masalah'],
+                    'sumber_masalah' => $case['sumber_masalah'],
+                    'solusi' => $case['solusi'],
+                    'pic' => $case['pic'],
+                    'dead_line' => $case['dl'],
+                );
 
-                array_push($result['problems'], $case_key_value_to_push);
+                array_push($result['problems'], $case_to_push);
             }
         }
 
         $result['daily_reports'] = array();
         
         foreach ($grouping_document_with_same_periode as $key => $value) {
+
             array_push($result['daily_reports'], $value);
-            # code...
         }
         
         if ($this->database->is_error !== null) {
