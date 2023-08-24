@@ -11,18 +11,6 @@ tags:
     description: order of products
 
 paths:
-  /orders:
-    get:
-      tags:
-        - order
-      summary: Get all orders.
-      responses:
-        "200":
-          $ref: "#/components/responses/getorder200"
-        "401":
-          $ref: "#/components/responses/401Error"
-        "404":
-          description: order not found
   /order:
     post:
       tags:
@@ -41,6 +29,18 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /orders:
+    get:
+      tags:
+        - order
+      summary: Get all orders.
+      responses:
+        "200":
+          $ref: "#/components/responses/getorder200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
   /order/{id}:
     parameters:
       - name: id
