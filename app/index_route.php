@@ -8,6 +8,10 @@ Flight::route('GET /report/weekly', function () {
     include('html/weekly_report/index.html');
 });
 
+Flight::route('GET /myreport_app', function () {
+    include('html/myreport_app/index.html');
+});
+
 // Flight::route('POST /', function () {
 //     $req = Flight::request()->query->name;
 //     echo 'I received a POST request ' . $req;
