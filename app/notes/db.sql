@@ -4,7 +4,7 @@ CREATE TABLE
         tanggal DATETIME DEFAULT CURRENT_TIMESTAMP,
         isi TEXT,
         FULLTEXT(isi),
-        owner VARCHAR(9)
+        owner_id VARCHAR(9)
     );
 
 -- THE PREFIX FOR CUSTOM ID note_app

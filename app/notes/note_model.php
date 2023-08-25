@@ -13,11 +13,11 @@ class Note_app_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_note($tanggal, $isi)
+    public function append_note($owner_id, $isi)
     {
 
         $data_to_insert = array(
-            'tanggal' => $tanggal,
+            'owner_id' => $owner_id,
             'isi' => $isi
         );
 

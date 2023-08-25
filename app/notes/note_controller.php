@@ -9,16 +9,15 @@ class note_app
         $this->note_app = new Note_app_model();
     }
     
-    public function add_note()
+    public function add_note($owner_id)
     {
         // request
         $req = Flight::request();
-        $tanggal = $req->data->tanggal;
         $isi = $req->data->isi;
 
         $result = null;
 
-        $is_request_body_not_oke = is_null($tanggal) && is_null($isi);
+        $is_request_body_not_oke = is_null($isi);
 
         if($is_request_body_not_oke) {
 
@@ -31,7 +30,7 @@ class note_app
             return;
         }
 
-        $result = $this->note_app->append_note($tanggal, $isi);
+        $result = $this->note_app->append_note($owner_id, $isi);
 
         if($this->note_app->is_success === true) {
         
@@ -180,17 +179,10 @@ class note_app
     {
         // catch the query string request
         $req = Flight::request();
-        $tanggal = $req->data->tanggal;
         $isi = $req->data->isi;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
-
-        // conditional $tanggal
-        $valid_tanggal = !is_null($tanggal);
-        if ($valid_tanggal) {
-            $keyValueToUpdate["tanggal"] = $tanggal;
-        }
 
         // conditional $isi
         $valid_isi = !is_null($isi);
