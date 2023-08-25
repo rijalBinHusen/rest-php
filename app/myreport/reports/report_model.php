@@ -35,11 +35,30 @@ class My_report_report_model
             return $result;
         }
 
-        $grouping_document_with_same_periode = [];
+        
+        $result = array(
+            "info" => array(),
+            "problems" => array(),
+            "daily_reports" => array(),
+        );
 
-        $result = array("problems" => array());
+        $divisions = array();
+        $grouping_document_with_same_periode = array();
         // Calculate summaries based on the 'oeruide' key
         foreach ($result_documents as $document) {
+            
+            // find warehouse name
+            if(!isset($divisions[$document['warehouse_id']])) {
+
+                $warehouse_id = $document['warehouse_id'];
+                // $warehouse_names  = $this->database->select_where('my_report_warehouse', 'id', 'WHS22050001')->fetchAll(PDO::FETCH_ASSOC);
+                $warehouse_query = "SELECT * from my_report_warehouse WHERE id = '$warehouse_id'";
+                $warehouse_names = $this->database->sqlQuery($warehouse_query)->fetchAll(PDO::FETCH_ASSOC);
+                if(count($warehouse_names) > 0) {
+                    $divisions[$document['warehouse_id']] = $warehouse_names[0]['warehouse_name'];
+                }
+            }
+
             $periode = $document['periode'];
 
             if (isset($grouping_document_with_same_periode[$periode])) {
@@ -71,10 +90,12 @@ class My_report_report_model
                     'total_product_not_FIFO' => $document['total_product_not_FIFO'],
                     'total_qty_in' => $document['total_qty_in'],
                     'total_qty_out' => $document['total_qty_out'],
-                    'warehouse_id' => $document['warehouse_id'],
                     'total_komplain_muat' => 0
                 );
         }
+
+        // set divisions to response
+        $result['info']['bagian'] = implode(" | ", $divisions);
         
         // problems
         // // get komplain, my_report_complain periode between $periode1 and $periode2 by supervisor_id or head_spv_id
@@ -183,50 +204,32 @@ class My_report_report_model
             }
         }
 
-        $divisions = array();
-        $result['daily_reports'] = array();
+        
         
         foreach ($grouping_document_with_same_periode as $key => $value) {
 
             array_push($result['daily_reports'], $value);
-
-            // find warehouse name
-            if(!isset($divisions[$value['warehouse_id']])) {
-
-                $warehouse_id = $value['warehouse_id'];
-                // $warehouse_names  = $this->database->select_where('my_report_warehouse', 'id', 'WHS22050001')->fetchAll(PDO::FETCH_ASSOC);
-                $warehouse_query = "SELECT * from my_report_warehouse WHERE id = '$warehouse_id'";
-                $warehouse_names = $this->database->sqlQuery($warehouse_query)->fetchAll(PDO::FETCH_ASSOC);
-                if(count($warehouse_names) > 0) {
-                    $divisions[$value['warehouse_id']] = $warehouse_names[0]['warehouse_name'];
-                }
-            }
         }
 
         // report info
         // fungsi level name name
-        // $PIC_query = "SELECT supervisor_name from my_report_supervisor WHERE id = '$supervisor_id'";
-        // if($head_supervisor_id) {
+        if($head_supervisor_id) {
             
-        //     $PIC_query = "SELECT head_name from my_report_head_spv WHERE id = '$head_supervisor_id'";
-        // }
-        // $result_PIC = $this->database->sqlQuery($PIC_query)->fetchAll(PDO::FETCH_ASSOC);
-        // $PIC_name = $result_PIC[0]['supervisor_name'];
+            $get_PIC = $this->database->select_where("my_report_head_spv", 'id', $head_supervisor_id)->fetchAll(PDO::FETCH_ASSOC);
+            $PIC_name = $get_PIC[0]['head_name'];
+        } else {
 
-        // // periode start until end
-        // $periode_info = date('Y-m-d', $periode1) ." sampai dengan" .date('Y-m-d', $periode2);
+            $get_PIC = $this->database->select_where("my_report_supervisor", 'id', $supervisor_id)->fetchAll(PDO::FETCH_ASSOC);
+            $PIC_name = $get_PIC[0]['supervisor_name'];
+        }
 
-        // // division
-        // $division = "";
-        // foreach ($divisions as $key => $value) {
-        //     $division = $division .$value ." | ";
-        // }
+        // division
+        $divisionsArr= array();
+        foreach ($divisions as $key => $value) {
+            array_push($divisionsArr, $value);
+        }
 
-        // $result['info'] = array(
-        //     'PIC_name' => $PIC_name,
-        //     'periode' => $periode_info,
-        //     'bagian' => $division
-        // );
+        $result['info']['PIC_name'] = $PIC_name;
         
         if ($this->database->is_error !== null) {
 
