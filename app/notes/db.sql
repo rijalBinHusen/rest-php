@@ -54,7 +54,7 @@ CREATE TRIGGER tg_note_app_users_insert
 BEFORE INSERT ON note_app_users 
 FOR EACH ROW 
 BEGIN 
-	INSERT INTO note_app_users_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+	INSERT INTO note_app_users_prefix VALUES (NULL);
 	SET NEW.id = CONCAT('U', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
 	END$$ 
 DELIMITER ;

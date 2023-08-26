@@ -7,7 +7,7 @@ class Note_app_user_controller
 
     function __construct()
     {
-        $this->user = new User_model();
+        $this->user = new Note_app_user_model();
     }
     public function login()
     {
