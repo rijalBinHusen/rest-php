@@ -289,8 +289,6 @@ components:
           schema:
             type: object
             properties:
-              tanggal:
-                type: string
               isi:
                 type: string
     user:

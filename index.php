@@ -25,6 +25,7 @@ require_once(__DIR__ . '/app/myreport/reports/report_route.php');
 
 // note app
 require_once(__DIR__ . '/app/notes/note_users/user_route.php');
+require_once(__DIR__ . '/app/notes/note_route.php');
 
 // Flight::route('/test(/@endpoint)', function ($endpoint) {
 //     $request = Flight::request();
