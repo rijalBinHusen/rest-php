@@ -31,6 +31,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
             'keterangan2' => $faker->numberBetween(10000, 1000000),
             'periode' => $faker->firstName('female'),
             'temuan' => $faker->firstName('female'),
+            'is_inserted' => $faker->boolean(),
         );
 
         $http->setData($data);
@@ -120,6 +121,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('keterangan2', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('temuan', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_inserted', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
@@ -175,6 +177,7 @@ class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('keterangan2', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('periode', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('temuan', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_inserted', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 

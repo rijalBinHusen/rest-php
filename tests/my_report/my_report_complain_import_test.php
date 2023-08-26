@@ -37,7 +37,8 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
             'tanggal_info' => $faker->numberBetween(0, 100),
             'tanggal_komplain' => $faker->numberBetween(0, 100),
             'tanggal_SJ' => $faker->numberBetween(0, 100),
-            'type_' => $faker->numberBetween(0, 100)
+            'type_' => $faker->numberBetween(0, 100),
+            'is_inserted' => $faker->boolean(),
         );
 
         $http->setData($data);
@@ -134,6 +135,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('type_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_inserted', $convertToAssocArray['data'][0]);
         $this->assertEquals(10, count($convertToAssocArray['data']));
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
@@ -183,6 +185,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('tanggal_komplain', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('tanggal_SJ', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('type_', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_inserted', $convertToAssocArray['data'][0]);
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
