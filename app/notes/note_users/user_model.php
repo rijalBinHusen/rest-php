@@ -1,4 +1,8 @@
 <?php
+// Call dotenv package
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+// load dotenv package
+// $dotenv->load();
 require_once(__DIR__ . '/../../utils/database.php');
 
 define("JWT_SECRET", "SECRET-KEY");
@@ -7,10 +11,11 @@ define("JWT_AUD", "site.com");
 define("JWT_ALGO", "HS256");
 
 
-class User_note_app_model {
+class Note_app_user_model {
   private $database = null;
   public $error = null;
   function __construct () {
+
     $this->database = Query_builder::getInstance();
   }
  
@@ -23,6 +28,7 @@ class User_note_app_model {
       $isEmailExists = is_array($findEmail);
       
       if($isEmailExists) {
+
         $this->error = "User exist.";
         return;
       }
@@ -44,6 +50,7 @@ class User_note_app_model {
         );
         $this->database->update("note_app_users", $data_to_entry, "id", $id);
     }
+    return;
   }
  
   // (F) VERIFY USER LOGIN
@@ -86,12 +93,12 @@ class User_note_app_model {
 
       $jwt = Firebase\JWT\JWT::decode($jwt, new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO));
       $valid = is_object($jwt);
-    } 
-    
-    catch (Exception $e) {
+
+    } catch (Exception $e) {
       
       $this->error = $e->getMessage();
       return;
+
     }
  
     // (G2) GET USER
@@ -105,9 +112,12 @@ class User_note_app_model {
 
       unset($user["password"]);
       return $user;
+
     } else {
 
       $this->error = "Invalid JWT";
+      return;
+
     }
   }
 }

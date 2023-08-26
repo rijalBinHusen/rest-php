@@ -12,6 +12,14 @@ tags:
 
 paths:
   /note:
+    parameters:
+      - name: JWT-Authorization
+        in: header
+        required: true
+        description: JWT Token
+        schema:
+          type: string
+        example: Very long token
     post:
       tags:
         - note
@@ -30,6 +38,14 @@ paths:
         "401":
           $ref: "#/components/responses/401Error"
   /notes:
+    parameters:
+      - name: JWT-Authorization
+        in: header
+        required: true
+        description: JWT Token
+        schema:
+          type: string
+        example: Very long token
     get:
       tags:
         - note
@@ -59,6 +75,13 @@ paths:
         schema:
           type: string
         example: "WAR220203902"
+      - name: JWT-Authorization
+        in: header
+        required: true
+        description: JWT Token
+        schema:
+          type: string
+        example: Very long token
     get:
       tags:
         - note
@@ -99,6 +122,67 @@ paths:
         "404":
           $ref: "#/components/responses/404Error"
   # End of note end point
+  /user/{operation}:
+    parameters:
+      - name: register
+        in: path
+        required: true
+        description: Path for register new user
+        schema:
+          type: string
+        example: register
+      - name: login
+        in: path
+        required: true
+        description: Path for user login
+        schema:
+          type: string
+        example: login
+      - name: validate
+        in: path
+        required: true
+        description: Path for validate JWT
+        schema:
+          type: string
+        example: validate
+      - name: JWT-Authorization
+        in: header
+        required: true
+        description: Path for validate JWT
+        schema:
+          type: string
+        example: Very long token
+    post:
+      tags:
+        - user
+      summary: Lets a user to register/validate/login
+      requestBody:
+        $ref: "#/components/requestBodies/user"
+      responses:
+        "201":
+          description: Successfully created a new user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "200":
+          description: JWT Token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Valid token
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  # End of user end point
 
 components:
   schemas:
@@ -120,6 +204,16 @@ components:
         tanggal:
           type: string
         isi:
+          type: string
+    user:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "WAR22500001"
+        password:
+          type: string
+        name:
           type: string
   responses:
     400Error:
@@ -198,4 +292,15 @@ components:
               tanggal:
                 type: string
               isi:
+                type: string
+    user:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+              email:
                 type: string

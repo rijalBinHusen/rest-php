@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/user_model.php');
 
-class User
+class Note_app_user_controller
 {   
     protected $user;
 
@@ -91,28 +91,31 @@ class User
         }
         
     }
-    public function is_valid_token() {
+    public function get_user_info() {
         if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
-            $is_token_valid = $this->user->validate($jwt_token);
-            if($is_token_valid) {
-                return $is_token_valid;
+            $user_info_by_jwt = $this->user->validate($jwt_token);
+            if($user_info_by_jwt) {
+
+                return $user_info_by_jwt;
             } else {
                 
                 Flight::json([
                     'success' => false,
                     'message' => 'Invalid token',
                 ], 401);
-                return false;
+                
             }
             
         } else {
+
             Flight::json([
                 'success' => false,
                 'message' => 'You must be authenticated to access this resource.',
             ], 401);
-            return false;
         }
+
+        return false;
     }
 }
