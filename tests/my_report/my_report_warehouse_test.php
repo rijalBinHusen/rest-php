@@ -15,7 +15,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);

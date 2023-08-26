@@ -14,7 +14,6 @@ Class SummaryDatabase {
 
         self::$summary_database = self::getData($table);
         self::$table_name = $table;
-
     }
 
     public static function getInstance($table) {
@@ -27,7 +26,7 @@ Class SummaryDatabase {
     }
 
     public static function getData($table) {
-        $retrieveData = self::$database->select_from("summary")->fetchAll(PDO::FETCH_ASSOC);
+        $retrieveData = self::$database->select_from('summary')->fetchAll(PDO::FETCH_ASSOC);
         // self::$summary_database = $retrieveData;
         /*
           convert array from 
@@ -72,10 +71,11 @@ Class SummaryDatabase {
          */
         if(empty($retrieveData)) {
             
-            self::$summary_database[$table] = array (
-                'total' => 0,
-                'last_id' => 0
-            );
+            // do nothing
+            // self::$summary_database[$table] = array (
+            //     'total' => 0,
+            //     'last_id' => 0
+            // );
 
         } else {
 
