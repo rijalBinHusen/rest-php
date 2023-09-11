@@ -2642,60 +2642,36 @@ components:
                     type: array
                     items:
                       properties:
-                        id:
-                          type: string
-                        collected:
+                        total_do: 
                           type: number
-                        approval:
+                        total_kendaraan: 
                           type: number
-                        status:
+                        total_waktu: 
                           type: number
-                        shared:
+                        periode: 
                           type: number
-                        finished:
+                        shift: 
                           type: number
-                        total_do:
-                          type: number
-                        total_kendaraan:
-                          type: number
-                        total_waktu:
-                          type: number
-                        base_report_file:
-                          type: string
-                        is_finished:
+                        is_generated_document: 
                           type: boolean
-                        supervisor_id:
+                        item_variance: 
+                          type: number
+                        plan_out: 
+                          type: number
+                        total_item_keluar: 
+                          type: number
+                        total_item_moving: 
+                          type: number
+                        total_product_not_FIFO: 
+                          type: number
+                        total_qty_in: 
+                          type: number
+                        total_qty_out: 
+                          type: number
+                        total_komplain_muat: 
+                          type: number
+                        document_info: 
                           type: string
-                        periode:
-                          type: number
-                        shift:
-                          type: number
-                        head_spv_id:
-                          type: string
-                        warehouse_id:
-                          type: string
-                        is_generated_document:
-                          type: boolean
-                        item_variance:
-                          type: number
-                        parent:
-                          type: string
-                        parent_document:
-                          type: string
-                        plan_out:
-                          type: number
-                        total_item_keluar:
-                          type: number
-                        total_item_moving:
-                          type: number
-                        total_product_not_FIFO:
-                          type: number
-                        total_qty_in:
-                          type: number
-                        total_qty_out:
-                          type: number
-                        total_komplain_muat:
-                          type: number
                   problems:
                     type: array
                     items:

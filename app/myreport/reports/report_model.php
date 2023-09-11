@@ -82,11 +82,12 @@ class My_report_report_model
 
             // document report
             $grouping_document_with_same_periode[$periode] = array (
-                    'periode' => $document['periode'],
-                    'shift' => $document['shift'],
                     'total_do' => $document['total_do'],
                     'total_kendaraan' => $document['total_kendaraan'],
                     'total_waktu' => $document['total_waktu'],
+                    'periode' => $document['periode'],
+                    'shift' => $document['shift'],
+                    'is_generated_document' => $document['is_generated_document'],
                     'item_variance' => $document['item_variance'],
                     'plan_out' => $document['plan_out'],
                     'total_item_keluar' => $document['total_item_keluar'],
@@ -94,7 +95,8 @@ class My_report_report_model
                     'total_product_not_FIFO' => $document['total_product_not_FIFO'],
                     'total_qty_in' => $document['total_qty_in'],
                     'total_qty_out' => $document['total_qty_out'],
-                    'total_komplain_muat' => 0
+                    'total_komplain_muat' => 0,
+                    'document_info' => $document['collected'],
                 );
         }
 
