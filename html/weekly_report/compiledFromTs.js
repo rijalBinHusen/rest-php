@@ -39,7 +39,7 @@ async function fetchDataFromServer() {
                 total_waktu: 180,
                 periode: "1689008400000",
                 shift: 1,
-                is_generated_document: false,
+                is_generated_document: "0",
                 item_variance: 0,
                 plan_out: 0,
                 total_item_keluar: 0,
@@ -47,7 +47,8 @@ async function fetchDataFromServer() {
                 total_product_not_FIFO: 0,
                 total_qty_in: 0,
                 total_qty_out: 0,
-                total_komplain_muat: 0
+                total_komplain_muat: 0,
+                document_info: "Laporan tidak ada"
             }
         ]
     };
@@ -95,7 +96,11 @@ function convertDataToRender(data) {
     return result;
 }
 function templateDataToRender(data) {
-    const periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
+    let periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
+    const is_generated_document = data?.is_generated_document == "1";
+    if (is_generated_document) {
+        periodeToLocaleString = periodeToLocaleString + ` (${data.document_info})`;
+    }
     const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100;
     const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100;
     const achievementAkurasiProdukTermuat = ((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100;
@@ -105,7 +110,7 @@ function templateDataToRender(data) {
     const scoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 7 : ((100 + achievementAkurasiProdukTermuat) / 2) < 97 ? 6 : 5;
     const scoreAkurasiWaktu = achievementAkurasiWaktu == 'Ok' ? 7 : 5;
     const scoreKomplainMuat = data.total_komplain_muat == 0 ? 7 : 5;
-    const scoreRataRata = (scoreAkurasiStock + scoreAkurasiFIFO + scoreAkurasiProdukTermuat + scoreAkurasiWaktu + scoreKomplainMuat) / 5;
+    const scoreRataRata = is_generated_document ? 5 : (scoreAkurasiStock + scoreAkurasiFIFO + scoreAkurasiProdukTermuat + scoreAkurasiWaktu + scoreKomplainMuat) / 5;
     const classNameScoreAkurasiStock = achievementAkurasiStock < 97 ? 'red' : achievementAkurasiStock < 100 ? 'yellow' : 'green';
     const classNameScoreAkurasiFIFO = achievementAkurasiFIFO < 97 ? 'red' : achievementAkurasiFIFO < 100 ? 'yellow' : 'green';
     const classNameScoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 'green' : ((100 + achievementAkurasiProdukTermuat) / 2) < 97 ? 'yellow' : 'red';
@@ -265,12 +270,13 @@ function totalAllDailyReport(data) {
         total_qty_out: 0,
         plan_out: 0,
         total_waktu: 0,
-        is_generated_document: data[0].is_generated_document,
+        is_generated_document: "0",
         item_variance: 0,
         periode: "Grand total",
         shift: data[0].shift,
         total_kendaraan: data[0].total_kendaraan,
         total_komplain_muat: 0,
+        document_info: "",
     };
     for (let datum of data) {
         result.total_qty_in += Number(datum.total_qty_in);

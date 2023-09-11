@@ -98,6 +98,13 @@ class My_report_report_model
                     'total_komplain_muat' => 0,
                     'document_info' => $document['collected'],
                 );
+            
+            if($head_supervisor_id) {
+
+                // is generated document as false
+                $grouping_document_with_same_periode[$periode]['is_generated_document'] = 0;
+            }
+
         }
 
         // set divisions to response
