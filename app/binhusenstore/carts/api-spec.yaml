@@ -75,7 +75,14 @@ paths:
         - cart
       summary: Update cart by id
       requestBody:
-        $ref: "#/components/requestBodies/cart"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qty:
+                  type: number
       responses:
         "201":
           $ref: "#/components/responses/200Success"
@@ -92,8 +99,6 @@ paths:
       responses:
         "201":
           $ref: "#/components/responses/200Success"
-        "400":
-          $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
         "404":
@@ -121,7 +126,7 @@ components:
           type: string
         product_id:
           type: string
-        qty: 
+        qty:
           type: number
   responses:
     400Error:
@@ -201,5 +206,5 @@ components:
                 type: string
               product_id:
                 type: string
-              qty: 
+              qty:
                 type: number
