@@ -22,8 +22,11 @@ class Binhusenstore_payment
 
         $is_request_body_not_oke = is_null($date_payment)
                                     || is_null($id_order)
+                                    || !is_string($id_order)
                                     || is_null($balance)
-                                    || is_null($is_paid);
+                                    || is_numeric($balance)
+                                    || is_null($is_paid)
+                                    || !is_bool($is_paid);
 
         if($is_request_body_not_oke) {
 
