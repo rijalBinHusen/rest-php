@@ -27,6 +27,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         $http->setData($user_to_post);
         $response = $http->getResponse("POST");
 
+        // fwrite(STDERR, print_r($response, TRUE));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -99,7 +100,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     {
         $http = new HttpCall($this->url . "login");
         // Define the request body
-        $data = array('email' => 'test@test.com', 'password' => '1234');
+        $data = array('email' => 'binhusenstore_test@test.com', 'password' => '1234');
         $http->setData($data);
         $response = $http->getResponse("POST");
 

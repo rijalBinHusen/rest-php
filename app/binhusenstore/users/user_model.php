@@ -1,17 +1,7 @@
 <?php
-// Call dotenv package
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-// load dotenv package
-// $dotenv->load();
-require_once(__DIR__ . '/../../utils/database.php');
+require_once(__DIR__ . '/../../../utils/database.php');
 
-define("JWT_SECRET", "SECRET-KEY");
-define("JWT_ISSUER", "johndoe");
-define("JWT_AUD", "site.com");
-define("JWT_ALGO", "HS256");
-
-
-class User_model {
+class Binhusenstore_user_model {
   private $database = null;
   public $error = null;
   private $table_name = "binhusenstore_users";

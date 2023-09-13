@@ -1,13 +1,13 @@
 <?php
 require_once(__DIR__ . '/user_model.php');
 
-class User
+class Binhusenstore_user_controller
 {   
     protected $user;
 
     function __construct()
     {
-        $this->user = new User_model();
+        $this->user = new Binhusenstore_user_model();
     }
     public function login()
     {

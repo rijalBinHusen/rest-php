@@ -153,7 +153,7 @@ CREATE TABLE if not exists binhusenstore_testimonies (
     id VARCHAR(9) NOT NULL PRIMARY KEY,
     id_user VARCHAR(30),
     id_product VARCHAR(30),
-    rating TINYINT(1)
+    rating TINYINT(1),
     content TEXT
 );
 
@@ -176,3 +176,24 @@ CREATE EVENT truncate_binhusenstore_testimonies_prefix_seq_event
 ON SCHEDULE EVERY 1 WEEK
 DO
     TRUNCATE TABLE binhusenstore_testimonies_prefix;
+
+
+    -- ========================================================BORDER
+
+CREATE TABLE
+    if not exists binhusenstore_users (
+        id bigint(20) PRIMARY KEY AUTO_INCREMENT,
+        name varchar(255) NOT NULL,
+        email varchar(255) NOT NULL,
+        password varchar(255) NOT NULL
+    );
+
+
+INSERT INTO
+    binhusenstore_users (id, name, email, password)
+VALUES (
+        1,
+        'Jon Doe',
+        'binhusenstore_test@test.com',
+        '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee'
+    );
