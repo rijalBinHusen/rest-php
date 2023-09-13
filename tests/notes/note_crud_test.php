@@ -82,22 +82,22 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
     }
 
-    // public function testGetEndpoint()
-    // {
-    //     $http = new HttpCall($this->urlGets);
-    //     $http->addJWTToken();
-    //     // Send a GET request to the /endpoint URL
-    //     $response = $http->getResponse("GET");
+    public function testGetEndpoint()
+    {
+        $http = new HttpCall($this->urlGets);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertArrayHasKey('data', $convertToAssocArray);
-    //     $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
-    //     $this->assertArrayHasKey('isi', $convertToAssocArray['data'][0]);
-    //     $this->assertEquals(true, $convertToAssocArray['success']);
-    // }
+        $convertToAssocArray = json_decode($response, true);
+        // write(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('isi', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
     // public function testGetEndpointFailed()
     // {

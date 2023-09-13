@@ -35,7 +35,7 @@ class Note_app_model
     public function get_notes()
     {
         $query = "SELECT * FROM $this->table_name ORDER BY id DESC LIMIT 30";
-        $result = $this->database->sqlQuery($query)->fetchColumn();
+        $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
             

@@ -22,15 +22,6 @@ Flight::route('GET /notes', function () {
 
         $myreport_base_file = new note_app();
         $myreport_base_file->get_notes();
-    } else {
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'You must be authenticated to access this resource.'
-            ),
-            401
-        );
     }
 });
 
