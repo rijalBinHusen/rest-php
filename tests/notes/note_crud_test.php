@@ -132,22 +132,22 @@ class Note_app_test extends PHPUnit_Framework_TestCase
     }
 
 
-    // public function testGetByIdEndpoint()
-    // {
-    //     $this->testPostEndpoint();
-    //     $http = new HttpCall($this->urlPost . $this->idInserted);
-    //     $http->addJWTToken();
-    //     // Send a GET request to the /endpoint URL
-    //     $response = $http->getResponse("GET");
+    public function testGetByIdEndpoint()
+    {
+        $this->testPostEndpoint();
+        $http = new HttpCall($this->urlPost . $this->idInserted);
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
         
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertArrayHasKey('data', $convertToAssocArray);
-    //     $this->assertArrayHasKey('isi', $convertToAssocArray['data'][0]);
-    //     $this->assertEquals(true, $convertToAssocArray['success']);
-    // }
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('isi', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
     // public function testGetByIdEndpointFailed()
     // {
