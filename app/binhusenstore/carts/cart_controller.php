@@ -172,22 +172,11 @@ class Binhusenstore_cart
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
-        // conditional product_id
-        $valid_product_id = !is_null($product_id);
-        if ($valid_product_id) {
-            $keyValueToUpdate["product_id"] = $product_id;
-        }
 
         // conditional $qty
         $valid_qty = !is_null($qty);
         if ($valid_qty) {
             $keyValueToUpdate["qty"] = $qty;
-        }
-
-        // conditional $id_user
-        $valid_id_user = !is_null($id_user);
-        if ($valid_id_user) {
-            $keyValueToUpdate["id_user"] = $id_user;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;

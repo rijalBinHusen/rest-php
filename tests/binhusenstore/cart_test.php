@@ -129,12 +129,29 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
 
-
     public function testGetEndpointFailed404()
     {
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'carts?id_user=loremipsumdolor');
+
+        $http->addJWTToken();
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Cart not found.", $convertToAssocArray['message']);
+    }
+
+    public function testGetEndpointFailed4042()
+    {
+        $this->testPostEndpoint();
+
+        $http = new HttpCall($this->url . 'carts');
 
         $http->addJWTToken();
         $response = $http->getResponse("GET");
