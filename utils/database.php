@@ -129,6 +129,21 @@ class Query_builder {
     function sqlQuery($your_query) {
         return $this->db->query($your_query);
     }
+
+    function getMaxId($tableName) {
+        $last_id = $this->db->lastInsertId();
+
+        if ($last_id == 0) {
+            $sql = "SELECT MAX(id) as id FROM $tableName";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+
+            $row = $stmt->fetch();
+            $last_id = $row['id'];
+        }
+
+        return $last_id;
+    }
 }
 
 ?>

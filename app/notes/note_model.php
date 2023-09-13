@@ -21,11 +21,11 @@ class Note_app_model
             'isi' => $isi
         );
 
-        $inserted_id = $this->database->insert($this->table_name, $data_to_insert);
+        $this->database->insert($this->table_name, $data_to_insert);
 
         if($this->database->is_error === null) {
     
-            return $inserted_id;
+            return $this->database->getMaxId($this->table_name);
         }   
 
         $this->is_success = $this->database->is_error;

@@ -36,6 +36,7 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals(true, is_string($convertToAssocArray['id']));
         $this->idInserted = $convertToAssocArray['id'];
     }
 
@@ -99,34 +100,36 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $convertToAssocArray['success']);
     }
 
-    // public function testGetEndpointFailed()
-    // {
-    //     $http = new HttpCall($this->urlGets);
-    //     $response = $http->getResponse("GET");
+    public function testGetEndpointFailed()
+    {
+        $http = new HttpCall($this->urlGets);
+        $response = $http->getResponse("GET");
         
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
-    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // }
+        $convertToAssocArray = json_decode($response, true);
+        // write(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-    // public function testGetEndpointFailed2()
-    // {
-    //     $http = new HttpCall($this->urlGets);
-    //     $http->addJWTToken();
-    //     $response = $http->getResponse("GET");
+    public function testGetEndpointByKeyword()
+    {
+        $http = new HttpCall($this->urlGets . "?search=lorem");
+        $http->addJWTToken();
+        $response = $http->getResponse("GET");
         
-    //     $convertToAssocArray = json_decode($response, true);
-    //     fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
-    //     $this->assertEquals("The query parameter must be number", $convertToAssocArray['message']);
-    // }
+        $convertToAssocArray = json_decode($response, true);
+        // write(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('isi', $convertToAssocArray['data'][0]);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+    }
 
 
     // public function testGetByIdEndpoint()
