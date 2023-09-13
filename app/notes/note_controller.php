@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/note_model.php.php');
+require_once(__DIR__ . '/note_model.php');
 
 class note_app
 {

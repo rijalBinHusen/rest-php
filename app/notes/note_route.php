@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . "/note_users/user_controller.php");
-require_once(__DIR__ . "/note_controller.php.php");
+require_once(__DIR__ . "/note_controller.php");
 
 Flight::route('POST /note', function () {
     $user = new Note_app_user_controller();
@@ -11,15 +11,6 @@ Flight::route('POST /note', function () {
 
         $myreport_base_file = new note_app();
         $myreport_base_file->add_note($user_id);
-    } else {
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'You must be authenticated to access this resource.'
-            ),
-            401
-        );
     }
 });
 
