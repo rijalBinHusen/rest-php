@@ -40,15 +40,6 @@ Flight::route("PUT /note/@id", function ($id) {
 
         $myreport_base_file = new note_app();
         $myreport_base_file->update_note_by_id($id);
-    } else {
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'You must be authenticated to access this resource.'
-            ),
-            401
-        );
     }
 });
 
