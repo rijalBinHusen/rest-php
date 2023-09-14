@@ -19,6 +19,17 @@ Flight::route('POST /note_app/user/validate', function () {
     $user->check_token();
 });
 
+// update password
+Flight::route('PUT /note_app/user/update_password', function () {
+    $user = new Note_app_user_controller();
+    $user_info = $user->get_user_info();
+
+    if ($user_info) {
+
+        $user->update_password($user_info['id']);
+    }
+});
+
 // // validate
 // Flight::route('GET /note_app/user', function () {
     

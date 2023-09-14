@@ -118,4 +118,45 @@ class Note_app_user_controller
 
         return false;
     }
+
+    
+    public function update_password($id_user) {
+
+        $req = Flight::request();
+        $password = $req->data->password;
+
+        $invalid_request_body = is_null($password)|| empty($password);
+
+        if($invalid_request_body) {
+
+            Flight::json([
+                "success" => false,
+                "message" => "Password can't be null or empty"
+            ], 400);
+        } 
+        else {
+
+            $row_updated = $this->user->save(null, null, $password, $id_user);
+            $errorUpdateUser = $this->user->error;
+            
+            if(is_null($errorUpdateUser) && $row_updated > 0) {
+
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Update password success.',
+                    'row_updated' => $row_updated,
+                    'errorupdateuser' => $errorUpdateUser,
+                    'id_user' => $id_user
+                ]);
+            } 
+            
+            else {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $errorUpdateUser,
+                ], 500);
+            }
+        }
+    }
 }

@@ -16,6 +16,7 @@ class Note_app_user_model {
   // (D) SAVE USER
   function save ($name, $email, $password, $id=null) {
 
+    // register new user
     if ($id===null) {
       // check is the email exists or no
       $findEmail = $this->database->select_where("note_app_users", "email", $email)->fetch();
@@ -36,13 +37,13 @@ class Note_app_user_model {
       $this->database->insert("note_app_users", $data_to_entry);
 
     } 
+
+    // update pasword user
     else {
-        $data_to_entry = array(
-            "name" => $name,
-            "email" => $email,
-            "password" => password_hash($password, PASSWORD_DEFAULT)
-        );
-        $this->database->update("note_app_users", $data_to_entry, "id", $id);
+      
+        $data_to_entry = array("password" => password_hash($password, PASSWORD_DEFAULT));
+        $result = $this->database->update("note_app_users", $data_to_entry, "id", $id);
+        return $result;
     }
     return;
   }
