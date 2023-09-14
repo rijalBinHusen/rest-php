@@ -5,10 +5,12 @@ class User
 {   
     protected $user;
 
-    function __construct()
+    function __construct($table_name)
     {
-        $this->user = new User_model();
+
+        $this->user = new User_model($table_name);
     }
+
     public function login()
     {
         $req = Flight::request();
@@ -19,6 +21,7 @@ class User
         $errorLogin = $this->user->error;
 
         if(is_null($errorLogin)) {
+
             Flight::json([
                 'success' => true,
                 'token' => $token,
@@ -32,6 +35,7 @@ class User
             ], 401);
         }
     }
+
     public function register() {
         $req = Flight::request();
         $email = $req->data->email;
@@ -41,11 +45,13 @@ class User
         $invalid_request_body = is_null($email) || is_null($password) || is_null($name) || empty($email) || empty($password) || empty($name);
 
         if($invalid_request_body) {
+
             Flight::json([
                 "success" => false,
                 "message" => "Unprocessable Entity"
             ], 422);
         } 
+
         else {
 
             $this->user->save($name, $email, $password);
@@ -64,12 +70,16 @@ class User
             }
         }
     }
+
     public function check_token () {
+
         if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $is_token_valid = $this->user->validate($jwt_token);
             
             if($is_token_valid) {
+
                 Flight::json([
                     'success' => true,
                     'message' => 'Valid token',
@@ -77,6 +87,7 @@ class User
             } 
             
             else {
+
                 Flight::json([
                     'success' => false,
                     'message' => 'Invalid token',
@@ -84,6 +95,7 @@ class User
             }
 
         } else {
+
             Flight::json([
                 'success' => false,
                 'message' => 'You must be authenticated to access this resource.',
@@ -91,12 +103,14 @@ class User
         }
         
     }
+
     public function is_valid_token() {
         if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $is_token_valid = $this->user->validate($jwt_token);
             if($is_token_valid) {
+
                 return $is_token_valid;
             } else {
                 
@@ -104,6 +118,7 @@ class User
                     'success' => false,
                     'message' => 'Invalid token',
                 ], 401);
+
                 return false;
             }
             
@@ -112,7 +127,76 @@ class User
                 'success' => false,
                 'message' => 'You must be authenticated to access this resource.',
             ], 401);
+
             return false;
+        }
+    }
+
+    public function get_user_info() {
+        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+
+            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            $user_info_by_jwt = $this->user->validate($jwt_token);
+            if($user_info_by_jwt) {
+
+                return $user_info_by_jwt;
+            } else {
+                
+                Flight::json([
+                    'success' => false,
+                    'message' => 'Invalid token',
+                ], 401);
+                
+            }
+            
+        } else {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'You must be authenticated to access this resource.',
+            ], 401);
+        }
+
+        return false;
+    }
+
+    public function update_password($id_user) {
+
+        $req = Flight::request();
+        $password = $req->data->password;
+
+        $invalid_request_body = is_null($password)|| empty($password);
+
+        if($invalid_request_body) {
+
+            Flight::json([
+                "success" => false,
+                "message" => "Password can't be null or empty"
+            ], 400);
+        } 
+        else {
+
+            $row_updated = $this->user->save(null, null, $password, $id_user);
+            $errorUpdateUser = $this->user->error;
+            
+            if(is_null($errorUpdateUser) && $row_updated > 0) {
+
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Update password success.',
+                    'row_updated' => $row_updated,
+                    'errorupdateuser' => $errorUpdateUser,
+                    'id_user' => $id_user
+                ]);
+            } 
+            
+            else {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $errorUpdateUser,
+                ], 500);
+            }
         }
     }
 }

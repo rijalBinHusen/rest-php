@@ -147,4 +147,27 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Valid token", $convertToAssocArray['message']);
     }
 
+    // test login success
+    public function testUpdateUserPassword()
+    {
+        $this->testRegisterEndpoint();
+        $http = new HttpCall($this->url . "update_password");
+        // Define the request body
+        $http->setData(['password' => 00700]);
+        $http->addJWTToken();
+        $response = $http->getResponse("PUT");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, TRUE));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Update password success.', $convertToAssocArray['message']);
+
+        $this->data_inserted['password'] = 00700;
+        $this->testLoginEndpoint();
+    }
+
 }

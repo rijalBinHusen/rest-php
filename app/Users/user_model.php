@@ -14,41 +14,46 @@ define("JWT_ALGO", "HS256");
 class User_model {
   private $database = null;
   public $error = null;
-  function __construct () {
+  private $table_name = null;
+
+  function __construct ($table_name) {
+
+    $this->table_name = $table_name;
     $this->database = Query_builder::getInstance();
   }
  
   // (D) SAVE USER
   function save ($name, $email, $password, $id=null) {
 
+    $data_to_entry = array(
+      "name" => $name,
+      "email" => $email,
+      "password" => password_hash($password, PASSWORD_DEFAULT)
+    );
+
+    // register
     if ($id===null) {
       // check is the email exists or no
-      $findEmail = $this->database->select_where("users", "email", $email)->fetch();
+      $findEmail = $this->database->select_where($this->table_name, "email", $email)->fetch();
       $isEmailExists = is_array($findEmail);
       
       if($isEmailExists) {
+
         $this->error = "User exist.";
-        return;
+      } 
+      
+      else {
+
+        $this->database->insert($this->table_name, $data_to_entry);
       }
 
-      $data_to_entry = array(
-        "name" => $name,
-        "email" => $email,
-        "password" => password_hash($password, PASSWORD_DEFAULT)
-      );
-
-      $this->database->insert("users", $data_to_entry);
-
     } 
+
+    // update password
     else {
-        $data_to_entry = array(
-            "name" => $name,
-            "email" => $email,
-            "password" => password_hash($password, PASSWORD_DEFAULT)
-        );
-        $this->database->update("users", $data_to_entry, "id", $id);
+
+        $this->database->update($this->table_name, array('password' => password_hash($password, PASSWORD_DEFAULT)), "id", $id);
     }
-    return;
   }
  
   // (F) VERIFY USER LOGIN
@@ -56,7 +61,7 @@ class User_model {
   // RETURNS JWT IF VALID
   function login ($email, $password) {
     // (F1) GET USER
-    $user = $this->database->select_where("users", "email", $email)->fetch();
+    $user = $this->database->select_where($this->table_name, "email", $email)->fetch();
     $valid = is_array($user);
  
     // (F2) CHECK PASSWORD
@@ -65,6 +70,7 @@ class User_model {
     // (F3) RETURN JWT IF OK, FALSE IF NOT
     if ($valid) {
       $now = strtotime("now");
+
       return Firebase\JWT\JWT::encode([
         "iat" => $now, // issued at - time when token is generated
         "nbf" => $now, // not before - when this token is considered valid
@@ -74,34 +80,31 @@ class User_model {
         "aud" => JWT_AUD, // audience
         "data" => ["id" => $user["id"]] // whatever data you want to add
       ], JWT_SECRET, JWT_ALGO);
-    } else {
+    } 
+    
+    else {
 
       $this->error = "Invalid user/password";
-      return;
-
     }
   }
  
-  // (G) VALIDATE JWT
-  // RETURN USER IF VALID
-  // RETURN FALSE IF INVALID
+  // (G) VALIDATE JWT, RETURN USER IF VALID, RETURN FALSE IF INVALID
   function validate ($jwt) {
+
+    $valid = false;
     // (G1) "UNPACK" ENCODED JWT
     try {
 
       $jwt = Firebase\JWT\JWT::decode($jwt, new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO));
       $valid = is_object($jwt);
-
     } catch (Exception $e) {
       
       $this->error = $e->getMessage();
-      return;
-
     }
  
     // (G2) GET USER
     if ($valid) {
-      $user = $this->database->select_where("users", "id", $jwt->data->id)->fetch();
+      $user = $this->database->select_where($this->table_name, "id", $jwt->data->id)->fetch();
       $valid = is_array($user);
     }
  
@@ -110,12 +113,11 @@ class User_model {
 
       unset($user["password"]);
       return $user;
-
-    } else {
+    } 
+    
+    else {
 
       $this->error = "Invalid JWT";
-      return;
-
     }
   }
 }
