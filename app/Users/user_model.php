@@ -52,7 +52,8 @@ class User_model {
     // update password
     else {
 
-        $this->database->update($this->table_name, array('password' => password_hash($password, PASSWORD_DEFAULT)), "id", $id);
+       $result = $this->database->update($this->table_name, ['password' => password_hash($password, PASSWORD_DEFAULT)], "id", $id);
+       return $result;
     }
   }
  

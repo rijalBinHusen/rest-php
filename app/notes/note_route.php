@@ -1,9 +1,9 @@
 <?php
-require_once(__DIR__ . "/note_users/user_controller.php");
 require_once(__DIR__ . "/note_controller.php");
+require_once(__DIR__ ."/../Users/user_controller.php");
 
 Flight::route('POST /note', function () {
-    $user = new Note_app_user_controller();
+    $user = new User("note_app_users");
     $user_info = $user->get_user_info();
 
     if ($user_info) {
@@ -15,7 +15,7 @@ Flight::route('POST /note', function () {
 });
 
 Flight::route('GET /notes', function () {
-    $user = new Note_app_user_controller();
+    $user = new User("note_app_users");
     $user_info = $user->get_user_info();
 
     if ($user_info) {
@@ -33,7 +33,7 @@ Flight::route("GET /note/@id", function ($id) {
 });
 
 Flight::route("PUT /note/@id", function ($id) {
-    $user = new Note_app_user_controller();
+    $user = new User("note_app_users");
     $user_info = $user->get_user_info();
 
     if ($user_info) {
@@ -44,7 +44,7 @@ Flight::route("PUT /note/@id", function ($id) {
 });
 
 Flight::route("DELETE /note/@id", function ($id) {
-    $user = new Note_app_user_controller();
+    $user = new User("note_app_users");
     $user_info = $user->get_user_info();
 
     if ($user_info) {

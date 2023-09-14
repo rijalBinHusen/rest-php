@@ -183,10 +183,7 @@ class User
 
                 Flight::json([
                     'success' => true,
-                    'message' => 'Update password success.',
-                    'row_updated' => $row_updated,
-                    'errorupdateuser' => $errorUpdateUser,
-                    'id_user' => $id_user
+                    'message' => 'Update password success.'
                 ]);
             } 
             
@@ -195,6 +192,7 @@ class User
                 Flight::json([
                     'success' => false,
                     'message' => $errorUpdateUser,
+                    'err' => $row_updated
                 ], 500);
             }
         }
