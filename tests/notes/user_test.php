@@ -3,7 +3,7 @@
 require_once(__DIR__ ."/../../tests/httpCall.php");
 require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
-class MyRestServerUserTest extends PHPUnit_Framework_TestCase
+class MyRestServerUserNoteAppTest extends PHPUnit_Framework_TestCase
 {
     private $url = "http://localhost/rest-php/note_app/user/";
     var $data_inserted = array();

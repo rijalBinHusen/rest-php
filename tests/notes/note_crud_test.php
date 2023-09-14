@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 class Note_app_test extends PHPUnit_Framework_TestCase
 {
@@ -329,6 +330,36 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Note not found", $convertToAssocArray['message']);
+    }
+
+    public function testUpdateNoteByNotTheOwnedUser () {
+
+        // insert new note with current user
+        $this->testPostEndpoint();
+
+        // login new user
+        $login_test = new MyRestServerUserNoteAppTest();
+
+        $login_test->testRegisterEndpoint();
+        $login_test->testLoginEndpoint();
+        sleep(1);
+
+        // update note using new user account
+        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
+        $data = array('isi' => "Update note failed");
+
+        $httpCallVar->setData($data);
+        $httpCallVar->addJWTToken();
+        
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // the access should be forbidden
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You do not have permission to update that note.", $convertToAssocArray['message']);
     }
 
 }
