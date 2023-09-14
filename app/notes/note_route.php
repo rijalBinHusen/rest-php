@@ -39,7 +39,7 @@ Flight::route("PUT /note/@id", function ($id) {
     if ($user_info) {
 
         $myreport_base_file = new note_app();
-        $myreport_base_file->update_note_by_id($id);
+        $myreport_base_file->update_note_by_id($id, $user_info['id']);
     }
 });
 

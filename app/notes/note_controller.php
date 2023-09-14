@@ -175,7 +175,7 @@ class note_app
         }
     }
 
-    public function update_note_by_id($id)
+    public function update_note_by_id($id, $user_id)
     {
         // catch the query string request
         $req = Flight::request();
@@ -190,7 +190,21 @@ class note_app
             $keyValueToUpdate["isi"] = $isi;
         }
 
-        $is_oke_to_update = count($keyValueToUpdate) > 0;
+        // retrieve note by id
+        $result = $this->note_app->get_note_by_id($id);
+        $is_success = $this->note_app->is_success;
+        $is_found = count($result) > 0;
+        $is_owner_matched = false;
+
+        if($is_found) {
+
+            $is_owner_matched = $result[0]['owner_id'] === $user_id;
+        }
+
+        // check is the note owner === $user_id
+
+        $is_any_value_to_update = count($keyValueToUpdate) > 0;
+        $is_oke_to_update = $is_any_value_to_update && $is_owner_matched;
 
         if($is_oke_to_update) {
 
@@ -217,17 +231,28 @@ class note_app
                     ), 500
                 );
             }
-    
-            else {
+        }
+        
+        else if($is_owner_matched === false && $is_found) {
 
-                Flight::json(
-                    array(
-                        'success' => false,
-                        'message' => 'Note not found'
-                    ), 404
-                );
-            }
-        } 
+            Flight::json(
+
+                array(
+                    'success' => false,
+                    'message' => 'You do not have permission to update that note.'
+                ), 403
+            );
+        }
+    
+        else if ($is_found === false){
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Note not found'
+                ), 404
+            );
+        }
         
         else {
 

@@ -2,7 +2,6 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
-require_once(__DIR__ . '/user_test.php');
 
 class Note_app_test extends PHPUnit_Framework_TestCase
 {
@@ -273,7 +272,7 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $response = $httpCallVar->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // write(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
@@ -337,23 +336,60 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         // insert new note with current user
         $this->testPostEndpoint();
 
-        // login new user
-        $login_test = new MyRestServerUserNoteAppTest();
+        //============ register new user ================== //
+        $httpRegisterUser = new HttpCall("http://localhost/rest-php/note_app/user/register");
+        $faker = Faker\Factory::create();
+        // Define the request body
+        $email = $faker->email;
+        $password = $faker->numberBetween(100000, 1000000);
+        $name = $faker->name("female");
+        $user_to_post = array(
+            'email' => $email, 
+            'password' => $password, 
+            'name' => $name
+        );
+        
+        $httpRegisterUser->setData($user_to_post);
+        $responseRegister = $httpRegisterUser->getResponse("POST");
 
-        $login_test->testRegisterEndpoint();
-        $login_test->testLoginEndpoint();
+        $convertToAssocArray = json_decode($responseRegister, true);
+        // write(STDERR, print_r($responseRegister ."\n", true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals('Registration success.', $convertToAssocArray['message']);
+        
+        // ==================== Login new user ==============///
+        $httpLoginUser = new HttpCall("http://localhost/rest-php/note_app/user/login");
+        // Define the request body
+        $httpLoginUser->setData($user_to_post);
+        $responseLogin = $httpLoginUser->getResponse("POST");
+        
+        $convertToAssocArray = json_decode($responseLogin, true);
+        // fwrite(STDERR, print_r($response, TRUE));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('token', $convertToAssocArray);
+
+        // save token to a .txt file
+        $myfile = fopen("token.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $convertToAssocArray['token']);
+        fclose($myfile);
+
         sleep(1);
 
         // update note using new user account
-        $httpCallVar = new HttpCall($this->urlPost . $this->idInserted);
+        $httpUpdateNote = new HttpCall($this->urlPost . $this->idInserted);
         $data = array('isi' => "Update note failed");
 
-        $httpCallVar->setData($data);
-        $httpCallVar->addJWTToken();
+        $httpUpdateNote->setData($data);
+        $httpUpdateNote->addJWTToken();
         
-        $response = $httpCallVar->getResponse("PUT");
+        $response = $httpUpdateNote->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
+        // write(STDERR, print_r($response ."\n", true));
         // the access should be forbidden
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
