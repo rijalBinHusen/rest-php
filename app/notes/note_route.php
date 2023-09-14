@@ -51,14 +51,5 @@ Flight::route("DELETE /note/@id", function ($id) {
 
         $myreport_base_file = new note_app();
         $myreport_base_file->remove_note($id);
-    } else {
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'You must be authenticated to access this resource.'
-            ),
-            401
-        );
     }
 });

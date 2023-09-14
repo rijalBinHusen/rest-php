@@ -169,7 +169,7 @@ class note_app
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'note not found'
+                    'message' => 'Note not found'
                 ), 404
             );
         }
