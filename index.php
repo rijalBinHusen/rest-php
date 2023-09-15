@@ -29,7 +29,7 @@ require_once(__DIR__ . '/app/notes/user_route.php');
 require_once(__DIR__ . '/app/notes/note_route.php');
 
 // binhusenstore
-require_once(__DIR__ . '/app/binhusenstore/users/user_route.php');
+require_once(__DIR__ . '/app/binhusenstore/user_route.php');
 // Flight::route('/test(/@endpoint)', function ($endpoint) {
 //     $request = Flight::request();
 //     // $jwt_token = $request->;
