@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/product_model.php.php');
+require_once(__DIR__ . '/product_model.php');
 
 class Binhusenstore_product
 {
@@ -18,7 +18,7 @@ class Binhusenstore_product
         $categories = $req->data->categories;
         $price = $req->data->price;
         $weight = $req->data->weight;
-        $image = $req->data->image;
+        $images = $req->data->images;
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
@@ -29,7 +29,7 @@ class Binhusenstore_product
                                 || is_null($name)
                                 || is_null($price) 
                                 || is_null($weight) 
-                                || is_null($image) 
+                                || is_null($images) 
                                 || is_null($description)
                                 || is_null($is_available)
                                 || is_null($default_total_week);
@@ -45,7 +45,7 @@ class Binhusenstore_product
             return;
         }
 
-        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $image, $description, $default_total_week, $is_available);
+        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available);
 
         if($this->Binhusenstore_product->is_success === true) {
         

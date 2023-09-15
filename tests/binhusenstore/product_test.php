@@ -196,7 +196,7 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("product not found", $convertToAssocArray['message']);
+        $this->assertEquals("Product not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
@@ -271,8 +271,9 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array('price' => "Failed test");
 
-        $httpCallVar->addJWTToken();
         $httpCallVar->setData($data);
+        
+        $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
 
@@ -282,7 +283,7 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("product not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Product not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint201()
@@ -332,6 +333,6 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("product not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Product not found", $convertToAssocArray['message']);
     }
 }
