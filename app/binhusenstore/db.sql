@@ -76,7 +76,7 @@ DELIMITER $$
     FOR EACH ROW
     BEGIN
         INSERT INTO binhusenstore_categories_prefix VALUES (NULL);
-        SET NEW.id = CONCAT('T', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
+        SET NEW.id = CONCAT('C', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
 

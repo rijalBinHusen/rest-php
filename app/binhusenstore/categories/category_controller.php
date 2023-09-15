@@ -79,7 +79,7 @@ class Binhusenstore_category
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "category not found"
+            "message" => "Category not found"
             ), 404);
         }
 
@@ -118,7 +118,7 @@ class Binhusenstore_category
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'category not found'
+                    'message' => 'Category not found'
                 ), 404
             );
         }
@@ -217,7 +217,7 @@ class Binhusenstore_category
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update Category, check the data you sent'
+                    'message' => 'Failed to update category, check the data you sent'
                 )
             );
         }

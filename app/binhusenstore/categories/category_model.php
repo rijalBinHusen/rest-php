@@ -18,11 +18,11 @@ class Binhusenstore_category_model
 
         $data_to_insert = array('name_category' => $name_category);
 
-        $inserted_id = $this->database->insert($this->table, $data_to_insert);
+        $this->database->insert($this->table, $data_to_insert);
 
         if($this->database->is_error === null) {
     
-            return $inserted_id;
+            return $this->database->getMaxId($this->table);
         }   
             
         $this->is_success = $this->database->is_error;
