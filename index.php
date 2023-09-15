@@ -33,6 +33,7 @@ require_once(__DIR__ . '/app/binhusenstore/user_route.php');
 require_once(__DIR__ . '/app/binhusenstore/categories/category_route.php');
 require_once(__DIR__ . '/app/binhusenstore/carts/cart_route.php');
 require_once(__DIR__ . '/app/binhusenstore/orders/order_route.php');
+require_once(__DIR__ . '/app/binhusenstore/payments/payments_route.php');
 // Flight::route('/test(/@endpoint)', function ($endpoint) {
 //     $request = Flight::request();
 //     // $jwt_token = $request->;

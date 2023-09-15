@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/payment_model.php.php');
+require_once(__DIR__ . '/payments_model.php');
 
 class Binhusenstore_payment
 {
@@ -24,7 +24,7 @@ class Binhusenstore_payment
                                     || is_null($id_order)
                                     || !is_string($id_order)
                                     || is_null($balance)
-                                    || is_numeric($balance)
+                                    || !is_numeric($balance)
                                     || is_null($is_paid)
                                     || !is_bool($is_paid);
 
@@ -66,7 +66,7 @@ class Binhusenstore_payment
     {
         // catch the query string request
         $req = Flight::request();
-        $id_order = $req->data->id_order;
+        $id_order = $req->query->id_order;
 
         $result = $this->Binhusenstore_payment->get_payments($id_order);
                 
@@ -91,7 +91,7 @@ class Binhusenstore_payment
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "payment not found"
+            "message" => "Payments not found"
             ), 404);
         }
 
@@ -132,7 +132,7 @@ class Binhusenstore_payment
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'payment not found'
+                    'message' => 'Payment not found'
                 ), 404
             );
         }
@@ -168,7 +168,7 @@ class Binhusenstore_payment
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'payment not found'
+                    'message' => 'Payment not found'
                 ), 404
             );
         }
@@ -244,7 +244,7 @@ class Binhusenstore_payment
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'payment not found'
+                        'message' => 'Payment not found'
                     ), 404
                 );
             }

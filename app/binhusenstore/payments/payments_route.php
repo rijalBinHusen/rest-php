@@ -1,9 +1,8 @@
 <?php
-require_once(__DIR__ . "/../../Users/user_controller.php");
-require_once(__DIR__ . "/payment_controller.php.php");
+require_once(__DIR__ . "/payments_controller.php");
 
 Flight::route('POST /binhusenstore/payment', function () {
-    $user = new User();
+    $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
     if($is_token_valid) {
@@ -14,7 +13,7 @@ Flight::route('POST /binhusenstore/payment', function () {
 });
 
 Flight::route('GET /binhusenstore/payments', function () {
-    $user = new User();
+    $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
     if($is_token_valid) {
@@ -27,7 +26,7 @@ Flight::route('GET /binhusenstore/payments', function () {
 
 
 Flight::route("GET /binhusenstore/payment/@id", function ($id) {
-    $user = new User();
+    $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
     if($is_token_valid) {
@@ -39,7 +38,7 @@ Flight::route("GET /binhusenstore/payment/@id", function ($id) {
 });
 
 Flight::route("PUT /binhusenstore/payment/@id", function ($id) {
-    $user = new User();
+    $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
     if($is_token_valid) {
@@ -51,7 +50,7 @@ Flight::route("PUT /binhusenstore/payment/@id", function ($id) {
 });
 
 Flight::route("DELETE /binhusenstore/payment/@id", function ($id) {
-    $user = new User();
+    $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
     if($is_token_valid) {

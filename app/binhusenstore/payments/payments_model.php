@@ -23,11 +23,11 @@ class Binhusenstore_payment_model
             'is_paid' => $is_paid
         );
 
-        $inserted_id = $this->database->insert($this->table, $data_to_insert);
+        $this->database->insert($this->table, $data_to_insert);
 
         if($this->database->is_error === null) {
     
-            return $inserted_id;
+            return $this->database->getMaxId($this->table);
         }   
             
         $this->is_success = $this->database->is_error;

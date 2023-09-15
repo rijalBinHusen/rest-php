@@ -17,7 +17,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $data = array(
             'date_payment' => $faker->date('Y-m-d'),
             'id_payment' => $faker->text(30),
-            'id_order' => $faker->text(30),
+            'id_order' => $faker->text(5),
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
         );
@@ -64,7 +64,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals('Failed add payment, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed401()
@@ -99,7 +99,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($id_order, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -134,9 +134,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'payments?id_order=loremipsumdolor');
-        $response = $http->getResponse("GET");
-
+        
         $http->addJWTToken();
+
+        $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -145,7 +146,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Payments not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Payments not found", $convertToAssocArray['message']);
     }
 
     public function testGetEndpointFailed404_()
@@ -153,9 +154,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'payments');
-        $response = $http->getResponse("GET");
-
+        
         $http->addJWTToken();
+
+        $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -164,7 +166,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Payments not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Payments not found", $convertToAssocArray['message']);
     }
 
     public function testGetByIdEndpoint()
@@ -222,7 +224,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("payment not found", $convertToAssocArray['message']);
+        $this->assertEquals("Payment not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
@@ -297,8 +299,9 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array('date_payment' => "Failed test");
 
-        $httpCallVar->addJWTToken();
         $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
 
@@ -308,7 +311,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("payment not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Payment not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint201()
@@ -358,6 +361,6 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("payment not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Payment not found", $convertToAssocArray['message']);
     }
 }
