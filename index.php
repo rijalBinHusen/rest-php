@@ -35,6 +35,7 @@ require_once(__DIR__ . '/app/binhusenstore/carts/cart_route.php');
 require_once(__DIR__ . '/app/binhusenstore/orders/order_route.php');
 require_once(__DIR__ . '/app/binhusenstore/payments/payments_route.php');
 require_once(__DIR__ . '/app/binhusenstore/products/product_route.php');
+require_once(__DIR__ . '/app/binhusenstore/testimonies/testimony_route.php');
 
 
 // Flight::route('/test(/@endpoint)', function ($endpoint) {

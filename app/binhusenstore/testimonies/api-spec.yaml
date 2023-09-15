@@ -30,6 +30,14 @@ paths:
         "401":
           $ref: "#/components/responses/401Error"
   /testimonies:
+    parameters:
+        - name: id_product
+          in: query
+          required: false
+          description: The ID of the product
+          schema:
+            type: string
+          example: "P220203902"
     get:
       tags:
         - testimony

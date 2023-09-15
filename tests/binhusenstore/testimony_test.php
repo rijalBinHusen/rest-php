@@ -16,7 +16,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'id_user' => $faker->text(20),
-            'id_product' => $faker->text(30),
+            'id_product' => $faker->text(6),
             'rating' => $faker->numberBetween(1, 5),
             'content' => $faker->text(190)
         );
@@ -35,7 +35,6 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        // $this->assertEquals(201, http_response_code());
         $this->url_host_id = $this->url . "testimony/" . $convertToAssocArray['id'];
     }
 
@@ -95,7 +94,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -106,6 +105,56 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('id_product', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('rating', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('content', $convertToAssocArray['data'][0]);
+    }
+
+    public function testGetEndpointByIdProduct200()
+    {
+        $this->testPostEndpoint();
+
+        $id_product = $this->data_posted['id_product'];
+
+        $http = new HttpCall($this->url .'testimonies?id_product=' .$id_product);
+
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('id_user', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('id_product', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('rating', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('content', $convertToAssocArray['data'][0]);
+    }
+
+
+    public function testGetEndpointByIdProduct404()
+    {
+        $this->testPostEndpoint();
+
+        $id_product = $this->data_posted['id_product'];
+
+        $http = new HttpCall($this->url .'testimonies?id_product=1231223');
+
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("Testimony not found", $convertToAssocArray['message']);
     }
 
     public function testGetEndpointFailed401()
@@ -130,12 +179,13 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url_host_id);
+        
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($this->url_host_id, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -171,6 +221,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->url . 'testimony/SDFLSKDFJ');
 
         $http->addJWTToken();
+
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -180,7 +231,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("testimony not found", $convertToAssocArray['message']);
+        $this->assertEquals("Testimony not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
@@ -189,7 +240,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array('rating' => 2);
-
+        
         $httpCallVar->setData($data);
 
         $httpCallVar->addJWTToken();
@@ -250,13 +301,13 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed404()
     {
-        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url . 'testimony/loremipsum');
         // Define the request body
         $data = array('rating' => "Failed test");
 
-        $httpCallVar->addJWTToken();
         $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
 
@@ -266,7 +317,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("testimony not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Testimony not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint201()
@@ -280,6 +331,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
 
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
+        // fwrite(STDERR, print_r($response, true));
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
@@ -316,6 +368,6 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("testimony not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Testimony not found", $convertToAssocArray['message']);
     }
 }

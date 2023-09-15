@@ -5,6 +5,7 @@ phpunit tests/binhusenstore/category_test.php
 phpunit tests/binhusenstore/order_test.php
 phpunit tests/binhusenstore/payment_test.php
 phpunit tests/binhusenstore/product_test.php
+phpunit tests/binhusenstore/testimony_test.php
 sleep 6
 
 #run all those command by using unit_test_note_app.sh

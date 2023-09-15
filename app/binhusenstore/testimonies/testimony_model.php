@@ -23,18 +23,30 @@ class Binhusenstore_testimony_model
             'content' => $content
         );
 
-        $inserted_id = $this->database->insert($this->table, $data_to_insert);
+        $this->database->insert($this->table, $data_to_insert);
 
         if($this->database->is_error === null) {
     
-            return $inserted_id;
+            return $this->database->getMaxId($this->table);
         }   
             
         $this->is_success = $this->database->is_error;
 
     }
 
-    public function get_testimonies($id_product)
+    public function get_testimonies()
+    {
+        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($this->database->is_error === null) {
+            
+            return $result;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
+    public function get_testimoniesByIdProduct($id_product)
     {
         $result  = $this->database->select_where($this->table, 'id_product', $id_product)->fetchAll(PDO::FETCH_ASSOC);
         

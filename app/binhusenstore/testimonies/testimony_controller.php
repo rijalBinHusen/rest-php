@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/testimony_model.php.php');
+require_once(__DIR__ . '/testimony_model.php');
 
 class Binhusenstore_testimony
 {
@@ -63,13 +63,24 @@ class Binhusenstore_testimony
     {
         // catch the query string request
         $req = Flight::request();
-        $id_product = $req->data->id_product;
+        $id_product = $req->query->id_product;
 
-        $result = $this->Binhusenstore_testimony->get_testimonies($id_product);
+        $result = array();
+
+        if(is_null($id_product)) {
+
+            $result = $this->Binhusenstore_testimony->get_testimonies();
+        }
+
+        else {
+            
+            $result = $this->Binhusenstore_testimony->get_testimoniesByIdProduct($id_product);
+        }
                 
         $is_exists = count($result) > 0;
 
         if($this->Binhusenstore_testimony->is_success === true && $is_exists) {
+
             Flight::json(
                 array(
                     "success" => true,
@@ -79,6 +90,7 @@ class Binhusenstore_testimony
         }
 
         else if ($this->Binhusenstore_testimony->is_success !== true) {
+
             Flight::json( array(
                 "success" => false,
                 "message" => $result
@@ -86,9 +98,10 @@ class Binhusenstore_testimony
         }
         
         else {
+
             Flight::json( array(
             "success" => false,
-            "message" => "testimony not found"
+            "message" => "Testimony not found"
             ), 404);
         }
 
@@ -129,7 +142,7 @@ class Binhusenstore_testimony
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'testimony not found'
+                    'message' => 'Testimony not found'
                 ), 404
             );
         }
@@ -165,7 +178,7 @@ class Binhusenstore_testimony
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'testimony not found'
+                    'message' => 'Testimony not found'
                 ), 404
             );
         }
@@ -241,7 +254,7 @@ class Binhusenstore_testimony
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'testimony not found'
+                        'message' => 'Testimony not found'
                     ), 404
                 );
             }
