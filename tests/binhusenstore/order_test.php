@@ -68,7 +68,7 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals('Failed add order, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add order, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed401()
@@ -140,12 +140,13 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url_host_id);
-        $http->addJWTToken();
         // Send a GET request to the /endpoint URL
+        
+        $http->addJWTToken();
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -194,16 +195,16 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("order not found", $convertToAssocArray['message']);
+        $this->assertEquals("Order not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
     {
         $this->testPostEndpoint();
-        $faker = Faker\Factory::create();
+        
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
-        $data = array('title' => $faker->firstName("male"));
+        $data = array('title' => "Updated");
 
         $httpCallVar->setData($data);
 
@@ -212,6 +213,7 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $response = $httpCallVar->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -265,13 +267,13 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed404()
     {
-        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url . 'order/loremipsum');
         // Define the request body
         $data = array('date_order' => "Failed test");
 
-        $httpCallVar->addJWTToken();
         $httpCallVar->setData($data);
+        
+        $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
 
@@ -281,7 +283,7 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("order not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Order not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint201()
@@ -331,6 +333,6 @@ class MyReportOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("order not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Order not found", $convertToAssocArray['message']);
     }
 }

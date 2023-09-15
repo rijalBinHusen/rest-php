@@ -93,7 +93,7 @@ class Binhusenstore_order
         else {
             Flight::json( array(
             "success" => false,
-            "message" => "order not found"
+            "message" => "Order not found"
             ), 404);
         }
 
@@ -110,30 +110,30 @@ class Binhusenstore_order
         $is_found = count($result) > 0;
 
         if($is_success === true && $is_found) {
-            Flight::json(
-                array(
-                    'success' => true,
+
+            Flight::json([
+                'success' => true,
                     'data' => $result
-                )
+                ]
             );
         }
 
         else if($is_success !== true) {
+
             Flight::json(
-                array(
+                [
                     'success' => false,
                     'message' => $is_success
-                ), 500
+                ], 500
             );
-            return;
         }
 
         else {
             Flight::json(
-                array(
+                [
                     'success' => false,
-                    'message' => 'order not found'
-                ), 404
+                    'message' => 'Order not found'
+                ], 404
             );
         }
     }
@@ -147,29 +147,27 @@ class Binhusenstore_order
     
         if($is_success === true && $result > 0) {
             Flight::json(
-                array(
+                [
                     'success' => true,
                     'message' => 'Delete order success',
-                )
+                ]
             );
         }
 
         else if($is_success !== true) {
-            Flight::json(
-                array(
+            Flight::json([
                     'success' => false,
                     'message' => $is_success
-                ), 500
+                ], 500
             );
             return;
         }
 
         else {
-            Flight::json(
-                array(
+            Flight::json([
                     'success' => false,
-                    'message' => 'order not found'
-                ), 404
+                    'message' => 'Order not found'
+                ], 404
             );
         }
     }
@@ -269,7 +267,7 @@ class Binhusenstore_order
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'order not found'
+                        'message' => 'Order not found'
                     ), 404
                 );
             }
