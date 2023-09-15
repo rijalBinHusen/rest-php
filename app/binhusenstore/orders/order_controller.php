@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/order_model.php.php');
+require_once(__DIR__ . '/order_model.php');
 
 class Binhusenstore_order
 {
