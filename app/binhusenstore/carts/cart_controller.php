@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/cart_model.php.php');
+require_once(__DIR__ . '/cart_model.php');
 
 class Binhusenstore_cart
 {
@@ -217,7 +217,7 @@ class Binhusenstore_cart
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update Product, check the data you sent'
+                    'message' => 'Failed to update cart, check the data you sent'
                 )
             );
         }

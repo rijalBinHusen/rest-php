@@ -1,5 +1,6 @@
 # source .env
 phpunit tests/binhusenstore/user_test.php
+phpunit tests/binhusenstore/cart_test.php
 phpunit tests/binhusenstore/category_test.php
 sleep 6
 

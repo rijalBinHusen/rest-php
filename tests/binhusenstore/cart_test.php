@@ -15,7 +15,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $http = new HttpCall($this->url . "cart");
         // Define the request body
         $data = array(
-            'id_user' => $faker->text(30),
+            'id_user' => $faker->text(7),
             'product_id' => $faker->text(30),
             'qty' => $faker->numberBetween(1, 10),
         );
@@ -61,7 +61,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Failed add cart, check the data you sent', $convertToAssocArray['message']);
+        $this->assertEquals('Failed to add cart, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointFailed2()
@@ -100,7 +100,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($this->data_posted, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -144,7 +144,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Cart not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Cart not found", $convertToAssocArray['message']);
     }
 
     public function testGetEndpointFailed4042()
@@ -162,7 +162,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Cart not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Cart not found", $convertToAssocArray['message']);
     }
 
     public function testGetByIdEndpoint()
@@ -217,7 +217,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("cart not found", $convertToAssocArray['message']);
+        $this->assertEquals("Cart not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
@@ -297,13 +297,13 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
 
     public function testPutEndpointFailed404()
     {
-        $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url . 'cart/loremipsum');
         // Define the request body
         $data = array('qty' => 7);
 
-        $httpCallVar->addJWTToken();
         $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
 
@@ -313,7 +313,7 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Cart not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Cart not found", $convertToAssocArray['message']);
     }
 
     public function testDeleteEndpoint201()
@@ -365,6 +365,6 @@ class MyReportcartsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Cart not found.", $convertToAssocArray['message']);
+        $this->assertEquals("Cart not found", $convertToAssocArray['message']);
     }
 }
