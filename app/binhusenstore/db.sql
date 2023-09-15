@@ -20,7 +20,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_products
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_products_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_products_prefix VALUES (NULL);
         SET NEW.id = CONCAT('P', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
@@ -49,7 +49,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_carts
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_carts_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_carts_prefix VALUES (NULL);
         SET NEW.id = CONCAT('C', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
@@ -75,7 +75,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_categories
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_categories_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_categories_prefix VALUES (NULL);
         SET NEW.id = CONCAT('T', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
@@ -108,7 +108,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_orders
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_orders_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_orders_prefix VALUES (NULL);
         SET NEW.id = CONCAT('O', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
@@ -137,7 +137,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_payments
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_payments_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_payments_prefix VALUES (NULL);
         SET NEW.id = CONCAT('O', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
@@ -166,7 +166,7 @@ DELIMITER $$
     BEFORE INSERT ON binhusenstore_testimonies
     FOR EACH ROW
     BEGIN
-        INSERT INTO binhusenstore_testimonies_prefix VALUES (NULL, WEEK(CURRENT_DATE));
+        INSERT INTO binhusenstore_testimonies_prefix VALUES (NULL);
         SET NEW.id = CONCAT('O', RIGHT(YEAR(CURRENT_DATE), 2), LPAD(WEEK(CURRENT_DATE), 2, '0'), LPAD(LAST_INSERT_ID(), 4, '0'));
     END$$
 DELIMITER ;
