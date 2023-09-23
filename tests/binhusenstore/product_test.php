@@ -19,7 +19,7 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
             'categories' => $faker->text(30),
             'price' => $faker->numberBetween(10000, 100000),
             'weight' => $faker->numberBetween(100, 1000),
-            'images' => $faker->text(100),
+            'images' => "https://images.unsplash.com/photo-1653179241553-891d33f05410?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80",
             'description' => $faker->text(150),
             'default_total_week' => $faker->numberBetween(20, 60),
             'is_available' => $faker->boolean()

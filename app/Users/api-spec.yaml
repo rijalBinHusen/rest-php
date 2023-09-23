@@ -119,7 +119,7 @@ components:
                 default: false
               message:
                 type: string
-                default: "You must be authenticated to access this resource."
+                default: "You must be authenticated to access this resource. / Invalid email or password"
     200Success:
       description: Success operation
       content:
