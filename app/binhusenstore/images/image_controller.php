@@ -2,6 +2,8 @@
 
 class Binhusenstore_image
 {
+    var $image_dir = "uploaded/binhusenstore/";
+    
     function __construct()
     {
         
@@ -11,42 +13,42 @@ class Binhusenstore_image
     {
         // request
         $req = Flight::request();
-        $image = $req->files;
+        $image = $req->files['image'];
 
         // Validate the image file.
-        // if ($image['error'] !== UPLOAD_ERR_OK) {
-        //     // Handle the error here.
+        if ($image['error'] !== UPLOAD_ERR_OK) {
+            // Handle the error here.
 
-        //     Flight::json(
-        //         array(
-        //             'success' => false,
-        //             'message' => 'Failed to upload image, check the data you sent'
-        //         ), 400
-        //     );
-        //     return;
-        // }
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to upload image, check the data you sent'
+                ), 400
+            );
+            return;
+        }
 
         // Get the image file extension.
         $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
 
         // Check the image file extension.
-        // if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
-        //     // Handle the error here.
+        if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
+            // Handle the error here.
 
-        //     Flight::json(
-        //         array(
-        //             'success' => false,
-        //             'message' => 'Invalid image data' . $extension
-        //         ), 400
-        //     );
-        //     return;
-        // }
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Invalid image data' . $extension
+                ), 400
+            );
+            return;
+        }
 
         // Generate a unique filename for the image.
         $filename = uniqid() . '.' . $extension;
 
         // Save the image file to the server.
-        move_uploaded_file($image['tmp_name'], 'binhusenstore/images/' . $filename);
+        move_uploaded_file($image['tmp_name'], $this->image_dir . $filename);
 
         // Return a success response.
         Flight::json(
@@ -59,7 +61,7 @@ class Binhusenstore_image
 
     public function remove_image($filename) {
 
-        $filepath = 'binhusenstore/images/' . $filename;
+        $filepath = $this->image_dir . $filename;
 
         $is_filename_exist = file_exists($filepath);
 
