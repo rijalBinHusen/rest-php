@@ -32,13 +32,13 @@ class HttpCall {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $operation);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         if($uploadImageByPath !== null) {
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, [
-                'file' => new CURLFile($uploadImageByPath),
-            ]);
+            $data = array('name' => 'image', 'file' => '@/' . $uploadImageByPath);
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $response = curl_exec($ch);
         curl_close($ch);
         
