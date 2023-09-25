@@ -5,3 +5,5 @@ vendor
 token.txt
 *.txt
 *.zip
+*.jpg
+*.png

@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: image
+    description: image of products
+
+paths:
+  /image:
+    post:
+      tags:
+        - image
+      summary: Lets a user post a new image
+      requestBody:
+        $ref: "#/components/requestBodies/image"
+      responses:
+        "201":
+          description: Successfully created a new image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /image/{file_name}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the image
+        schema:
+          type: string
+        example: "WAR220203902"
+    delete:
+      tags:
+        - image
+      summary: Delete image by file name
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of image end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        file_name:
+          type: string
+          example: "IMG_2303004.PNG"
+    image:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        name_image:
+          type: string
+          example: "name of image"
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getimage200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/image"
+  requestBodies:
+    image:
+      required: true
+      content:
+        image/png:
+          schema:
+            type: string
+            format: binary

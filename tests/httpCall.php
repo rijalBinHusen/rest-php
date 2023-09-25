@@ -27,12 +27,18 @@ class HttpCall {
         );
     }
     
-    public function getResponse($operation) {
+    public function getResponse($operation, $uploadImageByPath = null) {
         $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $operation);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+        if($uploadImageByPath !== null) {
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, [
+                'file' => new CURLFile($uploadImageByPath),
+            ]);
+        }
         $response = curl_exec($ch);
         curl_close($ch);
         
