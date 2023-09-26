@@ -13,7 +13,7 @@ Flight::route('POST /binhusenstore/image', function () {
     }
 });
 
-Flight::route("DELETE /binhusenstore/category/@filename", function ($filename) {
+Flight::route("DELETE /binhusenstore/image/@filename", function ($filename) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 

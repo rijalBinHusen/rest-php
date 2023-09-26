@@ -83,7 +83,7 @@ class Binhusenstore_image
                 Flight::json([
                         'success' => true,
                         'message' => 'The file was successfully deleted.'
-                    ]
+                    ], 200
                 );
             }
 
