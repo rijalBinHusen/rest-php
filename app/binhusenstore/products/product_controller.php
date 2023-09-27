@@ -183,7 +183,7 @@ class Binhusenstore_product
         $name = $req->data->name;
         $price = $req->data->price;
         $weight = $req->data->weight;
-        $image = $req->data->image;
+        $images = $req->data->images;
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
@@ -208,10 +208,10 @@ class Binhusenstore_product
             $keyValueToUpdate["weight"] = $weight;
         }
 
-        // conditional $image
-        $valid_image = !is_null($image);
-        if ($valid_image) {
-            $keyValueToUpdate["image"] = $image;
+        // conditional $images
+        $valid_images = !is_null($images);
+        if ($valid_images) {
+            $keyValueToUpdate["images"] = $images;
         }
 
         // conditional $description
