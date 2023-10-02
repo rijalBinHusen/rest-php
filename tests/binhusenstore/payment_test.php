@@ -40,6 +40,66 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->url_host_id = $this->url . "payment/" . $convertToAssocArray['id'];
     }
 
+    public function testPostEndpointInvalidDate()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "payment");
+        // Define the request body
+        $data = array(
+            'date_payment' => "2023-02-30",
+            'id_payment' => $faker->text(30),
+            'id_order' => $faker->text(5),
+            'balance' => $faker->numberBetween(10000, 100000),
+            'is_paid' => false,
+        );
+
+        $this->data_posted = $data;
+
+        $http->setData($data);
+        $http->addJWTToken();
+
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+        
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
+    }
+
+    public function testPostEndpointInvalidDate2()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "payment");
+        // Define the request body
+        $data = array(
+            'date_payment' => "sakfjhaslkfjhalskjdfhwoieruqpieru",
+            'id_payment' => $faker->text(30),
+            'id_order' => $faker->text(5),
+            'balance' => $faker->numberBetween(10000, 100000),
+            'is_paid' => false,
+        );
+
+        $this->data_posted = $data;
+
+        $http->setData($data);
+        $http->addJWTToken();
+
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+        
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
+    }
+
     public function testPostEndpointFailed400()
     {
         $httpCallVar = new HttpCall($this->url . 'payment');
@@ -249,6 +309,76 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Update payment success", $convertToAssocArray['message']);
     }
 
+    public function testPutEndpointInvalidDate()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->url_host_id);
+        // Define the request body
+        $data = array(
+            'balance' => 100000,
+            'date_payment' => "2023-02-30",
+        );
+
+        $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
+
+        // update data on server
+        $httpCallVar->getResponse("PUT");
+
+        // validate data
+        $getData = $httpCallVar->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($getData, true);
+        
+        
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('date_payment', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('id_order', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('balance', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_paid', $convertToAssocArray['data'][0]);
+        $this->assertNotEquals($data['date_payment'], $convertToAssocArray['data'][0]['date_payment']);
+    }
+
+    public function testPutEndpointInvalidDate2()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->url_host_id);
+        // Define the request body
+        $data = array(
+            'balance' => 100000,
+            'date_payment' => "sakdfjhasfkjas;dflkjasd;fkjsdlfkj",
+        );
+
+        $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
+
+        // update data on server
+        $httpCallVar->getResponse("PUT");
+        
+        $getData = $httpCallVar->getResponse("GET");
+        
+        $convertToAssocArray = json_decode($getData, true);
+
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('date_payment', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('id_order', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('balance', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('is_paid', $convertToAssocArray['data'][0]);
+        $this->assertNotEquals($data['date_payment'], $convertToAssocArray['data'][0]['date_payment']);
+    }
+
     public function testPutEndpointFailed400()
     {
         $this->testPostEndpoint();
@@ -297,7 +427,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url . 'payment/loremipsum');
         // Define the request body
-        $data = array('date_payment' => "Failed test");
+        $data = array('date_payment' => "2023-03-23");
 
         $httpCallVar->setData($data);
 

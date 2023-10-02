@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/payments_model.php');
+require_once(__DIR__ . '../../../../utils/piece/validator.php');
 
 class Binhusenstore_payment
 {
@@ -18,10 +19,14 @@ class Binhusenstore_payment
         $balance = $req->data->balance;
         $is_paid = $req->data->is_paid;
 
+        $validator = new Validator();
+
         $result = null;
+        $isDatePaymentValid = $validator->isYMDDate($date_payment);
 
         $is_request_body_not_oke = is_null($date_payment)
                                     || is_null($id_order)
+                                    || !$isDatePaymentValid
                                     || !is_string($id_order)
                                     || is_null($balance)
                                     || !is_numeric($balance)
@@ -187,9 +192,20 @@ class Binhusenstore_payment
         $keyValueToUpdate = array();
 
         // conditional $date_payment
+
+        
+        $result = null;
+        
         $valid_date_payment = !is_null($date_payment);
+        
         if ($valid_date_payment) {
-            $keyValueToUpdate["date_payment"] = $date_payment;
+            $validator = new Validator();
+            $isDatePaymentValid = $validator->isYMDDate($date_payment);
+
+            if($isDatePaymentValid) {
+
+                $keyValueToUpdate["date_payment"] = $date_payment;
+            }
         }
 
         // conditional $id_order
