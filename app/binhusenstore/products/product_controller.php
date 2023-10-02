@@ -13,7 +13,6 @@ class Binhusenstore_product
     {
         // request
         $req = Flight::request();
-        $id = $req->data->id;
         $name = $req->data->name;
         $categories = $req->data->categories;
         $price = $req->data->price;

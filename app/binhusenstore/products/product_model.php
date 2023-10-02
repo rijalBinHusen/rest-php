@@ -38,9 +38,15 @@ class Binhusenstore_product_model
 
     }
 
-    public function get_products()
+    public function get_products($limit = 0)
     {
-        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        
+        $query = "SELECT * FROM $this->table ORDER BY id DESC";
+
+        if($limit > 0) {
+            $query = $query . " LIMIT 30";
+        }
+        $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
             
