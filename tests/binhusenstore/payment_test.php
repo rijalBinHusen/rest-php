@@ -9,6 +9,37 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
     private $url_host_id = null;
     private $data_posted = null;
 
+    public function testPostEndpoint()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "payment");
+        // Define the request body
+        $data = array(
+            'date_payment' => $faker->date('Y-m-d'),
+            'id_payment' => $faker->text(30),
+            'id_order' => $faker->text(5),
+            'balance' => $faker->numberBetween(10000, 100000),
+            'is_paid' => false,
+        );
+
+        $this->data_posted = $data;
+
+        $http->setData($data);
+        $http->addJWTToken();
+
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        // $this->assertEquals(201, http_response_code());
+        $this->url_host_id = $this->url . "payment/" . $convertToAssocArray['id'];
+    }
+
     public function testPostEndpointInvalidNumberBalance()
     {
         $faker = Faker\Factory::create();
@@ -40,7 +71,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
     }
 
-    public function testPostEndpoint()
+    public function testPostEndpointInvalidBooleanIsPaid()
     {
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->url . "payment");
@@ -49,8 +80,8 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
             'date_payment' => $faker->date('Y-m-d'),
             'id_payment' => $faker->text(30),
             'id_order' => $faker->text(5),
-            'balance' => $faker->numberBetween(10000, 100000),
-            'is_paid' => false,
+            'balance' => "Not number",
+            'is_paid' => "Not boolean",
         );
 
         $this->data_posted = $data;
@@ -65,10 +96,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        // $this->assertEquals(201, http_response_code());
-        $this->url_host_id = $this->url . "payment/" . $convertToAssocArray['id'];
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
     }
 
     public function testPostEndpointInvalidDate()
