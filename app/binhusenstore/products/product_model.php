@@ -13,7 +13,7 @@ class Binhusenstore_product_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available)
+    public function append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links)
     {
 
         $data_to_insert = array(
@@ -24,7 +24,8 @@ class Binhusenstore_product_model
             'images' => $images,
             'description' => $description,
             'default_total_week' => $default_total_week,
-            'is_available' => $is_available
+            'is_available' => $is_available,
+            'links' => $links,
         );
 
         $this->database->insert($this->table, $data_to_insert);

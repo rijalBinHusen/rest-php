@@ -8,6 +8,7 @@ CREATE TABLE if not exists binhusenstore_products (
     description TEXT,
     default_total_week VARCHAR(2),
     is_available TINYINT,
+    links TEXT,
     FULLTEXT(categories)
 );
 

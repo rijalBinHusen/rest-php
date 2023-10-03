@@ -144,6 +144,9 @@ components:
         is_available:
           type: boolean
           example: false
+        links:
+          type: string
+          example: "https://sdlfsdfjhsdfsdf.com"
   responses:
     400Error:
       description: Invalid request

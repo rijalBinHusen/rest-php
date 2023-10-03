@@ -21,6 +21,7 @@ class Binhusenstore_product
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
+        $links = $req->data->links;
 
         $result = null;
 
@@ -44,7 +45,12 @@ class Binhusenstore_product
             return;
         }
 
-        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available);
+        if(is_null($links)) {
+
+            $links = "";
+        }
+
+        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links);
 
         if($this->Binhusenstore_product->is_success === true) {
         
