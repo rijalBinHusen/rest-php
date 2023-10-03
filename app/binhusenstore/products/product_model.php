@@ -41,8 +41,8 @@ class Binhusenstore_product_model
 
     public function get_products($limit = 0)
     {
-        
-        $query = "SELECT * FROM $this->table ORDER BY id DESC";
+        $columnToSelect = "id, images, name, price, default_total_week";
+        $query = "SELECT $columnToSelect FROM $this->table ORDER BY id DESC";
 
         if($limit > 0) {
             $query = $query . " LIMIT 30";
