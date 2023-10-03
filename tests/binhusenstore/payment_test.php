@@ -9,6 +9,37 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
     private $url_host_id = null;
     private $data_posted = null;
 
+    public function testPostEndpointInvalidNumberBalance()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "payment");
+        // Define the request body
+        $data = array(
+            'date_payment' => $faker->date('Y-m-d'),
+            'id_payment' => $faker->text(30),
+            'id_order' => $faker->text(5),
+            'balance' => "Not number",
+            'is_paid' => false,
+        );
+
+        $this->data_posted = $data;
+
+        $http->setData($data);
+        $http->addJWTToken();
+
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Failed to add payment, check the data you sent', $convertToAssocArray['message']);
+    }
+
     public function testPostEndpoint()
     {
         $faker = Faker\Factory::create();
