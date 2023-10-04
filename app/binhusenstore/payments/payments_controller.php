@@ -209,19 +209,19 @@ class Binhusenstore_payment
         }
 
         // conditional $id_order
-        $valid_id_order = !is_null($id_order);
+        $valid_id_order = !is_null($id_order) && is_string($id_order);
         if ($valid_id_order) {
             $keyValueToUpdate["id_order"] = $id_order;
         }
 
         // conditional $balance
-        $valid_balance = !is_null($balance);
+        $valid_balance = !is_null($balance) && is_numeric($balance);
         if ($valid_balance) {
             $keyValueToUpdate["balance"] = $balance;
         }
 
         // conditional $is_paid
-        $valid_is_paid = !is_null($is_paid);
+        $valid_is_paid = !is_null($is_paid) && is_bool($is_paid);
         if ($valid_is_paid) {
             $keyValueToUpdate["is_paid"] = $is_paid;
         }
@@ -231,6 +231,75 @@ class Binhusenstore_payment
         if($is_oke_to_update) {
 
             $result = $this->Binhusenstore_payment->update_payment_by_id($keyValueToUpdate, "id", $id);
+    
+            $is_success = $this->Binhusenstore_payment->is_success;
+    
+            if($is_success === true && $result > 0) {
+
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'message' => 'Update payment success',
+                    )
+                );
+            }
+    
+            else if($is_success !== true) {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $is_success
+                    ), 500
+                );
+                return;
+            }
+    
+            else {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => 'Payment not found'
+                    ), 404
+                );
+            }
+        } 
+        
+        else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to update payment, check the data you sent'
+                )
+            );
+        }
+    }
+
+    public function mark_payment_as_paid()
+    {
+        // request
+        $req = Flight::request();
+        $date_paid = $req->data->date_paid;
+        $id_payment = $req->data->id_payment;
+        $balance = $req->data->balance;
+
+        $validator = new Validator();
+
+        $result = null;
+        $isDatePaymentValid = $validator->isYMDDate($date_paid);
+
+        $is_request_body_oke = !is_null($date_paid)
+                                    && !is_null($id_payment)
+                                    && $isDatePaymentValid
+                                    && is_string($id_payment)
+                                    && !is_null($balance)
+                                    && is_numeric($balance);
+
+        if($is_request_body_oke) {
+
+            $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id($id_payment, $date_paid, $balance);
     
             $is_success = $this->Binhusenstore_payment->is_success;
     
