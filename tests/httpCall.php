@@ -17,7 +17,6 @@ class HttpCall {
 
     public function setData($arrayData) {
         $this->data_string = json_encode($arrayData);
-        $this->setHeaders();
     }
 
     private function setHeaders() {
@@ -64,5 +63,10 @@ class HttpCall {
             'Content-Length: ' . strlen($this->data_string),
             $key . ": " . $value
         );
+    }
+
+    public function setNewURL($url) {
+
+        $this->url = $url;
     }
 }

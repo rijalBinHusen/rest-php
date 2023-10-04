@@ -98,7 +98,33 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-
+  /payment_mark_as_paid:
+    put:
+      tags:
+        - payment
+      summary: Lets a user post a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_payment:
+                  type: string
+                date_payment:
+                  type: string
+                  example: "2023-07-23"
+                balance:
+                  type: number
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  
 components:
   schemas:
     Return_after_post:
@@ -196,12 +222,4 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              success:
-                type: boolean
-                default: true
-              data:
-                type: array
-                items:
-                  $ref: "#/components/schemas/payment"
+            $ref: "#/components/schemas/payment"
