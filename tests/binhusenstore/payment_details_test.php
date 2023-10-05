@@ -112,11 +112,11 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         // Send a GET request to the /endpoint URL
         $response = $httpCall->getResponse("GET");
 
-        // $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($response, true));
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
 
         $httpCall->setNewURL("$this->url . 'payment_mark_as_paid'");
-        // // mark payment as paid with balance decrement by 30
+        // mark payment as paid with balance decrement by 30
         foreach ($convertToAssocArray['data'] as $payment) {
             $balance_to_update = $payment['balance'] - 30;
 
@@ -127,26 +127,27 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
             );
 
             $httpCall->setData($data_to_send);
+            $httpCall->addJWTToken();
 
             $httpCall->getResponse("PUT");
         }
         
-        // check next balance must be balance + 30
-        // $httpCall->setNewURL($this->url .'payments?id_order=' .$id_order);
-        // // Send a GET request to the /endpoint URL
-        // $response = $httpCall->getResponse("GET");
+        $httpCall->setNewURL($this->url .'payments?id_order=' .$id_order);
+        // Send a GET request to the /endpoint URL
+        $response = $httpCall->getResponse("GET");
 
-        // $convertToAssocArray = json_decode($response, true);
+        $convertToAssocArray = json_decode($response, true);
+        ////fwrite(STDERR, print_r($response, true));
         
         // compare total balance
 
-        // $total_balance_to_check = 0;
-        // foreach ($convertToAssocArray['data'] as $payment) {
+        $total_balance_to_check = 0;
+        foreach ($convertToAssocArray['data'] as $payment) {
 
-        //     $total_balance_to_check += $payment['balance'];
-        // }
+            $total_balance_to_check += $payment['balance'];
+        }
 
-        // $this->assertEquals($this->total_balance, $total_balance_to_check);
+        $this->assertEquals($this->total_balance, $total_balance_to_check);
 
     }
 }

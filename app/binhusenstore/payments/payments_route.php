@@ -60,3 +60,15 @@ Flight::route("DELETE /binhusenstore/payment/@id", function ($id) {
     }
 
 });
+
+Flight::route("PUT /binhusenstore/payment_mark_as_paid", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_payment();
+        $myreport_base_file->mark_payment_as_paid();
+    }
+
+});

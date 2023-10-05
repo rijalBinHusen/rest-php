@@ -95,62 +95,54 @@ class Binhusenstore_payment_model
 
     }
 
-    public function mark_payment_as_paid_by_id($id_payment, $date_paid, $balance)
+    public function mark_payment_as_paid_by_id($id_order, $date_paid, $balance)
     {
+        
 
-        $retrieve_payment = $this->get_payment_by_id($id_payment);
+        $query_payment_by_id_order = "SELECT id, balance FROM $this->table WHERE id_order = $id_order AND is_paid = 0 ORDER BY date_payment)";
+        $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchColumn(PDO::FETCH_ASSOC);
 
-        if(count($retrieve_payment) === 0) {
-
+        if(count($retrieve_all_payment) === 0) {
+            
             return 0;
         }
-
-        $date_payment_db = $retrieve_payment[0]['date_payment'];
-        $id_order_db =  $retrieve_payment[0]['id_order'];
-        $balance_db =  $retrieve_payment[0]['balance'];
-
-        $balance_variance = $balance_db - $balance;
-
-        $data_to_update = array(
-            'date_paid' => $date_paid,
-            'balance' => $balance,
-            'is_paid' => true,
-        );
-
-        // less than db balance
-        if($balance_variance > 0) {
-
-            // create new payment with balance variance
-            $this->append_payment($date_payment_db, $id_order_db, $balance_variance, false);
-        }
-
-        else if($balance_variance < 0) {
-
-            $query = "SELECT id, balance FROM $this->table WHERE id_order = $id_order_db ORDER BY date_payment LIMIT 1)";
-            $retrieve_next_payment = $this->database->sqlQuery($query)->fetchColumn(PDO::FETCH_ASSOC);
-
-            $id_next_payment_db =  $retrieve_next_payment[0]['id'];
-            $balance_next_payment_db =  $retrieve_next_payment[0]['balance'];
-            $balance_after_decrease = $balance_next_payment_db + $balance_variance;
-
-            $next_payment_date_to_update = array(
-                'balance' => $balance_after_decrease
-            );
-
-            // decrease balance by variance
-            $this->update_payment_by_id($next_payment_date_to_update, 'id', $id_next_payment_db);
-        }
-
-
-        $result = $this->update_payment_by_id($data_to_update, 'id', $id_payment);
-
-        if($this->database->is_error === null) {
-
-            return $result;
-        }
         
-        $this->is_success = $this->database->is_error;
-        return array();
+        $balance_left = $balance;
+
+        foreach ($retrieve_all_payment as $value) {
+            $payment_id = $value['id'];
+            $payment_balance = $value['balance'];
+
+            if($balance_left === 0) continue;
+            
+            $more_than_bill= $balance_left > $payment_balance;
+            // 1000 - 900 = +100;
+            
+            if($more_than_bill) {
+                
+                $data_to_update = array(
+                    'date_paid' => date("Y/m/d"),
+                    'is_paid' => true
+                );
+
+                $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+            
+                $balance_left = $balance_left - $payment_balance; // 1000 - 900= +100
+            }
+
+            else {
+
+                $data_to_update = array(
+                    'balance' => $payment_balance + $balance_left,
+                    'is_paid' => true,
+                    'date_paid' => date("Y/m/d")
+                );
+
+                $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+
+                $balance_left = 0;
+            }
+         }
         
     }
 }
