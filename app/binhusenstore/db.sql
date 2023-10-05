@@ -126,7 +126,8 @@ CREATE TABLE if not exists binhusenstore_payments (
     date_payment VARCHAR(10),
     id_order VARCHAR(9),
     balance INT,
-    is_paid TINYINT(1)
+    is_paid TINYINT(1),
+    date_paid VARCHAR(10)
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_payments

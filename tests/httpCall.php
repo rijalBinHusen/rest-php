@@ -16,7 +16,9 @@ class HttpCall {
     }
 
     public function setData($arrayData) {
+
         $this->data_string = json_encode($arrayData);
+        $this->setHeaders();
     }
 
     private function setHeaders() {

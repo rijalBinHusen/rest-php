@@ -20,7 +20,8 @@ class Binhusenstore_payment_model
             'date_payment' => $date_payment,
             'id_order' => $id_order,
             'balance' => $balance,
-            'is_paid' => $is_paid
+            'is_paid' => $is_paid,
+            'date_paid' => "",
         );
 
         $this->database->insert($this->table, $data_to_insert);
