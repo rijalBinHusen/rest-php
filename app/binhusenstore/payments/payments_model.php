@@ -108,18 +108,25 @@ class Binhusenstore_payment_model
         
         $payment_left = $payment;
 
-        foreach ($retrieve_all_payment as $value) {
-            $payment_id = $value['id'];
-            $payment_balance = $value['balance'];
-            $payament_date = $value['date_payment'];
+        for ($i = 0; $i < count($retrieve_all_payment); $i++) {
+            $payment_id = $retrieve_all_payment[$i]['id'];
+            $payment_balance = $retrieve_all_payment[$i]['balance'];
+            $payament_date = $retrieve_all_payment[$i]['date_payment'];
 
             if($payment_left === 0) return true;
 
             if($payment_left < 0) {
-                
-                $data_to_update = array('balance' => $payment_balance + (- $payment_left));
-                
-                $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+
+                $is_the_last_iteration = $i + 1 === count($retrieve_all_payment);
+                if($is_the_last_iteration) {
+
+                    $this->append_payment($payament_date, $id_order, (- $payment_left), false);
+                } else {
+
+                    $data_to_update = array('balance' => $payment_balance + (- $payment_left));
+                    $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+                }
+
                 return true;
             }
             
