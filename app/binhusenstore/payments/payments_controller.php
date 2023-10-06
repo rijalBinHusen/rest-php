@@ -17,7 +17,6 @@ class Binhusenstore_payment
         $date_payment = $req->data->date_payment;
         $id_order = $req->data->id_order;
         $balance = $req->data->balance;
-        $is_paid = $req->data->is_paid;
 
         $validator = new Validator();
 
@@ -29,9 +28,7 @@ class Binhusenstore_payment
                                     || !$isDatePaymentValid
                                     || !is_string($id_order)
                                     || is_null($balance)
-                                    || !is_numeric($balance)
-                                    || is_null($is_paid)
-                                    || !is_bool($is_paid);
+                                    || !is_numeric($balance);
 
         if($is_request_body_not_oke) {
 
@@ -44,7 +41,7 @@ class Binhusenstore_payment
             return;
         }
 
-        $result = $this->Binhusenstore_payment->append_payment($date_payment, $id_order, $balance, $is_paid);
+        $result = $this->Binhusenstore_payment->append_payment($date_payment, $id_order, $balance);
 
         if($this->Binhusenstore_payment->is_success === true) {
         
@@ -308,7 +305,7 @@ class Binhusenstore_payment
                 Flight::json(
                     array(
                         'success' => true,
-                        'message' => 'Update payment success',
+                        'message' => 'Update payment success'
                     )
                 );
             }
@@ -321,7 +318,6 @@ class Binhusenstore_payment
                         'message' => $is_success
                     ), 500
                 );
-                return;
             }
     
             else {
@@ -341,7 +337,7 @@ class Binhusenstore_payment
                 array(
                     'success' => false,
                     'message' => 'Failed to update payment, check the data you sent'
-                )
+                ), 400
             );
         }
     }

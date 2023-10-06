@@ -13,14 +13,14 @@ class Binhusenstore_payment_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_payment($date_payment, $id_order, $balance, $is_paid)
+    public function append_payment($date_payment, $id_order, $balance)
     {
 
         $data_to_insert = array(
             'date_payment' => $date_payment,
             'id_order' => $id_order,
             'balance' => $balance,
-            'is_paid' => $is_paid,
+            'is_paid' => false,
             'date_paid' => "",
         );
 
@@ -95,54 +95,63 @@ class Binhusenstore_payment_model
 
     }
 
-    public function mark_payment_as_paid_by_id($id_order, $date_paid, $balance)
+    public function mark_payment_as_paid_by_id($id_order, $date_paid, $payment)
     {
         
-
-        $query_payment_by_id_order = "SELECT id, balance FROM $this->table WHERE id_order = $id_order AND is_paid = 0 ORDER BY date_payment)";
-        $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchColumn(PDO::FETCH_ASSOC);
+        $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
+        $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
 
         if(count($retrieve_all_payment) === 0) {
             
-            return 0;
+            return false;
         }
         
-        $balance_left = $balance;
+        $payment_left = $payment;
 
         foreach ($retrieve_all_payment as $value) {
             $payment_id = $value['id'];
             $payment_balance = $value['balance'];
+            $payament_date = $value['date_payment'];
 
-            if($balance_left === 0) continue;
+            if($payment_left === 0) return true;
+
+            if($payment_left < 0) {
+                
+                $data_to_update = array('balance' => $payment_balance + (- $payment_left));
+                
+                $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+                return true;
+            }
             
-            $more_than_bill= $balance_left > $payment_balance;
+            $is_payment_more_than_bill= $payment_left >= $payment_balance;
             // 1000 - 900 = +100;
             
-            if($more_than_bill) {
+            if($is_payment_more_than_bill) {
                 
                 $data_to_update = array(
-                    'date_paid' => date("Y/m/d"),
+                    'date_paid' => $date_paid,
                     'is_paid' => true
                 );
 
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+            }
             
-                $balance_left = $balance_left - $payment_balance; // 1000 - 900= +100
-            }
-
             else {
-
+                
                 $data_to_update = array(
-                    'balance' => $payment_balance + $balance_left,
+                    'balance' => $payment_left,
                     'is_paid' => true,
-                    'date_paid' => date("Y/m/d")
+                    'date_paid' => $date_paid
                 );
-
+                
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
-
-                $balance_left = 0;
             }
-         }
-        
+
+            $payment_left = $payment_left - $payment_balance; // 1000 - 900= +100
+        }
+
+        return true;
+
+        $this->is_success = $this->database->is_error;
     }
 }
