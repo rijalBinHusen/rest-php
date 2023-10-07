@@ -192,53 +192,60 @@ class Binhusenstore_product
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
+        $links = $req->data->links;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
         // conditional categories
-        $valid_categories = !is_null($categories);
+        $valid_links = !is_null($links) && is_string($links);
+        if ($valid_links) {
+            $keyValueToUpdate["links"] = $links;
+        }
+
+        // conditional categories
+        $valid_categories = !is_null($categories) && is_string($categories);
         if ($valid_categories) {
             $keyValueToUpdate["categories"] = $categories;
         }
 
         // conditional $price
-        $valid_price = !is_null($price);
+        $valid_price = !is_null($price) && is_numeric($price);
         if ($valid_price) {
             $keyValueToUpdate["price"] = $price;
         }
 
         // conditional $weight
-        $valid_weight = !is_null($weight);
+        $valid_weight = !is_null($weight) && is_numeric($weight);
         if ($valid_weight) {
             $keyValueToUpdate["weight"] = $weight;
         }
 
         // conditional $images
-        $valid_images = !is_null($images);
+        $valid_images = !is_null($images) && is_string($images);
         if ($valid_images) {
             $keyValueToUpdate["images"] = $images;
         }
 
         // conditional $description
-        $valid_description = !is_null($description);
+        $valid_description = !is_null($description) && is_string($description);
         if ($valid_description) {
             $keyValueToUpdate["description"] = $description;
         }
 
         // conditional $name
-        $valid_name = !is_null($name);
+        $valid_name = !is_null($name) && is_string($name);
         if ($valid_name) {
             $keyValueToUpdate["name"] = $name;
         }
 
         // conditional $default_total_week
-        $valid_default_total_week = !is_null($default_total_week);
+        $valid_default_total_week = !is_null($default_total_week) && is_numeric($default_total_week);
         if ($valid_default_total_week) {
             $keyValueToUpdate["default_total_week"] = $default_total_week;
         }
 
         // conditional $is_available
-        $valid_is_available = !is_null($is_available);
+        $valid_is_available = !is_null($is_available) && is_bool($is_available);
         if ($valid_is_available) {
             $keyValueToUpdate["is_available"] = $is_available;
         }
