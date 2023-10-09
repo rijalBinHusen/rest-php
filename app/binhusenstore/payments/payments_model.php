@@ -109,15 +109,22 @@ class Binhusenstore_payment_model
         $payment_left = $payment;
 
         for ($i = 0; $i < $payment; $i++) {
-            $payment_id = $retrieve_all_payment[$i]['id'];
-            $payment_balance = $retrieve_all_payment[$i]['balance'];
+
+            $is_the_last_bill = $i >= (count($retrieve_all_payment) - 1);
+            $payment_index = $i;
+
+            if($is_the_last_bill) {
+
+                $payment_index = count($retrieve_all_payment) - 1;
+            }
+
+            $payment_id = $retrieve_all_payment[$payment_index]['id'];
+            $payment_balance = $retrieve_all_payment[$payment_index]['balance'];
             // $payament_date = $retrieve_all_payment[$i]['date_payment'];
 
             if($payment_left === 0) return true;
 
             if($payment_left < 0) {
-
-                $is_the_last_bill = (count($retrieve_all_payment) - 1) === $i;
                 
                 if($is_the_last_bill) {
 
