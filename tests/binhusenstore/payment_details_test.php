@@ -114,7 +114,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         $response = $httpCall->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        fwrite(STDERR, print_r($response, true));
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
