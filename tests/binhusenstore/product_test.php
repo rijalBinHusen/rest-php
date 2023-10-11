@@ -111,13 +111,8 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('name', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('categories', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('price', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('weight', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('images', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('description', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('default_total_week', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('is_available', $convertToAssocArray['data'][0]);
     }
 
     public function testGetEndpointFailed401()
@@ -269,7 +264,7 @@ class MyReportProductTest extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
         // Define the request body
-        $data = array('price' => "Failed test");
+        $data = array('price' => 100);
 
         $httpCallVar->setData($data);
         

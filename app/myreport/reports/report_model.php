@@ -62,21 +62,23 @@ class My_report_report_model
             $periode = $document['periode'];
 
             if (isset($grouping_document_with_same_periode[$periode])) {
+
+                $current_document = $grouping_document_with_same_periode[$periode];
                 
-                $total_not_FIFO = $grouping_document_with_same_periode[$periode]['total_product_not_FIFO'] += $document['total_product_not_FIFO'];
+                $total_not_FIFO = $current_document['total_product_not_FIFO'] += $document['total_product_not_FIFO'];
 
                 $total_not_FIFO_to_set = $total_not_FIFO >= 3 ? ceil($total_not_FIFO / 3) : $total_not_FIFO;
                 // increment document report
-                $grouping_document_with_same_periode[$periode]['total_do'] += $document['total_do'];
-                $grouping_document_with_same_periode[$periode]['total_kendaraan'] += $document['total_kendaraan'];
-                $grouping_document_with_same_periode[$periode]['total_waktu'] += $document['total_waktu'];
-                $grouping_document_with_same_periode[$periode]['item_variance'] += $document['item_variance'];
-                $grouping_document_with_same_periode[$periode]['plan_out'] += $document['plan_out'];
-                $grouping_document_with_same_periode[$periode]['total_item_keluar'] += $document['total_item_keluar'];
-                $grouping_document_with_same_periode[$periode]['total_item_moving'] += $document['total_item_moving'];
-                $grouping_document_with_same_periode[$periode]['total_product_not_FIFO'] = $total_not_FIFO_to_set;
-                $grouping_document_with_same_periode[$periode]['total_qty_in'] += $document['total_qty_in'];
-                $grouping_document_with_same_periode[$periode]['total_qty_out'] += $document['total_qty_out'];
+                $current_document['total_do'] += $document['total_do'];
+                $current_document['total_kendaraan'] += $document['total_kendaraan'];
+                $current_document['total_waktu'] += $document['total_waktu'];
+                $current_document['item_variance'] += $document['item_variance'];
+                $current_document['plan_out'] += $document['plan_out'];
+                $current_document['total_item_keluar'] += $document['total_item_keluar'];
+                $current_document['total_item_moving'] += $document['total_item_moving'];
+                $current_document['total_product_not_FIFO'] = $total_not_FIFO_to_set;
+                $current_document['total_qty_in'] += $document['total_qty_in'];
+                $current_document['total_qty_out'] += $document['total_qty_out'];
                 continue;
             }
 
