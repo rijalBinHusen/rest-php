@@ -72,3 +72,14 @@ Flight::route("GET /binhusenstore/products/landing_page", function () {
         $myreport_base_file->get_products_for_landing_page();
     }
 });
+
+Flight::route('GET /binhusenstore/products/count', function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->get_count_products();
+    }
+});

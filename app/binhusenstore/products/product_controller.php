@@ -92,7 +92,7 @@ class Binhusenstore_product
         else if ($this->Binhusenstore_product->is_success !== true) {
             Flight::json( array(
                 "success" => false,
-                "message" => $result
+                "message" => $this->Binhusenstore_product->is_success
             ), 500);
         }
         
@@ -335,5 +335,37 @@ class Binhusenstore_product
                 ), 404
             );
         }
+    }
+    public function get_count_products()
+    {
+
+        $result = $this->Binhusenstore_product->count_products();
+        
+        $is_exists = count($result) > 0;
+
+        if($this->Binhusenstore_product->is_success === true && $is_exists) {
+            Flight::json(
+                array(
+                    "success" => true,
+                    "data" => $result
+                    )
+            , 200);
+        }
+
+        else if ($this->Binhusenstore_product->is_success !== true) {
+            
+            Flight::json( array(
+                "success" => false,
+                "message" => $this->Binhusenstore_product->is_success
+            ), 500);
+        }
+        
+        else {
+            Flight::json( array(
+            "success" => false,
+            "message" => "Product not found"
+            ), 404);
+        }
+
     }
 }

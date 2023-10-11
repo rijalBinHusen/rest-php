@@ -102,7 +102,29 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-
+  /products/count:
+      get:
+        tags:
+          - products
+        summary: Get count of products.
+        responses:
+          "200":
+            description: Success operation
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                      default: true
+                    data:
+                      type: number
+                      example: 100
+          "401":
+            $ref: "#/components/responses/401Error"
+          "404":
+            description: products not found
 components:
   schemas:
     Return_after_post:

@@ -127,7 +127,10 @@ class Query_builder {
     }
 
     function sqlQuery($your_query) {
-        return $this->db->query($your_query);
+        // return $this->db->query($your_query);
+        $stmt = $this->db->prepare($your_query);
+        $stmt->execute();
+        return $stmt;
     }
 
     function getMaxId($tableName) {

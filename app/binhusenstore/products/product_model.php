@@ -137,4 +137,17 @@ class Binhusenstore_product_model
         return $result;
 
     }
+
+    public function count_products()
+    {
+        $query = "SELECT COUNT(*) FROM $this->table";
+        $result = $this->database->sqlQuery($query)->fetchColumn();
+        
+        if($this->database->is_error === null) {
+            
+            return $result;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
 }
