@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . "/utils/piece/validator.php");
+
 function getDirContents($dir, $is_nested, $directories_black_list = array(), &$results = array()) {
     $default_directories_exclude = array(".", "..", ".git");
 
@@ -114,12 +116,9 @@ function select_directory_to_exclude(&$include_directories = array()) {
     return $include_directories;       
 }
 
-function zip_all_file_and_folder ($locations) {
+function zip_all_file_and_folder ($locations, $zip_file_name, $last_modified_time_minimum_to_wrap) {
   
     $zip_archive = new ZipArchive;
-  
-    // this should be contain date now and time
-    $zip_file_name = "Ready_to_deploy.zip";
   
     $zip_archive_open = $zip_archive->open($zip_file_name, (ZipArchive::CREATE | ZipArchive::OVERWRITE));
   
@@ -128,21 +127,26 @@ function zip_all_file_and_folder ($locations) {
     }
   
     foreach ($locations as $location) {
+        
+        $last_modified_time = filemtime($location);
+        $is_less_than_time = $last_modified_time < $last_modified_time_minimum_to_wrap;
+
+        if($is_less_than_time) continue;
   
-      if (is_dir($location)) {
-  
-        $zip_archive->addEmptyDir($location);
-      } else {
-  
-        $real_path = realpath($location);
-        $zip_archive->addFile($real_path, $location);
-      }
-  
-      $is_failed_to_zip = $zip_archive->status != ZipArchive::ER_OK;
-  
-      if ($is_failed_to_zip) {
-        echo "Failed to write " . $location . " files to zip\n";
-      }
+        if (is_dir($location)) {
+    
+            $zip_archive->addEmptyDir($location);
+        } else {
+    
+            $real_path = realpath($location);
+            $zip_archive->addFile($real_path, $location);
+        }
+    
+        $is_failed_to_zip = $zip_archive->status != ZipArchive::ER_OK;
+    
+        if ($is_failed_to_zip) {
+            echo "Failed to write " . $location . " files to zip\n";
+        }
     }
   
     $zip_archive->close();
@@ -150,18 +154,70 @@ function zip_all_file_and_folder ($locations) {
   
 
 function start_to_zip_all () {
+  
+    $validator = new Validator();
+    // this should be contain date now and time
+    $zip_file_name = "Ready_to_deploy.zip";
+    $last_modified_time_to_wrap = 0;
+    // inform to user
+    // find file zip before now
+    $is_zipped_before = file_exists($zip_file_name);
+    if($is_zipped_before) {
+        // get last modified
+        $last_modified_time = filemtime($zip_file_name);
+        echo "File and folder with last modified more than ". date("Y-m-d H:i:s", $last_modified_time) ." will be wrapped" . PHP_EOL;
+        echo "If you want some specific last modified please input (Year-Month-Date) below and press enter to continue" . PHP_EOL;
+        $input_date = trim(fgets(STDIN));
+
+        if($input_date != "") {
+   
+            if($validator->isYMDDate($input_date)) {
+                
+                $last_modified_time_to_wrap = strtotime($input_date);
+            } else {
+                
+                echo "Invalid date, zip file cancelled...";
+                return;
+            }
+        } else {
+
+            $last_modified_time_to_wrap = $last_modified_time;
+            unlink($zip_file_name);
+        }
+
+
+    } else {
+
+        echo "Input some specific last modified file to wrap, left it blank if you want wrap all file, Enter to continue";
+        $input_date = trim(fgets(STDIN));
+
+        if($input_date != "") {
+   
+            if($validator->isYMDDate($input_date)) {
+                
+                $last_modified_time_to_wrap = strtotime($input_date);
+            } else {
+                
+                echo "Invalid date, zip file cancelled...";
+                return;
+            }
+        } else {
+
+            $last_modified_time_to_wrap = 0;
+        }
+    }
     
     // ask user, 
     // prompt, is there any file to not include to zip?, and save it into somewhere
     $directory_to_zip = select_directory_to_exclude();
     sleep(1);
-    echo "Directories that would wrap into zip file\n\n";
+    echo "Directories that would wrap into zip file" . PHP_EOL . PHP_EOL;
 
     foreach($directory_to_zip as $key => $value) {
-        echo "[". $key ."] " .$value ."\n";
+        echo "[". $key ."] " .$value . PHP_EOL;
     }
     
-    echo "Press enter to continue, Input any key to cancel...\n\n";
+    echo "Press enter to continue, Input any key to cancel..." . PHP_EOL . PHP_EOL;
     $input = trim(fgets(STDIN));
 
     if($input != "") {
@@ -177,16 +233,10 @@ function start_to_zip_all () {
         $exclude_directories = read_file_to_array($exclude_directories_file_name);
 
         $file_and_folder_to_zip = getDirContents(".", true, $exclude_directories);
-        zip_all_file_and_folder($file_and_folder_to_zip);
+        zip_all_file_and_folder($file_and_folder_to_zip, $zip_file_name, $last_modified_time_to_wrap);
         
         echo "zip finished...\n";
     }
-    
-    // prompt, is it the first time to deploy to server
-    // if yes include the vendor directory
-    
-    // else
-    // dont include the vendor directory
 
 }
 

@@ -340,10 +340,8 @@ class Binhusenstore_product
     {
 
         $result = $this->Binhusenstore_product->count_products();
-        
-        $is_exists = count($result) > 0;
 
-        if($this->Binhusenstore_product->is_success === true && $is_exists) {
+        if($this->Binhusenstore_product->is_success === true && $result > 0) {
             Flight::json(
                 array(
                     "success" => true,
