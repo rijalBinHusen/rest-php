@@ -241,7 +241,25 @@ components:
                     products:
                       type: array
                       items:
-                        $ref: "#/components/schemas/product"
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: "WAR22500001"
+                          name:
+                            type: string
+                            example: "name of product"
+                          images:
+                            type: array
+                            items: 
+                              type: string
+                              example: "image123.jpg"
+                          price:
+                            type: number
+                            example: 1000000
+                          default_total_week:
+                            type: number
+                            example: 59
     getProducts200:
       description: Success operation
       content:
@@ -263,6 +281,11 @@ components:
                     name:
                       type: string
                       example: "name of product"
+                    images:
+                      type: array
+                      items: 
+                        type: string
+                        example: "image123.jpg"
                     price:
                       type: number
                       example: 1000000

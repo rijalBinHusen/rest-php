@@ -108,7 +108,7 @@ class Binhusenstore_product_model
     public function get_products_landing_page () {
         
         // get categories first
-        $categories  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        $categories  = $this->database->select_from("binhusenstore_categories")->fetchAll(PDO::FETCH_ASSOC);
         $is_categories_exists = count($categories) > 0;
 
         if(!$is_categories_exists) { return array(); };
@@ -118,16 +118,32 @@ class Binhusenstore_product_model
         $table_product = $this->table;
         foreach ($categories as $value) {
             $category_id = $value['id'];
-            $query_product = "SELECT * FROM $table_product WHERE MATCH(categories) AGAINST ('$category_id' IN NATURAL LANGUAGE MODE) ORDER BY id DESC LIMIT 4";
+            $columnToSelect = "id, images, name, price, default_total_week";
+            $query_product = "SELECT $columnToSelect FROM $table_product WHERE MATCH(categories) AGAINST ('$category_id' IN NATURAL LANGUAGE MODE) ORDER BY id DESC LIMIT 4";
             $get_products = $this->database->sqlQuery($query_product)->fetchAll(PDO::FETCH_ASSOC);
+            // $get_products = $this->database->select_from($table_product)->fetchAll(PDO::FETCH_ASSOC);;
             
             $is_product_exists = count($get_products) > 0;
 
             if($is_product_exists) {
                 
+                $product_to_push = array();
+
+                // mapping products
+                foreach ($get_products as $product_value) {
+                    array_push($product_to_push, array(
+                        "id" => $product_value['id'],
+                        "name" => $product_value['name'],
+                        "images" => explode(",", $product_value['images']),
+                        "price" => (int)$product_value['price'],
+                        "default_total_week" => (int)$product_value['default_total_week'],
+                    ));
+                }
+
+                
                 $array_to_push = array(
-                    "category" => $value['name'],
-                    "products" => $get_products
+                    "category" => $value['name_category'],
+                    "products" => $product_to_push
                 );
 
                 array_push($result, $array_to_push);

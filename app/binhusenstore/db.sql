@@ -4,7 +4,7 @@ CREATE TABLE if not exists binhusenstore_products (
     categories VARCHAR(96),
     price INT,
     weight INT,
-    images VARCHAR(255),
+    images TEXT,
     description TEXT,
     default_total_week VARCHAR(2),
     is_available TINYINT,
