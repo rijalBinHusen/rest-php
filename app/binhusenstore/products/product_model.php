@@ -106,16 +106,49 @@ class Binhusenstore_product_model
     }
 
     public function get_products_landing_page () {
+
+        $table_product = $this->table;
+        $result = array();
+        
+        $column_product_to_select = "id, images, name, price, default_total_week";
+        $query_3_product = "SELECT $column_product_to_select FROM $table_product ORDER BY id DESC LIMIT 3";
+        $retrieve_3_new_product = $this->database->sqlQuery($query_3_product)->fetchAll(PDO::FETCH_ASSOC);
+
+        $is_3_product_exists = count($retrieve_3_new_product) > 0;
+
+        if($is_3_product_exists) {
+            
+            $product_to_push_3 = array();
+
+            // mapping products
+            foreach ($retrieve_3_new_product as $product_value_3) {
+
+                array_push($product_to_push_3, array(
+                    "id" => $product_value_3['id'],
+                    "name" => $product_value_3['name'],
+                    "images" => explode(",", $product_value_3['images']),
+                    "price" => (int)$product_value_3['price'],
+                    "default_total_week" => (int)$product_value_3['default_total_week'],
+                ));
+            }
+
+            
+            $array_to_push = array(
+                "category" => "Semua produk",
+                "products" => $product_to_push_3
+            );
+
+            array_push($result, $array_to_push);
+        }
         
         // get categories first
         $categories  = $this->database->select_from("binhusenstore_categories")->fetchAll(PDO::FETCH_ASSOC);
         $is_categories_exists = count($categories) > 0;
 
-        if(!$is_categories_exists) { return array(); };
+        if(!$is_categories_exists) { return $result; };
 
-        $result = array();
         // get products where category = cat, limit 4
-        $table_product = $this->table;
+        
         foreach ($categories as $value) {
             $category_id = $value['id'];
             $columnToSelect = "id, images, name, price, default_total_week";
