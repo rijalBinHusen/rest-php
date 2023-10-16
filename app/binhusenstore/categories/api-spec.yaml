@@ -111,6 +111,9 @@ components:
         name_category:
           type: string
           example: "name of category"
+        is_landing_page:
+          type: boolean
+
   responses:
     400Error:
       description: Invalid request
@@ -188,3 +191,5 @@ components:
               name_category:
                 type: string
                 example: "name of category"
+              is_landing_page:
+                type: boolean

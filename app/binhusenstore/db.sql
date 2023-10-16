@@ -64,7 +64,8 @@ DO
 -- ============================== BORDER ======================
 CREATE TABLE if not exists binhusenstore_categories (
     id VARCHAR(9) NOT NULL PRIMARY KEY, 
-    name_category VARCHAR(30)
+    name_category VARCHAR(30),
+    is_landing_page TINYINT(1)
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_categories

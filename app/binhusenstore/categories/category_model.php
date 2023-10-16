@@ -16,7 +16,10 @@ class Binhusenstore_category_model
     public function append_category($name_category)
     {
 
-        $data_to_insert = array('name_category' => $name_category);
+        $data_to_insert = array(
+            'name_category' => $name_category,
+            'is_landing_page' => false
+        );
 
         $this->database->insert($this->table, $data_to_insert);
 
@@ -35,7 +38,8 @@ class Binhusenstore_category_model
         
         if($this->database->is_error === null) {
             
-            return $result;
+            $convert_data_type = $this->convert_data_type($result);
+            return $convert_data_type;
         }
 
         $this->is_success = $this->database->is_error;
@@ -48,7 +52,8 @@ class Binhusenstore_category_model
         
         if($this->database->is_error === null) {
 
-            return $result;
+            $convert_data_type = $this->convert_data_type($result);
+            return $convert_data_type;
         }
         
         $this->is_success = $this->database->is_error;
@@ -87,5 +92,21 @@ class Binhusenstore_category_model
         
         $this->is_success = $this->database->is_error;
 
+    }
+
+    private function convert_data_type($categories)
+    {
+        $result = array();
+
+        // mapping products
+        foreach ($categories as $category_value) {
+            array_push($result, array(
+                "id" => $category_value['id'],
+                "name_category" => $category_value['name_category'],
+                "is_landing_page" => boolval($category_value['is_landing_page'])
+            ));
+        }
+
+        return $result;
     }
 }

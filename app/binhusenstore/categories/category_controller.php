@@ -165,14 +165,21 @@ class Binhusenstore_category
         // catch the query string request
         $req = Flight::request();
         $name_category = $req->data->name_category;
+        $is_landing_page = $req->data->is_landing_page;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
 
         // conditional $name_category
-        $valid_name_category = !is_null($name_category);
+        $valid_name_category = !is_null($name_category) && is_string($name_category) && !empty($name_category);
         if ($valid_name_category) {
             $keyValueToUpdate["name_category"] = $name_category;
+        }
+        
+        // conditional $is_landing_page
+        $valid_is_landing_page = !is_null($is_landing_page) && is_bool($is_landing_page);
+        if ($valid_is_landing_page) {
+            $keyValueToUpdate["is_landing_page"] = $is_landing_page;
         }
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
