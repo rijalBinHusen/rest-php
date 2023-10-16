@@ -188,14 +188,17 @@ function start_to_zip_all () {
 
     } else {
 
-        echo "Input some specific last modified file to wrap, left it blank if you want wrap all file, Enter to continue";
+        echo "Input some specific last modified file to wrap, left it blank if you want wrap all file, Enter to continue" . PHP_EOL;
         $input_date = trim(fgets(STDIN));
 
+
         if($input_date != "") {
+
+            $unix_time = strtotime($input_date);
    
-            if($validator->isYMDDate($input_date)) {
+            if($unix_time) {
                 
-                $last_modified_time_to_wrap = strtotime($input_date);
+                $last_modified_time_to_wrap = strtotime($unix_time);
             } else {
                 
                 echo "Invalid date, zip file cancelled...";
