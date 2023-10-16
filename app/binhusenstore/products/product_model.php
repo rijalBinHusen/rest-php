@@ -69,6 +69,7 @@ class Binhusenstore_product_model
 
             return [
                 array(
+                    'id' => $result[0]['id'],
                     'name' => $result[0]['name'],
                     'categories' => explode(",", $result[0]['categories']),
                     'price' => (int)$result[0]['price'],

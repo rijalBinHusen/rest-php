@@ -56,7 +56,46 @@ paths:
       summary: Get product by id.
       responses:
         "200":
-          $ref: "#/components/responses/getProducts200"
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "WAR22500001"
+                  name:
+                    type: string
+                    example: "name of product"
+                  categories:
+                    type: array
+                    items: 
+                      type: string
+                      example: "categories1"
+                  price:
+                    type: number
+                    example: 1000000
+                  weight:
+                    type: number
+                    example: 1000
+                  images:
+                    type: array
+                    items: 
+                      type: string
+                      example: "IMG22500001"
+                  description:
+                    type: string
+                    example: "will contain very length of string"
+                  default_total_week:
+                    type: number
+                    example: 59
+                  is_available:
+                    type: boolean
+                    example: false
+                  links:
+                    type: string
+                    example: "https://sdlfsdfjhsdfsdf.com"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
