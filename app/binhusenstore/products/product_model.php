@@ -123,27 +123,8 @@ class Binhusenstore_product_model
         $table_product = $this->table;
         $result = array();
 
-        $column_product_to_select = "id, images, name, price, default_total_week";
-        $query_3_product = "SELECT $column_product_to_select FROM $table_product ORDER BY id DESC LIMIT 3";
-        $retrieve_3_new_product = $this->database->sqlQuery($query_3_product)->fetchAll(PDO::FETCH_ASSOC);
-
-        $is_3_product_exists = count($retrieve_3_new_product) > 0;
-
-        if ($is_3_product_exists) {
-
-            // mapping products
-            $product_to_push_3 = $this->convert_data_type($retrieve_3_new_product);
-
-            $array_to_push = array(
-                "category" => "Semua produk",
-                "products" => $product_to_push_3
-            );
-
-            array_push($result, $array_to_push);
-        }
-
         // get categories first
-        $categories  = $this->database->select_from("binhusenstore_categories")->fetchAll(PDO::FETCH_ASSOC);
+        $categories = $this->database->select_where("binhusenstore_categories", 'is_landing_page', 1)->fetchAll(PDO::FETCH_ASSOC);
         $is_categories_exists = count($categories) > 0;
 
         if (!$is_categories_exists) {
@@ -172,6 +153,25 @@ class Binhusenstore_product_model
 
                 array_push($result, $array_to_push);
             }
+        }
+
+        $column_product_to_select = "id, images, name, price, default_total_week";
+        $query_3_product = "SELECT $column_product_to_select FROM $table_product ORDER BY id DESC LIMIT 3";
+        $retrieve_3_new_product = $this->database->sqlQuery($query_3_product)->fetchAll(PDO::FETCH_ASSOC);
+
+        $is_3_product_exists = count($retrieve_3_new_product) > 0;
+
+        if ($is_3_product_exists) {
+
+            // mapping products
+            $product_to_push_3 = $this->convert_data_type($retrieve_3_new_product);
+
+            $array_to_push = array(
+                "category" => "Semua produk",
+                "products" => $product_to_push_3
+            );
+
+            array_push($result, $array_to_push);
         }
 
         return $result;
