@@ -198,7 +198,7 @@ class Binhusenstore_product_model
         foreach ($products as $product_value) {
             array_push($result, array(
                 "id" => $product_value['id'],
-                "name" => substr($product_value['name'], 0, 44) . "~",
+                "name" => substr($product_value['name'], 0, 44) . "...",
                 "images" => explode(",", $product_value['images']),
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
