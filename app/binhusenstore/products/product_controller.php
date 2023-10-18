@@ -75,8 +75,10 @@ class Binhusenstore_product
     
     public function get_products()
     {
+        $req = Flight::request();
+        $limit = $req->query->limit;
 
-        $result = $this->Binhusenstore_product->get_products();
+        $result = $this->Binhusenstore_product->get_products($limit);
         
         $is_exists = count($result) > 0;
 

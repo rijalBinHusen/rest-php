@@ -38,16 +38,19 @@ class Binhusenstore_product_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function get_products($limit = 0)
+    public function get_products($limit)
     {
         $columnToSelect = "id, images, name, price, default_total_week";
         $query = "SELECT $columnToSelect FROM $this->table ORDER BY id DESC";
 
         if ($limit > 0) {
+
             $query = $query . " LIMIT " . $limit;
-        } else {
+        } else if (!is_numeric($limit)) {
+
             $query = $query . " LIMIT 30";
         }
+
         $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
