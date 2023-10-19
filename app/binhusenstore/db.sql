@@ -200,3 +200,19 @@ VALUES (
         'binhusenstore_test@test.com',
         '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee'
     );
+
+-- ========================================================BORDER
+
+CREATE TABLE if not exists binhusenstore_products_archived (
+    id VARCHAR(9) NOT NULL PRIMARY KEY, 
+    name TEXT, 
+    categories VARCHAR(96),
+    price INT,
+    weight INT,
+    images TEXT,
+    description TEXT,
+    default_total_week VARCHAR(2),
+    is_available TINYINT,
+    links TEXT,
+    FULLTEXT(categories)
+);

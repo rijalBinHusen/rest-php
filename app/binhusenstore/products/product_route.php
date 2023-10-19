@@ -42,24 +42,22 @@ Flight::route("PUT /binhusenstore/product/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
-    if(!$is_token_valid) {
-        return;
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->update_product_by_id($id);
     }
-
-    $myreport_base_file = new Binhusenstore_product();
-    $myreport_base_file->update_product_by_id($id);
 });
 
 Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
 
-    if(!$is_token_valid) {
-        return;
+    if($is_token_valid) {
+            
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->remove_product($id);
     }
-
-    $myreport_base_file = new Binhusenstore_product();
-    $myreport_base_file->remove_product($id);
 });
 
 Flight::route("GET /binhusenstore/products/landing_page", function () {
@@ -81,5 +79,16 @@ Flight::route('GET /binhusenstore/products/count', function () {
         
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->get_count_products();
+    }
+});
+
+Flight::route('POST /binhusenstore/product/move_to_archive', function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+        
+        $myreport_base_file = new Binhusenstore_product();
+        $myreport_base_file->move_product_to_archive();
     }
 });

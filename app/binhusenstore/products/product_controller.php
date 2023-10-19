@@ -338,6 +338,7 @@ class Binhusenstore_product
             );
         }
     }
+
     public function get_count_products()
     {
 
@@ -367,5 +368,49 @@ class Binhusenstore_product
             ), 404);
         }
 
+    }
+    
+    public function move_product_to_archive()
+    {
+        // request
+        $req = Flight::request();
+        $id = $req->data->id;
+
+        $result = null;
+
+        $is_request_body_not_oke = empty($id) || is_null($id);
+
+        if($is_request_body_not_oke) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to archive the product'
+                ), 400
+            );
+            return;
+        }
+
+        $this->Binhusenstore_product->move_product_to_archive($id);
+
+        if($this->Binhusenstore_product->is_success === true) {
+        
+            Flight::json(
+                array(
+                    'success' => true,
+                    'id' => 'Product archived'
+                ), 200
+            );
+        } 
+        
+        else {
+            
+            Flight::json(
+                array(
+                    'success'=> false,
+                    'message'=> $this->Binhusenstore_product->is_success
+                ), 500
+            );
+        }
     }
 }
