@@ -1,5 +1,7 @@
 <?php
 
+require_once(__DIR__ . '/image_function.php');
+
 class Binhusenstore_image
 {
     var $image_dir = "uploaded/binhusenstore/";
@@ -46,17 +48,32 @@ class Binhusenstore_image
 
         // Generate a unique filename for the image.
         $filename = uniqid() . '.' . $extension;
+        $path_default_image = $this->image_dir . $filename;
+        $is_uploaded = move_uploaded_file($image['tmp_name'], $this->image_dir . $filename);
 
-        // Save the image file to the server.
-        move_uploaded_file($image['tmp_name'], $this->image_dir . $filename);
+        $filename_small_image = uniqid() . '-small.' . $extension;
+        $path_small_image = $this->image_dir . $filename_small_image;
+        resize_image_and_save($path_default_image, 320, 320, false, $extension, $path_small_image);
 
-        // Return a success response.
-        Flight::json(
-            array(
-                'success' => true,
-                'filename' => $filename
-            ), 201
-        );
+        if($is_uploaded) {
+
+            // Return a success response.
+            Flight::json(
+                array(
+                    'success' => true,
+                    'filename' => $filename_small_image
+                ), 201
+            );
+        } else {
+            
+            Flight::json(
+                array(
+                    'success' => true,
+                    'message' => 'Failed to move image to server folder!',
+                ), 500
+            );
+        }
+            
     }
 
     public function remove_image($filename) {
