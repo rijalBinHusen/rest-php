@@ -47,11 +47,12 @@ class Binhusenstore_image
         }
 
         // Generate a unique filename for the image.
-        $filename = uniqid() . '.' . $extension;
+        $uniquee_name = uniqid();
+        $filename = $uniquee_name . '.' . $extension;
         $path_default_image = $this->image_dir . $filename;
         $is_uploaded = move_uploaded_file($image['tmp_name'], $this->image_dir . $filename);
 
-        $filename_small_image = uniqid() . '-small.' . $extension;
+        $filename_small_image = $uniquee_name . '-small.' . $extension;
         $path_small_image = $this->image_dir . $filename_small_image;
         resize_image_and_save($path_default_image, 320, 320, false, $extension, $path_small_image);
 
