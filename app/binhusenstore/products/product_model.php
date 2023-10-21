@@ -70,6 +70,28 @@ class Binhusenstore_product_model
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
+            $server_name = $_SERVER['SERVER_NAME'];
+            $host_url = $server_name === 'localhost' ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+
+            $is_external_image = strpos($result[0]['images'], 'http') > -1;
+            $images = explode(",", $result[0]['images']);
+
+            if(!$is_external_image) {
+                
+                $images = array();
+                $image_as_arr = explode(",", $result[0]['images']);
+                for($i = 0;  $i < count($image_as_arr); $i++) {
+
+                    if($i === 0) {
+
+                        array_push($images, $host_url . str_replace('-small', '', $image_as_arr[$i]));
+                    } else {
+
+                        array_push($images, $host_url . $image_as_arr[$i]);
+                    }
+
+                }
+            }
 
             return [
                 array(
@@ -78,7 +100,7 @@ class Binhusenstore_product_model
                     'categories' => explode(",", $result[0]['categories']),
                     'price' => (int)$result[0]['price'],
                     'weight' => (int)$result[0]['weight'],
-                    'images' => explode(",", $result[0]['images']),
+                    'images' => $images,
                     'description' => $result[0]['description'],
                     'default_total_week' => (int)$result[0]['default_total_week'],
                     'is_available' => boolval($result[0]['is_available']),
