@@ -233,17 +233,36 @@ class Binhusenstore_product_model
 
     private function convert_data_type($products)
     {
+        $server_name = $_SERVER['SERVER_NAME'];
+        $host_url = $server_name === 'localhost' ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+        
         $result = array();
-
         // mapping products
         foreach ($products as $product_value) {
-            array_push($result, array(
+            $array_to_push = array(
                 "id" => $product_value['id'],
                 "name" => substr($product_value['name'], 0, 44) . "...",
-                "images" => explode(",", $product_value['images']),
+                "images" => array(),
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
-            ));
+            );
+
+            
+            $is_external_image = strpos($product_value['images'], 'http') > -1;
+            
+            if($is_external_image) {
+                
+                $array_to_push['images'] = explode(",", $product_value['images']);
+            } else {
+
+                $image_as_arr = explode(",", $product_value['images']);
+                foreach ($image_as_arr as $image) {
+                    
+                    array_push($array_to_push['images'], $host_url . $image);
+                }
+            }
+
+            array_push($result, $array_to_push);
         }
 
         return $result;
