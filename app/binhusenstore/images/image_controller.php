@@ -82,6 +82,13 @@ class Binhusenstore_image
         $filepath = $this->image_dir . $filename;
 
         $is_filename_exist = file_exists($filepath);
+        
+        //big image
+        $big_image_filename = str_replace("-small", "", $filename);
+        $big_image_path = $this->image_dir . $big_image_filename;
+
+        $is_big_image_exists = file_exists($big_image_path);
+        if($is_big_image_exists) unlink($big_image_path);
 
         if($is_filename_exist) {
 
