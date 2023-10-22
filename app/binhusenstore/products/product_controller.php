@@ -32,7 +32,14 @@ class Binhusenstore_product
                                 || is_null($images) 
                                 || is_null($description)
                                 || is_null($is_available)
-                                || is_null($default_total_week);
+                                || is_null($categories) 
+                                || is_null($default_total_week)
+                                || empty($name)
+                                || empty($price) 
+                                || empty($weight) 
+                                || empty($images) 
+                                || empty($description)
+                                || empty($default_total_week);
 
         if($is_request_body_not_oke) {
 
