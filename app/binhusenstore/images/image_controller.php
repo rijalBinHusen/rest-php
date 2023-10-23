@@ -79,16 +79,26 @@ class Binhusenstore_image
 
     public function remove_image($filename) {
 
+        $is_small_image = strpos($filename, "-small") > -1;
+
+        $another_file_name = "";
+
+        if($is_small_image) {
+            
+            $another_file_name = str_replace("-small", "", $filename);
+        } else {
+            
+            $another_file_name = str_replace(".", "-small.", $filename);
+        }
+
         $filepath = $this->image_dir . $filename;
 
         $is_filename_exist = file_exists($filepath);
         
-        //big image
-        $big_image_filename = str_replace("-small", "", $filename);
-        $big_image_path = $this->image_dir . $big_image_filename;
+        $another_file_path = $this->image_dir . $another_file_name;
+        $is_another_image_exists = file_exists($another_file_path);
+        if($is_another_image_exists) unlink($another_file_path);
 
-        $is_big_image_exists = file_exists($big_image_path);
-        if($is_big_image_exists) unlink($big_image_path);
 
         if($is_filename_exist) {
 
