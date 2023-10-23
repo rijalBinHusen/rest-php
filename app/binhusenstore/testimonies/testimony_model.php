@@ -13,11 +13,12 @@ class Binhusenstore_testimony_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_testimony($id_user, $id_product, $rating, $content)
+    public function append_testimony($id_user, $id_product, $rating, $content, $display_name)
     {
 
         $data_to_insert = array(
             'id_user' => $id_user,
+            'display_name' => $display_name,
             'id_product' => $id_product,
             'rating' => $rating,
             'content' => $content
@@ -39,8 +40,9 @@ class Binhusenstore_testimony_model
         $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
-            
-            return $result;
+
+            $converted_data_type = $this->convert_data_type($result);
+            return $converted_data_type;
         }
 
         $this->is_success = $this->database->is_error;
@@ -51,8 +53,9 @@ class Binhusenstore_testimony_model
         $result  = $this->database->select_where($this->table, 'id_product', $id_product)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
-            
-            return $result;
+
+            $converted_data_type = $this->convert_data_type($result);
+            return $converted_data_type;
         }
 
         $this->is_success = $this->database->is_error;
@@ -65,7 +68,9 @@ class Binhusenstore_testimony_model
         
         if($this->database->is_error === null) {
 
-            return $result;
+
+            $converted_data_type = $this->convert_data_type($result);
+            return $converted_data_type;
         }
         
         $this->is_success = $this->database->is_error;
@@ -104,5 +109,21 @@ class Binhusenstore_testimony_model
         
         $this->is_success = $this->database->is_error;
 
+    }
+
+    public function convert_data_type($testimonies) {
+        $result = array();
+
+        foreach ($testimonies as $value) {
+            array_push($result, array(
+                'id' => $value['id'],
+                'display_name' => $value['display_name'],
+                'id_product' => $value['id_product'],
+                'rating' => (int)$value['rating'],
+                'content' => $value['content'],
+            ));
+        }
+
+        return $result;
     }
 }

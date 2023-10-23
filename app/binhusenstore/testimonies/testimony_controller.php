@@ -14,6 +14,7 @@ class Binhusenstore_testimony
         // request
         $req = Flight::request();
         $id_user = $req->data->id_user;
+        $display_name = $req->data->display_name;
         $id_product = $req->data->id_product;
         $rating = $req->data->rating;
         $content = $req->data->content;
@@ -22,6 +23,7 @@ class Binhusenstore_testimony
 
         $is_request_body_not_oke = is_null($id_user)
                                     || is_null($id_product)
+                                    || is_null($display_name)
                                     || is_null($rating)
                                     || is_null($content);
 
@@ -36,7 +38,7 @@ class Binhusenstore_testimony
             return;
         }
 
-        $result = $this->Binhusenstore_testimony->append_testimony($id_user, $id_product, $rating, $content);
+        $result = $this->Binhusenstore_testimony->append_testimony($id_user, $id_product, $rating, $content, $display_name);
 
         if($this->Binhusenstore_testimony->is_success === true) {
         
@@ -188,34 +190,20 @@ class Binhusenstore_testimony
     {
         // catch the query string request
         $req = Flight::request();
-        $id_user = $req->data->id_user;
-        $id_product = $req->data->id_product;
         $rating = $req->data->rating;
         $content = $req->data->content;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
 
-        // conditional $id_user
-        $valid_id_user = !is_null($id_user);
-        if ($valid_id_user) {
-            $keyValueToUpdate["id_user"] = $id_user;
-        }
-
-        // conditional $id_product
-        $valid_id_product = !is_null($id_product);
-        if ($valid_id_product) {
-            $keyValueToUpdate["id_product"] = $id_product;
-        }
-
         // conditional $rating
-        $valid_rating = !is_null($rating);
+        $valid_rating = !is_null($rating) && is_numeric($rating);
         if ($valid_rating) {
             $keyValueToUpdate["rating"] = $rating;
         }
 
         // conditional $content
-        $valid_content = !is_null($content);
+        $valid_content = !is_null($content) && !empty($content);
         if ($valid_content) {
             $keyValueToUpdate["content"] = $content;
         }

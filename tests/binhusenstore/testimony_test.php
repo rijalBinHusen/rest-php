@@ -16,6 +16,7 @@ class MyReportTestimonyTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'id_user' => $faker->text(20),
+            'diplay_name' => $faker->text(20),
             'id_product' => $faker->text(6),
             'rating' => $faker->numberBetween(1, 5),
             'content' => $faker->text(190)

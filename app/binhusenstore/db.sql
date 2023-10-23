@@ -155,6 +155,7 @@ DO
 CREATE TABLE if not exists binhusenstore_testimonies (
     id VARCHAR(9) NOT NULL PRIMARY KEY,
     id_user VARCHAR(30),
+    display_name VARCHAR(30),
     id_product VARCHAR(30),
     rating TINYINT(1),
     content TEXT

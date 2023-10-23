@@ -74,7 +74,18 @@ paths:
         - testimony
       summary: Update testimony by id
       requestBody:
-        $ref: "#/components/requestBodies/testimony"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: number
+                  example: 5
+                content:
+                  type: string
+                  example: "QWERTYASDW"
       responses:
         "201":
           $ref: "#/components/responses/200Success"
@@ -119,6 +130,9 @@ components:
         id_user:
           type: string
           example: "QWERTYASDW"
+        diplay_name:
+          type: string
+          example: rijalbinhusen
         id_product:
           type: string
           example: "QWERTYASDW"
@@ -193,7 +207,23 @@ components:
               data:
                 type: array
                 items:
-                  $ref: "#/components/schemas/testimony"
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "WAR22500001"
+                    diplay_name:
+                      type: string
+                      example: rijalbinhusen
+                    id_product:
+                      type: string
+                      example: "QWERTYASDW"
+                    rating:
+                      type: number
+                      example: 5
+                    content:
+                      type: string
+                      example: "QWERTYASDW"
   requestBodies:
     testimony:
       required: true
@@ -205,6 +235,9 @@ components:
               id_user:
                 type: string
                 example: "QWERTYASDW"
+              diplay_name:
+                type: string
+                example: rijalbinhusen
               id_product:
                 type: string
                 example: "QWERTYASDW"
