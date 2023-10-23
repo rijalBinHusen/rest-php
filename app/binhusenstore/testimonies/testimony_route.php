@@ -14,14 +14,14 @@ Flight::route('POST /binhusenstore/testimony', function () {
 });
 
 Flight::route('GET /binhusenstore/testimonies', function () {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    // $user = new User("binhusenstore_users");
+    // $is_token_valid = $user->is_valid_token();
 
-    if($is_token_valid) {
+    // if($is_token_valid) {
         
         $myreport_base_file = new Binhusenstore_testimony();
         $myreport_base_file->get_testimonies();
-    }
+    // }
 
 });
 
