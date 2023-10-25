@@ -9,6 +9,7 @@ CREATE TABLE if not exists binhusenstore_products (
     default_total_week VARCHAR(2),
     is_available TINYINT,
     links TEXT,
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FULLTEXT(categories)
 );
 
@@ -38,7 +39,8 @@ CREATE TABLE if not exists binhusenstore_carts (
     id VARCHAR(9) NOT NULL PRIMARY KEY, 
     id_user VARCHAR(30),
     product_id VARCHAR(30),
-    qty TINYINT(2)
+    qty TINYINT(2),
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_carts
@@ -65,7 +67,8 @@ DO
 CREATE TABLE if not exists binhusenstore_categories (
     id VARCHAR(9) NOT NULL PRIMARY KEY, 
     name_category VARCHAR(30),
-    is_landing_page TINYINT(1)
+    is_landing_page TINYINT(1),
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_categories
@@ -98,7 +101,8 @@ CREATE TABLE if not exists binhusenstore_orders (
     name_of_customer VARCHAR(47),
     sent VARCHAR(10),
     title VARCHAR(47),
-    total_balance INT
+    total_balance INT,
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_orders
@@ -128,7 +132,8 @@ CREATE TABLE if not exists binhusenstore_payments (
     id_order VARCHAR(9),
     balance INT,
     is_paid TINYINT(1),
-    date_paid VARCHAR(10)
+    date_paid VARCHAR(10),
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_payments
@@ -158,7 +163,8 @@ CREATE TABLE if not exists binhusenstore_testimonies (
     display_name VARCHAR(30),
     id_product VARCHAR(30),
     rating TINYINT(1),
-    content TEXT
+    content TEXT,
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_testimonies
@@ -189,7 +195,8 @@ CREATE TABLE
         id bigint(20) PRIMARY KEY AUTO_INCREMENT,
         name varchar(255) NOT NULL,
         email varchar(255) NOT NULL,
-        password varchar(255) NOT NULL
+        password varchar(255) NOT NULL,
+        date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
 
@@ -215,5 +222,6 @@ CREATE TABLE if not exists binhusenstore_products_archived (
     default_total_week VARCHAR(2),
     is_available TINYINT,
     links TEXT,
-    FULLTEXT(categories)
+    FULLTEXT(categories),
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
