@@ -49,6 +49,49 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           description: testimony not found
+  /testimonies/landing_page:
+    get:
+      tags:
+        - testimony
+      summary: Get testimony for landing page.
+      responses:
+        "200":  
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "WAR22500001"
+                        diplay_name:
+                          type: string
+                          example: rijalbinhusen
+                        rating:
+                          type: number
+                          example: 5
+                        content:
+                          type: string
+                          example: "QWERTYASDW"
+                        product_name:
+                          type: string
+                          example: rijalbinhusen  product
+                        product_image:
+                          type: string
+                          example: rijalbinhusen.rijalbinhusen/image/iss.jpg
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: testimony not found
   /testimony/{id}:
     parameters:
       - name: id
