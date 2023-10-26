@@ -69,7 +69,7 @@ class Binhusenstore_product_model
 
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($this->database->is_error === null) {
+        if ($this->database->is_error === null && count($result) > 0) {
             $server_name = $_SERVER['SERVER_NAME'];
             $host_url = $server_name === 'localhost' ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
 

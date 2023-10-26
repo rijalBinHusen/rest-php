@@ -150,6 +150,47 @@ class Binhusenstore_testimony
             );
         }
     }
+    
+    public function get_testimony_for_landing_page()
+    {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id
+        $result = $this->Binhusenstore_testimony->get_testimony_landing_page();
+
+        $is_success = $this->Binhusenstore_testimony->is_success;
+
+        $is_found = count($result) > 0;
+
+        if($is_success === true && $is_found) {
+
+            Flight::json(
+                array(
+                    'success' => true,
+                    'data' => $result
+                )
+            );
+        }
+
+        else if($is_success !== true) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ), 500
+            );
+        }
+
+        else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Testimony not found'
+                ), 404
+            );
+        }
+    }
 
     public function remove_testimony($id) {
         // myguest/8

@@ -8,6 +8,8 @@
 
 ## 26 Oct 2023
 - [x] (GET) binhusentore/testimonies, order by id desc with custom limit
+- [x] Get random testimony for landing page (endpoint)
+- [ ] Add api spec for testimony landing page endpoint
 
 ## 23 Oct 23
 - [x] hapus small image juga jika request remove image bukan small image

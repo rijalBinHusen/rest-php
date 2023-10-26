@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../products/product_model.php');
 
 class Binhusenstore_testimony_model
 {
@@ -126,6 +127,37 @@ class Binhusenstore_testimony_model
         $this->is_success = $this->database->is_error;
 
     }
+
+    
+    public function get_testimony_landing_page()
+    {
+        
+        $table_testimony = $this->table;
+        $query_testimony = "SELECT * FROM $table_testimony ORDER BY RAND() LIMIT 1";
+        $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
+
+        if(count($result) === 0) return;
+
+        $product_model = new Binhusenstore_product_model();
+        $retrieve_product = $product_model->get_product_by_id($result[0]['id_product']);
+        
+        if(count($retrieve_product) === 0) return;
+        
+        if($this->database->is_error === null && count($result) > 0) {
+
+            return array(
+                'id' => $result[0]['id'],
+                'display_name' => $result[0]['display_name'],
+                'rating' => (int)$result[0]['rating'],
+                'content' => $result[0]['content'],
+                'product_name' => $retrieve_product[0]['name'],
+                'product_image' => $retrieve_product[0]['images'][0]
+            );
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
 
     public function convert_data_type($testimonies) {
         $result = array();
