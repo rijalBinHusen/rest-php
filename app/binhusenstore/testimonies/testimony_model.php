@@ -35,13 +35,26 @@ class Binhusenstore_testimony_model
 
     }
 
-    public function get_testimonies()
+    public function get_testimonies($limit)
     {
-        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
         
-        if($this->database->is_error === null) {
+        $columnToSelect = "display_name, content, rating";
+        $table_testimony = $this->table;
+        $query_testimony = "SELECT $columnToSelect FROM $table_testimony ORDER BY id DESC";
+        
+        if(is_numeric($limit) && $limit > 1) {
 
-            $converted_data_type = $this->convert_data_type($result);
+            $query_testimony = $query_testimony . " LIMIT $limit";
+        } else {
+            
+            $query_testimony = $query_testimony . " LIMIT 10";
+        }
+
+        $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($this->database->is_error === null && count($result) > 0) {
+
+            $converted_data_type = $this->convert_data_type_simple_record($result);
             return $converted_data_type;
         }
 
@@ -50,11 +63,14 @@ class Binhusenstore_testimony_model
 
     public function get_testimoniesByIdProduct($id_product)
     {
-        $result  = $this->database->select_where($this->table, 'id_product', $id_product)->fetchAll(PDO::FETCH_ASSOC);
+        $columnToSelect = "display_name, content, rating";
+        $table_testimony = $this->table;
+        $query_testimony = "SELECT $columnToSelect FROM $table_testimony WHERE 'id_product' =  '$id_product' ORDER BY id DESC";
+        $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
 
-            $converted_data_type = $this->convert_data_type($result);
+            $converted_data_type = $this->convert_data_type_simple_record($result);
             return $converted_data_type;
         }
 
@@ -119,6 +135,20 @@ class Binhusenstore_testimony_model
                 'id' => $value['id'],
                 'display_name' => $value['display_name'],
                 'id_product' => $value['id_product'],
+                'rating' => (int)$value['rating'],
+                'content' => $value['content'],
+            ));
+        }
+
+        return $result;
+    }
+
+    public function convert_data_type_simple_record($testimonies) {
+        $result = array();
+
+        foreach ($testimonies as $value) {
+            array_push($result, array(
+                'display_name' => $value['display_name'],
                 'rating' => (int)$value['rating'],
                 'content' => $value['content'],
             ));

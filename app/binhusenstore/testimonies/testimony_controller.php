@@ -66,12 +66,13 @@ class Binhusenstore_testimony
         // catch the query string request
         $req = Flight::request();
         $id_product = $req->query->id_product;
+        $limit = $req->query->limit;
 
         $result = array();
 
         if(is_null($id_product)) {
 
-            $result = $this->Binhusenstore_testimony->get_testimonies();
+            $result = $this->Binhusenstore_testimony->get_testimonies($limit);
         }
 
         else {
