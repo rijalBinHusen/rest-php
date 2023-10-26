@@ -263,9 +263,10 @@ class Binhusenstore_product_model
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
+            $product_name = strlen($product_value['name']) <= 44 ? $product_value['name'] : substr($product_value['name'], 0, 44) . "...";
             $array_to_push = array(
                 "id" => $product_value['id'],
-                "name" => substr($product_value['name'], 0, 44) . "...",
+                "name" => $product_name,
                 "images" => array(),
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
