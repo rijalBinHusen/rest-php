@@ -7,7 +7,7 @@
  -->
 
 ## 26 Oct 2023
-- [ ] (GET) binhusentore/testimonies, order by id desc with custom limit
+- [x] (GET) binhusentore/testimonies, order by id desc with custom limit
 
 ## 23 Oct 23
 - [x] hapus small image juga jika request remove image bukan small image

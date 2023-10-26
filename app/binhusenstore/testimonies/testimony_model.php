@@ -45,7 +45,9 @@ class Binhusenstore_testimony_model
         if(is_numeric($limit) && $limit > 1) {
 
             $query_testimony = $query_testimony . " LIMIT $limit";
-        } else {
+        } 
+        else if(is_numeric($limit) && $limit === 0) {}
+        else {
             
             $query_testimony = $query_testimony . " LIMIT 10";
         }
