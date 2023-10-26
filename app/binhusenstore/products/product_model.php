@@ -152,7 +152,7 @@ class Binhusenstore_product_model
 
         // get categories first
         
-        $category_testimony = "SELECT * FROM binhusenstore_categories WHERE 'is_landing_page' =  1 ORDER BY id DESC";
+        $category_testimony = "SELECT * FROM binhusenstore_categories WHERE is_landing_page = 1 ORDER BY id DESC";
         $categories = $this->database->sqlQuery($category_testimony)->fetchAll(PDO::FETCH_ASSOC);
         $is_categories_exists = count($categories) > 0;
 
