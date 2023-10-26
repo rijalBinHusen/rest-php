@@ -30,6 +30,21 @@ paths:
           "401":
             $ref: "#/components/responses/401Error"
   /products:
+    parameters:
+      - name: id_category
+        in: query
+        required: true
+        description: The ID of the category
+        schema:
+          type: string
+        example: P220203902
+      - name: limit
+        in: query
+        required: true
+        description: The ID of the category
+        schema:
+          type: number
+        example: 10
     get:
       tags:
         - products
