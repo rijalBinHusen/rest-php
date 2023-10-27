@@ -25,7 +25,11 @@ class Binhusenstore_testimony
                                     || is_null($id_product)
                                     || is_null($display_name)
                                     || is_null($rating)
-                                    || is_null($content);
+                                    || !empty($id_user)
+                                    || !empty($id_product)
+                                    || !empty($display_name)
+                                    || is_numeric($rating);
+        if(is_null($content) || empty($content)) $content = "Tidak ada review dari pengguna";
 
         if($is_request_body_not_oke) {
 
@@ -240,15 +244,12 @@ class Binhusenstore_testimony
 
         // conditional $rating
         $valid_rating = !is_null($rating) && is_numeric($rating);
-        if ($valid_rating) {
-            $keyValueToUpdate["rating"] = $rating;
-        }
+        if ($valid_rating) $keyValueToUpdate["rating"] = $rating;
 
         // conditional $content
         $valid_content = !is_null($content) && !empty($content);
-        if ($valid_content) {
-            $keyValueToUpdate["content"] = $content;
-        }
+        if ($valid_content) $keyValueToUpdate["content"] = $content; 
+        else $keyValueToUpdate["content"] = "Tidak ada review dari pengguna";
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 

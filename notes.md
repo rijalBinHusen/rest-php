@@ -4,12 +4,12 @@
 - [ ] Bikin validasi is admin(id_admin) untuk admin permission
 - [ ] Consider to return 1 image when request products
 - [ ] Jangan boleh update paymet jika pembayaran > tagihan
-- [ ] testimony POST|UPDATE validate payload rating as number, and the other as string
 - [ ] Try to update the password on unit testing, old password must be valid
 - [ ] Jangan bolehkan update harga product jika produk sudah pernah dipesan
  -->
 
 ## 27 Oct 2023
+- [x] testimony POST|UPDATE validate payload rating as number, and the other as string
 - [x] Products endpoint, validate payload price, weight, and default_total_week as number, validate payload is_available as boolean
 - [x] validate other than above as string
 
