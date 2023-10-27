@@ -9,6 +9,7 @@
  -->
 
 ## 27 Oct 2023
+- [ ] Gunakan kode akses untuk akses resource binhusenstore
 - [x] testimony POST|UPDATE validate payload rating as number, and the other as string
 - [x] Products endpoint, validate payload price, weight, and default_total_week as number, validate payload is_available as boolean
 - [x] validate other than above as string

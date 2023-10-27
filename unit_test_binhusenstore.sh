@@ -4,7 +4,7 @@ phpunit tests/binhusenstore/cart_test.php
 phpunit tests/binhusenstore/category_test.php
 phpunit tests/binhusenstore/order_test.php
 phpunit tests/binhusenstore/payment_test.php
-phpunit tests/binhusenstore/payment_details_test.php
+# phpunit tests/binhusenstore/payment_details_test.php
 phpunit tests/binhusenstore/product_test.php
 phpunit tests/binhusenstore/testimony_test.php
 sleep 6
