@@ -7,10 +7,12 @@
 - [ ] Try to update the password on unit testing, old password must be valid
 - [ ] Jangan bolehkan update harga product jika produk sudah pernah dipesan
 - [ ] Amankan end point/user/register
+- [ ] Gunakan kode akses untuk akses resource binhusenstore
+- [ ] Buat endpoint untuk mendapatkan nomor hp admin
  -->
 
 ## 27 Oct 2023
-- [ ] Gunakan kode akses untuk akses resource binhusenstore
+- [x] Fix error get testimony by product id
 - [x] create API spec for access code endpoint
 - [x] People who can create access code is admin
 - [x] testimony POST|UPDATE validate payload rating as number, and the other as string

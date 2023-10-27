@@ -65,7 +65,7 @@ class Binhusenstore_testimony_model
     public function get_testimoniesByIdProduct($id_product)
     {
         $table_testimony = $this->table;
-        $query_testimony = "SELECT * FROM $table_testimony WHERE 'id_product' =  '$id_product' ORDER BY id DESC";
+        $query_testimony = "SELECT * FROM $table_testimony WHERE id_product =  '$id_product' ORDER BY id DESC";
         $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
         
         if($this->database->is_error === null) {
