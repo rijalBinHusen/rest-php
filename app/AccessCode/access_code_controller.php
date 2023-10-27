@@ -38,7 +38,7 @@ class Access_code {
                     array(
                         'success' => true,
                         'message' => 'Your code is set'
-                    )
+                    ), 201
                 );
 
             }
@@ -76,7 +76,7 @@ class Access_code {
                     array(
                         'success' => false,
                         'message' => $result
-                    ), 500
+                    ), 401
                 );
 
             } else {

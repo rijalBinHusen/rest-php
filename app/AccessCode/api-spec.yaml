@@ -1,0 +1,171 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/access_code
+    description: Binhusenstore end point
+tags:
+  - name: access_code
+    description: code to access resource
+
+paths:
+  /access_code/create:
+    post:
+      tags:
+        - access_code
+      summary: Let user create new access_code
+      requestBody:
+        $ref: "#/components/requestBodies/access_code"
+      responses:
+        "201":
+          description: Successfully created a new access_code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Your code is set
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  # End of access_code end point
+  
+  /access_code/validate:
+    parameters:
+      - name: Code-Authorization
+        in: header
+        required: true
+        description: Path for validate JWT
+        schema:
+          type: number
+        example: 123123123
+    post:
+      tags:
+        - access_code
+      summary: Let user validate access_code
+      responses:
+        "200":
+          description: Access code is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Your code is valid
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  # End of access_code end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    access_code:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "WAR22500001"
+        password:
+          type: string
+        name:
+          type: string
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource. / Invalid email or password"
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getaccess_code200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/access_code"
+  requestBodies:
+    access_code:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              access-code:
+                type: string
+                example: 983981
