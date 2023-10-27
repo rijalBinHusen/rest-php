@@ -6,10 +6,11 @@
 - [ ] Jangan boleh update paymet jika pembayaran > tagihan
 - [ ] Try to update the password on unit testing, old password must be valid
 - [ ] Jangan bolehkan update harga product jika produk sudah pernah dipesan
-- [ ] Gunakan kode akses untuk akses resource binhusenstore
+- [ ] Amankan end point/user/register
  -->
 
 ## 27 Oct 2023
+- [ ] Gunakan kode akses untuk akses resource binhusenstore
 - [x] create API spec for access code endpoint
 - [x] People who can create access code is admin
 - [x] testimony POST|UPDATE validate payload rating as number, and the other as string
