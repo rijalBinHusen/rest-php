@@ -42,11 +42,10 @@ class Binhusenstore_testimony_model
         $table_testimony = $this->table;
         $query_testimony = "SELECT * FROM $table_testimony ORDER BY id DESC";
         
-        if(is_numeric($limit) && $limit > 1) {
+        if(is_numeric($limit)) {
 
-            $query_testimony = $query_testimony . " LIMIT $limit";
-        } 
-        else if(is_numeric($limit) && $limit === 0) {}
+            if($limit > 1) $query_testimony = $query_testimony . " LIMIT $limit";
+        }
         else {
             
             $query_testimony = $query_testimony . " LIMIT 10";

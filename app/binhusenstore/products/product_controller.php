@@ -39,7 +39,15 @@ class Binhusenstore_product
                                 || empty($weight) 
                                 || empty($images) 
                                 || empty($description)
-                                || empty($default_total_week);
+                                || empty($categories)
+                                || empty($default_total_week)
+                                || !is_string($name)
+                                || !is_numeric($price)
+                                || !is_numeric($weight)
+                                || !is_numeric($default_total_week)
+                                || !is_string($images)
+                                || !is_string($description)
+                                || !is_bool($is_available);
 
         if($is_request_body_not_oke) {
 
@@ -213,43 +221,43 @@ class Binhusenstore_product
         }
 
         // conditional categories
-        $valid_categories = !is_null($categories) && is_string($categories);
+        $valid_categories = !is_null($categories) && is_string($categories) && !empty($categories);
         if ($valid_categories) {
             $keyValueToUpdate["categories"] = $categories;
         }
 
         // conditional $price
-        $valid_price = !is_null($price) && is_numeric($price);
+        $valid_price = !is_null($price) && is_numeric($price) && !empty($price);
         if ($valid_price) {
             $keyValueToUpdate["price"] = $price;
         }
 
         // conditional $weight
-        $valid_weight = !is_null($weight) && is_numeric($weight);
+        $valid_weight = !is_null($weight) && is_numeric($weight) && !empty($weight);
         if ($valid_weight) {
             $keyValueToUpdate["weight"] = $weight;
         }
 
         // conditional $images
-        $valid_images = !is_null($images) && is_string($images);
+        $valid_images = !is_null($images) && is_string($images) && !empty($images);
         if ($valid_images) {
             $keyValueToUpdate["images"] = $images;
         }
 
         // conditional $description
-        $valid_description = !is_null($description) && is_string($description);
+        $valid_description = !is_null($description) && is_string($description) && !empty($description);
         if ($valid_description) {
             $keyValueToUpdate["description"] = $description;
         }
 
         // conditional $name
-        $valid_name = !is_null($name) && is_string($name);
+        $valid_name = !is_null($name) && is_string($name) && !empty($name);
         if ($valid_name) {
             $keyValueToUpdate["name"] = $name;
         }
 
         // conditional $default_total_week
-        $valid_default_total_week = !is_null($default_total_week) && is_numeric($default_total_week);
+        $valid_default_total_week = !is_null($default_total_week) && is_numeric($default_total_week) && !empty($default_total_week);
         if ($valid_default_total_week) {
             $keyValueToUpdate["default_total_week"] = $default_total_week;
         }
