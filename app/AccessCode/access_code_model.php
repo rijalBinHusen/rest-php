@@ -32,20 +32,14 @@ Class Access_code_model {
     }
 
     function validate_code($source_name, $code) {
-        $find_source = $this->database->select_where($this->table_name, 'source_name', $source_name)->fetch();
+        $table_name = $this->table_name;
+        $access_code_query = "SELECT * FROM $table_name WHERE source_name = '$source_name' AND code = '$code'";
+        $retrieve_data = $this->database->sqlQuery($access_code_query)->fetchAll(PDO::FETCH_ASSOC);
+        $is_code_matched = count($retrieve_data) > 0;
         
-        // is soucre find
-        if(is_array($find_source)) {
-            // is code matched
-            $is_code_matched = $code == $find_source['code'];
-            
-            if($is_code_matched) {
-                return true;
-            }
-
-            return "Access code invalid";
-        }
-
-        return "Source not found";
+        if($is_code_matched) return true;
+        
+        return "Access code or resorce name invalid";
+        
     }
 }

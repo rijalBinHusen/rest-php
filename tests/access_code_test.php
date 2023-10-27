@@ -91,7 +91,7 @@ class AccessCodeTest extends PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Access code invalid', $convertToAssocArray['message']);
+        $this->assertEquals('Access code or resorce name invalid', $convertToAssocArray['message']);
     }
 
     // validate code failed3
@@ -113,7 +113,7 @@ class AccessCodeTest extends PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Source not found', $convertToAssocArray['message']);
+        $this->assertEquals('Access code or resorce name invalid', $convertToAssocArray['message']);
     }
 
     // validate code success
@@ -131,7 +131,7 @@ class AccessCodeTest extends PHPUnit_Framework_TestCase {
 
         $reponse = $http->getResponse("POST");
 
-        // fwrite(STDERR, print_r($this->accessCodeInserted, true));
+        // fwrite(STDERR, print_r($reponse, true));
         $convertToAssocArray = json_decode($reponse, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
