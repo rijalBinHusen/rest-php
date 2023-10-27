@@ -102,4 +102,52 @@ class Access_code {
         }
 
     }
+
+    function validate_my_code ($source_name) {
+
+        $your_access_code = false;
+
+        if(isset($_SERVER['HTTP_CODE_AUTHORIZATION'])) {
+
+            $your_access_code = $_SERVER['HTTP_CODE_AUTHORIZATION'];
+        }
+
+
+
+        if($your_access_code !== false) {
+            
+            $result = $this->access_code->validate_code($source_name, $your_access_code);
+
+            if($result !== true) {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $result
+                    ), 401
+                );
+
+            } else {
+
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'message' => 'Your code is valid'
+                    )
+                );
+
+            }
+
+        } else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => "Request body invalid"
+                ), 400
+            );
+
+        }
+
+    }
 }

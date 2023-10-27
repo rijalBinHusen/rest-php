@@ -43,7 +43,7 @@ paths:
       - name: Code-Authorization
         in: header
         required: true
-        description: Path for validate JWT
+        description: Acess code
         schema:
           type: number
         example: 123123123
@@ -166,6 +166,9 @@ components:
           schema:
             type: object
             properties:
-              access-code:
+              code:
                 type: string
                 example: 983981
+              source_name:
+                type: string
+                example: myresource

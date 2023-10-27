@@ -19,6 +19,7 @@ class AccessCodeTest extends PHPUnit_Framework_TestCase {
         );
 
         $http->setData($data);
+        $http->addJWTToken();
         $reponse = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($reponse, true);
@@ -40,6 +41,7 @@ class AccessCodeTest extends PHPUnit_Framework_TestCase {
         );
 
         $http->setData($data);
+        $http->addJWTToken();
         $reponse = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($reponse, true);
