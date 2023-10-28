@@ -190,52 +190,36 @@ class Binhusenstore_order
 
         // conditional $date_order
         $valid_date_order = !is_null($date_order);
-        if ($valid_date_order) {
-            $keyValueToUpdate["date_order"] = $date_order;
-        }
-
+        if ($valid_date_order) $keyValueToUpdate["date_order"] = $date_order;
+        
         // conditional $id_group
         $valid_id_group = !is_null($id_group);
-        if ($valid_id_group) {
-            $keyValueToUpdate["id_group"] = $id_group;
-        }
-
+        if ($valid_id_group) $keyValueToUpdate["id_group"] = $id_group;
+        
         // conditional $is_group
         $valid_is_group = !is_null($is_group);
-        if ($valid_is_group) {
-            $keyValueToUpdate["is_group"] = $is_group;
-        }
+        if ($valid_is_group) $keyValueToUpdate["is_group"] = $is_group;
 
         // conditional $id_product
         $valid_id_product = !is_null($id_product);
-        if ($valid_id_product) {
-            $keyValueToUpdate["id_product"] = $id_product;
-        }
-
+        if ($valid_id_product) $keyValueToUpdate["id_product"] = $id_product;
+        
         // conditional $name_of_customer
         $valid_name_of_customer = !is_null($name_of_customer);
-        if ($valid_name_of_customer) {
-            $keyValueToUpdate["name_of_customer"] = $name_of_customer;
-        }
-
+        if ($valid_name_of_customer) $keyValueToUpdate["name_of_customer"] = $name_of_customer;
+        
         // conditional $sent
         $valid_sent = !is_null($sent);
-        if ($valid_sent) {
-            $keyValueToUpdate["sent"] = $sent;
-        }
+        if ($valid_sent) $keyValueToUpdate["sent"] = $sent;
 
         // conditional $title
         $valid_title = !is_null($title);
-        if ($valid_title) {
-            $keyValueToUpdate["title"] = $title;
-        }
-
+        if ($valid_title) $keyValueToUpdate["title"] = $title;
+        
         // conditional $total_balance
         $valid_total_balance = !is_null($total_balance);
-        if ($valid_total_balance) {
-            $keyValueToUpdate["total_balance"] = $total_balance;
-        }
-
+        if ($valid_total_balance) $keyValueToUpdate["total_balance"] = $total_balance;
+        
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
         if($is_oke_to_update) {
@@ -282,5 +266,36 @@ class Binhusenstore_order
                 )
             );
         }
+    }
+
+    public function get_count_orders()
+    {
+
+        $result = $this->Binhusenstore_order->count_orders();
+
+        if($this->Binhusenstore_order->is_success === true) {
+
+            Flight::json([
+                    "success" => true,
+                    "data" => $result
+                ], 200);
+        }
+
+        else if ($this->Binhusenstore_order->is_success !== true) {
+            
+            Flight::json([
+                "success" => false,
+                "message" => $this->Binhusenstore_order->is_success
+            ], 500);
+        }
+        
+        else {
+
+            Flight::json([
+                "success" => false,
+                "message" => "Order not found"
+            ], 404);
+        }
+
     }
 }

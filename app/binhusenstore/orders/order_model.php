@@ -97,4 +97,17 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
 
     }
+
+    public function count_orders()
+    {
+        $query = "SELECT COUNT(*) FROM $this->table";
+        $result = $this->database->sqlQuery($query)->fetchColumn();
+
+        if ($this->database->is_error === null) {
+
+            return $result;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
 }

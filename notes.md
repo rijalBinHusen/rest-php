@@ -11,6 +11,10 @@
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
  -->
 
+## 28 Oct 2023
+- [x] End point to show total order
+- [ ] End point to show total money
+
 ## 27 Oct 2023
 - [x] Fix error get testimony by product id
 - [x] create API spec for access code endpoint
