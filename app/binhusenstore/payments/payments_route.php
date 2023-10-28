@@ -72,3 +72,15 @@ Flight::route("PUT /binhusenstore/payment_mark_as_paid", function () {
     }
 
 });
+
+Flight::route("GET /binhusenstore/payments/sum_balance", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+       
+        $myreport_base_file = new Binhusenstore_payment();
+        $myreport_base_file->get_sum_balance_payments();    
+    }
+
+});

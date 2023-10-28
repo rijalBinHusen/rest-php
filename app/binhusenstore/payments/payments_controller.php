@@ -341,4 +341,27 @@ class Binhusenstore_payment
             );
         }
     }
+    
+    public function get_sum_balance_payments()
+    {
+        $result = $this->Binhusenstore_payment->sum_balance();
+
+        $is_success = $this->Binhusenstore_payment->is_success;
+
+        if($is_success === true) {
+
+            Flight::json([
+                'success' => true,
+                'total_balance' => $result
+            ]);
+        }
+
+        else {
+
+            Flight::json([
+                'success' => false,
+                'message' => $is_success
+            ], 500);
+        }
+    }
 }

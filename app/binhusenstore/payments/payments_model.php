@@ -170,4 +170,14 @@ class Binhusenstore_payment_model
         
         return true;
     }
+
+    public function sum_balance() {
+        
+        $query_sum_balance = "SELECT SUM(balance) as total_balance FROM $this->table WHERE is_paid = 1";
+        $sum_balance = $this->database->sqlQuery($query_sum_balance)->fetchAll(PDO::FETCH_ASSOC);
+
+        if($this->database->is_error === null) return $sum_balance[0]['total_balance'];
+
+        $this->is_success = $this->database->is_error;
+    }
 }
