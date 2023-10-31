@@ -97,7 +97,8 @@ class User_model {
     try {
 
       $jwt = Firebase\JWT\JWT::decode($jwt, new Firebase\JWT\Key(JWT_SECRET, JWT_ALGO));
-      $valid = is_object($jwt);
+      // $valid = is_object($jwt);
+      $valid = $jwt;
     } catch (Exception $e) {
       
       $this->error = $e->getMessage();
@@ -105,16 +106,17 @@ class User_model {
  
     // (G2) GET USER
     if ($valid) {
-      $user = $this->database->select_where($this->table_name, "id", $jwt->data->id)->fetch();
-      $valid = is_array($user);
+      // $user = $this->database->select_where($this->table_name, "id", $jwt->data->id)->fetchAll(PDO::FETCH_ASSOC);
+      // $valid = is_array($user);
+      return $valid;
     }
  
     // (G3) RETURN RESULT
-    if ($valid) {
+    // if ($valid) {
 
-      unset($user["password"]);
-      return $user;
-    } 
+    //   unset($user["password"]);
+    //   return $user;
+    // } 
     
     else {
 
