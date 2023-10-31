@@ -122,6 +122,7 @@ class My_report_report_model
         if($is_complain_exists) {
             
             foreach($result_complains as $complain) {
+                $periode = $complain['periode'];
 
                 $grouping_document_with_same_periode[$periode]['total_komplain_muat'] += $complain['is_count'];
 
