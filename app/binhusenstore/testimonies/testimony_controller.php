@@ -25,10 +25,10 @@ class Binhusenstore_testimony
                                     || is_null($id_product)
                                     || is_null($display_name)
                                     || is_null($rating)
-                                    || !empty($id_user)
-                                    || !empty($id_product)
-                                    || !empty($display_name)
-                                    || is_numeric($rating);
+                                    || empty($id_user)
+                                    || empty($id_product)
+                                    || empty($display_name)
+                                    || !is_numeric($rating);
         if(is_null($content) || empty($content)) $content = "Tidak ada review dari pengguna";
 
         if($is_request_body_not_oke) {
