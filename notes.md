@@ -9,6 +9,7 @@
 - [ ] Amankan end point/user/register
 - [ ] Gunakan kode akses untuk akses resource binhusenstore
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
+- [ ] Buat index pada beberapa table untuk meningkatkan proses query
  -->
 
 ## 28 Oct 2023
