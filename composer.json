@@ -5,7 +5,7 @@
         "firebase/php-jwt": "^6.0"
     },
     "autoload": {
-        "classmap": ["controller/", "model/", "vendor/"]
+        "classmap": ["vendor/"]
     },
     "require-dev": {
         "fakerphp/faker": "^1.9",
