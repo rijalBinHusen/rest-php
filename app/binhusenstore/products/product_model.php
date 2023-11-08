@@ -85,7 +85,8 @@ class Binhusenstore_product_model
 
         if ($this->database->is_error === null && count($result) > 0) {
             $server_name = $_SERVER['SERVER_NAME'];
-            $host_url = $server_name === 'localhost' ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+            $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
+            $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
 
             $is_external_image = strpos($result[0]['images'], 'http') > -1;
             $images = explode(",", $result[0]['images']);
@@ -272,7 +273,8 @@ class Binhusenstore_product_model
     private function convert_data_type($products)
     {
         $server_name = $_SERVER['SERVER_NAME'];
-        $host_url = $server_name === 'localhost' ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+        $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
+        $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
         
         $result = array();
         // mapping products
