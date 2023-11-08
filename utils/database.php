@@ -14,7 +14,7 @@ class Query_builder {
 
     public static function getInstance() {
         if (self::$instance === null) {
-            $connection = new PDO('mysql:host=localhost;dbname=myreport', 'root', '');
+            $connection = new PDO('mysql:host=localhost;dbname=rijalbin_my_report', 'root', 'Ibarahim123*');
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$instance = new static($connection);
         }
