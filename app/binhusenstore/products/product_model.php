@@ -25,7 +25,7 @@ class Binhusenstore_product_model
             'images' => $images,
             'description' => $description,
             'default_total_week' => $default_total_week,
-            'is_available' => $is_available,
+            'is_available' => (int)$is_available,
             'links' => $links,
         );
 
