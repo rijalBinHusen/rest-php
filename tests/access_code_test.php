@@ -1,8 +1,10 @@
 <?php
 require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 
-class AccessCodeTest extends PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class Access_code_test extends TestCase {
     private $url = "access_code/";
     private $accessCodeInserted = null;
 
