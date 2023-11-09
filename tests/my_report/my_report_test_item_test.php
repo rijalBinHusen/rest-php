@@ -1,20 +1,15 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_test_item_test extends TestCase
 {
-    private $url = "myreport/";
-    private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
-
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'base_items/';
-        $this->urlPost = $this->url . 'base_item/';
-    }
+    private $idInserted;
+    private $urlGets = "myreport/base_items/";
+    private $urlPost = "myreport/base_item/";
     
     public function testPostEndpoint()
     {
@@ -33,10 +28,10 @@ class MyReportMasterItemTest extends PHPUnit_Framework_TestCase
         
         $response = $http->getResponse("POST");
 
+        // fwrite(STDERR, print_r($response . PHP_EOL, true));
         $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r($response ."\n", true));
-        // Verify that the response same as expected
+        //Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
