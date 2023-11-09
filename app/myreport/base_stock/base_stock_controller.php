@@ -157,7 +157,7 @@ class My_report_base_stock
 
         $result = $this->my_report_base_stock->remove_base_stock_by_parent($parent);
         
-        $is_exists = count($result) > 0;
+        $is_exists = $result > 0;
 
         if($this->my_report_base_stock->is_success === true && $is_exists) {
 

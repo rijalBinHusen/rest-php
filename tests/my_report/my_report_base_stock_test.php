@@ -9,14 +9,15 @@ class My_report_base_stock_test extends TestCase
 {
     private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
+    private $urlGets = "myreport/";
+    private $urlPost = "myreport/base_stock/";
     private $dataToInsert;
     private $dataToUpdate;
     private $urlDeleteByParents;
-
-    public function __construct()
+    
+    public function testPostEndpoint()
     {
+
         $faker = Faker\Factory::create();
         $parentId = $faker->text(5);
         $shiftStock = $faker->numberBetween(1, 3);
@@ -34,9 +35,7 @@ class My_report_base_stock_test extends TestCase
             'real_stock' => $faker->numberBetween(1, 1000000),
             'problem' => "",
         );
-
-        $this->urlPost = $this->url . 'base_stock/';
-        $this->urlGets = $this->url . "base_stocks?parent=$parentId&shift=$shiftStock";
+        $this->urlGets = $this->urlGets . "base_stocks?parent=$parentId&shift=$shiftStock";
         $this->urlDeleteByParents =  $this->url . "base_stocks?parent=$parentId";
 
         $this->dataToUpdate = array(
@@ -46,10 +45,7 @@ class My_report_base_stock_test extends TestCase
             'real_stock' => $faker->numberBetween(1, 1000000)
         );
 
-    }
-    
-    public function testPostEndpoint()
-    {
+
         $http = new HttpCall($this->urlPost);
         // Define the request body
 
@@ -119,7 +115,7 @@ class My_report_base_stock_test extends TestCase
         $response = $http->getResponse("GET");
         
         $convertToAssocArray = json_decode($response, true);
-        fwrite(STDERR, print_r("\n" .$this->urlGets . "\n", true));
+        // fwrite(STDERR, print_r("\n" .$this->urlGets . "\n", true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);
@@ -140,6 +136,7 @@ class My_report_base_stock_test extends TestCase
 
     public function testGetEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGets);
         $response = $http->getResponse("GET");
         
@@ -163,6 +160,7 @@ class My_report_base_stock_test extends TestCase
         
         $response = $httpCallVar->getResponse("DELETE");
 
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);

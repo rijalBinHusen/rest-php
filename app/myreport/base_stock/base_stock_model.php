@@ -105,7 +105,7 @@ class My_report_base_stock_model
         if($this->database->is_error !== null) {
 
             $this->is_success = $this->database->is_error;
-            return array();
+            return 0;
 
         } else {
 
