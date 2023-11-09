@@ -1,15 +1,17 @@
 <?php
 
 require_once(__DIR__ ."/../tests/httpCall.php");
-require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 
-class MyRestServerUserTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class User_test extends TestCase
 {
-    private $url = "http://localhost/rest-php/user/";
+    private $end_point = "user/";
     // Test register email exists
     public function testRegisterEndpointFailed()
     {
-        $http = new HttpCall($this->url . "register");
+        $http = new HttpCall($this->end_point . "register");
         // Define the request body
         $data = array(
             'email' => 'test@test.com', 
@@ -21,8 +23,8 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
 
         $response = $http->getResponse("POST");
 
+        // fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, TRUE));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
@@ -33,7 +35,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // Test register user not enter name
     public function testRegisterEndpointWithoutName()
     {
-        $http = new HttpCall($this->url . "register");
+        $http = new HttpCall($this->end_point . "register");
         // Define the request body
         $data = array(
             'email' => 'test@dfsfsdfsdf.com', 
@@ -52,7 +54,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // Test register must success
     public function testRegisterEndpoint()
     {
-        $http = new HttpCall($this->url . "register");
+        $http = new HttpCall($this->end_point . "register");
         $faker = Faker\Factory::create();
         // Define the request body
         $data = array(
@@ -74,7 +76,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // test login success
     public function testLoginEndpoint()
     {
-        $http = new HttpCall($this->url . "login");
+        $http = new HttpCall($this->end_point . "login");
         // Define the request body
         $data = array('email' => 'test@test.com', 'password' => '123456');
         $http->setData($data);
@@ -95,7 +97,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // test login failed   
     public function testLoginEndpointFailed()
     {
-        $http = new HttpCall($this->url . "login");
+        $http = new HttpCall($this->end_point . "login");
         // Define the request body
         $data = array('email' => 'test@test.com', 'password' => '1234');
         $http->setData($data);
@@ -109,7 +111,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // test validation must failed
     public function testValidateEndpointFailed()
     {
-        $http = new HttpCall($this->url . "validate");
+        $http = new HttpCall($this->end_point . "validate");
         // Define the request body
         // get token
         $myfile = fopen("token.txt", "r") or die("Unable to open file!");
@@ -129,7 +131,7 @@ class MyRestServerUserTest extends PHPUnit_Framework_TestCase
     // test validation must success
     public function testValidateEndpoint()
     {
-        $http = new HttpCall($this->url . "validate");
+        $http = new HttpCall($this->end_point . "validate");
         // Define the request body
         // set token on header request
         $http->addJWTToken();

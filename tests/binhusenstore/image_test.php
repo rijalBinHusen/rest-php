@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../httpCall.php');
 
 class MyReportcartsTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/binhusenstore/";
+    private $url = "binhusenstore/";
     private $url_host_id = null;
 
     public function testPostEndpoint()

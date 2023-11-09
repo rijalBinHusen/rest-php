@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/binhusenstore/";
+    private $url = "binhusenstore/";
     private $total_balance = 0;
 
     public function testTotalBalance()

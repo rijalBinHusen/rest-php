@@ -2,7 +2,7 @@
 
 class MyRestServerTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/";
+    private $url = "";
     public function testGetEndpoint()
     {
         // Send a GET request to the /endpoint URL

@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/myreport/";
+    private $url = "myreport/";
     private $url_host_id = null;
 
     public function testPostEndpoint()

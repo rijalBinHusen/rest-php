@@ -3,7 +3,7 @@ require_once(__DIR__ . '/httpCall.php');
 require_once(__DIR__ . '/../vendor/fakerphp/faker/src/autoload.php');
 
 class AccessCodeTest extends PHPUnit_Framework_TestCase {
-    private $url = "http://localhost/rest-php/access_code/";
+    private $url = "access_code/";
     private $accessCodeInserted = null;
 
     //create access code success

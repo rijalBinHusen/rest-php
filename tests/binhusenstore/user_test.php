@@ -1,11 +1,11 @@
 <?php
 
 require_once(__DIR__ ."/../../tests/httpCall.php");
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyRestServerUserTest extends PHPUnit_Framework_TestCase
+class BinhusenstoreUserTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/binhusenstore/user/";
+    private $url = "binhusenstore/user/";
     var $data_inserted = array();
     // Test register must success
     public function testRegisterEndpoint()

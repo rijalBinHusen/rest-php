@@ -1,13 +1,13 @@
 <?php
 
 class HttpCall {
-    private $url;
+    public $url;
     private $data_string;
     private $headers;
 
     public function __construct($url)
     {
-        $this->url = $url;
+        $this->url = "http://localhost:8000/" . $url;
         $this->setHeaders();
     }
 

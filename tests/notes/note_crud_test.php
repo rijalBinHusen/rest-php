@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class Note_app_test extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/";
+    private $url = "";
     private $idInserted = null;
     private $urlGets;
     private $urlPost;
@@ -337,7 +337,7 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->testPostEndpoint();
 
         //============ register new user ================== //
-        $httpRegisterUser = new HttpCall("http://localhost/rest-php/note_app/user/register");
+        $httpRegisterUser = new HttpCall("note_app/user/register");
         $faker = Faker\Factory::create();
         // Define the request body
         $email = $faker->email;
@@ -361,7 +361,7 @@ class Note_app_test extends PHPUnit_Framework_TestCase
         $this->assertEquals('Registration success.', $convertToAssocArray['message']);
         
         // ==================== Login new user ==============///
-        $httpLoginUser = new HttpCall("http://localhost/rest-php/note_app/user/login");
+        $httpLoginUser = new HttpCall("note_app/user/login");
         // Define the request body
         $httpLoginUser->setData($user_to_post);
         $responseLogin = $httpLoginUser->getResponse("POST");

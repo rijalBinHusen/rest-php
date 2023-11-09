@@ -1,11 +1,13 @@
 <?php
-use PHPUnit\Framework\TestCase;
-// Class yang mau di TEST.
+// declare(strict_types=1);
+
 require_once( __DIR__. '/../utils/generator_id.php');
-// require_once "Wordcount.php";
+require_once(__DIR__ . '/../vendor/autoload.php');
+
+use PHPUnit\Framework\TestCase;
 
 // Class untuk run Testing.
-class SimpleTest extends PHPUnit_Framework_TestCase
+class generator_id_Test extends TestCase
 {
     public function testGeneratorId()
     {

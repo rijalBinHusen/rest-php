@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
 
 class MyRestServerUserNoteAppTest extends PHPUnit_Framework_TestCase
 {
-    private $url = "http://localhost/rest-php/note_app/user/";
+    private $url = "note_app/user/";
     var $data_inserted = array();
     // Test register must success
     public function testRegisterEndpoint()
