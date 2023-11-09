@@ -1,20 +1,15 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_complain_import_test extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
-
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'complains_import/';
-        $this->urlPost = $this->url . 'complain_import/';
-    }
+    private $urlGets = "myreport/complains_import/";
+    private $urlPost = "myreport/complain_import/";
     
     public function testPostEndpoint()
     {
@@ -23,13 +18,13 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'customer' => $faker->firstName('female'),
-            'do_' => $faker->firstName('female'),
+            'do_' => $faker->numberBetween(0, 100),
             'gudang' => $faker->numberBetween(10000, 1000000),
             'item' => $faker->numberBetween(10000, 1000000),
             'kabag' => $faker->firstName('female'),
             'nomor_SJ' => $faker->firstName('female'),
             'nopol' => $faker->numberBetween(10000, 1000000),
-            'real_' => $faker->firstName('female'),
+            'real_' => $faker->numberBetween(0, 100),
             'row_' => $faker->firstName('female'),
             'spv' => $faker->boolean(),
             'tally' => $faker->firstName('female'),
@@ -232,7 +227,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'customer' => $faker->firstName('female'),
-            'do_' => $faker->firstName('female'),
+            'do_' => $faker->numberBetween(0, 100),
             'item' => $faker->firstName('female')
         );
 
@@ -241,6 +236,7 @@ class MyReportComplainImportTest extends PHPUnit_Framework_TestCase
         
         $response = $httpCallVar->getResponse("PUT");
 
+        // fwrite(STDERR, print_r($response . PHP_EOL, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);

@@ -126,7 +126,7 @@ class My_report_complain_import_model
             'tanggal_komplain' => $tanggal_komplain,
             'tanggal_SJ' => $tanggal_SJ,
             'type_' => $type,
-            'is_inserted' => $is_inserted,
+            'is_inserted' => (int)$is_inserted,
         );
 
         $this->database->insert($this->table, $data_to_insert);
