@@ -37,17 +37,17 @@ Flight::route("GET /binhusenstore/payment/@id", function ($id) {
 
 });
 
-Flight::route("PUT /binhusenstore/payment/@id", function ($id) {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+// Flight::route("PUT /binhusenstore/payment/@id", function ($id) {
+//     $user = new User("binhusenstore_users");
+//     $is_token_valid = $user->is_valid_token();
 
-    if($is_token_valid) {
+//     if($is_token_valid) {
         
-        $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->update_payment_by_id($id);
-    }
+//         $myreport_base_file = new Binhusenstore_payment();
+//         $myreport_base_file->update_payment_by_id($id);
+//     }
 
-});
+// });
 
 Flight::route("DELETE /binhusenstore/payment/@id", function ($id) {
     $user = new User("binhusenstore_users");
