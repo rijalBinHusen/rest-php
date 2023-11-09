@@ -1,9 +1,11 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_warehouse_test extends TestCase
 {
     private $url = "myreport/";
     private $url_host_id = null;
@@ -154,6 +156,7 @@ class MyReportWarehousesTest extends PHPUnit_Framework_TestCase
         $response = $httpCallVar->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);

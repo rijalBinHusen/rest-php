@@ -155,7 +155,7 @@ class My_report_warehouse
 
         $result = $this->my_report_warehouse->update_warehouse_by_id($keyValueToUpdate, "id", $id);
 
-        $is_found = count($result) > 0;
+        $is_found = $result > 0;
 
         $is_success = $this->my_report_warehouse->is_success;
 
