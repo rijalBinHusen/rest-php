@@ -1,21 +1,16 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportComplainTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_complain_test extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
+    private $urlGets = "myreport/complains/";
+    private $urlPost = "myreport/complain/";
 
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'complains/';
-        $this->urlPost = $this->url . 'complain/';
-    }
-    
     public function testPostEndpoint()
     {
         $faker = Faker\Factory::create();
