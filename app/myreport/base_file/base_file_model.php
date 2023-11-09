@@ -107,8 +107,8 @@ class My_report_base_file_model
             'file_name' => $file_name,
             'stock_sheet' => $stock_sheet,
             'clock_sheet' => $clock_sheet,
-            'is_imported' => $is_imported,
-            'is_record_finished' => $is_record_finished
+            'is_imported' => (int)$is_imported,
+            'is_record_finished' => (int)$is_record_finished
         );
 
         $this->database->insert($this->table, $data_to_insert);

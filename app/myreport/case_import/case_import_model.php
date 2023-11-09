@@ -112,7 +112,7 @@ class My_report_case_import_model
             'keterangan2' => $keterangan2,
             'periode' => $periode,
             'temuan' => $temuan,
-            'is_inserted' => $is_inserted,
+            'is_inserted' => (int)$is_inserted,
         );
 
         $this->database->insert($this->table, $data_to_insert);

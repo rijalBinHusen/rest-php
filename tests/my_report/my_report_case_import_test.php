@@ -1,20 +1,15 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportCaseImportTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_case_import_test extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
-
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'cases_import';
-        $this->urlPost = $this->url . 'case_import/';
-    }
+    private $urlGets = "myreport/cases_import/";
+    private $urlPost = "myreport/case_import/";
     
     public function testPostEndpoint()
     {

@@ -1,20 +1,15 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportCaseTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_case_test extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
-
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'cases';
-        $this->urlPost = $this->url . 'case/';
-    }
+    private $urlGets = "myreport/cases/";
+    private $urlPost = "myreport/case/";
     
     public function testPostEndpoint()
     {
@@ -144,12 +139,13 @@ class MyReportCaseTest extends PHPUnit_Framework_TestCase
     {
         $this->testPostEndpoint();
         $http = new HttpCall($this->urlPost . $this->idInserted);
+        
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
         
+        // fwrite(STDERR, print_r($response . PHP_EOL, true));
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray);

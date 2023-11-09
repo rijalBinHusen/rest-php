@@ -1,33 +1,36 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class My_report_base_file extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
+    private $urlGets = "myreport/";
+    private $urlPost = "myreport/base_file/";
     private $dataToInsert;
     private $dataToUpdate;
-
-    public function __construct()
+    
+    public function testPostEndpoint()
     {
+        $http = new HttpCall($this->urlPost);
+        // Define the request body
+
+
         $faker = Faker\Factory::create();
         $periode = $faker->date('now');
         $this->dataToInsert = array(
             'periode' => $periode,
             'warehouse_id' => $faker->firstName('female'),
             'file_name' => $faker->text(15),
-            'stock_sheet' => $faker->text(400),
+            'stock_sheet' => $faker->text(200),
             'clock_sheet' => $faker->text(200),
             'is_imported' => false,
             'is_record_finished' => false,
         );
-
-        $this->urlPost = $this->url . 'base_file/';
-        $this->urlGets = $this->url . "base_files?periode1=$periode&periode2=$periode";
+        $this->urlGets = $this->urlGets . "base_files?periode1=$periode&periode2=$periode";
 
         $this->dataToUpdate = array(
             'file_name' => $faker->text(10),
@@ -36,13 +39,6 @@ class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
             'is_imported' => true,
             'is_record_finished' => true
         );
-
-    }
-    
-    public function testPostEndpoint()
-    {
-        $http = new HttpCall($this->urlPost);
-        // Define the request body
 
         $http->setData($this->dataToInsert);
         // Define the request body
@@ -127,6 +123,7 @@ class MyReportBaseFileImportTest extends PHPUnit_Framework_TestCase
 
     public function testGetEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGets);
         $response = $http->getResponse("GET");
         
