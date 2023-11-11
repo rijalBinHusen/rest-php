@@ -10,14 +10,15 @@ class My_report_document_test extends TestCase
 {
     private $url = "myreport/";
     private $idInserted = null;
-    private $urlGetByPeriode;
-    private $urlGetByStatus;
-    private $urlPost;
+    private $urlGetByPeriode = "myreport/";
+    private $urlGetByStatus = "myreport/";
+    private $urlPost = "myreport/document/";
     private $dataToInsert;
     private $dataToUpdate;
-
-    public function __construct()
+    
+    public function testPostEndpoint()
     {
+
         $faker = Faker\Factory::create();
         $periode = $faker->date('now');
 
@@ -48,21 +49,15 @@ class My_report_document_test extends TestCase
             'total_qty_in' => $faker->numberBetween(10, 1000),
             'total_qty_out' => $faker->numberBetween(100, 1000),
         );
-
-        $this->urlPost = $this->url . 'document/';
-        $this->urlGetByPeriode = $this->url . "documents/byperiode?periode1=$periode&periode2=$periode";
-        $this->urlGetByStatus = $this->url . "documents/bystatus?status=0";
+        $this->urlGetByPeriode = $this->urlGetByPeriode . "documents/byperiode?periode1=$periode&periode2=$periode";
+        $this->urlGetByStatus = $this->urlGetByStatus . "documents/bystatus?status=0";
 
         $this->dataToUpdate = array(
             'collected' => $faker->date('now'),
             'approval' => $faker->date('now'),
             'status' => 2
         );
-
-    }
-    
-    public function testPostEndpoint()
-    {
+        
         $http = new HttpCall($this->urlPost);
         // Define the request body
 
