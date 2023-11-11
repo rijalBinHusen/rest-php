@@ -7,18 +7,18 @@ use PHPUnit\Framework\TestCase;
 
 class My_report_problem_test extends TestCase
 {
-    private $url = "myreport/";
     private $idInserted = null;
-    private $urlGetByPeriode;
-    private $urlGetByStatus;
-    private $urlGetBySupervisor;
-    private $urlGetByWarehouseAndItem;
-    private $urlPost;
+    private $urlGetByPeriode = "myreport/";
+    private $urlGetByStatus = "myreport/problems/bystatus?status=0";
+    private $urlGetBySupervisor = "myreport/";
+    private $urlGetByWarehouseAndItem = "myreport/";
+    private $urlPost = "myreport/problem/";
     private $dataToInsert;
     private $dataToUpdate;
-
-    public function __construct()
+    
+    public function testPostEndpoint()
     {
+
         $faker = Faker\Factory::create();
         $shiftStock = $faker->numberBetween(1, 3);
         $tanggalMulai = $faker->numberBetween(1, 10000);
@@ -42,25 +42,19 @@ class My_report_problem_test extends TestCase
             'dl_panjang' => $faker->date('now'),
             'pic_panjang' => $faker->date('now'),
             'tanggal_selesai' => $faker->date('now'),
-            'shift_selesai' => $faker->date('now'),
+            'shift_selesai' => 1,
             'is_finished' => false
         );
-
-        $this->urlPost = $this->url . 'problem/';
-        $this->urlGetByPeriode = $this->url . "problems/byperiode?periode1=$tanggalMulai&periode2=$tanggalMulai";
-        $this->urlGetByStatus = $this->url . "problems/bystatus?status=0";
-        $this->urlGetBySupervisor = $this->url . "problems/bysupervisor?supervisor_id=$supervisor_id";
-        $this->urlGetByWarehouseAndItem = $this->url . "problems/bywarehouseanditem?warehouse_id=$warehouse_id&item_kode=$item_kode";
+        
+        $this->urlGetByPeriode = $this->urlGetByPeriode . "problems/byperiode?periode1=$tanggalMulai&periode2=$tanggalMulai";
+        $this->urlGetBySupervisor = $this->urlGetBySupervisor . "problems/bysupervisor?supervisor_id=$supervisor_id";
+        $this->urlGetByWarehouseAndItem = $this->urlGetByWarehouseAndItem . "problems/bywarehouseanditem?warehouse_id=$warehouse_id&item_kode=$item_kode";
 
         $this->dataToUpdate = array(
             'masalah' => $faker->text(100),
             'sumber_masalah' => $faker->text(200),
         );
 
-    }
-    
-    public function testPostEndpoint()
-    {
         $http = new HttpCall($this->urlPost);
         // Define the request body
 

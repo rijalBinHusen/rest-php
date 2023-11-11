@@ -111,7 +111,7 @@ class My_report_problem_model
             'pic_panjang' => $pic_panjang,
             'tanggal_selesai' => $tanggal_selesai,
             'shift_selesai' => $shift_selesai,
-            'is_finished' => $is_finished
+            'is_finished' => (int)$is_finished
         );
 
         $this->database->insert($this->table, $data_to_insert);
