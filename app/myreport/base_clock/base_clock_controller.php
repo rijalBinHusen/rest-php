@@ -146,7 +146,7 @@ class My_report_base_clock
 
         $result = $this->my_report_base_clock->remove_base_clock_by_parent($parent);
         
-        $is_exists = count($result) > 0;
+        $is_exists = $result > 0;
 
         if($this->my_report_base_clock->is_success === true && $is_exists) {
 

@@ -9,14 +9,15 @@ class My_report_base_clock_test extends TestCase
 {
     private $url = "myreport/";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
+    private $urlGets = "myreport/";
+    private $urlPost = "myreport/base_clock/";
     private $dataToInsert;
     private $dataToUpdate;
     private $urlDeleteByParents;
-
-    public function __construct()
+    
+    public function testPostEndpoint()
     {
+
         $faker = Faker\Factory::create();
         $parentId = $faker->text(7);
         $shiftStock = $faker->numberBetween(1, 3);
@@ -24,14 +25,12 @@ class My_report_base_clock_test extends TestCase
         $this->dataToInsert = array(
             'parent' => $parentId,
             'shift' => $shiftStock,
-            'no_do' => $faker->text(15),
+            'no_do' => $faker->numberBetween(1, 10),
             'reg' => $faker->numberBetween(1, 10000),
             'start' => $faker->numberBetween(1, 10000),
             'finish' => $faker->numberBetween(1, 1000000),
             'rehat' => $faker->date('now'),
         );
-
-        $this->urlPost = $this->url . 'base_clock/';
         $this->urlGets = $this->url . "base_clocks?parent=$parentId&shift=$shiftStock";
         $this->urlDeleteByParents =  $this->url . "base_clocks?parent=$parentId";
 
@@ -39,11 +38,7 @@ class My_report_base_clock_test extends TestCase
             'reg' => $faker->numberBetween(1, 1000000),
             'start' => $faker->numberBetween(1, 1000000),
         );
-
-    }
-    
-    public function testPostEndpoint()
-    {
+        
         $http = new HttpCall($this->urlPost);
         // Define the request body
 
@@ -131,11 +126,12 @@ class My_report_base_clock_test extends TestCase
 
     public function testGetEndpointFailed()
     {
+        $this->testPostEndpoint();
         $http = new HttpCall($this->urlGets);
         $response = $http->getResponse("GET");
         
+        // fwrite(STDERR, print_r($this->urlGets, true));
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
@@ -174,6 +170,7 @@ class My_report_base_clock_test extends TestCase
         
         $response = $httpCallVar->getResponse("DELETE");
 
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);

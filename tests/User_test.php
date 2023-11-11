@@ -23,7 +23,7 @@ class User_test extends TestCase
 
         $response = $http->getResponse("POST");
 
-        // fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
+        fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
