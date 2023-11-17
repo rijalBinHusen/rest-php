@@ -1,8 +1,11 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportcartsTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MyReportcartsTest extends TestCase
 {
     private $url = "binhusenstore/";
     private $url_host_id = null;

@@ -18,7 +18,7 @@ class Binhusenstore_category_model
 
         $data_to_insert = array(
             'name_category' => $name_category,
-            'is_landing_page' => false
+            'is_landing_page' => 0
         );
 
         $this->database->insert($this->table, $data_to_insert);

@@ -1,9 +1,11 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportOrderTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MyReportOrderTest extends TestCase
 {
     private $url = "binhusenstore/";
     private $url_host_id = null;
