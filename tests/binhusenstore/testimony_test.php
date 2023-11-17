@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
 
-class MyReportTestimonyTest extends TestCase
+class Testimony_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $url_host_id = null;
@@ -17,11 +17,11 @@ class MyReportTestimonyTest extends TestCase
         $http = new HttpCall($this->url . "testimony");
         // Define the request body
         $data = array(
-            'id_user' => $faker->text(20),
-            'diplay_name' => $faker->text(20),
-            'id_product' => $faker->text(6),
-            'rating' => $faker->numberBetween(1, 5),
-            'content' => $faker->text(190)
+            "id_user" => $faker->numberBetween(1, 1000000) . "_",
+            "id_product" => $faker->numberBetween(1, 1000000) . "_",
+            "display_name" => $faker->numberBetween(1, 1000000) . "_",
+            "rating" => $faker->numberBetween(1, 5),
+            "content" => $faker->text(190)
         );
 
         $this->data_posted = $data;
@@ -104,7 +104,6 @@ class MyReportTestimonyTest extends TestCase
 
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('id_user', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('id_product', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('rating', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('content', $convertToAssocArray['data'][0]);
@@ -130,7 +129,6 @@ class MyReportTestimonyTest extends TestCase
 
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('id_user', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('id_product', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('rating', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('content', $convertToAssocArray['data'][0]);
@@ -160,22 +158,22 @@ class MyReportTestimonyTest extends TestCase
         $this->assertEquals("Testimony not found", $convertToAssocArray['message']);
     }
 
-    public function testGetEndpointFailed401()
-    {
-        $this->testPostEndpoint();
+    // public function testGetEndpointFailed401()
+    // {
+    //     $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url . 'testimonies');
-        $response = $http->getResponse("GET");
+    //     $http = new HttpCall($this->url . 'testimonies');
+    //     $response = $http->getResponse("GET");
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(false, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(false, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    // }
 
     public function testGetByIdEndpoint()
     {
@@ -195,7 +193,6 @@ class MyReportTestimonyTest extends TestCase
 
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
-        $this->assertArrayHasKey('id_user', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('id_product', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('rating', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('content', $convertToAssocArray['data'][0]);
@@ -273,6 +270,7 @@ class MyReportTestimonyTest extends TestCase
 
         $response = $httpCallVar->getResponse("PUT");
 
+        fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);

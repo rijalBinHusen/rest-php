@@ -22,12 +22,12 @@ class Binhusenstore_testimony
         $result = null;
 
         $is_request_body_not_oke = is_null($id_user)
-                                    || is_null($id_product)
                                     || is_null($display_name)
+                                    || is_null($id_product)
                                     || is_null($rating)
                                     || empty($id_user)
-                                    || empty($id_product)
                                     || empty($display_name)
+                                    || empty($id_product)
                                     || !is_numeric($rating);
         if(is_null($content) || empty($content)) $content = "Tidak ada review dari pengguna";
 
@@ -36,7 +36,7 @@ class Binhusenstore_testimony
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to add testimony, check the data you sent'
+                    'message' => 'Failed to add testimony, check the data you sent',
                 ), 400
             );
             return;
