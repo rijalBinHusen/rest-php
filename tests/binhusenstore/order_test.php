@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
 
-class MyReportOrderTest extends TestCase
+class Order_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $url_host_id = null;
@@ -18,12 +18,12 @@ class MyReportOrderTest extends TestCase
         // Define the request body
         $data = array(
             'date_order' => $faker->date('Y-m-d'),
-            'id_group' => $faker->text(30),
+            'id_group' => $faker->text(9),
             'is_group' => $faker->boolean(),
-            'id_product' => $faker->text(30),
+            'id_product' => $faker->text(9),
             'name_of_customer' => $faker->text(40),
             'sent' => 'false',
-            'title' => $faker->text(60),
+            'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000)
         );
 

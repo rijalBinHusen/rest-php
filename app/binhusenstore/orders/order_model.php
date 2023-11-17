@@ -19,7 +19,7 @@ class Binhusenstore_order_model
         $data_to_insert = array(
             'date_order' => $date_order,
             'id_group' => $id_group,
-            'is_group' => $is_group,
+            'is_group' => (int)$is_group,
             'id_product' => $id_product,
             'name_of_customer' => $name_of_customer,
             'sent' => $sent,
