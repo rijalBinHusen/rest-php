@@ -20,7 +20,7 @@ class Binhusenstore_payment_model
             'date_payment' => $date_payment,
             'id_order' => $id_order,
             'balance' => $balance,
-            'is_paid' => false,
+            'is_paid' => 0,
             'date_paid' => "",
         );
 
