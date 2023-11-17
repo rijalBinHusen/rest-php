@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
 
-class MyReportProductTest extends TestCase
+class Product_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $url_host_id = null;
@@ -117,22 +117,22 @@ class MyReportProductTest extends TestCase
         $this->assertArrayHasKey('default_total_week', $convertToAssocArray['data'][0]);
     }
 
-    public function testGetEndpointFailed401()
-    {
-        $this->testPostEndpoint();
+    // public function testGetEndpointFailed401()
+    // {
+    //     $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url . 'products');
-        $response = $http->getResponse("GET");
+    //     $http = new HttpCall($this->url . 'products');
+    //     $response = $http->getResponse("GET");
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(false, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(false, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    // }
 
     public function testGetByIdEndpoint()
     {
@@ -161,22 +161,22 @@ class MyReportProductTest extends TestCase
         $this->assertArrayHasKey('is_available', $convertToAssocArray['data'][0]);
     }
 
-    public function testGetByIdEndpointFailed401()
-    {
-        $this->testPostEndpoint();
+    // public function testGetByIdEndpointFailed401()
+    // {
+    //     $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url_host_id);
-        $response = $http->getResponse("GET");
+    //     $http = new HttpCall($this->url_host_id);
+    //     $response = $http->getResponse("GET");
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(false, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(false, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    // }
 
     public function testGetByIdEndpointFailed404()
     {

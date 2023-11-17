@@ -142,7 +142,7 @@ class Binhusenstore_product
             );
         }
 
-        else if($is_success !== true) {
+        else if($is_success !== null && !$is_found) {
             Flight::json(
                 array(
                     'success' => false,
