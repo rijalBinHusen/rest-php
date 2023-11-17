@@ -62,25 +62,25 @@ class Binhusenstore_payment_model
         
     }
 
-    // public function update_payment_by_id(array $data, $where, $id)
-    // {
+    public function update_payment_by_id(array $data, $where, $id)
+    {
 
-    //     $result = $this->database->update($this->table, $data, $where, $id);
+        $result = $this->database->update($this->table, $data, $where, $id);
 
-    //     if($this->database->is_error === null) {
+        if($this->database->is_error === null) {
     
-    //         if($result === 0) {
+            if($result === 0) {
 
-    //             $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
-    //             return $this->database->sqlQuery($query)->fetchColumn();
-    //         }
+                $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
+                return $this->database->sqlQuery($query)->fetchColumn();
+            }
             
-    //         return $result;
-    //     } 
+            return $result;
+        } 
 
-    //     $this->is_success = $this->database->is_error;
+        $this->is_success = $this->database->is_error;
 
-    // }
+    }
 
     public function remove_payment_by_id($id)
     {
@@ -102,11 +102,11 @@ class Binhusenstore_payment_model
         $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
 
         if(count($retrieve_all_payment) === 0) {
-            return false;
+            return 0;
         }
 
         $total_balance = 0;
-        foreach ($query_payment_by_id_order as $value) { 
+        foreach ($retrieve_all_payment as $value) { 
             $total_balance += $value['balance'];
         }
 

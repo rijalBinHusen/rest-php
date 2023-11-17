@@ -1,9 +1,11 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyReportPaymentTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Payment_details_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $total_balance = 0;
@@ -16,7 +18,7 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         // Define the request body
         $data = array(
             'date_payment' => $faker->date('Y-m-d'),
-            'id_order' => $faker->text(6),
+            'id_order' => $faker->numberBetween(10000, 10000000) . "_",
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
         );
@@ -45,8 +47,8 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         // Send a GET request to the /endpoint URL
         $response = $httpGetPaymentByIdOrder->getResponse("GET");
 
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray['data'], true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -71,24 +73,27 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentMoreThanBalance()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
         
         for($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
-                'id_order' => "pay1",
+                'id_order' => $id_order,
                 'balance' => 100,
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostNewPayment->setData($data_to_send);
+            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostNewPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -100,21 +105,21 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
-        $data_to_send = array(
-            'id_order' => "pay1",
+        $httpPostPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        $data_to_send2 = array(
+            'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 150
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPostPutPayment->setData($data_to_send2);
+        $httpPostPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response2 = $httpPostPutPayment->getResponse("PUT");
+        // fwrite(STDERR, print_r(PHP_EOL . "Response: " . $response2 . PHP_EOL, true));
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($response, true));
+        $convertToAssocArray = json_decode($response2, true);
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -123,8 +128,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
         // get all bill
 
-        $httpCall->setNewURL($this->url . 'payments?id_order=pay1');
-        $response = $httpCall->getResponse("GET");
+        $httpPostGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpPostGetPayment->addJWTToken();
+        $response = $httpPostGetPayment->getResponse("GET");
+
 
         $convertToAssocArray = json_decode($response, true);
 
@@ -151,7 +158,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentLessThanBalance()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
@@ -160,15 +170,15 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
-                'id_order' => "pay2",
+                'id_order' => $id_order,
                 'balance' => 100,
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostNewPayment->setData($data_to_send);
+            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostNewPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -180,18 +190,19 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
+        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        
         $data_to_send = array(
-            'id_order' => "pay2",
+            'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 50
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPutPayment->setData($data_to_send);
+        $httpPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response = $httpPutPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -203,8 +214,9 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
         // get all bill
 
-        $httpCall->setNewURL($this->url . 'payments?id_order=pay2');
-        $response = $httpCall->getResponse("GET");
+        $httpPutPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpPutPayment->addJWTToken();
+        $response = $httpPutPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -228,7 +240,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentEqualToBalance()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
@@ -237,15 +252,15 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
-                'id_order' => "pay3",
+                'id_order' => $id_order,
                 'balance' => 100,
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostNewPayment->setData($data_to_send);
+            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostNewPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -257,18 +272,19 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
+        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        
         $data_to_send = array(
-            'id_order' => "pay3",
+            'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 100
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPutPayment->setData($data_to_send);
+        $httpPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response = $httpPutPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -279,9 +295,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
 
         // get all bill
+        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpGetPayment->addJWTToken();
 
-        $httpCall->setNewURL($this->url . 'payments?id_order=pay3');
-        $response = $httpCall->getResponse("GET");
+        $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
 
@@ -304,7 +321,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPaymentMoreThanBalance200()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $httpPostPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
@@ -313,15 +333,15 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
-                'id_order' => "pay4",
+                'id_order' => $id_order,
                 'balance' => 100,
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostPayment->setData($data_to_send);
+            $httpPostPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -333,18 +353,19 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
+        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        
         $data_to_send = array(
-            'id_order' => "pay4",
+            'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 200
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPutPayment->setData($data_to_send);
+        $httpPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response = $httpPutPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -355,9 +376,9 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
 
         // get all bill
-
-        $httpCall->setNewURL($this->url . 'payments?id_order=pay4');
-        $response = $httpCall->getResponse("GET");
+        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpGetPayment->addJWTToken();
+        $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
 
@@ -380,11 +401,13 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPayment250()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
-        $id_order = "pay5";
         
         for($i = 1; $i <= 3; $i++) {
             // Define the request body
@@ -395,10 +418,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostNewPayment->setData($data_to_send);
+            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostNewPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -410,18 +433,19 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
+        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 250
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPutPayment->setData($data_to_send);
+        $httpPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response = $httpPutPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($response, true));
@@ -433,8 +457,9 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
         // get all bill
 
-        $httpCall->setNewURL($this->url . 'payments?id_order=' . $id_order);
-        $response = $httpCall->getResponse("GET");
+        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpGetPayment->addJWTToken();
+        $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
 
@@ -461,11 +486,13 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
     public function testPayment300()
     {
-        $httpCall = new HttpCall($this->url . "payment");
+
+        $faker = Faker\Factory::create();
+        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
-        $id_order = "pay6";
         
         for($i = 1; $i <= 3; $i++) {
             // Define the request body
@@ -476,10 +503,10 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
                 'is_paid' => false,
             );
 
-            $httpCall->setData($data_to_send);
-            $httpCall->addJWTToken();
+            $httpPostNewPayment->setData($data_to_send);
+            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpCall->getResponse("POST");
+            $response = $httpPostNewPayment->getResponse("POST");
     
             $convertToAssocArray = json_decode($response, true);
     
@@ -491,18 +518,19 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
         }
 
         // pay the bill
-        $httpCall->setNewURL($this->url .'payment_mark_as_paid');
+        $httpPutNewPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 300
         );
 
-        $httpCall->setData($data_to_send);
-        $httpCall->addJWTToken();
+        $httpPutNewPayment->setData($data_to_send);
+        $httpPutNewPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
-        $response = $httpCall->getResponse("PUT");
+        $response = $httpPutNewPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($convertToAssocArray, true));
@@ -513,9 +541,9 @@ class MyReportPaymentTest extends PHPUnit_Framework_TestCase
 
 
         // get all bill
-
-        $httpCall->setNewURL($this->url . 'payments?id_order=' . $id_order);
-        $response = $httpCall->getResponse("GET");
+        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpGetPayment->addJWTToken();
+        $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
 

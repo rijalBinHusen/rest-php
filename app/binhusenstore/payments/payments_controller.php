@@ -300,7 +300,7 @@ class Binhusenstore_payment
     
             $is_success = $this->Binhusenstore_payment->is_success;
     
-            if($is_success === true && $result > 0) {
+            if($is_success === true && $result !== 0) {
 
                 Flight::json(
                     array(
