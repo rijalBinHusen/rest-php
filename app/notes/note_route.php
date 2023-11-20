@@ -7,7 +7,7 @@ Flight::route('POST /note', function () {
     $user_info = $user->get_user_info();
 
     if ($user_info) {
-        $user_id = $user_info['id'];
+        $user_id = $user_info->data->id;
 
         $myreport_base_file = new note_app();
         $myreport_base_file->add_note($user_id);
@@ -39,7 +39,7 @@ Flight::route("PUT /note/@id", function ($id) {
     if ($user_info) {
 
         $myreport_base_file = new note_app();
-        $myreport_base_file->update_note_by_id($id, $user_info['id']);
+        $myreport_base_file->update_note_by_id($id, $user_info->data->id);
     }
 });
 

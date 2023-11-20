@@ -5,11 +5,11 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
 
-class Note_app_test extends TestCase
+class Note_crud_test extends TestCase
 {
     private $idInserted = null;
     private $urlGets = 'notes/';
-    private $urlPost = 'notes';
+    private $urlPost = 'note/';
     
     public function testPostEndpoint()
     {
