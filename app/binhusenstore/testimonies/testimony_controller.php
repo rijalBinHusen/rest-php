@@ -248,8 +248,7 @@ class Binhusenstore_testimony
 
         // conditional $content
         $valid_content = !is_null($content) && !empty($content);
-        if ($valid_content) $keyValueToUpdate["content"] = $content; 
-        else $keyValueToUpdate["content"] = "Tidak ada review dari pengguna";
+        if ($valid_content) $keyValueToUpdate["content"] = $content;
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 

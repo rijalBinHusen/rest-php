@@ -262,7 +262,7 @@ class Testimony_test extends TestCase
 
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
-        $data = array('rating__' => "Failed test");
+        $data = array('rating9' => "Failed test");
 
         $httpCallVar->setData($data);
 
@@ -270,7 +270,7 @@ class Testimony_test extends TestCase
 
         $response = $httpCallVar->getResponse("PUT");
 
-        fwrite(STDERR, print_r($response, true));
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -304,7 +304,7 @@ class Testimony_test extends TestCase
     {
         $httpCallVar = new HttpCall($this->url . 'testimony/loremipsum');
         // Define the request body
-        $data = array('rating' => "Failed test");
+        $data = array('rating' => 9);
 
         $httpCallVar->setData($data);
 
