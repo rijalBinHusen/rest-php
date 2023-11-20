@@ -1,20 +1,15 @@
 <?php
 
 require_once(__DIR__ . '/../httpCall.php');
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class Note_app_test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Note_app_test extends TestCase
 {
-    private $url = "";
     private $idInserted = null;
-    private $urlGets;
-    private $urlPost;
-
-    public function __construct()
-    {
-        $this->urlGets = $this->url . 'notes/';
-        $this->urlPost = $this->url . 'note/';
-    }
+    private $urlGets = 'notes/';
+    private $urlPost = 'notes';
     
     public function testPostEndpoint()
     {

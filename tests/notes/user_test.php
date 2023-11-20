@@ -1,9 +1,11 @@
 <?php
 
 require_once(__DIR__ ."/../../tests/httpCall.php");
-require_once(__DIR__ . '/../../vendor/fakerphp/faker/src/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
-class MyRestServerUserNoteAppTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class User_test extends TestCase
 {
     private $url = "note_app/user/";
     var $data_inserted = array();
@@ -27,6 +29,7 @@ class MyRestServerUserNoteAppTest extends PHPUnit_Framework_TestCase
         $http->setData($user_to_post);
         $response = $http->getResponse("POST");
 
+        // fwrite(STDERR, print_r($response, TRUE));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
