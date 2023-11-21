@@ -103,7 +103,7 @@ class Access_code {
 
     }
 
-    function validate_code_on_header ($source_name) {
+    function validate_code_on_header ($source_name, $is_send_reply = false) {
         $code = null;
         if(isset($_SERVER['HTTP_CODE_AUTHORIZATION'])) {
 
@@ -128,7 +128,18 @@ class Access_code {
                     ), 401
                 );
 
-            } else return true;
+            } else {
+
+                if($is_send_reply) {
+
+                    Flight::json(
+                        array(
+                            'success' => true,
+                            'message' => 'Your code is valid'
+                        )
+                    );
+                } else return true;
+            }
 
         } else {
 

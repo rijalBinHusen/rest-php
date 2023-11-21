@@ -12,3 +12,8 @@ Flight::route('POST /binhusenstore/access_code', function () {
         $access_code->create_access_code_by_source_name("binhusenstore");
     }
 });
+
+Flight::route('GET /binhusenstore/access_code', function () {
+    $access_code = new Access_code();
+    $access_code->validate_code_on_header("binhusenstore", true);
+});
