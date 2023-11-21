@@ -142,4 +142,50 @@ class Access_code {
         }
 
     }
+
+    function create_access_code_by_source_name($source_name) {
+        $req = Flight::request();
+        $code = $req->data->code;
+
+        $valid_request_body = !is_null($source_name) 
+                                && !empty($source_name)
+                                && !is_null($code)
+                                && !empty($code);
+
+        if($valid_request_body) {
+            
+            $result = $this->access_code->create_code($source_name, $code);
+
+            if($result !== true) {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $result
+                    ), 500
+                );
+
+            } else {
+
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'message' => 'Your code is set'
+                    ), 201
+                );
+
+            }
+
+        } else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => "Request body invalid"
+                ), 400
+            );
+
+        }
+
+    }
 }
