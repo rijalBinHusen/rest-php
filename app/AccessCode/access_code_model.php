@@ -39,7 +39,7 @@ Class Access_code_model {
         
         if($is_code_matched) return true;
         
-        return "Access code or resorce name invalid";
+        return "Access code or resource name invalid";
         
     }
 }

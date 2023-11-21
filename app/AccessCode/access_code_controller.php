@@ -103,20 +103,21 @@ class Access_code {
 
     }
 
-    function validate_my_code ($source_name) {
-
-        $your_access_code = false;
-
+    function validate_code_on_header ($source_name) {
+        $code = null;
         if(isset($_SERVER['HTTP_CODE_AUTHORIZATION'])) {
 
-            $your_access_code = $_SERVER['HTTP_CODE_AUTHORIZATION'];
+            $code = $_SERVER['HTTP_CODE_AUTHORIZATION'];
         }
 
+        $valid_request_body = !is_null($source_name) 
+                                && !empty($source_name)
+                                && !is_null($code)
+                                && !empty($code);
 
-
-        if($your_access_code !== false) {
+        if($valid_request_body) {
             
-            $result = $this->access_code->validate_code($source_name, $your_access_code);
+            $result = $this->access_code->validate_code($source_name, $code);
 
             if($result !== true) {
 
@@ -127,24 +128,15 @@ class Access_code {
                     ), 401
                 );
 
-            } else {
-
-                Flight::json(
-                    array(
-                        'success' => true,
-                        'message' => 'Your code is valid'
-                    )
-                );
-
-            }
+            } else return true;
 
         } else {
 
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => "Request body invalid"
-                ), 400
+                    'message' => "You must be authenticated to access this resource."
+                ), 401
             );
 
         }
