@@ -4,7 +4,7 @@ require_once(__DIR__ . "/../../utils/database.php");
 
 Class Access_code_model {
     private $database = null;
-    public $error = null;
+    public $is_success = true;
     private $table_name = "access_code";
     function __construct()
     {
@@ -40,6 +40,21 @@ Class Access_code_model {
         if($is_code_matched) return true;
         
         return "Access code or resource name invalid";
+        
+    }
+
+    public function retrieve_access_code_by_source_name($source_name)
+    {
+
+        $result = $this->database->select_where($this->table_name, 'source_name', $source_name)->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($this->database->is_error === null) {
+
+            return $result;
+        }
+        
+        $this->is_success = $this->database->is_error;
+        return array();
         
     }
 }

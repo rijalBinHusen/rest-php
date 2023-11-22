@@ -84,8 +84,7 @@ class User
 
                 Flight::json([
                     'success' => true,
-                    'message' => 'Valid token',
-                    'token_content' => $is_token_valid
+                    'message' => 'Valid token'
                 ], 200);
             } 
             

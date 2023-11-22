@@ -199,4 +199,46 @@ class Access_code {
         }
 
     }
+
+    function get_access_code_by_source_name($source_name) { 
+        
+        $result = $this->access_code->retrieve_access_code_by_source_name($source_name);
+
+        $is_success = $this->access_code->is_success;
+
+        $is_found = count($result) > 0;
+
+        if ($is_success === true && $is_found) {
+
+            Flight::json(
+                array(
+                    'success' => true,
+                    'data' => $result
+                )
+            );
+        } 
+        
+        else if ($is_success !== true) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ),
+                500
+            );
+            return;
+        } 
+        
+        else {
+            
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Cart not found'
+                ),
+                404
+            );
+        }
+    }
 }
