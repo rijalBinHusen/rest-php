@@ -100,7 +100,7 @@ class Product_test extends TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url .'products');
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
@@ -117,29 +117,29 @@ class Product_test extends TestCase
         $this->assertArrayHasKey('default_total_week', $convertToAssocArray['data'][0]);
     }
 
-    // public function testGetEndpointFailed401()
-    // {
-    //     $this->testPostEndpoint();
+    public function testGetEndpointFailed401()
+    {
+        $this->testPostEndpoint();
 
-    //     $http = new HttpCall($this->url . 'products');
-    //     $response = $http->getResponse("GET");
+        $http = new HttpCall($this->url . 'products');
+        $response = $http->getResponse("GET");
 
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
 
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // }
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
     public function testGetByIdEndpoint()
     {
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url_host_id);
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
@@ -161,29 +161,29 @@ class Product_test extends TestCase
         $this->assertArrayHasKey('is_available', $convertToAssocArray['data'][0]);
     }
 
-    // public function testGetByIdEndpointFailed401()
-    // {
-    //     $this->testPostEndpoint();
+    public function testGetByIdEndpointFailed401()
+    {
+        $this->testPostEndpoint();
 
-    //     $http = new HttpCall($this->url_host_id);
-    //     $response = $http->getResponse("GET");
+        $http = new HttpCall($this->url_host_id);
+        $response = $http->getResponse("GET");
 
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success'], $response);
 
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // }
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
     public function testGetByIdEndpointFailed404()
     {
         $this->testPostEndpoint();
         $http = new HttpCall($this->url . 'product/SDFLSKDFJ');
 
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
