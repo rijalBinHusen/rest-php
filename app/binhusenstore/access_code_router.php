@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/access_code_controller.php');
+require_once(__DIR__ . '/../AccessCode/access_code_controller.php');
 require_once(__DIR__ . '/../Users/user_controller.php');
 
 Flight::route('POST /binhusenstore/access_code', function () {

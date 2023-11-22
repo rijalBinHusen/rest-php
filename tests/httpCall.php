@@ -59,6 +59,19 @@ class HttpCall {
         );
     }
 
+    public function addAccessCode($file_name) {
+        
+        $myfile = fopen($file_name, "r") or die("Unable to open file!");
+        $token = fgets($myfile);
+        fclose($myfile);
+
+        $this->headers = array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($this->data_string),
+            "Code-Authorization: " . $token
+        );
+    }
+
     public function addHeaders($key, $value) {
         $this->headers = array(
             'Content-Type: application/json',

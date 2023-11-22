@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__ . '/httpCall.php');
-require_once(__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../httpCall.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +21,7 @@ class Access_code_test extends TestCase {
         $http->addJWTToken();
         $reponse = $http->getResponse("POST");
 
+        // fwrite(STDERR, print_r($reponse . PHP_EOL, true));
         $convertToAssocArray = json_decode($reponse, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -52,82 +53,55 @@ class Access_code_test extends TestCase {
 
     // validate code failed
     public function testValidateAccessCodeFailed() {
-        $http = new HttpCall($this->url . 'validate');
+        $http = new HttpCall($this->url);
 
-        // define request body
-        $data = array(
-            'source_name' => 'binhusenstore',
-        );
-
-        $http->setData($data);
-        $reponse = $http->getResponse("POST");
+        $reponse = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($reponse, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Request body invalid', $convertToAssocArray['message']);
+        $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
     }
 
     // validate code failed2
     public function testValidateAccessCodeFailed2() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url . 'validate');
+        $http = new HttpCall($this->url);
 
-        // define request body
-        $data = array(
-            'source_name' => 'binhusenstore',
-            'code' => $this->accessCodeInserted . "111",
-        );
-
-        $http->setData($data);
-        $reponse = $http->getResponse("POST");
+        $reponse = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($reponse, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Access code or resorce name invalid', $convertToAssocArray['message']);
+        $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
     }
 
     // validate code failed3
     public function testValidateAccessCodeFailed3() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url . 'validate');
+        $http = new HttpCall($this->url);
 
-        // define request body
-        $data = array(
-            'source_name' => 'tests22333',
-            'code' => $this->accessCodeInserted,
-        );
-
-        $http->setData($data);
-        $reponse = $http->getResponse("POST");
+        $reponse = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($reponse, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals('Access code or resorce name invalid', $convertToAssocArray['message']);
+        $this->assertEquals('You must be authenticated to access this resource.', $convertToAssocArray['message']);
     }
 
     // validate code success
     public function testValidateAccessCode() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url . 'validate');
+        $http = new HttpCall($this->url);
 
-        // define request body
-        $data = array(
-            'source_name' => 'binhusenstore',
-            'code' => $this->accessCodeInserted,
-        );
-
-        $http->setData($data);
-
-        $reponse = $http->getResponse("POST");
+        $http->addAccessCode("binhusenstore-access-code.txt");
+        $reponse = $http->getResponse("GET");
 
         // fwrite(STDERR, print_r($reponse, true));
         $convertToAssocArray = json_decode($reponse, true);

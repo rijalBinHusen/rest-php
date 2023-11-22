@@ -1,4 +1,5 @@
 # source .env
+phpunit tests/binhusenstore/access_code_test.php
 phpunit tests/binhusenstore/user_test.php
 phpunit tests/binhusenstore/cart_test.php
 phpunit tests/binhusenstore/category_test.php
