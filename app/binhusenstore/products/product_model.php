@@ -237,7 +237,7 @@ class Binhusenstore_product_model
                 'images' => implode(",", $retrieve_product[0]['images']),
                 'description' => $retrieve_product[0]['description'],
                 'default_total_week' => $retrieve_product[0]['default_total_week'],
-                'is_available' => $retrieve_product[0]['is_available'],
+                'is_available' => (int)$retrieve_product[0]['is_available'],
                 'links' => implode(",", $retrieve_product[0]['links']),
             );
 
