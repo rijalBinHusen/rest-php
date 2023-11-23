@@ -213,7 +213,7 @@ class Access_code {
             Flight::json(
                 array(
                     'success' => true,
-                    'data' => $result
+                    'code' => $result[0]['code']
                 )
             );
         } 

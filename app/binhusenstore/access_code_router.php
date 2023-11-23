@@ -13,7 +13,17 @@ Flight::route('POST /binhusenstore/access_code', function () {
     }
 });
 
-Flight::route('GET /binhusenstore/access_code', function () {
+Flight::route('GET /binhusenstore/access_code/validate', function () {
     $access_code = new Access_code();
     $access_code->validate_code_on_header("binhusenstore", true);
+});
+
+Flight::route('GET /binhusenstore/access_code', function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if($is_token_valid) {
+        $access_code = new Access_code();
+        $access_code->get_access_code_by_source_name("binhusenstore");
+    }
 });

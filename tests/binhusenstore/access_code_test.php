@@ -53,7 +53,7 @@ class Access_code_test extends TestCase {
 
     // validate code failed
     public function testValidateAccessCodeFailed() {
-        $http = new HttpCall($this->url);
+        $http = new HttpCall($this->url . 'validate');
 
         $reponse = $http->getResponse("GET");
 
@@ -68,7 +68,7 @@ class Access_code_test extends TestCase {
     // validate code failed2
     public function testValidateAccessCodeFailed2() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url);
+        $http = new HttpCall($this->url . 'validate');
 
         $reponse = $http->getResponse("GET");
 
@@ -83,7 +83,7 @@ class Access_code_test extends TestCase {
     // validate code failed3
     public function testValidateAccessCodeFailed3() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url);
+        $http = new HttpCall($this->url . 'validate');
 
         $reponse = $http->getResponse("GET");
 
@@ -98,7 +98,7 @@ class Access_code_test extends TestCase {
     // validate code success
     public function testValidateAccessCode() {
         $this->testCreateAccessCode();
-        $http = new HttpCall($this->url);
+        $http = new HttpCall($this->url . 'validate');
 
         $http->addAccessCode("binhusenstore-access-code.txt");
         $reponse = $http->getResponse("GET");
