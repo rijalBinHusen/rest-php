@@ -62,14 +62,14 @@ Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
 });
 
 Flight::route("GET /binhusenstore/products/landing_page", function () {
-    // $user = new User("binhusenstore_users");
-    // $is_token_valid = $user->is_valid_token();
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    // if($is_token_valid) {
+    if($is_valid_code) {
         
     $myreport_base_file = new Binhusenstore_product();
     $myreport_base_file->get_products_for_landing_page();
-    // }
+    }
 });
 
 Flight::route('GET /binhusenstore/products/count', function () {
