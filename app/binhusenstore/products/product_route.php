@@ -5,9 +5,9 @@ require_once(__DIR__ . "/../../AccessCode/access_code_controller.php");
 
 Flight::route('POST /binhusenstore/product', function () {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $is_admin = $user->is_admin(1);
 
-    if($is_token_valid) {
+    if($is_admin) {
         
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->add_product();    
@@ -26,7 +26,6 @@ Flight::route('GET /binhusenstore/products', function () {
 
 });
 
-
 Flight::route("GET /binhusenstore/product/@id", function ($id) {
     $access_code = new Access_code();
     $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
@@ -41,9 +40,9 @@ Flight::route("GET /binhusenstore/product/@id", function ($id) {
 
 Flight::route("PUT /binhusenstore/product/@id", function ($id) {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $is_admin = $user->is_admin(1);
 
-    if($is_token_valid) {
+    if($is_admin) {
         
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->update_product_by_id($id);
@@ -52,9 +51,9 @@ Flight::route("PUT /binhusenstore/product/@id", function ($id) {
 
 Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $is_admin = $user->is_admin(1);
 
-    if($is_token_valid) {
+    if($is_admin) {
             
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->remove_product($id);
@@ -74,9 +73,9 @@ Flight::route("GET /binhusenstore/products/landing_page", function () {
 
 Flight::route('GET /binhusenstore/products/count', function () {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $is_admin = $user->is_admin(1);
 
-    if($is_token_valid) {
+    if($is_admin) {
         
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->get_count_products();
@@ -85,9 +84,9 @@ Flight::route('GET /binhusenstore/products/count', function () {
 
 Flight::route('POST /binhusenstore/product/move_to_archive', function () {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $is_admin = $user->is_admin(1);
 
-    if($is_token_valid) {
+    if($is_admin) {
         
         $myreport_base_file = new Binhusenstore_product();
         $myreport_base_file->move_product_to_archive();

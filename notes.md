@@ -1,16 +1,18 @@
 
 <!-- 
 - [ ] Tidak boleh hapus category jika ada produk yang masih menggunakan produk tersebut
-- [ ] Bikin validasi is admin(id_admin) untuk admin permission
 - [ ] Consider to return 1 image when request products
 - [ ] Jangan boleh update paymet jika pembayaran > tagihan
 - [ ] Try to update the password on unit testing, old password must be valid
 - [ ] Jangan bolehkan update harga product jika produk sudah pernah dipesan
 - [ ] Amankan end point/user/register
-- [ ] Gunakan kode akses untuk akses resource binhusenstore
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
 - [ ] Buat index pada beberapa table untuk meningkatkan proses query
  -->
+
+## 23 Nov 2023
+- [x] Gunakan kode akses untuk akses resource binhusenstore
+- [x] Bikin validasi is admin(id_admin) untuk admin permission
 
 ## 28 Oct 2023
 - [x] End point to show total order

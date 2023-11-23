@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -30,13 +31,17 @@ class Product_test extends TestCase
         $this->data_posted = $data;
 
         $http->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $http->addJWTToken();
 
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r($response, true));
+        // fwrite(STDERR, print_r( PHP_EOL . $response . PHP_EOL, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
@@ -61,6 +66,9 @@ class Product_test extends TestCase
         );
 
         $httpCallVar->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
 
         $httpCallVar->addJWTToken();
 
@@ -205,6 +213,9 @@ class Product_test extends TestCase
 
         $httpCallVar->setData($data);
 
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
@@ -227,6 +238,9 @@ class Product_test extends TestCase
         $data = array('price__' => "Failed test");
 
         $httpCallVar->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
 
         $httpCallVar->addJWTToken();
 
@@ -269,6 +283,9 @@ class Product_test extends TestCase
         $data = array('price' => 100);
 
         $httpCallVar->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
         
         $httpCallVar->addJWTToken();
 
@@ -287,6 +304,9 @@ class Product_test extends TestCase
     {
         $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url_host_id);
+
+        $user = new User_test();
+        $user->LoginAdmin();
 
         $httpCallVar->addJWTToken();
 
@@ -319,6 +339,9 @@ class Product_test extends TestCase
     public function testDeleteEndpointFailed404()
     {
         $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
+
+        $user = new User_test();
+        $user->LoginAdmin();
 
         $httpCallVar->addJWTToken();
 

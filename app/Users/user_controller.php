@@ -199,4 +199,28 @@ class User
             }
         }
     }
+
+    public function is_admin($id_admin) {
+
+        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+
+            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            $user_info_by_jwt = $this->user->validate($jwt_token);
+
+            $is_no_error = $this->user->error === null;
+
+            if($is_no_error) {
+
+                $is_admin = $user_info_by_jwt->data->id === $id_admin;
+                if($is_admin) return true;
+            }
+            
+        } else {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'You must be authenticated to access this resource.',
+            ], 401);
+        }
+    }
 }

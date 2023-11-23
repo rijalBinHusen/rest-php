@@ -174,4 +174,28 @@ class User_test extends TestCase
         $this->testLoginEndpoint();
     }
 
+    // test login success
+    public function LoginAdmin()
+    {
+        $this->testRegisterEndpoint();
+        $http = new HttpCall($this->url . "login");
+        // Define the request body
+        $http->setData(array(
+            'email' => 'binhusenstore_test@test.com', 
+            'password' => '123456'
+        ));
+        $response = $http->getResponse("POST");
+        
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, TRUE));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('token', $convertToAssocArray);
+
+        // save token to a .txt file
+        $myfile = fopen("token.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $convertToAssocArray['token']);
+        fclose($myfile);
+    }
+
 }
