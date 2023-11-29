@@ -38,14 +38,16 @@ class Binhusenstore_order_model
 
     }
 
-    public function get_orders()
+    public function get_orders($limit)
     {
-        $result  = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
+        $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance";
+        $query = "SELECT $columnToSelect FROM $this->table";
         
-        if($this->database->is_error === null) {
-            
-            return $result;
-        }
+        if($limit > 0) $query = $query . " LIMIT " . $limit;
+        else $query = $query . " LIMIT 30";
+
+        $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
+        if($this->database->is_error === null) return $result;
 
         $this->is_success = $this->database->is_error;
     }

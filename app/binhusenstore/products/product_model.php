@@ -44,8 +44,6 @@ class Binhusenstore_product_model
         $columnToSelect = "id, images, name, price, default_total_week";
         $query = "SELECT $columnToSelect FROM $this->table";
 
-        
-
         $is_category_valid = !is_null($id_category) && !empty($id_category) && $id_category != "";
 
         // search category

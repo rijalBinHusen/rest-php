@@ -8,6 +8,8 @@
 - [ ] Amankan end point/user/register
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
 - [ ] Buat index pada beberapa table untuk meningkatkan proses query
+- [ ] Check all critical endpoint and implement the access code request
+- [ ] Periksa lagi reset event index
  -->
 
 ## 23 Nov 2023

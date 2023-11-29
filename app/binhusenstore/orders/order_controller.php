@@ -70,7 +70,10 @@ class Binhusenstore_order
     public function get_orders()
     {
 
-        $result = $this->Binhusenstore_order->get_orders();
+        $req = Flight::request();
+        $limit = $req->query->limit;
+
+        $result = $this->Binhusenstore_order->get_orders($limit);
                 
         $is_exists = count($result) > 0;
 
