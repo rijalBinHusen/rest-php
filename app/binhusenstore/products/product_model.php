@@ -39,17 +39,21 @@ class Binhusenstore_product_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function get_products($limit, $id_category = null)
+    public function get_products($limit, $id_category = null, $name_product)
     {
         $columnToSelect = "id, images, name, price, default_total_week";
         $query = "SELECT $columnToSelect FROM $this->table";
 
         $is_category_valid = !is_null($id_category) && !empty($id_category) && $id_category != "";
+        $is_name_product_valid = !is_null($name_product) && !empty($name_product) && $name_product != "";
 
         // search category
         if($is_category_valid) {
-
             $query = $query . "  WHERE MATCH(categories) AGAINST ('$id_category' IN NATURAL LANGUAGE MODE)";
+        }
+
+        else if($is_name_product_valid) {
+            $query = $query . "  WHERE MATCH(name) AGAINST ('$name_product' IN NATURAL LANGUAGE MODE)";
         }
 
         // order
@@ -57,10 +61,10 @@ class Binhusenstore_product_model
 
         // limiter
         if ($limit > 0) {
-
             $query = $query . " LIMIT " . $limit;
-        } else if (!is_numeric($limit)) {
+        }
 
+        else if (!is_numeric($limit)) {
             $query = $query . " LIMIT 30";
         }
 

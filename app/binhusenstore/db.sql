@@ -11,6 +11,7 @@ CREATE TABLE if not exists binhusenstore_products (
     links TEXT,
     date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FULLTEXT(categories)
+    FULLTEXT(name)
 );
 
 -- THE PREFIX FOR CUSTOM ID binhusenstore_products
@@ -224,4 +225,5 @@ CREATE TABLE if not exists binhusenstore_products_archived (
     links TEXT,
     FULLTEXT(categories),
     date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    FULLTEXT(name)
 );

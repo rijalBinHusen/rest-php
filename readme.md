@@ -8,14 +8,7 @@ I do unit testing with php unit [PHP unit test](https://phpunit.de/manual/4.8/en
 ## SQL Full text search
 I learn Full text search sql from [here](https://www.w3resource.com/mysql/mysql-full-text-search-functions.php)
 
-## Example .env file
-```bash
-APP_ENV=DEV
-DATABASE=mysql:host=localhost;dbname=myreport
-DATABASE_USER=root
-DATABASE_PASSWORD=
-JWT_SECRET=SECRET-KEY
-JWT_ISSUER=johndoe
-JWT_AUD=site.com
-JWT_ALGO=HS256
-```
+## Set FULL TEXT to some column that exist on database
+To create a full-text index, you can use the CREATE FULLTEXT INDEX statement. For example, the following statement creates a full-text index on the content column of the articles table:
+
+```CREATE FULLTEXT INDEX ft_idx_articles_content ON articles (content);```
