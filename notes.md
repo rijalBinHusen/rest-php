@@ -9,8 +9,12 @@
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
 - [ ] Buat index pada beberapa table untuk meningkatkan proses query
 - [ ] Check all critical endpoint and implement the access code request
-- [ ] Periksa lagi reset event index
+- [ ] Periksa lagi event truncate table index di database
+- [ ] endpoint untuk dapatkan order by group_id
  -->
+
+## 06 Des 2023
+- [x] Add id_order_group on column payment
 
 ## 23 Nov 2023
 - [x] Gunakan kode akses untuk akses resource binhusenstore

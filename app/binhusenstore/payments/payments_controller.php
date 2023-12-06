@@ -16,6 +16,7 @@ class Binhusenstore_payment
         $req = Flight::request();
         $date_payment = $req->data->date_payment;
         $id_order = $req->data->id_order;
+        $id_order_group = $req->data->id_order_group;
         $balance = $req->data->balance;
 
         $validator = new Validator();
@@ -24,9 +25,11 @@ class Binhusenstore_payment
         $isDatePaymentValid = $validator->isYMDDate($date_payment);
 
         $is_request_body_not_oke = is_null($date_payment)
-                                    || is_null($id_order)
                                     || !$isDatePaymentValid
+                                    || is_null($id_order)
                                     || !is_string($id_order)
+                                    || is_null($id_order_group)
+                                    || !is_string($id_order_group)
                                     || is_null($balance)
                                     || !is_numeric($balance);
 
@@ -41,7 +44,7 @@ class Binhusenstore_payment
             return;
         }
 
-        $result = $this->Binhusenstore_payment->append_payment($date_payment, $id_order, $balance);
+        $result = $this->Binhusenstore_payment->append_payment($date_payment, $id_order, $balance, $id_order_group);
 
         if($this->Binhusenstore_payment->is_success === true) {
         

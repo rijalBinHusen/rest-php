@@ -13,12 +13,13 @@ class Binhusenstore_payment_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_payment($date_payment, $id_order, $balance)
+    public function append_payment($date_payment, $id_order, $balance, $id_order_group)
     {
 
         $data_to_insert = array(
             'date_payment' => $date_payment,
             'id_order' => $id_order,
+            'id_order_group' => $id_order_group,
             'balance' => $balance,
             'is_paid' => 0,
             'date_paid' => "",
