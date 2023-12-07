@@ -22,6 +22,7 @@ class Payment_test extends TestCase
             'id_order' => $faker->text(5),
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
+            'id_order_group' => $faker->text(5)
         );
 
         $this->data_posted = $data;

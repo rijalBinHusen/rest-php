@@ -21,6 +21,7 @@ class Payment_details_test extends TestCase
             'id_order' => $faker->numberBetween(10000, 10000000) . "_",
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
+            'id_order_group' => $faker->numberBetween(10000, 10000000) . "_",
         );
 
         for($i = 0; $i <= 3; $i++) {
@@ -88,6 +89,7 @@ class Payment_details_test extends TestCase
                 'id_order' => $id_order,
                 'balance' => 100,
                 'is_paid' => false,
+                'id_order_group' => $faker->numberBetween(10000, 10000000) . "_",
             );
 
             $httpPostNewPayment->setData($data_to_send);

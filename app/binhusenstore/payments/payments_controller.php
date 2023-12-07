@@ -28,8 +28,6 @@ class Binhusenstore_payment
                                     || !$isDatePaymentValid
                                     || is_null($id_order)
                                     || !is_string($id_order)
-                                    || is_null($id_order_group)
-                                    || !is_string($id_order_group)
                                     || is_null($balance)
                                     || !is_numeric($balance);
 
