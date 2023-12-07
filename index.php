@@ -6,6 +6,9 @@ require_once(__DIR__ . '/utils/cors.php');
 require_once(__DIR__ . '/app/Users/user_route.php');
 require_once(__DIR__ . '/app/AccessCode/access_code_router.php');
 
+// contant name variable
+require_once(__DIR__ . '/utils/constant_named.php');
+
 // myreport app
 require_once(__DIR__ . '/app/myreport/warehouse/warehouse_route.php');
 require_once(__DIR__ . '/app/myreport/supervisor/supervisor_route.php');

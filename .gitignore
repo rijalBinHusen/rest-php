@@ -1,7 +1,5 @@
 .env
 vendor
-.env
-.env
 token.txt
 *.txt
 *.zip
@@ -10,3 +8,4 @@ token.txt
 *.gif
 *.jpeg
 *.cache
+utils/constant_named.php

@@ -103,6 +103,7 @@ CREATE TABLE if not exists binhusenstore_orders (
     sent VARCHAR(10),
     title VARCHAR(47),
     total_balance INT,
+    phone TEXT,
     date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

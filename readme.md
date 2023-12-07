@@ -12,3 +12,17 @@ I learn Full text search sql from [here](https://www.w3resource.com/mysql/mysql-
 To create a full-text index, you can use the CREATE FULLTEXT INDEX statement. For example, the following statement creates a full-text index on the content column of the articles table:
 
 ```CREATE FULLTEXT INDEX ft_idx_articles_content ON articles (content);```
+
+## define variable on utils/constant_named.php, example:
+```php
+// JWT constant name
+
+define("JWT_SECRET", "YOUR-JWT-SECRET-KEY");
+define("JWT_ISSUER", "johndoe");
+define("JWT_AUD", "your-site.com");
+define("JWT_ALGO", "HS256");
+
+// key to encrypt descrypt string
+define("ENCRYPT_DECRYPT_PHONE", "wGk11X03ju");
+
+```

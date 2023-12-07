@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../../../utils/piece/encrypt_decrypt_str.php');
 
 class Binhusenstore_order_model
 {
@@ -13,8 +14,9 @@ class Binhusenstore_order_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance)
+    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone)
     {
+        $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
         $data_to_insert = array(
             'date_order' => $date_order,
@@ -25,6 +27,7 @@ class Binhusenstore_order_model
             'sent' => $sent,
             'title' => $title,
             'total_balance' => $total_balance,
+            'phone' => $encrypted_phone
         );
 
         $this->database->insert($this->table, $data_to_insert);
@@ -101,6 +104,23 @@ class Binhusenstore_order_model
         
         $this->is_success = $this->database->is_error;
 
+    }
+    
+    public function phone_by_order_id($id)
+    {
+
+        $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
+        
+        if($this->database->is_error === null && count($result) > 0) {
+
+            $phone = $result[0]['phone'];
+            $decrypted_phone = decrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
+            return $decrypted_phone;
+        }
+        
+        $this->is_success = $this->database->is_error;
+        return array();
+        
     }
 
     public function count_orders()

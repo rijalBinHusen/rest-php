@@ -5,12 +5,6 @@
 // $dotenv->load();
 require_once(__DIR__ . '/../../utils/database.php');
 
-define("JWT_SECRET", "SECRET-KEY");
-define("JWT_ISSUER", "johndoe");
-define("JWT_AUD", "site.com");
-define("JWT_ALGO", "HS256");
-
-
 class User_model {
   private $database = null;
   public $error = null;
