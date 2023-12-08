@@ -1,0 +1,173 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: date
+    description: date eid day
+
+paths:
+  /date:
+    post:
+      tags:
+        - date
+      summary: Lets a user post a new date eid day
+      requestBody:
+        $ref: "#/components/requestBodies/date"
+      responses:
+        "201":
+          description: Successfully created a new date
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /dates:
+    get:
+      tags:
+        - date
+      summary: Get all dates.
+      responses:
+        "200":
+          $ref: "#/components/responses/getdate200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /date/{id}:
+    parameters:
+      - name: year
+        in: path
+        required: true
+        description: The ID of the date
+        schema:
+          type: string
+        example: "WAR220203902"
+    put:
+      tags:
+        - date
+      summary: Update date by year
+      requestBody:
+        $ref: "#/components/requestBodies/date"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - date
+      summary: Delete date by year
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        year:
+          type: string
+          example: "2023"
+    date:
+      type: object
+      properties:
+        year:
+          type: string
+        date:
+          type: string
+          example: "2023-07-23"
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getdate200:
+      description: Succes operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/date"
+  requestBodies:
+    date:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/date"
