@@ -9,8 +9,8 @@ Flight::route('POST /binhusenstore/product', function () {
 
     if($is_admin) {
         
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->add_product();    
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->add_product();    
     }
 });
 
@@ -20,8 +20,8 @@ Flight::route('GET /binhusenstore/products', function () {
 
     if($is_valid_code) {
         
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->get_products();
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->get_products();
     }
 
 });
@@ -32,8 +32,8 @@ Flight::route("GET /binhusenstore/product/@id", function ($id) {
 
     if($is_valid_code) {
        
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->get_product_by_id($id);    
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->get_product_by_id($id);    
     }
 
 });
@@ -44,8 +44,8 @@ Flight::route("PUT /binhusenstore/product/@id", function ($id) {
 
     if($is_admin) {
         
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->update_product_by_id($id);
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->update_product_by_id($id);
     }
 });
 
@@ -55,8 +55,8 @@ Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
 
     if($is_admin) {
             
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->remove_product($id);
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->remove_product($id);
     }
 });
 
@@ -66,8 +66,8 @@ Flight::route("GET /binhusenstore/products/landing_page", function () {
 
     if($is_valid_code) {
         
-    $myreport_base_file = new Binhusenstore_product();
-    $myreport_base_file->get_products_for_landing_page();
+    $binhusenstore_product = new Binhusenstore_product();
+    $binhusenstore_product->get_products_for_landing_page();
     }
 });
 
@@ -77,8 +77,8 @@ Flight::route('GET /binhusenstore/products/count', function () {
 
     if($is_admin) {
         
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->get_count_products();
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->get_count_products();
     }
 });
 
@@ -88,7 +88,7 @@ Flight::route('POST /binhusenstore/product/move_to_archive', function () {
 
     if($is_admin) {
         
-        $myreport_base_file = new Binhusenstore_product();
-        $myreport_base_file->move_product_to_archive();
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->move_product_to_archive();
     }
 });

@@ -228,3 +228,10 @@ CREATE TABLE if not exists binhusenstore_products_archived (
     date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     FULLTEXT(name)
 );
+
+-- ========================================================BORDER
+
+CREATE TABLE if not exists binhusenstore_date_eid (
+    year VARCHAR(4) NOT NULL PRIMARY KEY,
+    date VARCHAR(10)
+);
