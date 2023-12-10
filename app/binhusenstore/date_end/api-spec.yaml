@@ -43,7 +43,7 @@ paths:
           $ref: "#/components/responses/404Error"
   /date/{id}:
     parameters:
-      - name: year
+      - name: id
         in: path
         required: true
         description: The ID of the date
@@ -53,7 +53,7 @@ paths:
     put:
       tags:
         - date
-      summary: Update date by year
+      summary: Update date by id
       requestBody:
         $ref: "#/components/requestBodies/date"
       responses:
@@ -68,7 +68,7 @@ paths:
     delete:
       tags:
         - date
-      summary: Delete date by year
+      summary: Delete date by id
       responses:
         "201":
           $ref: "#/components/responses/200Success"
@@ -78,7 +78,7 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-  
+
 components:
   schemas:
     Return_after_post:
@@ -87,17 +87,18 @@ components:
         success:
           type: boolean
           example: true
-        year:
+        title:
           type: string
-          example: "2023"
+          example: "Eid fitri 2024"
     date:
       type: object
       properties:
-        year:
+        title:
           type: string
+          example: Eid adha 2024
         date:
           type: string
-          example: "2023-07-23"
+          example: "2023-01-01"
   responses:
     400Error:
       description: Invalid request

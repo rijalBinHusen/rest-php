@@ -41,7 +41,7 @@ require_once(__DIR__ . '/app/binhusenstore/payments/payments_route.php');
 require_once(__DIR__ . '/app/binhusenstore/products/product_route.php');
 require_once(__DIR__ . '/app/binhusenstore/testimonies/testimony_route.php');
 require_once(__DIR__ . '/app/binhusenstore/images/image_route.php');
-require_once(__DIR__ . '/app/binhusenstore/date_eid/date_route.php');
+require_once(__DIR__ . '/app/binhusenstore/date_end/date_route.php');
 
 
 // Flight::route('/test(/@endpoint)', function ($endpoint) {
@@ -72,11 +72,11 @@ require_once(__DIR__ . '/app/binhusenstore/date_eid/date_route.php');
 
 // });
 
-Flight::map('notFound', function(){
+Flight::map('notFound', function () {
     // Handle 404 errors
     Flight::json([
         "success" => false,
-        "message" => "Page not found" 
+        "message" => "Page not found"
     ], 404);
 });
 
