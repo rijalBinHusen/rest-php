@@ -42,7 +42,7 @@ class Binhusenstore_date
             Flight::json(
                 array(
                     'success' => true,
-                    'title' => $result
+                    'id' => $result
                 ),
                 201
             );
@@ -131,18 +131,18 @@ class Binhusenstore_date
         $keyValueToUpdate = array();
 
         // conditional $date
-        $valid_name_date = !is_null($date) && is_string($date) && !empty($date);
-        if ($valid_name_date) {
+        $valid_date = !is_null($date) && is_string($date) && !empty($date);
+        if ($valid_date) {
             $keyValueToUpdate["date"] = $date;
         }
 
         // conditional $title
-        $valid_name_title = !is_null($title) && is_string($title) && !empty($title);
-        if ($valid_name_title) {
+        $valid_title = !is_null($title) && is_string($title) && !empty($title);
+        if ($valid_title) {
             $keyValueToUpdate["title"] = $title;
         }
 
-        $is_oke_to_update = count($keyValueToUpdate) > 0;
+        $is_oke_to_update = count($keyValueToUpdate) > 0 && is_numeric($id);
 
         if ($is_oke_to_update) {
 

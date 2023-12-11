@@ -25,7 +25,7 @@ class Binhusenstore_date_model
 
         if ($this->database->is_error === null) {
 
-            return $title;
+            return $this->database->getMaxId($this->table);
         }
 
         $this->is_success = $this->database->is_error;

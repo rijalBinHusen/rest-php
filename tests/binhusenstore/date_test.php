@@ -17,7 +17,7 @@ class Date_test extends TestCase
         $http = new HttpCall($this->url . "date");
         // Define the request body
         $data = array(
-            'year' => $faker->numberBetween(1000, 9999),
+            'title' => $faker->text(30),
             'date' => $faker->date("Y-m-d"),
         );
 
@@ -33,10 +33,10 @@ class Date_test extends TestCase
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('year', $convertToAssocArray, $response);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
         // $this->assertEquals(201, http_response_code());
-        $this->url_host_id = $this->url . "date/" . $convertToAssocArray['year'];
+        $this->url_host_id = $this->url . "date/" . $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed()
@@ -96,7 +96,7 @@ class Date_test extends TestCase
         $this->assertEquals(true, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('year', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('title', $convertToAssocArray['data'][0]);
         $this->assertArrayHasKey('date', $convertToAssocArray['data'][0]);
     }
 
@@ -116,7 +116,7 @@ class Date_test extends TestCase
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     }
-    
+
     public function testPutEndpoint201()
     {
         $this->testPostEndpoint();
@@ -185,7 +185,7 @@ class Date_test extends TestCase
 
     public function testPutEndpointFailed404()
     {
-        $httpCallVar = new HttpCall($this->url . 'date/loremipsum');
+        $httpCallVar = new HttpCall($this->url . 'date/1001200012390');
         // Define the request body
         $data = array('date' => "Failed test");
 
@@ -224,7 +224,7 @@ class Date_test extends TestCase
 
     public function testDeleteEndpointFailed401()
     {
-        $httpCallVar = new HttpCall($this->url . 'date/loremipsum');
+        $httpCallVar = new HttpCall($this->url . 'date/001111');
 
         $response = $httpCallVar->getResponse("DELETE");
 
@@ -239,7 +239,7 @@ class Date_test extends TestCase
 
     public function testDeleteEndpointFailed404()
     {
-        $httpCallVar = new HttpCall($this->url . 'date/loremipsum');
+        $httpCallVar = new HttpCall($this->url . 'date/0011111');
 
         $httpCallVar->addJWTToken();
 
