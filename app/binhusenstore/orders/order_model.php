@@ -1,16 +1,18 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/../../../utils/piece/encrypt_decrypt_str.php');
+require_once(__DIR__ . '/../payments/payments_model.php');
 
 class Binhusenstore_order_model
 {
     protected $database;
     var $table = "binhusenstore_orders";
+    var $table_archive = "binhusenstore_orders_archived";
     var $is_success = true;
 
     function __construct()
     {
-        
+
         $this->database = Query_builder::getInstance();
     }
 
@@ -32,28 +34,27 @@ class Binhusenstore_order_model
 
         $this->database->insert($this->table, $data_to_insert);
 
-        if($this->database->is_error === null) {
-    
-            return $this->database->getMaxId($this->table);
-        }   
-            
-        $this->is_success = $this->database->is_error;
+        if ($this->database->is_error === null) {
 
+            return $this->database->getMaxId($this->table);
+        }
+
+        $this->is_success = $this->database->is_error;
     }
 
     public function get_orders($limit)
     {
         $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance";
         $query = "SELECT $columnToSelect FROM $this->table";
-        
+
         $query = $query . " ORDER BY id DESC";
-        
-        if($limit > 0) $query = $query . " LIMIT " . $limit;
+
+        if ($limit > 0) $query = $query . " LIMIT " . $limit;
         else $query = $query . " LIMIT 30";
 
 
         $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
-        if($this->database->is_error === null) return $result;
+        if ($this->database->is_error === null) return $result;
 
         $this->is_success = $this->database->is_error;
     }
@@ -62,15 +63,14 @@ class Binhusenstore_order_model
     {
 
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null) {
+
+        if ($this->database->is_error === null) {
 
             return $result;
         }
-        
+
         $this->is_success = $this->database->is_error;
         return array();
-        
     }
 
     public function update_order_by_id(array $data, $where, $id)
@@ -78,49 +78,46 @@ class Binhusenstore_order_model
 
         $result = $this->database->update($this->table, $data, $where, $id);
 
-        if($this->database->is_error === null) {
-    
-            if($result === 0) {
+        if ($this->database->is_error === null) {
+
+            if ($result === 0) {
 
                 $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
                 return $this->database->sqlQuery($query)->fetchColumn();
             }
-            
+
             return $result;
-        } 
+        }
 
         $this->is_success = $this->database->is_error;
-
     }
 
     public function remove_order_by_id($id)
     {
         $result = $this->database->delete($this->table, 'id', $id);
 
-        if($this->database->is_error === null) {
-    
+        if ($this->database->is_error === null) {
+
             return $result;
         }
-        
-        $this->is_success = $this->database->is_error;
 
+        $this->is_success = $this->database->is_error;
     }
-    
+
     public function phone_by_order_id($id)
     {
 
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null && count($result) > 0) {
+
+        if ($this->database->is_error === null && count($result) > 0) {
 
             $phone = $result[0]['phone'];
             $decrypted_phone = decrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
             return $decrypted_phone;
         }
-        
+
         $this->is_success = $this->database->is_error;
         return array();
-        
     }
 
     public function count_orders()
@@ -134,5 +131,53 @@ class Binhusenstore_order_model
         }
 
         $this->is_success = $this->database->is_error;
+    }
+
+    public function move_order_to_archive($id_order)
+    {
+        $payment_model = new Binhusenstore_payment_model();
+
+        $retrieve_order = $this->get_order_by_id($id_order);
+
+        $is_order_exists = count($retrieve_order) > 0;
+
+        if ($is_order_exists) {
+
+            //set data to insert
+            $data_to_insert = array(
+                'id' => $id_order,
+                'date_order' => $retrieve_order[0]['date_order'],
+                'id_group' => $retrieve_order[0]['id_group'],
+                'is_group' => (int)$retrieve_order[0]['is_group'],
+                'id_product' => $retrieve_order[0]['id_product'],
+                'name_of_customer' => $retrieve_order[0]['name_of_customer'],
+                'sent' => $retrieve_order[0]['sent'],
+                'title' => $retrieve_order[0]['title'],
+                'total_balance' => $retrieve_order[0]['total_balance'],
+                'phone' => $retrieve_order[0]['phone']
+            );
+
+            // insert to archive table
+            $this->database->insert($this->table_archive, $data_to_insert);
+
+            if ($this->database->is_error === null) {
+
+                // remove order
+                $this->remove_order_by_id($id_order);
+                $is_payment_moved = $payment_model->move_payment_to_archive($id_order);
+                if ($is_payment_moved) {
+
+                    return true;
+                } else {
+
+                    $this->is_success = $is_payment_moved;
+                    return false;
+                }
+            }
+
+            $this->is_success = $this->database->is_error;
+        }
+
+        return false;
     }
 }

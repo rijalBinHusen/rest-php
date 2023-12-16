@@ -8,7 +8,7 @@ class Binhusenstore_order
     {
         $this->Binhusenstore_order = new Binhusenstore_order_model();
     }
-    
+
     public function add_order()
     {
         // request
@@ -26,49 +26,50 @@ class Binhusenstore_order
         $result = null;
 
         $is_request_body_not_oke = is_null($date_order)
-                                    || is_null($id_group)
-                                    || is_null($is_group)
-                                    || is_null($id_product)
-                                    || is_null($name_of_customer)
-                                    || is_null($sent)
-                                    || is_null($title)
-                                    || is_null($total_balance)
-                                    || is_null($phone);
+            || is_null($id_group)
+            || is_null($is_group)
+            || is_null($id_product)
+            || is_null($name_of_customer)
+            || is_null($sent)
+            || is_null($title)
+            || is_null($total_balance)
+            || is_null($phone);
 
-        if($is_request_body_not_oke) {
+        if ($is_request_body_not_oke) {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Failed to add order, check the data you sent'
-                ), 400
+                ),
+                400
             );
             return;
         }
 
         $result = $this->Binhusenstore_order->append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone);
 
-        if($this->Binhusenstore_order->is_success === true) {
-        
+        if ($this->Binhusenstore_order->is_success === true) {
+
             Flight::json(
                 array(
                     'success' => true,
                     'id' => $result
-                ), 201
+                ),
+                201
             );
-        } 
-        
-        else {
-            
+        } else {
+
             Flight::json(
                 array(
-                    'success'=> false,
-                    'message'=> $this->Binhusenstore_order->is_success
-                ), 500
+                    'success' => false,
+                    'message' => $this->Binhusenstore_order->is_success
+                ),
+                500
             );
         }
     }
-    
+
     public function get_orders()
     {
 
@@ -76,34 +77,30 @@ class Binhusenstore_order
         $limit = $req->query->limit;
 
         $result = $this->Binhusenstore_order->get_orders($limit);
-                
+
         $is_exists = count($result) > 0;
 
-        if($this->Binhusenstore_order->is_success === true && $is_exists) {
+        if ($this->Binhusenstore_order->is_success === true && $is_exists) {
             Flight::json(
                 array(
                     "success" => true,
                     "data" => $result
-                    )
-            , 200);
-        }
-
-        else if ($this->Binhusenstore_order->is_success !== true) {
-            Flight::json( array(
+                ),
+                200
+            );
+        } else if ($this->Binhusenstore_order->is_success !== true) {
+            Flight::json(array(
                 "success" => false,
                 "message" => $result
             ), 500);
-        }
-        
-        else {
-            Flight::json( array(
-            "success" => false,
-            "message" => "Order not found"
+        } else {
+            Flight::json(array(
+                "success" => false,
+                "message" => "Order not found"
             ), 404);
         }
-
     }
-    
+
     public function get_order_by_id($id)
     {
         // myguest/8
@@ -114,35 +111,34 @@ class Binhusenstore_order
 
         $is_found = count($result) > 0;
 
-        if($is_success === true && $is_found) {
+        if ($is_success === true && $is_found) {
 
-            Flight::json([
-                'success' => true,
+            Flight::json(
+                [
+                    'success' => true,
                     'data' => $result
                 ]
             );
-        }
-
-        else if($is_success !== true) {
+        } else if ($is_success !== true) {
 
             Flight::json(
                 [
                     'success' => false,
                     'message' => $is_success
-                ], 500
+                ],
+                500
             );
-        }
-
-        else {
+        } else {
             Flight::json(
                 [
                     'success' => false,
                     'message' => 'Order not found'
-                ], 404
+                ],
+                404
             );
         }
     }
-    
+
     public function get_phone_by_order_id($id)
     {
         // myguest/8
@@ -153,65 +149,65 @@ class Binhusenstore_order
 
         $is_found = count($result) > 0;
 
-        if($is_success === true && $is_found) {
+        if ($is_success === true && $is_found) {
 
-            Flight::json([
-                'success' => true,
-                'data' => $result
+            Flight::json(
+                [
+                    'success' => true,
+                    'data' => $result
                 ]
             );
-        }
-
-        else if($is_success !== true) {
+        } else if ($is_success !== true) {
 
             Flight::json(
                 [
                     'success' => false,
                     'message' => $is_success
-                ], 500
+                ],
+                500
             );
-        }
-
-        else {
+        } else {
             Flight::json(
                 [
                     'success' => false,
                     'message' => 'Order not found'
-                ], 404
+                ],
+                404
             );
         }
     }
 
-    public function remove_order($id) {
+    public function remove_order($id)
+    {
         // myguest/8
         // the 8 will automatically becoming parameter $id
         $result = $this->Binhusenstore_order->remove_order_by_id($id);
 
         $is_success = $this->Binhusenstore_order->is_success;
-    
-        if($is_success === true && $result > 0) {
+
+        if ($is_success === true && $result > 0) {
             Flight::json(
                 [
                     'success' => true,
                     'message' => 'Delete order success',
                 ]
             );
-        }
-
-        else if($is_success !== true) {
-            Flight::json([
+        } else if ($is_success !== true) {
+            Flight::json(
+                [
                     'success' => false,
                     'message' => $is_success
-                ], 500
+                ],
+                500
             );
             return;
-        }
-
-        else {
-            Flight::json([
+        } else {
+            Flight::json(
+                [
                     'success' => false,
                     'message' => 'Order not found'
-                ], 404
+                ],
+                404
             );
         }
     }
@@ -235,11 +231,11 @@ class Binhusenstore_order
         // conditional $date_order
         $valid_date_order = !is_null($date_order);
         if ($valid_date_order) $keyValueToUpdate["date_order"] = $date_order;
-        
+
         // conditional $id_group
         $valid_id_group = !is_null($id_group);
         if ($valid_id_group) $keyValueToUpdate["id_group"] = $id_group;
-        
+
         // conditional $is_group
         $valid_is_group = !is_null($is_group);
         if ($valid_is_group) $keyValueToUpdate["is_group"] = $is_group;
@@ -247,11 +243,11 @@ class Binhusenstore_order
         // conditional $id_product
         $valid_id_product = !is_null($id_product);
         if ($valid_id_product) $keyValueToUpdate["id_product"] = $id_product;
-        
+
         // conditional $name_of_customer
         $valid_name_of_customer = !is_null($name_of_customer);
         if ($valid_name_of_customer) $keyValueToUpdate["name_of_customer"] = $name_of_customer;
-        
+
         // conditional $sent
         $valid_sent = !is_null($sent);
         if ($valid_sent) $keyValueToUpdate["sent"] = $sent;
@@ -259,55 +255,52 @@ class Binhusenstore_order
         // conditional $title
         $valid_title = !is_null($title);
         if ($valid_title) $keyValueToUpdate["title"] = $title;
-        
+
         // conditional $total_balance
         $valid_total_balance = !is_null($total_balance);
         if ($valid_total_balance) $keyValueToUpdate["total_balance"] = $total_balance;
-        
+
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
-        if($is_oke_to_update) {
+        if ($is_oke_to_update) {
 
             $result = $this->Binhusenstore_order->update_order_by_id($keyValueToUpdate, "id", $id);
-    
+
             $is_success = $this->Binhusenstore_order->is_success;
-    
-            if($is_success === true && $result > 0) {
+
+            if ($is_success === true && $result > 0) {
                 Flight::json(
                     array(
                         'success' => true,
                         'message' => 'Update order success',
                     )
                 );
-            }
-    
-            else if($is_success !== true) {
+            } else if ($is_success !== true) {
                 Flight::json(
                     array(
                         'success' => false,
                         'message' => $is_success
-                    ), 500
+                    ),
+                    500
                 );
                 return;
-            }
-    
-            else {
+            } else {
                 Flight::json(
                     array(
                         'success' => false,
                         'message' => 'Order not found'
-                    ), 404
+                    ),
+                    404
                 );
             }
-        } 
-        
-        else {
+        } else {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Failed to update order, check the data you sent'
-                )
+                ),
+                400
             );
         }
     }
@@ -317,29 +310,63 @@ class Binhusenstore_order
 
         $result = $this->Binhusenstore_order->count_orders();
 
-        if($this->Binhusenstore_order->is_success === true) {
+        if ($this->Binhusenstore_order->is_success === true) {
 
             Flight::json([
-                    "success" => true,
-                    "data" => $result
-                ], 200);
-        }
+                "success" => true,
+                "data" => $result
+            ], 200);
+        } else if ($this->Binhusenstore_order->is_success !== true) {
 
-        else if ($this->Binhusenstore_order->is_success !== true) {
-            
             Flight::json([
                 "success" => false,
                 "message" => $this->Binhusenstore_order->is_success
             ], 500);
-        }
-        
-        else {
+        } else {
 
             Flight::json([
                 "success" => false,
                 "message" => "Order not found"
             ], 404);
         }
+    }
 
+    public function move_order_to_archive_by_order_id()
+    {
+        $req = Flight::request();
+        $id_order = $req->data->id_order;
+
+        $is_request_body_not_oke = empty($id_order) || is_null($id_order);
+
+        if ($is_request_body_not_oke) {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'Failed to archive order'
+            ], 400);
+            return;
+        }
+
+        $result = $this->Binhusenstore_order->move_order_to_archive($id_order);
+
+        if ($this->Binhusenstore_order->is_success === true) {
+
+            Flight::json([
+                "success" => true,
+                "data" => "Order archived"
+            ], 201);
+        } else if ($this->Binhusenstore_order->is_success !== true) {
+
+            Flight::json([
+                "success" => false,
+                "message" => $this->Binhusenstore_order->is_success
+            ], 500);
+        } else {
+
+            Flight::json([
+                "success" => false,
+                "message" => "Order not found"
+            ], 404);
+        }
     }
 }
