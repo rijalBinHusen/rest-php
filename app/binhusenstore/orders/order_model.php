@@ -165,7 +165,7 @@ class Binhusenstore_order_model
                 // remove order
                 $this->remove_order_by_id($id_order);
                 $is_payment_moved = $payment_model->move_payment_to_archive($id_order);
-                if ($is_payment_moved) {
+                if ($is_payment_moved === true) {
 
                     return true;
                 } else {

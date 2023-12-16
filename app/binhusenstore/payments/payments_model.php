@@ -198,13 +198,13 @@ class Binhusenstore_payment_model
             foreach ($retrieve_payments as $payment_value) {
 
                 $data_to_insert = array(
-                    'id' => $payment_value[0]['id'],
-                    'date_payment' => $payment_value[0]['date_payment'],
-                    'id_order' => $payment_value[0]['id_order'],
-                    'id_order_group' => $payment_value[0]['id_order_group'],
-                    'balance' => $payment_value[0]['balance'],
-                    'is_paid' => $payment_value[0]['is_paid'],
-                    'date_paid' => $payment_value[0]['date_paid'],
+                    'id' => $payment_value['id'],
+                    'date_payment' => $payment_value['date_payment'],
+                    'id_order' => $payment_value['id_order'],
+                    'id_order_group' => $payment_value['id_order_group'],
+                    'balance' => $payment_value['balance'],
+                    'is_paid' => $payment_value['is_paid'],
+                    'date_paid' => $payment_value['date_paid'],
                 );
 
                 $this->database->insert($this->table_archived, $data_to_insert);
