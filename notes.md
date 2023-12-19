@@ -11,10 +11,11 @@
 - [ ] Check all critical endpoint and implement the access code request
 - [ ] Periksa lagi event truncate table index di database
 - [ ] endpoint untuk dapatkan order by group_id
+- [ ] Retrieve payments group by order_id not only id_group = "" but the payment with id group
  -->
 
-## 10 Des 2023
-
+## 19 Des 2023
+- [ ] Retrieve payments group by order_id where id_group = ""
 
 ## 06 Des 2023
 - [x] Add id_order_group on column payment

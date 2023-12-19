@@ -365,4 +365,39 @@ class Binhusenstore_payment
             ], 500);
         }
     }
+
+    public function get_payment_group_by_id_order() {
+
+        $req = Flight::request();
+        $limit = $req->query->limit;
+        
+        $result = $this->Binhusenstore_payment->retrieve_payment_group_by_id_order($limit);
+
+        $is_success = $this->Binhusenstore_payment->is_success;
+
+        $is_found = count($result) > 0;
+
+        if($is_success === true && $is_found) {
+
+            Flight::json([
+                    'success' => true,
+                    'data' => $result
+                ]);
+        }
+
+        else if($is_success !== true) {
+
+            Flight::json(['success' => false,
+                    'message' => $is_success
+                ], 500);
+        }
+
+        else {
+
+            Flight::json([
+                    'success' => false,
+                    'message' => 'Payment not found'
+                ], 404);
+        }
+    }
 }

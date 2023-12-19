@@ -223,4 +223,27 @@ class Binhusenstore_payment_model
 
         return "Payment not found";
     }
+
+    public function retrieve_payment_group_by_id_order($limit)
+    {
+
+        $is_limiter_oke = is_numeric($limit) && $limit > 0;
+
+        $query_payment_group_by_id_order = "SELECT date_payment, id_order, balance
+        FROM binhusenstore_payments
+        WHERE (id_order, date_payment) IN (
+          SELECT id_order, MIN(date_payment)
+          FROM binhusenstore_payments
+          GROUP BY id_order
+        ) AND id_order_group = ''";
+
+        if($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
+
+        $result = $this->database->sqlQuery($query_payment_group_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->database->is_error === null) return $result;
+
+        $this->is_success = $this->database->is_error;
+        return array();
+    }
 }
