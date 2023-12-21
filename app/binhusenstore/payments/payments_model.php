@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../orders/order_model.php');
 
 class Binhusenstore_payment_model
 {
@@ -93,25 +94,30 @@ class Binhusenstore_payment_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function mark_payment_as_paid_by_id($id_order, $date_paid, $payment)
+    public function mark_payment_as_paid_by_id($id_order, $date_paid, $payment, $phone)
     {
+
+        $order_model = new Binhusenstore_order_model();
+
+        // find order by order_id and phone
+        $phone_order = $order_model->phone_by_order_id($id_order);
+
+        $is_phone_matched = $phone_order === $phone;
+        
+        if($is_phone_matched) return "Id order atau nomor telfon tidak ditemukan";
 
         $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
         $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
 
-        if (count($retrieve_all_payment) === 0) {
-            return 0;
-        }
+        if (count($retrieve_all_payment) === 0) return 0;
+        
 
         $total_balance = 0;
         foreach ($retrieve_all_payment as $value) {
             $total_balance += $value['balance'];
         }
 
-        if ($payment > $total_balance) {
-
-            return "Pembayaran melebihi tagihan";
-        }
+        if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
 
         $payment_left = $payment;
 

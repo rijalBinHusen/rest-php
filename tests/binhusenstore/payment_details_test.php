@@ -9,21 +9,56 @@ class Payment_details_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $total_balance = 0;
+    private $order_id = "";
+    private $phone = "";
+
+    public function testCreateOrder() {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => $faker->text(9),
+            'is_group' => $faker->boolean(),
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => 'false',
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999)
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+
+        $response = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response, true);
+
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->order_id = $convertToAssocArray['id'];
+        $this->phone = $data['phone'];
+    }
 
     public function testTotalBalance()
     {
-
+        $this->testCreateOrder();
         $faker = Faker\Factory::create();
         $httpPostNewPayment = new HttpCall($this->url . "payment");
         // Define the request body
         $data = array(
             'date_payment' => $faker->date('Y-m-d'),
-            'id_order' => $faker->numberBetween(10000, 10000000) . "_",
+            'id_order' => $this->order_id,
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
             'id_order_group' => $faker->numberBetween(10000, 10000000) . "_",
         );
 
+        // create new payment
         for($i = 0; $i <= 3; $i++) {
 
             $this->total_balance += $data['balance'];
@@ -41,7 +76,7 @@ class Payment_details_test extends TestCase
             $this->assertEquals(true, $convertToAssocArray['success']);
         }
 
-        // // get payment by id order
+        // get payment by id order
         $id_order = $data['id_order'];
         $httpGetPaymentByIdOrder = new HttpCall($this->url .'payments?id_order=' .$id_order);
         $httpGetPaymentByIdOrder->addJWTToken();
@@ -75,21 +110,22 @@ class Payment_details_test extends TestCase
     public function testPaymentMoreThanBalance()
     {
 
-        $faker = Faker\Factory::create();
+        $this->testCreateOrder();
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $id_order = $this->order_id;
         
+        // create payment
         for($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
+                'id_order' => $this->order_id,
                 'balance' => 100,
                 'is_paid' => false,
-                'id_order_group' => $faker->numberBetween(10000, 10000000) . "_",
+                'id_order_group' => "",
             );
 
             $httpPostNewPayment->setData($data_to_send);
@@ -111,7 +147,8 @@ class Payment_details_test extends TestCase
         $data_to_send2 = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 150
+            'balance' => 150,
+            'phone' => $this->phone
         );
 
         $httpPostPutPayment->setData($data_to_send2);
@@ -129,7 +166,6 @@ class Payment_details_test extends TestCase
 
 
         // get all bill
-
         $httpPostGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
         $httpPostGetPayment->addJWTToken();
         $response = $httpPostGetPayment->getResponse("GET");
@@ -160,14 +196,14 @@ class Payment_details_test extends TestCase
 
     public function testPaymentLessThanBalance()
     {
-
-        $faker = Faker\Factory::create();
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $this->testCreateOrder();
+        $id_order = $this->order_id;
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
         
+        // create payment
         for($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
@@ -197,7 +233,8 @@ class Payment_details_test extends TestCase
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 50
+            'balance' => 50,
+            'phone' => $this->phone
         );
 
         $httpPutPayment->setData($data_to_send);
@@ -205,10 +242,10 @@ class Payment_details_test extends TestCase
 
         // Send a GET request to the /endpoint URL
         $response = $httpPutPayment->getResponse("PUT");
+        // fwrite(STDERR, print_r($response, true));
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('success', $convertToAssocArray, $response);
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->assertEquals("Update payment success", $convertToAssocArray['message']);
@@ -243,8 +280,8 @@ class Payment_details_test extends TestCase
     public function testPaymentEqualToBalance()
     {
 
-        $faker = Faker\Factory::create();
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $this->testCreateOrder();
+        $id_order = $this->order_id;
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
@@ -279,7 +316,8 @@ class Payment_details_test extends TestCase
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 100
+            'balance' => 100,
+            'phone' => $this->phone,
         );
 
         $httpPutPayment->setData($data_to_send);
@@ -323,9 +361,9 @@ class Payment_details_test extends TestCase
 
     public function testPaymentMoreThanBalance200()
     {
-
-        $faker = Faker\Factory::create();
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        
+        $this->testCreateOrder();
+        $id_order = $this->order_id;
         $httpPostPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
@@ -360,7 +398,8 @@ class Payment_details_test extends TestCase
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 200
+            'balance' => 200,
+            'phone' => $this->phone
         );
 
         $httpPutPayment->setData($data_to_send);
@@ -404,8 +443,8 @@ class Payment_details_test extends TestCase
     public function testPayment250()
     {
 
-        $faker = Faker\Factory::create();
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $this->testCreateOrder();
+        $id_order = $this->order_id;
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
@@ -440,7 +479,8 @@ class Payment_details_test extends TestCase
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 250
+            'balance' => 250,
+            'phone' => $this->phone
         );
 
         $httpPutPayment->setData($data_to_send);
@@ -489,8 +529,8 @@ class Payment_details_test extends TestCase
     public function testPayment300()
     {
 
-        $faker = Faker\Factory::create();
-        $id_order = $faker->numberBetween(1, 10000000) . "_";
+        $this->testCreateOrder();
+        $id_order = $this->order_id;
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
@@ -525,7 +565,8 @@ class Payment_details_test extends TestCase
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
-            'balance' => 300
+            'balance' => 300,
+            'phone' => $this->phone
         );
 
         $httpPutNewPayment->setData($data_to_send);

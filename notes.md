@@ -15,7 +15,7 @@
  -->
 
 ## 19 Des 2023
-- [ ] Retrieve payments group by order_id where id_group = ""
+- [x] Retrieve payments group by order_id where id_group = ""
 
 ## 06 Des 2023
 - [x] Add id_order_group on column payment
