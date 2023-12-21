@@ -78,3 +78,14 @@ Flight::route("POST /binhusenstore/order/move_to_archive", function () {
         $myreport_base_file->move_order_to_archive_by_order_id();
     }
 });
+
+Flight::route("GET /binhusenstore/order/phone/@id", function ($id) {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_admin(1);
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->get_phone_by_order_id($id);
+    }
+});

@@ -147,7 +147,7 @@ class Binhusenstore_order
 
         $is_success = $this->Binhusenstore_order->is_success;
 
-        $is_found = count($result) > 0;
+        $is_found = $result !== false;
 
         if ($is_success === true && $is_found) {
 

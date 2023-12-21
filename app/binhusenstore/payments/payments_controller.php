@@ -339,9 +339,20 @@ class Binhusenstore_payment
         
         else {
 
+            $data = array(
+                'is date paid null' => is_null($date_paid),
+                'is id order null' => !is_null($id_order),
+                'is date payment valid' => $isDatePaymentValid,
+                'is id order string' => is_string($id_order),
+                'is phone null' => !is_null($phone),
+                'is phone numeric' => is_numeric($phone),
+                'is balance null' => !is_null($balance),
+                'is balance numeric' => is_numeric($balance)
+            );
             Flight::json([
                     'success' => false,
-                    'message' => 'Failed to update payment, check the data you sent'
+                    'message' => 'Failed to update payment, check the data you sent',
+                    $data
                 ], 400 );
         }
     }

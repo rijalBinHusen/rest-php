@@ -117,7 +117,7 @@ class Binhusenstore_order_model
         }
 
         $this->is_success = $this->database->is_error;
-        return array();
+        return false;
     }
 
     public function count_orders()

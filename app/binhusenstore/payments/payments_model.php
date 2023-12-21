@@ -104,7 +104,7 @@ class Binhusenstore_payment_model
 
         $is_phone_matched = $phone_order === $phone;
         
-        if($is_phone_matched) return "Id order atau nomor telfon tidak ditemukan";
+        if(!$is_phone_matched) return "Id order atau nomor telfon tidak ditemukan";
 
         $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
         $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
@@ -239,9 +239,9 @@ class Binhusenstore_payment_model
         FROM binhusenstore_payments
         WHERE (id_order, date_payment) IN (
           SELECT id_order, MIN(date_payment)
-          FROM binhusenstore_payments
+          FROM binhusenstore_payments WHERE is_paid = 0 AND id_order_group = ''
           GROUP BY id_order
-        ) AND id_order_group = ''";
+        )";
 
         if($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
 
