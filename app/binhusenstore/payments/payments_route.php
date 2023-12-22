@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . "/payments_controller.php");
+require_once(__DIR__ . "/../../AccessCode/access_code_controller.php");
 
 Flight::route('POST /binhusenstore/payment', function () {
     $user = new User("binhusenstore_users");
@@ -13,10 +14,11 @@ Flight::route('POST /binhusenstore/payment', function () {
 });
 
 Flight::route('GET /binhusenstore/payments', function () {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    if($is_token_valid) {
+    if($is_valid_code) {
         
         $myreport_base_file = new Binhusenstore_payment();
         $myreport_base_file->get_payments();

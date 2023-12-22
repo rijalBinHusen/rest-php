@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . "/order_controller.php");
+require_once(__DIR__ . "/../../AccessCode/access_code_controller.php");
 
 Flight::route('POST /binhusenstore/order', function () {
     $user = new User("binhusenstore_users");
@@ -25,10 +26,10 @@ Flight::route('GET /binhusenstore/orders', function () {
 
 
 Flight::route("GET /binhusenstore/order/@id", function ($id) {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    if ($is_token_valid) {
+    if ($is_valid_code) {
 
         $myreport_base_file = new Binhusenstore_order();
         $myreport_base_file->get_order_by_id($id);

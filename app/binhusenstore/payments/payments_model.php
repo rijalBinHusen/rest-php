@@ -43,7 +43,8 @@ class Binhusenstore_payment_model
 
         if ($this->database->is_error === null) {
 
-            return $result;
+            $data_type_converted = $this->convert_data_type($result);
+            return $data_type_converted;
         }
 
         $this->is_success = $this->database->is_error;
@@ -251,5 +252,26 @@ class Binhusenstore_payment_model
 
         $this->is_success = $this->database->is_error;
         return array();
+    }
+
+    private function convert_data_type($payments)
+    {
+
+        $result = array();
+        // mapping products
+        foreach ($payments as $payment) {
+
+            $array_to_push = array(
+                'id' => $payment['id'],
+                'date_payment' => $payment['date_payment'],
+                'id_order' => $payment['id_order'],
+                'balance' => (int)$payment['balance'],
+                'is_paid' => boolval($payment['is_paid'])
+            );
+
+            array_push($result, $array_to_push);
+        }
+
+        return $result;
     }
 }
