@@ -353,7 +353,7 @@ class Binhusenstore_order
 
             Flight::json([
                 "success" => true,
-                "data" => "Order archived"
+                "message" => "Order archived"
             ], 201);
         } else if ($this->Binhusenstore_order->is_success !== true) {
 

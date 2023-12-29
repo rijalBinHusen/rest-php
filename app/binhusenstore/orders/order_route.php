@@ -36,17 +36,6 @@ Flight::route("GET /binhusenstore/order/@id", function ($id) {
     }
 });
 
-Flight::route("GET /binhusenstore/orders/count", function () {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
-
-    if ($is_token_valid) {
-
-        $myreport_base_file = new Binhusenstore_order();
-        $myreport_base_file->get_count_orders();
-    }
-});
-
 Flight::route("PUT /binhusenstore/order/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
@@ -66,6 +55,17 @@ Flight::route("DELETE /binhusenstore/order/@id", function ($id) {
 
         $myreport_base_file = new Binhusenstore_order();
         $myreport_base_file->remove_order($id);
+    }
+});
+
+Flight::route("GET /binhusenstore/orders/count", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_valid_token();
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->get_count_orders();
     }
 });
 

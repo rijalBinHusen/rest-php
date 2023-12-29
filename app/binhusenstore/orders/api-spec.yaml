@@ -30,6 +30,14 @@ paths:
         "401":
           $ref: "#/components/responses/401Error"
   /orders:
+    parameters:
+      - name: limit
+        in: query
+        required: true
+        description: Limit of orders
+        schema:
+          type: string
+        example: O220203902
     get:
       tags:
         - order
@@ -89,6 +97,91 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
+  /order/count:
+    get:
+      tags:
+        - order
+      summary: Count total order.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: number
+                    example: 10
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
+  /order/move_to_archive:
+    parameters:
+      - name: id_order
+        in: query
+        required: true
+        description: The order Id
+        schema:
+          type: string
+        example: O220203902
+    post:
+      tags:
+        - order
+      summary: Move the order to archived.
+      responses:
+        "201":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: string
+                    example: Order archived
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
+  /order/phone/{id}:
+    parameters:
+      - name: id_order
+        in: query
+        required: true
+        description: The order Id
+        schema:
+          type: string
+        example: O220203902
+    get:
+      tags:
+        - order
+      summary: Get phone by order id.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: string
+                    example: 628123456789
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
   # End of order end point
 
 components:
