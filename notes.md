@@ -7,11 +7,22 @@
 - [ ] Jangan bolehkan update harga product jika produk sudah pernah dipesan
 - [ ] Amankan end point/user/register
 - [ ] Buat endpoint untuk mendapatkan nomor hp admin
-- [ ] Buat index pada beberapa table untuk meningkatkan proses query
+- [ ] Create index on column my_report_base_item.last_used
+- [ ] Create index on column my_report_base_report_file.periode
+- [ ] Create index on column my_report_base_stock.parent
+- [ ] Create index on column my_report_base_clock.parent
+- [ ] Create index on column my_report_problem.tanggal_mulai
+- [ ] Create index on column my_report_problem.supervisor_id
+- [ ] Create index on column my_report_problem.warehouse_id
+- [ ] Create index on column my_report_document.periode
 - [ ] Check all critical endpoint and implement the access code request
 - [ ] Periksa lagi event truncate table index di database
 - [ ] endpoint untuk dapatkan order by group_id
-- [ ] Retrieve payments group by order_id not only id_group = "" but the payment with id group
+- [ ] Endpoint to Retrieve payments that has group_id
+- [ ] Create multiple order as group
+  - [ ] Make sure that each order has same phone number (Throw error if not)
+  - [ ] the group_id must be the smallest id
+  - [ ] Inert the id group to payment list too
  -->
 
 ## 19 Des 2023
