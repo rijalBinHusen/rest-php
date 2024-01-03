@@ -23,6 +23,10 @@
   - [ ] Make sure that each order has same phone number (Throw error if not)
   - [ ] the group_id must be the smallest id
   - [ ] Inert the id group to payment list too
+
+- [ ] Create table to store a message (message to send to user whatsapp)
+  - [ ] We need this columns, id, category, phone, message, date_created (The category will use as grouping what appliaction it message for, it can be binhusenstore, myreport, or etc)
+  - [ ] We should remove the message where date_created > 7 days
  -->
 
 ## 19 Des 2023

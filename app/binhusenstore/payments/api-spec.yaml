@@ -124,7 +124,27 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
-  
+  /payments/group_by_order_id:
+    get:
+      parameters:
+        - name: limit
+          in: query
+          description: limit payments
+          required: false
+          explode: true
+          schema:
+            type: number
+            example: 10
+      tags:
+        - payment
+      summary: Get all payments.
+      responses:
+        "200":
+          $ref: "#/components/responses/getPayment200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
 components:
   schemas:
     Return_after_post:
