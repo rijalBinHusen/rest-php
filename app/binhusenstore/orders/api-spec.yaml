@@ -218,6 +218,10 @@ components:
           type: string
         total_balance:
           type: number
+          example: 2000000
+        admin_charge:
+          type: number
+          example: 10000
   responses:
     400Error:
       description: Invalid request
@@ -309,3 +313,5 @@ components:
                 type: string
               total_balance:
                 type: number
+              admin_charge:
+                type: boolean

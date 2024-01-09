@@ -16,7 +16,7 @@ class Binhusenstore_order_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone)
+    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage)
     {
         $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
@@ -29,8 +29,20 @@ class Binhusenstore_order_model
             'sent' => $sent,
             'title' => $title,
             'total_balance' => $total_balance,
-            'phone' => $encrypted_phone
+            'phone' => $encrypted_phone,
+            'admin_charge' => 0
         );
+
+        if($admin_chrage) {
+            // retrieve admin charge
+            $retrieve_charge = $this->database->select_where('admin_charge', 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
+
+            // set the admin charge
+            if ($retrieve_charge) {
+
+                $data_to_insert['admin_charge'] = $result[0]['price'];
+            }
+        }
 
         $this->database->insert($this->table, $data_to_insert);
 

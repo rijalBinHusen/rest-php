@@ -22,18 +22,29 @@ class Binhusenstore_order
         $title = $req->data->title;
         $total_balance = $req->data->total_balance;
         $phone = $req->data->phone;
+        $admin_charge = $req->data->admin_charge;
 
         $result = null;
 
         $is_request_body_not_oke = is_null($date_order)
             || is_null($id_group)
+            || !is_string($id_group)
             || is_null($is_group)
+            || !is_bool($is_group)
             || is_null($id_product)
+            || !is_string($id_product)
             || is_null($name_of_customer)
+            || !is_string($name_of_customer)
             || is_null($sent)
+            || !is_string($sent)
             || is_null($title)
+            || !is_string($title)
             || is_null($total_balance)
-            || is_null($phone);
+            || !is_numeric($total_balance)
+            || is_null($phone)
+            || !is_numeric($phone)
+            || is_null($admin_charge)
+            || !is_bool($admin_charge);
 
         if ($is_request_body_not_oke) {
 
@@ -47,7 +58,7 @@ class Binhusenstore_order
             return;
         }
 
-        $result = $this->Binhusenstore_order->append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone);
+        $result = $this->Binhusenstore_order->append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_charge);
 
         if ($this->Binhusenstore_order->is_success === true) {
 
