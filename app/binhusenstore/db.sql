@@ -356,13 +356,14 @@ CREATE TABLE
 -- ========================================================BORDER
 
 CREATE TABLE
-    if not exists binhusenstore_carts_prefix(
-        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    );
-
-CREATE TABLE
     if not exists binhusenstore_date_end (
         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         title TEXT,
         date VARCHAR(10)
+    );
+
+CREATE TABLE
+    if not exists admin_charge (
+        domain VARCHAR(20) PRIMARY KEY,
+        admin_charge INT
     );

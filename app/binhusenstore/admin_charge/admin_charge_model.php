@@ -39,7 +39,7 @@ class Binhusenstore_admin_charge_model
         
         if($this->database->is_error === null) {
 
-            return $result['0']['price'];
+            return $result['0']['admin_charge'];
         }
         
         $this->is_success = $this->database->is_error;

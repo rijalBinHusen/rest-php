@@ -20,7 +20,7 @@ Flight::route("GET /binhusenstore/admin_charge", function () {
     if($is_token_valid) {
        
         $myreport_base_file = new Binhusenstore_admin_charge();
-        $myreport_base_file->get_admin_charge_by_id();    
+        $myreport_base_file->get_admin_charge();    
     }
 
 });

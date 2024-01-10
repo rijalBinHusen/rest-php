@@ -42,6 +42,7 @@ require_once(__DIR__ . '/app/binhusenstore/products/product_route.php');
 require_once(__DIR__ . '/app/binhusenstore/testimonies/testimony_route.php');
 require_once(__DIR__ . '/app/binhusenstore/images/image_route.php');
 require_once(__DIR__ . '/app/binhusenstore/date_end/date_route.php');
+require_once(__DIR__ . '/app/binhusenstore/admin_charge/admin_charge_route.php');
 
 
 // Flight::route('/test(/@endpoint)', function ($endpoint) {

@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +22,10 @@ class Admin_charge_test extends TestCase
         $this->data_posted = $data;
 
         $http->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $http->addJWTToken();
 
         $response = $http->getResponse("POST");
@@ -42,6 +47,9 @@ class Admin_charge_test extends TestCase
 
         $httpCallVar->setData($data);
 
+        $user = new User_test();
+        $user->LoginAdmin();
+        
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("POST");
@@ -79,6 +87,10 @@ class Admin_charge_test extends TestCase
     {
 
         $http = new HttpCall($this->url);
+
+        $user = new User_test();
+        $user->LoginAdmin();
+        
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -119,6 +131,10 @@ class Admin_charge_test extends TestCase
 
         $httpCallVar->setData($data);
 
+
+        $user = new User_test();
+        $user->LoginAdmin();
+        
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
@@ -135,12 +151,16 @@ class Admin_charge_test extends TestCase
     public function testPutEndpointFailed400()
     {
 
-        $httpCallVar = new HttpCall($this->url_host_id);
+        $httpCallVar = new HttpCall($this->url);
         // Define the request body
         $data = array('admin_charge__' => 'Failed test');
 
         $httpCallVar->setData($data);
 
+
+        $user = new User_test();
+        $user->LoginAdmin();
+        
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");

@@ -215,12 +215,12 @@ class User
                 if($is_admin) return true;
             }
             
-        } else {
-
-            Flight::json([
-                'success' => false,
-                'message' => 'You must be authenticated to access this resource.',
-            ], 401);
         }
+
+        Flight::json([
+            'success' => false,
+            'message' => 'You must be authenticated to access this resource.',
+        ], 401);
+    
     }
 }

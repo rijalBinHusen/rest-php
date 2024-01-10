@@ -30,6 +30,16 @@ class Binhusenstore_admin_charge
             return;
         }
 
+        // retrieve domain
+        $get_domain_admin_charge = $this->Binhusenstore_admin_charge->retrieve_admin_charge();
+        $is_domain_exists = $this->Binhusenstore_admin_charge->is_success === true && $get_domain_admin_charge >= 0;
+        
+        // if domain exists, do update admin charge
+        if($is_domain_exists) {
+            $this->update_admin_charge();
+            return;
+        }
+
         $result = $this->Binhusenstore_admin_charge->append_admin_charge($admin_charge);
 
         if($this->Binhusenstore_admin_charge->is_success === true) {
@@ -61,9 +71,7 @@ class Binhusenstore_admin_charge
 
         $is_success = $this->Binhusenstore_admin_charge->is_success;
 
-        $is_found = count($result) > 0;
-
-        if($is_success === true && $is_found) {
+        if($is_success === true) {
             Flight::json(
                 array(
                     'success' => true,
@@ -92,7 +100,7 @@ class Binhusenstore_admin_charge
         }
     }
 
-    public function update_admin_charge_by_id($id)
+    public function update_admin_charge()
     {
         // catch the query string request
         $req = Flight::request();
