@@ -9,6 +9,7 @@ phpunit tests/binhusenstore/payment_details_test.php
 phpunit tests/binhusenstore/product_test.php
 phpunit tests/binhusenstore/testimony_test.php
 phpunit tests/binhusenstore/date_test.php
+phpunit tests/binhusenstore/admin_charge_test.php
 sleep 6
 
 #run all those command by using unit_test_binhusenstore.sh

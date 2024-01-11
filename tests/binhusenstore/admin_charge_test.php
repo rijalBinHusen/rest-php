@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 class Admin_charge_test extends TestCase
 {
     private $url = "binhusenstore/admin_charge";
-    private $url_host_id = null;
     private $data_posted = null;
 
     public function testPostEndpoint()
@@ -17,7 +16,7 @@ class Admin_charge_test extends TestCase
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->url);
         // Define the request body
-        $data = array('price' => $faker->numberBetween(1000, 10000));
+        $data = array('admin_charge' => $faker->numberBetween(100, 10000));
 
         $this->data_posted = $data;
 
@@ -43,7 +42,7 @@ class Admin_charge_test extends TestCase
     {
         $httpCallVar = new HttpCall($this->url);
         // Define the request body
-        $data = array('price' => "Failed test");
+        $data = array('admin_charge' => "Failed test");
 
         $httpCallVar->setData($data);
 
@@ -68,7 +67,7 @@ class Admin_charge_test extends TestCase
         $httpCallVar = new HttpCall($this->url);
         // Define the request body
 
-        $data = array('price' => "Failed test");
+        $data = array('admin_charge' => "Failed test");
 
         $httpCallVar->setData($data);
 
@@ -86,24 +85,23 @@ class Admin_charge_test extends TestCase
     public function testGetEndpoint()
     {
 
-        $http = new HttpCall($this->url);
+        $this->testPostEndpoint();
 
-        $user = new User_test();
-        $user->LoginAdmin();
+        $http = new HttpCall($this->url);
         
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($this->data_posted['admin_charge'] . PHP_EOL, true));
+        // fwrite(STDERR, print_r($convertToAssocArray['admin_charge'], true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('price', $convertToAssocArray);
-        $this->assertArrayHasKey($data_posted['price'], $convertToAssocArray['price']);
+        $this->assertArrayHasKey('admin_charge', $convertToAssocArray);
+        $this->assertEquals($this->data_posted['admin_charge'], $convertToAssocArray['admin_charge']);
     }
 
     public function testGetByIdEndpointFailed401()
@@ -125,9 +123,9 @@ class Admin_charge_test extends TestCase
 
     public function testPutEndpoint201()
     {
-        $httpCallVar = new HttpCall($this->url_host_id);
+        $httpCallVar = new HttpCall($this->url);
         // Define the request body
-        $data = array('price' => 60000);
+        $data = array('admin_charge' => 60000);
 
         $httpCallVar->setData($data);
 
@@ -139,6 +137,7 @@ class Admin_charge_test extends TestCase
 
         $response = $httpCallVar->getResponse("PUT");
 
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -165,6 +164,7 @@ class Admin_charge_test extends TestCase
 
         $response = $httpCallVar->getResponse("PUT");
 
+        // fwrite(STDERR, print_r($response, true));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -177,7 +177,7 @@ class Admin_charge_test extends TestCase
     public function testPutEndpointFailed401()
     {
         $this->testPostEndpoint();
-        $httpCallVar = new HttpCall($this->url . 'admin_charge/loremipsum');
+        $httpCallVar = new HttpCall($this->url);
         // Define the request body
         $data = array('name_admin_charge' => "Failed test");
 

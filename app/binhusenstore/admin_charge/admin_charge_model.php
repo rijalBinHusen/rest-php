@@ -47,7 +47,7 @@ class Binhusenstore_admin_charge_model
         
     }
 
-    public function update_admin_charge($admin_charge)
+    public function update_binhusenstore_admin_charge($admin_charge)
     {
 
         $result = $this->database->update($this->table, array('admin_charge' => $admin_charge), 'domain', 'binhusenstore');

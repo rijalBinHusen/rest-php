@@ -27,12 +27,12 @@ Flight::route("GET /binhusenstore/admin_charge", function () {
 
 Flight::route("PUT /binhusenstore/admin_charge/", function () {
     $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_admin(1)();
+    $is_token_valid = $user->is_admin(1);
 
     if($is_token_valid) {
         
         $myreport_base_file = new Binhusenstore_admin_charge();
-        $myreport_base_file->update_admin_charge_by_id($id);
+        $myreport_base_file->update_admin_charge();
     }
 
 });

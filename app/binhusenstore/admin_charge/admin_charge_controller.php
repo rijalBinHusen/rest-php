@@ -75,7 +75,7 @@ class Binhusenstore_admin_charge
             Flight::json(
                 array(
                     'success' => true,
-                    'price' => $result
+                    'admin_charge' => $result
                 )
             );
         }
@@ -108,7 +108,7 @@ class Binhusenstore_admin_charge
 
         if($admin_charge > 0) {
 
-            $result = $this->Binhusenstore_admin_charge->update_admin_charge($admin_charge);
+            $result = $this->Binhusenstore_admin_charge->update_binhusenstore_admin_charge($admin_charge);
     
             $is_success = $this->Binhusenstore_admin_charge->is_success;
     
@@ -135,7 +135,7 @@ class Binhusenstore_admin_charge
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'admin_charge not found'
+                        'message' => 'admin charge not found'
                     ), 404
                 );
             }
@@ -146,7 +146,7 @@ class Binhusenstore_admin_charge
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => 'Failed to update admin_charge, check the data you sent'
+                    'message' => 'Failed to update admin charge, check the data you sent'
                 )
             );
         }
