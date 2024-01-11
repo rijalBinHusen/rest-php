@@ -25,7 +25,8 @@ class Order_test extends TestCase
             'sent' => 'false',
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999)
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
         );
 
         $http->setData($data);

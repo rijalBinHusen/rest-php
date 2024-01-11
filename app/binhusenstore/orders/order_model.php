@@ -40,7 +40,7 @@ class Binhusenstore_order_model
             // set the admin charge
             if ($retrieve_charge) {
 
-                $data_to_insert['admin_charge'] = $result[0]['price'];
+                $data_to_insert['admin_charge'] = $retrieve_charge[0]['admin_charge'];
             }
         }
 
