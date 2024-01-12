@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +31,10 @@ class Order_test extends TestCase
         );
 
         $http->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $http->addJWTToken();
 
         $response = $http->getResponse("POST");
@@ -100,6 +105,11 @@ class Order_test extends TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'orders');
+
+        $user = new User_test();
+        $user->LoginAdmin();
+        
+        
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -145,8 +155,9 @@ class Order_test extends TestCase
 
         $http = new HttpCall($this->url_host_id);
         // Send a GET request to the /endpoint URL
+    
+        $http->addAccessCode("binhusenstore-access-code.txt");
         
-        $http->addJWTToken();
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -189,7 +200,8 @@ class Order_test extends TestCase
         $this->testPostEndpoint();
         $http = new HttpCall($this->url . 'order/SDFLSKDFJ');
 
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");;
+
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
