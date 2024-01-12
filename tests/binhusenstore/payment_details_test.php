@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -25,10 +26,15 @@ class Payment_details_test extends TestCase
             'sent' => 'false',
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999)
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
         );
 
         $http->setData($data);
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $http->addJWTToken();
 
         $response = $http->getResponse("POST");
@@ -79,7 +85,7 @@ class Payment_details_test extends TestCase
         // get payment by id order
         $id_order = $data['id_order'];
         $httpGetPaymentByIdOrder = new HttpCall($this->url .'payments?id_order=' .$id_order);
-        $httpGetPaymentByIdOrder->addJWTToken();
+        $httpGetPaymentByIdOrder->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
         $response = $httpGetPaymentByIdOrder->getResponse("GET");
 
@@ -152,11 +158,12 @@ class Payment_details_test extends TestCase
         );
 
         $httpPostPutPayment->setData($data_to_send2);
+
         $httpPostPutPayment->addJWTToken();
 
         // Send a GET request to the /endpoint URL
         $response2 = $httpPostPutPayment->getResponse("PUT");
-        // fwrite(STDERR, print_r(PHP_EOL . "Response: " . $response2 . PHP_EOL, true));
+        // fwrite(STDERR, print_r(PHP_EOL . "id order: " . $id_order . PHP_EOL . "phone: " . $this->phone, true));
 
         $convertToAssocArray = json_decode($response2, true);
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -167,7 +174,7 @@ class Payment_details_test extends TestCase
 
         // get all bill
         $httpPostGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpPostGetPayment->addJWTToken();
+        $httpPostGetPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpPostGetPayment->getResponse("GET");
 
 
@@ -254,7 +261,7 @@ class Payment_details_test extends TestCase
         // get all bill
 
         $httpPutPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpPutPayment->addJWTToken();
+        $httpPutPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpPutPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -336,7 +343,7 @@ class Payment_details_test extends TestCase
 
         // get all bill
         $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addJWTToken();
+        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
 
         $response = $httpGetPayment->getResponse("GET");
 
@@ -418,7 +425,7 @@ class Payment_details_test extends TestCase
 
         // get all bill
         $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addJWTToken();
+        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -500,7 +507,7 @@ class Payment_details_test extends TestCase
         // get all bill
 
         $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addJWTToken();
+        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -531,6 +538,7 @@ class Payment_details_test extends TestCase
 
         $this->testCreateOrder();
         $id_order = $this->order_id;
+        $phone_order = $this->phone;
         $httpPostNewPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
@@ -566,7 +574,7 @@ class Payment_details_test extends TestCase
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
             'balance' => 300,
-            'phone' => $this->phone
+            'phone' => $phone_order
         );
 
         $httpPutNewPayment->setData($data_to_send);
@@ -576,7 +584,7 @@ class Payment_details_test extends TestCase
         $response = $httpPutNewPayment->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($id_order . $phone_order, true));
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -585,7 +593,7 @@ class Payment_details_test extends TestCase
 
         // get all bill
         $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addJWTToken();
+        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpGetPayment->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);

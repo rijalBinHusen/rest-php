@@ -103,9 +103,9 @@ class Binhusenstore_payment_model
         // find order by order_id and phone
         $phone_order = $order_model->phone_by_order_id($id_order);
 
-        $is_phone_matched = $phone_order === $phone;
+        $is_phone_not_matched = $phone_order != $phone;
         
-        if(!$is_phone_matched) return "Id order atau nomor telfon tidak ditemukan";
+        if($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
 
         $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
         $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
