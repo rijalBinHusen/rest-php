@@ -61,7 +61,7 @@ class User_model {
 
     if(!$isOldPasswordMatched) {
 
-      $this->error = "Old password not matched." . $retrieveUser['password'] . PHP_EOL . $old_password_hashed;
+      $this->error = "Old password not matched.";
     } 
 
     // update new password

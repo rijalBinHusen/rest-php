@@ -154,14 +154,19 @@ class User_test extends TestCase
     {
 
         $faker = Faker\Factory::create();
-        $this->testRegisterEndpoint();
+        $this->testLoginEndpoint();
         $http = new HttpCall($this->url . "update_password");
         // Define the request body
-        $http->setData(['password' => $faker->numberBetween(100000, 1000000)]);
+        $http->setData(
+            [
+                'password_new' => $faker->numberBetween(100000, 1000000),
+                'password_old' => $this->data_inserted['password']
+            ]
+        );
         $http->addJWTToken();
         $response = $http->getResponse("PUT");
         
-        fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
+        // fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
