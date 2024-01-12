@@ -17,7 +17,7 @@ class User_model {
   }
  
   // (D) SAVE USER
-  function save ($name, $email, $password, $id=null) {
+  function register ($name, $email, $password) {
 
     $data_to_entry = array(
       "name" => $name,
@@ -25,30 +25,54 @@ class User_model {
       "password" => password_hash($password, PASSWORD_DEFAULT)
     );
 
-    // register
-    if ($id===null) {
-      // check is the email exists or no
-      $findEmail = $this->database->select_where($this->table_name, "email", $email)->fetch();
-      $isEmailExists = is_array($findEmail);
-      
-      if($isEmailExists) {
+    // check is the email exists or no
+    $findEmail = $this->database->select_where($this->table_name, "email", $email)->fetch();
+    $isEmailExists = is_array($findEmail);
+    
+    if($isEmailExists) {
 
-        $this->error = "User exist.";
-      } 
-      
-      else {
-
-        $this->database->insert($this->table_name, $data_to_entry);
-      }
-
+      $this->error = "User exist.";
     } 
-
-    // update password
+    
     else {
 
-       $result = $this->database->update($this->table_name, ['password' => password_hash($password, PASSWORD_DEFAULT)], "id", $id);
-       return $result;
+      $this->database->insert($this->table_name, $data_to_entry);
     }
+
+  }
+
+  function update_password($id_user, $old_password, $new_password) {
+
+    // retrieve old password
+    $retrieveUser = $this->database->select_where($this->table_name, "id", $id_user)->fetch();
+    $isUserExists = is_array($retrieveUser);
+
+    if(!$isUserExists) {
+
+      $this->error = "User exist.";
+      // stop here
+      return;
+    }
+
+    // check is old password matched
+    // $old_password_hashed = password_hash($old_password, PASSWORD_DEFAULT);
+    // $isOldPasswordMatched = $retrieveUser['password'] === $old_password_hashed;
+    $isOldPasswordMatched = password_verify($old_password, $retrieveUser["password"]);
+
+    if(!$isOldPasswordMatched) {
+
+      $this->error = "Old password not matched." . $retrieveUser['password'] . PHP_EOL . $old_password_hashed;
+    } 
+
+    // update new password
+    else {
+  
+      $result = $this->database->update($this->table_name, ['password' => password_hash($new_password, PASSWORD_DEFAULT)], "id", $id_user);
+      return $result;
+    }
+
+
+
   }
  
   // (F) VERIFY USER LOGIN

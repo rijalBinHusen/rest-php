@@ -56,7 +56,7 @@ class User
 
         else {
 
-            $this->user->save($name, $email, $password);
+            $this->user->register($name, $email, $password);
             $errorLogin = $this->user->error;
             
             if(is_null($errorLogin)) {
@@ -162,12 +162,13 @@ class User
         return false;
     }
 
-    public function update_password($id_user) {
+    public function update_password_by_id($id_user) {
 
         $req = Flight::request();
-        $password = $req->data->password;
+        $password_old = $req->data->password_old;
+        $password_new = $req->data->password_new;
 
-        $invalid_request_body = is_null($password)|| empty($password);
+        $invalid_request_body = is_null($password_old)|| empty($password_old) || is_null($password_new)|| empty($password_new);
 
         if($invalid_request_body) {
 
@@ -175,28 +176,27 @@ class User
                 "success" => false,
                 "message" => "Password can't be null or empty"
             ], 400);
-        } 
+            // stop here
+            return;
+        }
+
+        $row_updated = $this->user->update_password($id_user, $password_old, $password_new);
+        $errorUpdateUser = $this->user->error;
+        
+        if(is_null($errorUpdateUser) && $row_updated > 0) {
+
+            Flight::json([
+                'success' => true,
+                'message' => 'Update password success.'
+            ]);
+        }
+        
         else {
 
-            $row_updated = $this->user->save(null, null, $password, $id_user);
-            $errorUpdateUser = $this->user->error;
-            
-            if(is_null($errorUpdateUser) && $row_updated > 0) {
-
-                Flight::json([
-                    'success' => true,
-                    'message' => 'Update password success.'
-                ]);
-            } 
-            
-            else {
-
-                Flight::json([
-                    'success' => false,
-                    'message' => $errorUpdateUser,
-                    'err' => $row_updated
-                ], 500);
-            }
+            Flight::json([
+                'success' => false,
+                'message' => $errorUpdateUser
+            ], 500);
         }
     }
 

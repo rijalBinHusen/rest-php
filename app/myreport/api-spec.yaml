@@ -1499,7 +1499,16 @@ paths:
         - user
       summary: Update user by id
       requestBody:
-        $ref: "#/components/requestBodies/User"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password_new:
+                  type: string
+                password_old:
+                  type: string
       responses:
         "200":
           $ref: "#/components/responses/200Success"

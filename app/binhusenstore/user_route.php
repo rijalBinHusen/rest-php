@@ -26,7 +26,7 @@ Flight::route('PUT /binhusenstore/user/update_password', function () {
 
     if ($user_info) {
 
-        $user->update_password($user_info->data->id);
+        $user->update_password_by_id($user_info->data->id);
     }
 });
 
