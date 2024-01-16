@@ -276,7 +276,8 @@ class Binhusenstore_product_model
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
-            $product_name = strlen($product_value['name']) <= 44 ? $product_value['name'] : substr($product_value['name'], 0, 44) . "...";
+            // $product_name = strlen($product_value['name']) <= 44 ? $product_value['name'] : substr($product_value['name'], 0, 44) . "...";
+            $product_name = $product_value['name'];
             $array_to_push = array(
                 "id" => $product_value['id'],
                 "name" => $product_name,
