@@ -92,10 +92,11 @@ Flight::route('POST /binhusenstore/product/move_to_archive', function () {
 });
 
 Flight::route('GET /binhusenstore/products_and_details', function () {
-    $user = new User("binhusenstore_users");
-    $is_admin = $user->is_admin(1);
+    
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    if ($is_admin) {
+    if ($is_valid_code) {
 
         $binhusenstore_product = new Binhusenstore_product();
         $binhusenstore_product->get_products_detail();
