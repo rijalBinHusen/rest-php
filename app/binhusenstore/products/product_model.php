@@ -82,43 +82,10 @@ class Binhusenstore_product_model
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($result) > 0) {
-            $server_name = $_SERVER['SERVER_NAME'];
-            $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
-            $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+            
+            $convert_data_type = $this->convert_data_type_detail($result);
 
-            $is_external_image = strpos($result[0]['images'], 'http') > -1;
-            $images = explode(",", $result[0]['images']);
-
-            if (!$is_external_image) {
-
-                $images = array();
-                $image_as_arr = explode(",", $result[0]['images']);
-                for ($i = 0; $i < count($image_as_arr); $i++) {
-
-                    if ($i === 0) {
-
-                        array_push($images, $host_url . str_replace('-small', '', $image_as_arr[$i]));
-                    } else {
-
-                        array_push($images, $host_url . $image_as_arr[$i]);
-                    }
-                }
-            }
-
-            return [
-                array(
-                    'id' => $result[0]['id'],
-                    'name' => $result[0]['name'],
-                    'categories' => explode(",", $result[0]['categories']),
-                    'price' => (int)$result[0]['price'],
-                    'weight' => (int)$result[0]['weight'],
-                    'images' => $images,
-                    'description' => $result[0]['description'],
-                    'default_total_week' => (int)$result[0]['default_total_week'],
-                    'is_available' => boolval($result[0]['is_available']),
-                    'links' => explode(",", $result[0]['links']),
-                )
-            ];
+            return $convert_data_type;
         }
 
         $this->is_success = $this->database->is_error;
@@ -269,41 +236,94 @@ class Binhusenstore_product_model
 
     private function convert_data_type($products)
     {
-        $server_name = $_SERVER['SERVER_NAME'];
-        $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
-        $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
 
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
             // $product_name = strlen($product_value['name']) <= 44 ? $product_value['name'] : substr($product_value['name'], 0, 44) . "...";
             $product_name = $product_value['name'];
+            $images = $this->convert_image_url($product_value['images']);
+
             $array_to_push = array(
                 "id" => $product_value['id'],
                 "name" => $product_name,
-                "images" => array(),
+                "images" => $images,
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
             );
-
-
-            $is_external_image = strpos($product_value['images'], 'http') > -1;
-
-            if ($is_external_image) {
-
-                $array_to_push['images'] = explode(",", $product_value['images']);
-            } else {
-
-                $image_as_arr = explode(",", $product_value['images']);
-                foreach ($image_as_arr as $image) {
-
-                    array_push($array_to_push['images'], $host_url . $image);
-                }
-            }
 
             array_push($result, $array_to_push);
         }
 
         return $result;
     }
+
+    private function convert_data_type_detail($products)
+    {
+
+        $result = array();
+        // mapping products
+        foreach ($products as $product_value) {
+            
+            $images = $this->convert_image_url($product_value['images']);
+
+            $array_to_push = array(
+                'id' => $product_value['id'],
+                'name' => $product_value['name'],
+                'categories' => explode(",", $product_value['categories']),
+                'price' => (int)$product_value['price'],
+                'weight' => (int)$product_value['weight'],
+                'images' => $images,
+                'description' => $product_value['description'],
+                'default_total_week' => (int)$product_value['default_total_week'],
+                'is_available' => boolval($product_value['is_available']),
+                'links' => explode(",", $product_value['links']),
+            );
+
+            array_push($result, $array_to_push);
+        }
+
+        return $result;
+    }
+
+    function convert_image_url($images) {
+
+        $result = array();
+
+        $server_name = $_SERVER['SERVER_NAME'];
+        $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
+        $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
+
+        $is_external_image = strpos($images, 'http') > -1;
+
+        if ($is_external_image) {
+
+            $result = explode(",", $images);
+        } else {
+
+            $image_as_arr = explode(",", $images);
+            foreach ($image_as_arr as $image) {
+
+                array_push($result, $host_url . $image);
+            }
+        }
+
+        return $result;
+    }
+
+    public function retrieve_products_and_detail()
+    {
+    
+        $result = $this->database->select_from($this->table);
+
+        if ($this->database->is_error === null) {
+
+            $convert_data_type_products = $this->convert_data_type_detail($result);
+
+            return $convert_data_type_products;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
 }

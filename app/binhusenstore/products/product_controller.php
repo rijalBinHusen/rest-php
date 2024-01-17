@@ -395,4 +395,39 @@ class Binhusenstore_product
             );
         }
     }
+
+    public function get_products_detail()
+    {
+
+        $result = $this->Binhusenstore_product->retrieve_products_and_detail();
+
+        $is_exists = count($result) > 0;
+
+        if ($this->Binhusenstore_product->is_success === true && $is_exists) {
+            
+            Flight::json([
+                    "success" => true,
+                    "data" => $result
+                ], 200
+            );
+        } 
+        
+        else if ($this->Binhusenstore_product->is_success !== true) {
+
+            Flight::json([
+                "success" => false,
+                "message" => $this->Binhusenstore_product->is_success
+                ], 500
+            );
+        } 
+        
+        else {
+
+            Flight::json([
+                "success" => false,
+                "message" => "Product not found"
+                ], 404
+            );
+        }
+    }
 }

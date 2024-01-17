@@ -90,3 +90,14 @@ Flight::route('POST /binhusenstore/product/move_to_archive', function () {
         $binhusenstore_product->move_product_to_archive();
     }
 });
+
+Flight::route('GET /binhusenstore/products_and_details', function () {
+    $user = new User("binhusenstore_users");
+    $is_admin = $user->is_admin(1);
+
+    if ($is_admin) {
+
+        $binhusenstore_product = new Binhusenstore_product();
+        $binhusenstore_product->get_products_detail();
+    }
+});
