@@ -36,10 +36,17 @@ class Binhusenstore_admin_charge_model
     {
 
         $result = $this->database->select_where($this->table, 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null) {
+        $no_error = $this->database->is_error === null;
+        $is_exists = count($result) > 0;
+
+        if($no_error && $is_exists) {
 
             return $result['0']['admin_charge'];
+        }
+
+        else if($no_error && !$is_exists) {
+
+            return 0;
         }
         
         $this->is_success = $this->database->is_error;

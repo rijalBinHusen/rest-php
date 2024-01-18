@@ -32,7 +32,7 @@ class Binhusenstore_admin_charge
 
         // retrieve domain
         $get_domain_admin_charge = $this->Binhusenstore_admin_charge->retrieve_admin_charge();
-        $is_domain_exists = $this->Binhusenstore_admin_charge->is_success === true && $get_domain_admin_charge >= 0;
+        $is_domain_exists = $this->Binhusenstore_admin_charge->is_success === true && $get_domain_admin_charge > 0;
         
         // if domain exists, do update admin charge
         if($is_domain_exists) {

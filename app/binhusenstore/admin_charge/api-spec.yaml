@@ -148,6 +148,6 @@ components:
           schema:
             type: object
             properties:
-              price:
+              admin_charge:
                 type: number
                 example: 60000
