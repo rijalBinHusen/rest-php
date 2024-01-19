@@ -24,7 +24,6 @@ Flight::route('GET /binhusenstore/orders', function () {
     }
 });
 
-
 Flight::route("GET /binhusenstore/order/@id", function ($id) {
     $access_code = new Access_code();
     $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
@@ -88,5 +87,16 @@ Flight::route("GET /binhusenstore/order/phone/@id", function ($id) {
 
         $myreport_base_file = new Binhusenstore_order();
         $myreport_base_file->get_phone_by_order_id($id);
+    }
+});
+
+Flight::route("POST /binhusenstore/order/cancel", function () {
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
+
+    if ($is_valid_code) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->is_order_able_to_cancel();
     }
 });

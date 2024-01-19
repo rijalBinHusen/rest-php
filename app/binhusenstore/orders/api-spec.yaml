@@ -182,6 +182,51 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           description: order not found
+  /order/cancel:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_order:
+                  type: string
+                  example: "O23041230"
+                phone:
+                  type: string
+                  example: 1561234123
+      tags:
+        - order
+      summary: Move the order to archived.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: boolean
+                    example: true
+        "404":
+          description: order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  message:
+                    type: boolean
+                    example: false
   # End of order end point
 
 components:

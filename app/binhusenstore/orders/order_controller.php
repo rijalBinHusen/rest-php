@@ -380,4 +380,52 @@ class Binhusenstore_order
             ], 404);
         }
     }
+
+    public function is_order_able_to_cancel()
+    {
+
+        $req = Flight::request();
+        $id_order = $req->data->id_order;
+        $phone = $req->data->phone;
+
+        $result = false;
+        $is_id_order_valid = strlen($id_order) === 9;
+
+        if($is_id_order_valid) {
+
+            $result = $this->Binhusenstore_order->phone_by_order_id($id_order);
+        }
+
+
+        $is_success = $this->Binhusenstore_order->is_success;
+        $is_found = $result !== false;
+        $is_phone_matched = $result == $phone;
+
+        if ($is_success === true && $is_phone_matched) {
+
+            Flight::json(
+                [
+                    'success' => true,
+                    'message' => $is_phone_matched
+                ]
+            );
+        } else if ($is_success !== true) {
+
+            Flight::json(
+                [
+                    'success' => false,
+                    'message' => $is_success
+                ],
+                500
+            );
+        } else {
+            Flight::json(
+                [
+                    'success' => false,
+                    'message' => "Id order atau nomor telfon tidak cocok",
+                ],
+                404
+            );
+        }
+    }
 }

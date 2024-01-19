@@ -120,15 +120,20 @@ class Binhusenstore_order_model
     {
 
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
+        $is_error = $this->database->is_error !== null;
 
-        if ($this->database->is_error === null && count($result) > 0) {
+        if (!$is_error && count($result) > 0) {
 
             $phone = $result[0]['phone'];
             $decrypted_phone = decrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
             return $decrypted_phone;
         }
 
-        $this->is_success = $this->database->is_error;
+        else if($is_error) {
+
+            $this->is_success = $this->database->is_error;
+        }
+
         return false;
     }
 
