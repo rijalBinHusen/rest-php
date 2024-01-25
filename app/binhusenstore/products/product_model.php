@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../admin_charge/admin_charge_model.php');
 
 class Binhusenstore_product_model
 {
@@ -14,7 +15,7 @@ class Binhusenstore_product_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links)
+    public function append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links, $is_admin_charge)
     {
 
         $data_to_insert = array(
@@ -26,6 +27,7 @@ class Binhusenstore_product_model
             'description' => $description,
             'default_total_week' => $default_total_week,
             'is_available' => (int)$is_available,
+            'is_admin_charge' => (int)$is_admin_charge,
             'links' => $links,
         );
 
@@ -41,7 +43,7 @@ class Binhusenstore_product_model
 
     public function get_products($limit, $id_category = null, $name_product)
     {
-        $columnToSelect = "id, images, name, price, default_total_week";
+        $columnToSelect = "id, images, name, price, default_total_week, is_admin_charge";
         $query = "SELECT $columnToSelect FROM $this->table";
 
         $is_category_valid = !is_null($id_category) && !empty($id_category) && $id_category != "";
@@ -236,7 +238,9 @@ class Binhusenstore_product_model
 
     private function convert_data_type($products)
     {
-
+        $admin_charge_class = new Binhusenstore_admin_charge_model();
+        $admin_charge = $admin_charge_class->retrieve_admin_charge();
+        
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
@@ -250,6 +254,7 @@ class Binhusenstore_product_model
                 "images" => $images,
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
+                "admin_charge" => (int) $product_value['is_admin_charge'] ? $admin_charge : 0
             );
 
             array_push($result, $array_to_push);
@@ -260,7 +265,9 @@ class Binhusenstore_product_model
 
     private function convert_data_type_detail($products)
     {
-
+        $admin_charge_class = new Binhusenstore_admin_charge_model();
+        $admin_charge = $admin_charge_class->retrieve_admin_charge();
+        
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
@@ -277,7 +284,9 @@ class Binhusenstore_product_model
                 'description' => $product_value['description'],
                 'default_total_week' => (int)$product_value['default_total_week'],
                 'is_available' => boolval($product_value['is_available']),
-                'links' => explode(",", $product_value['links']),
+                'is_admin_charge' => boolval($product_value['is_admin_charge']),
+                'links' => strlen($product_value['links']) ? explode(",", $product_value['links']) : array(),
+                "admin_charge" => (int) $product_value['is_admin_charge'] ? $admin_charge : 0,
             );
 
             array_push($result, $array_to_push);

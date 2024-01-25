@@ -108,6 +108,9 @@ paths:
                   is_available:
                     type: boolean
                     example: false
+                  admin_charge:
+                    type: number
+                    example: 6000
                   links:
                     type: string
                     example: "https://sdlfsdfjhsdfsdf.com"
@@ -220,6 +223,9 @@ components:
         is_available:
           type: boolean
           example: false
+        is_admin_charge:
+          type: boolean
+          example: true
         links:
           type: string
           example: "https://sdlfsdfjhsdfsdf.com"
@@ -346,6 +352,9 @@ components:
                     default_total_week:
                       type: number
                       example: 59
+                    admin_charge:
+                      type: number
+                      example: 6000
   requestBodies:
     product:
       required: true

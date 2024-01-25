@@ -21,6 +21,7 @@ class Binhusenstore_product
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
+        $is_admin_charge = $req->data->is_admin_charge;
         $links = $req->data->links;
 
         $result = null;
@@ -32,6 +33,7 @@ class Binhusenstore_product
             || is_null($images)
             || is_null($description)
             || is_null($is_available)
+            || is_null($is_admin_charge)
             || is_null($categories)
             || is_null($default_total_week)
             || empty($name)
@@ -47,7 +49,8 @@ class Binhusenstore_product
             || !is_numeric($default_total_week)
             || !is_string($images)
             || !is_string($description)
-            || !is_bool($is_available);
+            || !is_bool($is_available)
+            || !is_bool($is_admin_charge);
 
         if ($is_request_body_not_oke) {
 
@@ -66,7 +69,7 @@ class Binhusenstore_product
             $links = "";
         }
 
-        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links);
+        $result = $this->Binhusenstore_product->append_product($name, $categories, $price, $weight, $images, $description, $default_total_week, $is_available, $links, $is_admin_charge);
 
         if ($this->Binhusenstore_product->is_success === true) {
 
@@ -205,6 +208,7 @@ class Binhusenstore_product
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
+        $is_admin_charge = $req->data->$is_admin_charge;
         $links = $req->data->links;
 
         // initiate the column and values to update
@@ -244,6 +248,10 @@ class Binhusenstore_product
         // conditional $is_available
         $valid_is_available = !is_null($is_available) && is_bool($is_available);
         if ($valid_is_available) $keyValueToUpdate["is_available"] = $is_available;
+
+        // conditional $is_admin_charge
+        $valid_is_admin_charge = !is_null($is_admin_charge) && is_bool($is_admin_charge);
+        if ($valid_is_admin_charge) $keyValueToUpdate["is_admin_charge"] = $is_admin_charge;
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 

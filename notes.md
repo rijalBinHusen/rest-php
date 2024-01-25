@@ -29,6 +29,9 @@
   - [ ] We should remove the message where date_created > 7 days
  -->
 
+## 25 Jan 2023
+- [ ] add column is_admin_charge on products table
+
 ## 19 Des 2023
 - [x] Retrieve payments group by order_id where id_group = ""
 
