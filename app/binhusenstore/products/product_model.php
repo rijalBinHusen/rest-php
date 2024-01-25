@@ -254,8 +254,12 @@ class Binhusenstore_product_model
                 "images" => $images,
                 "price" => (int)$product_value['price'],
                 "default_total_week" => (int)$product_value['default_total_week'],
-                "admin_charge" => (int) $product_value['is_admin_charge'] ? $admin_charge : 0
             );
+
+            if(array_key_exists('is_admin_charge', $product_value)) {
+
+                $array_to_push['admin_charge'] = (int) $product_value['is_admin_charge'] ? $admin_charge : 0;
+            }
 
             array_push($result, $array_to_push);
         }

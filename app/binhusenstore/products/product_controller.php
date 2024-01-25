@@ -208,7 +208,7 @@ class Binhusenstore_product
         $description = $req->data->description;
         $default_total_week = $req->data->default_total_week;
         $is_available = $req->data->is_available;
-        $is_admin_charge = $req->data->$is_admin_charge;
+        $is_admin_charge = $req->data->is_admin_charge;
         $links = $req->data->links;
 
         // initiate the column and values to update
