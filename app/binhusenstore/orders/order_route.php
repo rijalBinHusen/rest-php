@@ -100,3 +100,14 @@ Flight::route("POST /binhusenstore/order/cancel", function () {
         $myreport_base_file->is_order_able_to_cancel();
     }
 });
+
+Flight::route("PUT /binhusenstore/order/merge_as_group", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_admin(1);
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->merge_order();
+    }
+});

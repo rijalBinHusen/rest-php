@@ -199,7 +199,7 @@ paths:
                   example: 1561234123
       tags:
         - order
-      summary: Move the order to archived.
+      summary: Is the phone number is matched with db to cancel order.
       responses:
         "200":
           description: Success operation
@@ -214,6 +214,68 @@ paths:
                   message:
                     type: boolean
                     example: true
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  message:
+                    type: boolean
+                    example: false
+  /order/merge_as_group:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_order_1:
+                  type: string
+                  example: "O23041230"
+                id_order_2:
+                  type: string
+                  example: "O23041231"
+      tags:
+        - order
+      summary: Create Id group for 2 orders (phone_order must same).
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: boolean
+                    example: "Order grouped"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "400":
+          description: order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  message:
+                    type: boolean
+                    example: "Nomor handphone pemesan tidak sama"
         "404":
           description: order not found
           content:

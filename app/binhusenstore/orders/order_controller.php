@@ -391,7 +391,7 @@ class Binhusenstore_order
         $result = false;
         $is_id_order_valid = strlen($id_order) === 9;
 
-        if($is_id_order_valid) {
+        if ($is_id_order_valid) {
 
             $result = $this->Binhusenstore_order->phone_by_order_id($id_order);
         }
@@ -426,6 +426,55 @@ class Binhusenstore_order
                 ],
                 404
             );
+        }
+    }
+
+    public function merge_order()
+    {
+        // catch the query string request
+        $req = Flight::request();
+        $id_order_1 = $req->data->id_order_1;
+        $id_order_2 = $req->data->id_order_2;
+
+        $is_id_order_oke = strlen($id_order_1) === 9 && strlen($id_order_2) === 9;
+
+        if ($is_id_order_oke) {
+
+            $result = $this->Binhusenstore_order->merge_order_as_group($id_order_1, $id_order_2);
+
+            $is_success = $this->Binhusenstore_order->is_success;
+
+            if ($result === 0) {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => 'Order not found'
+                ], 404);
+            } else if ($is_success === true && is_numeric($result) && $result > 0) {
+
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Update order success',
+                ]);
+            } else if ($is_success !== true) {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $is_success
+                ], 500);
+            } else {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $result
+                ], 400);
+            }
+        } else {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'Failed to update order, check the data you sent'
+            ], 400);
         }
     }
 }

@@ -33,7 +33,7 @@ class Binhusenstore_order_model
             'admin_charge' => 0
         );
 
-        if($admin_chrage) {
+        if ($admin_chrage) {
             // retrieve admin charge
             $retrieve_charge = $this->database->select_where('admin_charge', 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
 
@@ -127,9 +127,7 @@ class Binhusenstore_order_model
             $phone = $result[0]['phone'];
             $decrypted_phone = decrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
             return $decrypted_phone;
-        }
-
-        else if($is_error) {
+        } else if ($is_error) {
 
             $this->is_success = $this->database->is_error;
         }
@@ -195,6 +193,45 @@ class Binhusenstore_order_model
             $this->is_success = $this->database->is_error;
         }
 
+        return false;
+    }
+
+    public function merge_order_as_group($id_order_1, $id_order_2)
+    {
+
+        $order_1 = $this->database->select_where($this->table, 'id', $id_order_1)->fetchAll(PDO::FETCH_ASSOC);
+        $order_2 = $this->database->select_where($this->table, 'id', $id_order_2)->fetchAll(PDO::FETCH_ASSOC);
+
+        $is_order_exists = count($order_1) > 0 && count($order_2) > 0;
+        if (!$is_order_exists) return 0;
+
+        $is_phone_matched = $order_1[0]['phone'] === $order_2[0]['phone'];
+        if (!$is_phone_matched) return "Nomor handphone pemesan tidak sama";
+
+        $id_group_to_set = str_replace("O", "G", $id_order_1);
+
+        $is_order_1_has_group_id = boolval($order_1['is_group']);
+        $is_order_2_has_group_id = boolval($order_2['is_group']);
+
+        if ($is_order_1_has_group_id) $id_group_to_set = $order_1['id_group'];
+        if ($is_order_2_has_group_id) $id_group_to_set = $order_2['id_group'];
+
+        $is_2_order_has_group_id = $is_order_1_has_group_id && $is_order_2_has_group_id;
+        if ($is_2_order_has_group_id) return "Semua order telah memiliki group masing masing";
+
+
+        // $is_error = $this->database->is_error !== null;
+        $data_to_set = array('id_group' => $id_group_to_set);
+
+        if ($is_order_1_has_group_id) {
+
+            return $this->update_order_by_id($data_to_set, 'id', $id_order_2);
+        } else if ($is_order_2_has_group_id) {
+
+            return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
+        }
+
+        $this->is_success = $this->database->is_error;
         return false;
     }
 }
