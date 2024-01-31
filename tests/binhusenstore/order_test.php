@@ -353,13 +353,15 @@ class Order_test extends TestCase
     }
 
     // 2 order has no id_group
-    public function testMerge2OrderIn1IdGroup()
+    public function test_merge_2_order_in_1_id_group()
     {
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->url . "order");
 
         $user = new User_test();
         $user->LoginAdmin();
+
+        $phone_order = $faker->numberBetween(100000000000, 999999999999);
 
         // create order 1
         // Define the request body
@@ -372,7 +374,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -396,7 +398,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -453,6 +455,8 @@ class Order_test extends TestCase
     public function test_add_id_group_to_id_order2()
     {
         $faker = Faker\Factory::create();
+        $phone_order = $faker->numberBetween(100000000000, 999999999999);
+
         $http = new HttpCall($this->url . "order");
 
         $user = new User_test();
@@ -469,7 +473,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -493,7 +497,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -556,6 +560,7 @@ class Order_test extends TestCase
         $user->LoginAdmin();
 
         // create order 1
+        $phone_order = $faker->numberBetween(100000000000, 999999999999);
         // Define the request body
         $data = array(
             'date_order' => $faker->date('Y-m-d'),
@@ -566,7 +571,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -590,7 +595,7 @@ class Order_test extends TestCase
             'sent' => false,
             'title' => $faker->text(47),
             'total_balance' => $faker->numberBetween(100000, 1000000),
-            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'phone' => $phone_order,
             'admin_charge' => true
         );
 
@@ -730,4 +735,168 @@ class Order_test extends TestCase
     }
 
     // each order has id group
+    public function test_merge_order_404_part_1()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => $faker->text(9),
+            'is_group' => true,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order1 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order1, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id1 = $convertToAssocArray['id'];
+
+        // order 2
+        $http_order_2 = new HttpCall($this->url . "order");
+        $data2 = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => $faker->text(9),
+            'is_group' => true,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http_order_2->setData($data2);
+        $http_order_2->addJWTToken();
+        $response_order2 = $http_order_2->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order2, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id2 = $convertToAssocArray['id'];
+
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+
+        $data_to_sent = array(
+            "id_order_1" => $id_order_id1,
+            "id_order_2" => $id_order_id2,
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Semua order telah memiliki group masing masing", $convertToAssocArray['message']);
+    }
+
+    // phone doesn't same
+    public function test_add_id_group_to_id_order2_phone_not_some()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => $faker->text(9),
+            'is_group' => true,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order1 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order1, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id1 = $convertToAssocArray['id'];
+
+        // create order 2
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => "",
+            'is_group' => false,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order2 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order2, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id2 = $convertToAssocArray['id'];
+
+        // request to update id_group
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+        $data_to_sent = array(
+            "id_order_1" => $id_order_id1,
+            "id_order_2" => $id_order_id2,
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Order grouped", $convertToAssocArray['message']);
+
+        // get the both order
+        $http_get_order_1 = new HttpCall($this->url . "order/" . $id_order_id1);
+        $http_get_order_1->addAccessCode("binhusenstore-access-code.txt");
+
+        $response_get_order_1 = $http_get_order_1->getResponse("GET");
+        $response_get_order_1_as_array = json_decode($response_get_order_1, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $response_get_order_1_as_array);
+        $this->assertEquals(true, $response_get_order_1_as_array['success']);
+
+        $http_get_order_2 = new HttpCall($this->url . "order/" . $id_order_id2);
+        $http_get_order_2->addAccessCode("binhusenstore-access-code.txt");
+
+        $response_get_order_2 = $http_get_order_2->getResponse("GET");
+        $response_get_order_2_as_array = json_decode($response_get_order_2, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $response_get_order_2_as_array);
+        $this->assertEquals(false, $response_get_order_2_as_array['success']);
+        $this->assertEquals("Nomor handphone pemesan tidak sama", $response_get_order_2_as_array['message']);
+    }
 }
