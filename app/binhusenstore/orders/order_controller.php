@@ -473,7 +473,7 @@ class Binhusenstore_order
 
             Flight::json([
                 'success' => false,
-                'message' => 'Failed to update order, check the data you sent'
+                'message' => 'Failed to merge order, check the data you sent'
             ], 400);
         }
     }

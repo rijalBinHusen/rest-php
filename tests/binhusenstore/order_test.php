@@ -643,6 +643,25 @@ class Order_test extends TestCase
         $this->assertEquals(true, $is_id_group_same);
     }
     // error 400 bad request
+    public function test_merge_order_404()
+    {
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+
+        $data_to_sent = array(
+            "id_order_1" => "failed",
+            "id_order_2" => "failed2",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Failed to merge order, check the data you sent", $convertToAssocArray['message']);
+    }
     // error 401 Auth failed
     // error 404 not found
 }
