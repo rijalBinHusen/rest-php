@@ -104,14 +104,14 @@ class Binhusenstore_payment_model
         $phone_order = $order_model->phone_by_order_id($id_order);
 
         $is_phone_not_matched = $phone_order != $phone;
-        
-        if($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
+
+        if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
 
         $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
         $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($retrieve_all_payment) === 0) return 0;
-        
+
 
         $total_balance = 0;
         foreach ($retrieve_all_payment as $value) {
@@ -244,7 +244,7 @@ class Binhusenstore_payment_model
           GROUP BY id_order
         ) AND date_payment <= CURRENT_DATE()";
 
-        if($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
+        if ($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
 
         $result = $this->database->sqlQuery($query_payment_group_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -252,6 +252,23 @@ class Binhusenstore_payment_model
 
         $this->is_success = $this->database->is_error;
         return array();
+    }
+
+    public function add_id_group_payment_by_id_order($id_order, $id_order_group)
+    {
+
+        $data_to_update = array(
+            'id_order_group' => $id_order_group
+        );
+
+        $result = $this->database->update($this->table, $data_to_update, 'id_order', $id_order);
+
+        if ($this->database->is_error === null) {
+
+            return $result;
+        }
+
+        $this->is_success = $this->database->is_error;
     }
 
     private function convert_data_type($payments)

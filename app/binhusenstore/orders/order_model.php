@@ -219,19 +219,20 @@ class Binhusenstore_order_model
         $is_2_order_has_group_id = $is_order_1_has_group_id && $is_order_2_has_group_id;
         if ($is_2_order_has_group_id) return "Semua order telah memiliki group masing masing";
 
-
-        // $is_error = $this->database->is_error !== null;
         $data_to_set = array('id_group' => $id_group_to_set);
+
+        $payment_model = new Binhusenstore_payment_model();
 
         if ($is_order_1_has_group_id) {
 
+            $payment_model->add_id_group_payment_by_id_order($id_order_2, $id_group_to_set);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_2);
         } else if ($is_order_2_has_group_id) {
 
+            $payment_model->add_id_group_payment_by_id_order($id_order_1, $id_group_to_set);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
         }
 
         $this->is_success = $this->database->is_error;
-        return false;
     }
 }
