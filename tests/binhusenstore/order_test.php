@@ -643,7 +643,7 @@ class Order_test extends TestCase
         $this->assertEquals(true, $is_id_group_same);
     }
     // error 400 bad request
-    public function test_merge_order_404()
+    public function test_merge_order_400()
     {
         $user = new User_test();
         $user->LoginAdmin();
@@ -662,6 +662,72 @@ class Order_test extends TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Failed to merge order, check the data you sent", $convertToAssocArray['message']);
     }
+
     // error 401 Auth failed
+    public function test_merge_order_401()
+    {
+
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+
+        $data_to_sent = array(
+            "id_order_1" => "failed",
+            "id_order_2" => "failed2",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
     // error 404 not found
+    public function test_merge_order_404()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => $faker->text(9),
+            'is_group' => true,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order1 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order1, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id1 = $convertToAssocArray['id'];
+
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+
+        $data_to_sent = array(
+            "id_order_1" => $id_order_id1,
+            "id_order_2" => "G23456789",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Order not found", $convertToAssocArray['message']);
+    }
+
+    // each order has id group
 }
