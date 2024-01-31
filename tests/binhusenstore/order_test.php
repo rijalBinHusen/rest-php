@@ -108,8 +108,8 @@ class Order_test extends TestCase
 
         $user = new User_test();
         $user->LoginAdmin();
-        
-        
+
+
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -155,9 +155,9 @@ class Order_test extends TestCase
 
         $http = new HttpCall($this->url_host_id);
         // Send a GET request to the /endpoint URL
-    
+
         $http->addAccessCode("binhusenstore-access-code.txt");
-        
+
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
@@ -217,7 +217,7 @@ class Order_test extends TestCase
     public function testPutEndpoint201()
     {
         $this->testPostEndpoint();
-        
+
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array('title' => "Updated");
@@ -288,7 +288,7 @@ class Order_test extends TestCase
         $data = array('date_order' => "Failed test");
 
         $httpCallVar->setData($data);
-        
+
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");
@@ -351,4 +351,144 @@ class Order_test extends TestCase
         $this->assertArrayHasKey('message', $convertToAssocArray);
         $this->assertEquals("Order not found", $convertToAssocArray['message']);
     }
+
+    // 2 order has no id_group
+    public function testMerge2OrderIn1IdGroup()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => "",
+            'is_group' => false,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order1 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order1, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id1 = $convertToAssocArray['id'];
+
+        // create order 2
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => "",
+            'is_group' => false,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => false,
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order2 = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order2, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $id_order_id2 = $convertToAssocArray['id'];
+
+        // request to update id_group
+        $httpToUpdate = new HttpCall($this->url . "order/merge_as_group");
+        $data_to_sent = array(
+            "id_order_1" => $id_order_id1,
+            "id_order_2" => $id_order_id2,
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Order grouped", $convertToAssocArray['message']);
+
+        // get the both order
+        $http_get_order_1 = new HttpCall($this->url . "order/" . $id_order_id1);
+        $http_get_order_1->addAccessCode("binhusenstore-access-code.txt");
+
+        $response_get_order_1 = $http_get_order_1->getResponse("GET");
+        $response_get_order_1_as_array = json_decode($response_get_order_1, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $response_get_order_1_as_array);
+        $this->assertEquals(true, $response_get_order_1_as_array['success']);
+
+        $http_get_order_2 = new HttpCall($this->url . "order/" . $id_order_id2);
+        $http_get_order_2->addAccessCode("binhusenstore-access-code.txt");
+
+        $response_get_order_2 = $http_get_order_2->getResponse("GET");
+        $response_get_order_2_as_array = json_decode($response_get_order_2, true);
+        // fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $response_get_order_2_as_array);
+        $this->assertEquals(true, $response_get_order_2_as_array['success']);
+
+        // make sure id_group must be same
+        $is_id_group_same = $response_get_order_1_as_array['id_group'] === $response_get_order_2_as_array['id_group'];
+        $this->assertEquals(true, $is_id_group_same);
+    }
+
+    // order 1 has id_group
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
+    // order 2 has id_group
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
+    // 2 order has id group
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
+    // error 400 bad request
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
+    // error 401 Auth failed
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
+    // error 404 not found
+
+    // create order 1
+    // create order 2
+    // request to update id_group
+    // get the both order
+    // make sure id_group must be same
 }
