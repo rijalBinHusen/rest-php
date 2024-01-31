@@ -454,7 +454,7 @@ class Binhusenstore_order
 
                 Flight::json([
                     'success' => true,
-                    'message' => 'Update order success',
+                    'message' => 'Order grouped',
                 ]);
             } else if ($is_success !== true) {
 

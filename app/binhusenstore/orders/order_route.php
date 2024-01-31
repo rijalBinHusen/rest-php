@@ -101,7 +101,7 @@ Flight::route("POST /binhusenstore/order/cancel", function () {
     }
 });
 
-Flight::route("PUT /binhusenstore/order/merge_as_group", function () {
+Flight::route("PUT /binhusenstore/orders/merge/add_id_group", function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 

@@ -205,21 +205,27 @@ class Binhusenstore_order_model
         $is_order_exists = count($order_1) > 0 && count($order_2) > 0;
         if (!$is_order_exists) return 0;
 
-        $is_phone_matched = $order_1[0]['phone'] === $order_2[0]['phone'];
+        $phone_1_decrypted =  decrypt_string($order_1[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
+        $phone_2_decrypted =  decrypt_string($order_2[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
+
+        $is_phone_matched = $phone_1_decrypted == $phone_2_decrypted;
         if (!$is_phone_matched) return "Nomor handphone pemesan tidak sama";
 
         $id_group_to_set = str_replace("O", "G", $id_order_1);
 
-        $is_order_1_has_group_id = boolval($order_1['is_group']);
-        $is_order_2_has_group_id = boolval($order_2['is_group']);
+        $is_order_1_has_group_id = boolval($order_1[0]['is_group']);
+        $is_order_2_has_group_id = boolval($order_2[0]['is_group']);
 
-        if ($is_order_1_has_group_id) $id_group_to_set = $order_1['id_group'];
-        if ($is_order_2_has_group_id) $id_group_to_set = $order_2['id_group'];
+        if ($is_order_1_has_group_id) $id_group_to_set = $order_1[0]['id_group'];
+        if ($is_order_2_has_group_id) $id_group_to_set = $order_2[0]['id_group'];
 
         $is_2_order_has_group_id = $is_order_1_has_group_id && $is_order_2_has_group_id;
         if ($is_2_order_has_group_id) return "Semua order telah memiliki group masing masing";
 
-        $data_to_set = array('id_group' => $id_group_to_set);
+        $data_to_set = array(
+            'id_group' => $id_group_to_set,
+            'is_group' => true
+        );
 
         $payment_model = new Binhusenstore_payment_model();
 
@@ -231,8 +237,15 @@ class Binhusenstore_order_model
 
             $payment_model->add_id_group_payment_by_id_order($id_order_1, $id_group_to_set);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
-        }
+        } else if (!$is_2_order_has_group_id) {
 
-        $this->is_success = $this->database->is_error;
+            $payment_model->add_id_group_payment_by_id_order($id_order_1, $id_group_to_set);
+            $payment_model->add_id_group_payment_by_id_order($id_order_2, $id_group_to_set);
+            $this->update_order_by_id($data_to_set, 'id', $id_order_2);
+            return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
+        } else {
+
+            $this->is_success = $this->database->is_error;
+        }
     }
 }

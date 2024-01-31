@@ -229,7 +229,7 @@ paths:
                   message:
                     type: boolean
                     example: false
-  /order/merge_as_group:
+  /orders/merge/add_id_group:
     put:
       requestBody:
         required: true
