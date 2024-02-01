@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../httpCall.php');
 require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/user_test.php');
 
 use PHPUnit\Framework\TestCase;
 
@@ -126,7 +127,7 @@ class Payment_test extends TestCase
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
-        
+
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
@@ -156,7 +157,7 @@ class Payment_test extends TestCase
         $response = $http->getResponse("POST");
 
         $convertToAssocArray = json_decode($response, true);
-        
+
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
@@ -214,17 +215,19 @@ class Payment_test extends TestCase
 
     public function testGetEndpoint()
     {
+
         $this->testPostEndpoint();
 
         $id_order = $this->data_posted['id_order'];
 
-        $http = new HttpCall($this->url .'payments?id_order=' .$id_order);
-        $http->addJWTToken();
+        $http = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $http->addAccessCode("binhusenstore-access-code.txt");
+
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($id_order, true));
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -256,11 +259,14 @@ class Payment_test extends TestCase
 
     public function testGetEndpointFailed404()
     {
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'payments?id_order=loremipsumdolor');
-        
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");
 
         $response = $http->getResponse("GET");
 
@@ -276,11 +282,14 @@ class Payment_test extends TestCase
 
     public function testGetEndpointFailed404_()
     {
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url . 'payments');
-        
-        $http->addJWTToken();
+        $http->addAccessCode("binhusenstore-access-code.txt");
 
         $response = $http->getResponse("GET");
 
@@ -394,10 +403,10 @@ class Payment_test extends TestCase
 
     //     // validate data
     //     $getData = $httpCallVar->getResponse("GET");
-        
+
     //     $convertToAssocArray = json_decode($getData, true);
-        
-        
+
+
     //     $this->assertArrayHasKey('success', $convertToAssocArray);
     //     $this->assertEquals(true, $convertToAssocArray['success']);
 
@@ -428,9 +437,9 @@ class Payment_test extends TestCase
 
     //     // update data on server
     //     $httpCallVar->getResponse("PUT");
-        
+
     //     $getData = $httpCallVar->getResponse("GET");
-        
+
     //     $convertToAssocArray = json_decode($getData, true);
 
     //     $this->assertArrayHasKey('success', $convertToAssocArray);
