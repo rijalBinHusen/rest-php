@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ ."/../../tests/httpCall.php");
+require_once(__DIR__ . "/../../tests/httpCall.php");
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use PHPUnit\Framework\TestCase;
@@ -19,11 +19,11 @@ class User_test extends TestCase
         $password = $faker->numberBetween(100000, 1000000);
         $name = $faker->name("female");
         $user_to_post = array(
-            'email' => $email, 
-            'password' => $password, 
+            'email' => $email,
+            'password' => $password,
             'name' => $name
         );
-        
+
         $this->data_inserted = $user_to_post;
 
         $http->setData($user_to_post);
@@ -55,14 +55,14 @@ class User_test extends TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals('User exist.', $convertToAssocArray['message']);
     }
-    
+
     // Test register user not enter name
     public function testRegisterEndpointWithoutName()
     {
         $http = new HttpCall($this->url . "register");
         // Define the request body
         $data = array(
-            'email' => 'test@dfsfsdfsdf.com', 
+            'email' => 'test@dfsfsdfsdf.com',
             'password' => "1233333",
         );
         $http->setData($data);
@@ -84,7 +84,7 @@ class User_test extends TestCase
         // Define the request body
         $http->setData($this->data_inserted);
         $response = $http->getResponse("POST");
-        
+
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($response, TRUE));
         // Verify that the response same as expected
@@ -96,7 +96,7 @@ class User_test extends TestCase
         fwrite($myfile, $convertToAssocArray['token']);
         fclose($myfile);
     }
-    
+
     // test login failed   
     public function testLoginEndpointFailed()
     {
@@ -123,7 +123,7 @@ class User_test extends TestCase
         // set token on header request
         $http->addHeaders('JWT-Authorization', $token . "Invalidtoken");
         $response = $http->getResponse("POST");
-        
+
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -165,7 +165,7 @@ class User_test extends TestCase
         );
         $http->addJWTToken();
         $response = $http->getResponse("PUT");
-        
+
         // fwrite(STDERR, print_r($response . PHP_EOL, TRUE));
         $convertToAssocArray = json_decode($response, true);
         // Verify that the response same as expected
@@ -182,15 +182,14 @@ class User_test extends TestCase
     // test login success
     public function LoginAdmin()
     {
-        $this->testRegisterEndpoint();
         $http = new HttpCall($this->url . "login");
         // Define the request body
         $http->setData(array(
-            'email' => 'binhusenstore_test@test.com', 
+            'email' => 'binhusenstore_test@test.com',
             'password' => '123456'
         ));
         $response = $http->getResponse("POST");
-        
+
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($response, TRUE));
         // Verify that the response same as expected
@@ -202,5 +201,4 @@ class User_test extends TestCase
         fwrite($myfile, $convertToAssocArray['token']);
         fclose($myfile);
     }
-
 }
