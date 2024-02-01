@@ -917,7 +917,7 @@ class Order_test extends TestCase
 
         $httpToUpdate->setData($data_to_sent);
         $httpToUpdate->addJWTToken();
-        $response_update = $httpToUpdate->getResponse("PUT");
+        $response_update = $httpToUpdate->getResponse("POST");
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Failed to archive order, check the data you sent", $convertToAssocArray['message']);
@@ -938,14 +938,14 @@ class Order_test extends TestCase
 
         $httpToUpdate->setData($data_to_sent);
         $httpToUpdate->addJWTToken();
-        $response_update = $httpToUpdate->getResponse("PUT");
+        $response_update = $httpToUpdate->getResponse("POST");
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Failed to archive order, check the data you sent", $convertToAssocArray['message']);
     }
 
     // move order to archive id order not found
-    public function test_move_order_to_archive_400()
+    public function test_move_order_to_archive_404()
     {
         $user = new User_test();
         $user->LoginAdmin();
@@ -954,12 +954,14 @@ class Order_test extends TestCase
 
         $data_to_sent = array(
             "id_order" => "123456789",
-            "phone" => "lsdfjsdlfkjsldkfjlksjdf",
+            "phone" => "293810293",
         );
 
         $httpToUpdate->setData($data_to_sent);
         $httpToUpdate->addJWTToken();
-        $response_update = $httpToUpdate->getResponse("PUT");
+        $response_update = $httpToUpdate->getResponse("POST");
+
+        // fwrite(STDERR, print_r($response_update, true));
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Order not found", $convertToAssocArray['message']);
@@ -1020,7 +1022,7 @@ class Order_test extends TestCase
         $user = new User_test();
         $user->LoginAdmin();
 
-        // create order 1
+        // create order
         // Define the request body
         $data = array(
             'date_order' => $faker->date('Y-m-d'),
@@ -1039,13 +1041,37 @@ class Order_test extends TestCase
         $http->addJWTToken();
         $response_order = $http->getResponse("POST");
 
-        $convertToAssocArray = json_decode($response_order, true);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+        $OrderResponseConvertToAssocArray = json_decode($response_order, true);
+        $this->assertEquals(true, $OrderResponseConvertToAssocArray['success']);
 
+        // create payment
+        $http_payment = new HttpCall($this->url . "payment");
+        // Define the request body
+        $data_payment = array(
+            'date_payment' => $faker->date('Y-m-d'),
+            'id_payment' => $faker->text(30),
+            'id_order' => $OrderResponseConvertToAssocArray['id'],
+            'balance' => $faker->numberBetween(10000, 100000),
+            'is_paid' => false,
+            'id_order_group' => $faker->text(5)
+        );
+
+        $http_payment->setData($data_payment);
+        $http_payment->addJWTToken();
+
+        $response = $http_payment->getResponse("POST");
+
+        $PaymentResponseConvertedToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $PaymentResponseConvertedToAssocArray);
+        $this->assertArrayHasKey('id', $PaymentResponseConvertedToAssocArray, $response);
+        $this->assertEquals(true, $PaymentResponseConvertedToAssocArray['success']);
+
+        // move order to archive
         $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
 
         $data_to_sent = array(
-            "id_order" => $convertToAssocArray['id'],
+            "id_order" => $OrderResponseConvertToAssocArray['id'],
             "phone" => $data['phone'],
         );
 
@@ -1053,8 +1079,9 @@ class Order_test extends TestCase
         $httpToUpdate->addJWTToken();
         $response_update_order = $httpToUpdate->getResponse("POST");
 
-        $convertToAssocArray = json_decode($response_update_order, true);
-        $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Order archived", $convertToAssocArray['message']);
+        // fwrite(STDERR, print_r($response_update_order, true));
+        $OrderArchiveResponseConvertToAssocArray = json_decode($response_update_order, true);
+        $this->assertEquals(true, $OrderArchiveResponseConvertToAssocArray['success']);
+        $this->assertEquals("Order archived", $OrderArchiveResponseConvertToAssocArray['message']);
     }
 }

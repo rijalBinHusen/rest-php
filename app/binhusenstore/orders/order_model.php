@@ -152,13 +152,12 @@ class Binhusenstore_order_model
     {
 
         $retrieve_order = $this->get_order_by_id($id_order);
-        $phone_decrypted =  decrypt_string($retrieve_order[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
-
         $is_order_exists = count($retrieve_order) > 0;
-        $is_phone_matched = $phone_decrypted === $phone;
-
-        if (!$is_phone_matched) return "Nomor telfon pengguna tidak sesuai dengan database!";
         if (!$is_order_exists) return 0;
+
+        $phone_decrypted =  decrypt_string($retrieve_order[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
+        $is_phone_matched = $phone_decrypted == $phone;
+        if (!$is_phone_matched) return "Nomor telfon pengguna tidak sesuai dengan database!";
 
         $is_oke_to_continue = $is_order_exists && $is_phone_matched;
 

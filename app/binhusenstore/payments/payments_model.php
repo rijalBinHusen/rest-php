@@ -196,8 +196,7 @@ class Binhusenstore_payment_model
     public function move_payment_to_archive($id_order)
     {
 
-        $retrieve_payments = $this->get_payments($id_order);
-
+        $retrieve_payments  = $this->database->select_where($this->table, 'id_order', $id_order)->fetchAll(PDO::FETCH_ASSOC);
         $is_product_exists = count($retrieve_payments) > 0;
 
         if ($is_product_exists) {
