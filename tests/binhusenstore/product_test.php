@@ -25,7 +25,8 @@ class Product_test extends TestCase
             'images' => "https://images.unsplash.com/photo-1653179241553-891d33f05410?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80",
             'description' => $faker->text(150),
             'default_total_week' => $faker->numberBetween(20, 60),
-            'is_available' => $faker->boolean()
+            'is_available' => $faker->boolean(),
+            'is_admin_charge' => $faker->boolean()
         );
 
         $this->data_posted = $data;
@@ -62,7 +63,7 @@ class Product_test extends TestCase
             'images' => "Failed test",
             'description' => "Failed test",
             'default_total_week' => "Failed test",
-            'is_available' => "Failed test" 
+            'is_available' => "Failed test"
         );
 
         $httpCallVar->setData($data);
@@ -107,7 +108,7 @@ class Product_test extends TestCase
     {
         $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url .'products');
+        $http = new HttpCall($this->url . 'products');
         $http->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -286,7 +287,7 @@ class Product_test extends TestCase
 
         $user = new User_test();
         $user->LoginAdmin();
-        
+
         $httpCallVar->addJWTToken();
 
         $response = $httpCallVar->getResponse("PUT");

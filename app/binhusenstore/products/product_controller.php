@@ -412,29 +412,31 @@ class Binhusenstore_product
         $is_exists = count($result) > 0;
 
         if ($this->Binhusenstore_product->is_success === true && $is_exists) {
-            
-            Flight::json([
+
+            Flight::json(
+                [
                     "success" => true,
                     "data" => $result
-                ], 200
+                ],
+                200
             );
-        } 
-        
-        else if ($this->Binhusenstore_product->is_success !== true) {
+        } else if ($this->Binhusenstore_product->is_success !== true) {
 
-            Flight::json([
-                "success" => false,
-                "message" => $this->Binhusenstore_product->is_success
-                ], 500
+            Flight::json(
+                [
+                    "success" => false,
+                    "message" => $this->Binhusenstore_product->is_success
+                ],
+                500
             );
-        } 
-        
-        else {
+        } else {
 
-            Flight::json([
-                "success" => false,
-                "message" => "Product not found"
-                ], 404
+            Flight::json(
+                [
+                    "success" => false,
+                    "message" => "Product not found"
+                ],
+                404
             );
         }
     }
