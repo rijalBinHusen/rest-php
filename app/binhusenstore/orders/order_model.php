@@ -148,15 +148,21 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function move_order_to_archive($id_order)
+    public function move_order_to_archive($id_order, $phone)
     {
-        $payment_model = new Binhusenstore_payment_model();
 
         $retrieve_order = $this->get_order_by_id($id_order);
+        $phone_decrypted =  decrypt_string($retrieve_order[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
 
         $is_order_exists = count($retrieve_order) > 0;
+        $is_phone_matched = $phone_decrypted === $phone;
 
-        if ($is_order_exists) {
+        if (!$is_phone_matched) return "Nomor telfon pengguna tidak sesuai dengan database!";
+        if (!$is_order_exists) return 0;
+
+        $is_oke_to_continue = $is_order_exists && $is_phone_matched;
+
+        if ($is_oke_to_continue) {
 
             //set data to insert
             $data_to_insert = array(
@@ -177,6 +183,7 @@ class Binhusenstore_order_model
 
             if ($this->database->is_error === null) {
 
+                $payment_model = new Binhusenstore_payment_model();
                 // remove order
                 $this->remove_order_by_id($id_order);
                 $is_payment_moved = $payment_model->move_payment_to_archive($id_order);
@@ -219,8 +226,8 @@ class Binhusenstore_order_model
         if ($is_order_1_has_group_id) $id_group_to_set = $order_1[0]['id_group'];
         if ($is_order_2_has_group_id) $id_group_to_set = $order_2[0]['id_group'];
 
-        $is_2_order_has_group_id = $is_order_1_has_group_id && $is_order_2_has_group_id;
-        if ($is_2_order_has_group_id) return "Semua order telah memiliki group masing masing";
+        $is_both_order_has_group_id = $is_order_1_has_group_id && $is_order_2_has_group_id;
+        if ($is_both_order_has_group_id) return "Semua order telah memiliki group masing masing";
 
         $data_to_set = array(
             'id_group' => $id_group_to_set,
@@ -229,21 +236,28 @@ class Binhusenstore_order_model
 
         $payment_model = new Binhusenstore_payment_model();
 
+        //
         if ($is_order_1_has_group_id) {
 
             $payment_model->add_id_group_payment_by_id_order($id_order_2, $id_group_to_set);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_2);
-        } else if ($is_order_2_has_group_id) {
+        }
+        //
+        else if ($is_order_2_has_group_id) {
 
             $payment_model->add_id_group_payment_by_id_order($id_order_1, $id_group_to_set);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
-        } else if (!$is_2_order_has_group_id) {
+        }
+        //
+        else if (!$is_both_order_has_group_id) {
 
             $payment_model->add_id_group_payment_by_id_order($id_order_1, $id_group_to_set);
             $payment_model->add_id_group_payment_by_id_order($id_order_2, $id_group_to_set);
             $this->update_order_by_id($data_to_set, 'id', $id_order_2);
             return $this->update_order_by_id($data_to_set, 'id', $id_order_1);
-        } else {
+        }
+        //
+        else {
 
             $this->is_success = $this->database->is_error;
         }

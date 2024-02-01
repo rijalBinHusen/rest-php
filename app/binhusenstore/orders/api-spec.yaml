@@ -121,17 +121,23 @@ paths:
         "404":
           description: order not found
   /order/move_to_archive:
-    parameters:
-      - name: id_order
-        in: query
-        required: true
-        description: The order Id
-        schema:
-          type: string
-        example: O220203902
     post:
       tags:
         - order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_order:
+                  type: string
+                  example: G234567
+                phone:
+                  type: string
+                  example: 1238099712309
+
       summary: Move the order to archived.
       responses:
         "201":
@@ -144,7 +150,7 @@ paths:
                   success:
                     type: boolean
                     default: true
-                  data:
+                  message:
                     type: string
                     example: Order archived
         "401":

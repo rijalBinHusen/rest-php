@@ -883,4 +883,178 @@ class Order_test extends TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
         $this->assertEquals("Nomor handphone pemesan tidak sama", $convertToAssocArray['message']);
     }
+
+    // move order to archive error 401
+    public function test_move_order_to_archive_401()
+    {
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => "123456789",
+            "phone" => "0912830192382",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+
+        $response_update = $httpToUpdate->getResponse("POST");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    // move order to archive invalid phone data
+    public function test_move_order_to_archive_400_invalid_phone()
+    {
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => "123456789",
+            "phone" => "lsdfjsdlfkjsldkfjlksjdf",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Failed to archive order, check the data you sent", $convertToAssocArray['message']);
+    }
+
+    // move order to archive invalid order id
+    public function test_move_order_to_archive_400_invalid_id_order()
+    {
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => "12367",
+            "phone" => "12309823123",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Failed to archive order, check the data you sent", $convertToAssocArray['message']);
+    }
+
+    // move order to archive id order not found
+    public function test_move_order_to_archive_400()
+    {
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => "123456789",
+            "phone" => "lsdfjsdlfkjsldkfjlksjdf",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update = $httpToUpdate->getResponse("PUT");
+        $convertToAssocArray = json_decode($response_update, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Order not found", $convertToAssocArray['message']);
+    }
+
+    // move order to archive phone not matched
+    public function test_move_order_to_archive_phone_not_matched()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => "",
+            'is_group' => false,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => "false",
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => $convertToAssocArray['id'],
+            "phone" => "12398237987",
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update_order = $httpToUpdate->getResponse("POST");
+        $convertToAssocArray = json_decode($response_update_order, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Nomor telfon pengguna tidak sesuai dengan database!", $convertToAssocArray['message']);
+    }
+
+    // move order to archive success
+    public function test_move_order_to_archive_200()
+    {
+        $faker = Faker\Factory::create();
+        $http = new HttpCall($this->url . "order");
+
+        $user = new User_test();
+        $user->LoginAdmin();
+
+        // create order 1
+        // Define the request body
+        $data = array(
+            'date_order' => $faker->date('Y-m-d'),
+            'id_group' => "",
+            'is_group' => false,
+            'id_product' => $faker->text(9),
+            'name_of_customer' => $faker->text(40),
+            'sent' => "false",
+            'title' => $faker->text(47),
+            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'phone' => $faker->numberBetween(100000000000, 999999999999),
+            'admin_charge' => true
+        );
+
+        $http->setData($data);
+        $http->addJWTToken();
+        $response_order = $http->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_order, true);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $httpToUpdate = new HttpCall($this->url . "order/move_to_archive");
+
+        $data_to_sent = array(
+            "id_order" => $convertToAssocArray['id'],
+            "phone" => $data['phone'],
+        );
+
+        $httpToUpdate->setData($data_to_sent);
+        $httpToUpdate->addJWTToken();
+        $response_update_order = $httpToUpdate->getResponse("POST");
+
+        $convertToAssocArray = json_decode($response_update_order, true);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Order archived", $convertToAssocArray['message']);
+    }
 }

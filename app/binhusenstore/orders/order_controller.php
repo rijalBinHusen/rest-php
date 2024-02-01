@@ -346,38 +346,54 @@ class Binhusenstore_order
     {
         $req = Flight::request();
         $id_order = $req->data->id_order;
+        $phone = $req->data->phone;
 
-        $is_request_body_not_oke = empty($id_order) || is_null($id_order);
+        $is_id_order_not_oke = empty($id_order) || is_null($id_order) || strlen($id_order) !== 9;
+        $is_phone_not_oke = empty($phone) || is_null($phone) || !is_numeric($phone);
+
+        $is_request_body_not_oke = $is_id_order_not_oke || $is_phone_not_oke;
 
         if ($is_request_body_not_oke) {
 
             Flight::json([
                 'success' => false,
-                'message' => 'Failed to archive order'
+                'message' => "Failed to archive order, check the data you sent"
             ], 400);
             return;
         }
 
-        $result = $this->Binhusenstore_order->move_order_to_archive($id_order);
+        $result = $this->Binhusenstore_order->move_order_to_archive($id_order, $phone);
 
-        if ($this->Binhusenstore_order->is_success === true) {
+        if ($result === true) {
 
             Flight::json([
                 "success" => true,
                 "message" => "Order archived"
             ], 201);
-        } else if ($this->Binhusenstore_order->is_success !== true) {
-
-            Flight::json([
-                "success" => false,
-                "message" => $this->Binhusenstore_order->is_success
-            ], 500);
-        } else {
+        }
+        // 
+        else if ($result === 0) {
 
             Flight::json([
                 "success" => false,
                 "message" => "Order not found"
             ], 404);
+        }
+        // phone not matched
+        else if ($result !== true && is_string($result)) {
+
+            Flight::json([
+                'success' => false,
+                'message' => $result
+            ], 400);
+        }
+        // 
+        else {
+
+            Flight::json([
+                "success" => false,
+                "message" => $this->Binhusenstore_order->is_success
+            ], 500);
         }
     }
 
@@ -450,26 +466,34 @@ class Binhusenstore_order
                     'success' => false,
                     'message' => 'Order not found'
                 ], 404);
-            } else if ($is_success === true && is_numeric($result) && $result > 0) {
+            }
+            // 
+            else if ($is_success === true && is_numeric($result) && $result > 0) {
 
                 Flight::json([
                     'success' => true,
                     'message' => 'Order grouped',
                 ]);
-            } else if ($is_success !== true) {
+            }
+            // 
+            else if ($is_success !== true) {
 
                 Flight::json([
                     'success' => false,
                     'message' => $is_success
                 ], 500);
-            } else {
+            }
+            // 
+            else {
 
                 Flight::json([
                     'success' => false,
                     'message' => $result
                 ], 400);
             }
-        } else {
+        }
+        // 
+        else {
 
             Flight::json([
                 'success' => false,
