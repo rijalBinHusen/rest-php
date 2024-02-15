@@ -448,11 +448,18 @@ class Binhusenstore_order
     public function merge_order()
     {
         // catch the query string request
+        $error_message = "check the data you sent!";
+
         $req = Flight::request();
         $id_order_1 = $req->data->id_order_1;
         $id_order_2 = $req->data->id_order_2;
 
-        $is_id_order_oke = strlen($id_order_1) === 9 && strlen($id_order_2) === 9;
+        $is_id_order_not_same = $id_order_1 !== $id_order_2;
+        $is_id_order_oke = strlen($id_order_1) === 9 && strlen($id_order_2) === 9 && $is_id_order_not_same;
+
+        if (!$is_id_order_not_same) {
+            $error_message = "The id order can't be same!";
+        }
 
         if ($is_id_order_oke) {
 
@@ -497,7 +504,7 @@ class Binhusenstore_order
 
             Flight::json([
                 'success' => false,
-                'message' => 'Failed to merge order, check the data you sent'
+                'message' => 'Failed to merge order, ' . $error_message
             ], 400);
         }
     }

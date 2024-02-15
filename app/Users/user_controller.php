@@ -224,10 +224,10 @@ class User
     public function get_jwt_token_on_request()
     {
 
-        $cookie_token = $_COOKIE['JWT-Authorization'];
+        $is_cookie_set =  array_key_exists('JWT-Authorization', $_COOKIE) && strlen($_COOKIE['JWT-Authorization']) > 0;
         $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
 
-        $is_token_set = $cookie_token || $is_http_jwt_set;
+        $is_token_set = $is_cookie_set || $is_http_jwt_set;
 
         if ($is_token_set) {
 
@@ -238,7 +238,7 @@ class User
                 $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             } else {
 
-                $jwt_token = $cookie_token;
+                $jwt_token = $_COOKIE['JWT-Authorization'];;
             }
 
             return $jwt_token;
