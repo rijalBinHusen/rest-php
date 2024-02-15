@@ -116,9 +116,24 @@ class User
 
     public function is_valid_token()
     {
-        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
-            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+        $cookie_token = $_COOKIE['JWT-Authorization'];
+        $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
+
+        $is_token_set = $cookie_token || $is_http_jwt_set;
+
+        if ($is_token_set) {
+
+            $jwt_token = "";
+
+            if ($is_http_jwt_set) {
+
+                $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            } else {
+
+                $jwt_token = $cookie_token;
+            }
+
             $is_token_valid = $this->user->validate($jwt_token);
             if ($is_token_valid) {
 
