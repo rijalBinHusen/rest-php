@@ -159,45 +159,41 @@ class Binhusenstore_order_model
         $is_phone_matched = $phone_decrypted == $phone;
         if (!$is_phone_matched) return "Nomor telfon pengguna tidak sesuai dengan database!";
 
-        $is_oke_to_continue = $is_order_exists && $is_phone_matched;
+        // everything is oke to continue :)
+        // first thing, set data to insert
+        $data_to_insert = array(
+            'id' => $id_order,
+            'date_order' => $retrieve_order[0]['date_order'],
+            'id_group' => $retrieve_order[0]['id_group'],
+            'is_group' => (int)$retrieve_order[0]['is_group'],
+            'id_product' => $retrieve_order[0]['id_product'],
+            'name_of_customer' => $retrieve_order[0]['name_of_customer'],
+            'sent' => $retrieve_order[0]['sent'],
+            'title' => $retrieve_order[0]['title'],
+            'total_balance' => $retrieve_order[0]['total_balance'],
+            'phone' => $retrieve_order[0]['phone']
+        );
 
-        if ($is_oke_to_continue) {
+        // insert to archive table
+        $this->database->insert($this->table_archive, $data_to_insert);
 
-            //set data to insert
-            $data_to_insert = array(
-                'id' => $id_order,
-                'date_order' => $retrieve_order[0]['date_order'],
-                'id_group' => $retrieve_order[0]['id_group'],
-                'is_group' => (int)$retrieve_order[0]['is_group'],
-                'id_product' => $retrieve_order[0]['id_product'],
-                'name_of_customer' => $retrieve_order[0]['name_of_customer'],
-                'sent' => $retrieve_order[0]['sent'],
-                'title' => $retrieve_order[0]['title'],
-                'total_balance' => $retrieve_order[0]['total_balance'],
-                'phone' => $retrieve_order[0]['phone']
-            );
+        if ($this->database->is_error === null) {
 
-            // insert to archive table
-            $this->database->insert($this->table_archive, $data_to_insert);
+            $payment_model = new Binhusenstore_payment_model();
+            // remove order and the payments
+            $this->remove_order_by_id($id_order);
+            $is_payment_moved = $payment_model->move_payment_to_archive($id_order);
+            if ($is_payment_moved === true) {
 
-            if ($this->database->is_error === null) {
+                return true;
+            } else {
 
-                $payment_model = new Binhusenstore_payment_model();
-                // remove order
-                $this->remove_order_by_id($id_order);
-                $is_payment_moved = $payment_model->move_payment_to_archive($id_order);
-                if ($is_payment_moved === true) {
-
-                    return true;
-                } else {
-
-                    $this->is_success = $is_payment_moved;
-                    return false;
-                }
+                $this->is_success = $is_payment_moved;
+                return false;
             }
-
-            $this->is_success = $this->database->is_error;
         }
+
+        $this->is_success = $this->database->is_error;
 
         return false;
     }
@@ -214,8 +210,8 @@ class Binhusenstore_order_model
         $phone_1_decrypted =  decrypt_string($order_1[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
         $phone_2_decrypted =  decrypt_string($order_2[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
 
-        $is_phone_matched = $phone_1_decrypted == $phone_2_decrypted;
-        if (!$is_phone_matched) return "Nomor handphone pemesan tidak sama";
+        $is_phone_unmatched = $phone_1_decrypted != $phone_2_decrypted;
+        if ($is_phone_unmatched) return "Nomor handphone pemesan tidak sama";
 
         $id_group_to_set = str_replace("O", "G", $id_order_1);
 

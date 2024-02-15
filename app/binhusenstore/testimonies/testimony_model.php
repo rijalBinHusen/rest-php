@@ -10,7 +10,7 @@ class Binhusenstore_testimony_model
 
     function __construct()
     {
-        
+
         $this->database = Query_builder::getInstance();
     }
 
@@ -27,33 +27,31 @@ class Binhusenstore_testimony_model
 
         $this->database->insert($this->table, $data_to_insert);
 
-        if($this->database->is_error === null) {
-    
-            return $this->database->getMaxId($this->table);
-        }   
-            
-        $this->is_success = $this->database->is_error;
+        if ($this->database->is_error === null) {
 
+            return $this->database->getMaxId($this->table);
+        }
+
+        $this->is_success = $this->database->is_error;
     }
 
     public function get_testimonies($limit)
     {
-        
+
         $table_testimony = $this->table;
         $query_testimony = "SELECT * FROM $table_testimony ORDER BY id DESC";
-        
-        if(is_numeric($limit)) {
 
-            if($limit > 1) $query_testimony = $query_testimony . " LIMIT $limit";
-        }
-        else {
-            
+        if (is_numeric($limit)) {
+
+            if ($limit > 1) $query_testimony = $query_testimony . " LIMIT $limit";
+        } else {
+
             $query_testimony = $query_testimony . " LIMIT 10";
         }
 
         $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null && count($result) > 0) {
+
+        if ($this->database->is_error === null && count($result) > 0) {
 
             $converted_data_type = $this->convert_data_type($result);
             return $converted_data_type;
@@ -67,8 +65,8 @@ class Binhusenstore_testimony_model
         $table_testimony = $this->table;
         $query_testimony = "SELECT * FROM $table_testimony WHERE id_product =  '$id_product' ORDER BY id DESC";
         $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null) {
+
+        if ($this->database->is_error === null) {
 
             $converted_data_type = $this->convert_data_type($result);
             return $converted_data_type;
@@ -81,17 +79,16 @@ class Binhusenstore_testimony_model
     {
 
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
-        
-        if($this->database->is_error === null) {
+
+        if ($this->database->is_error === null) {
 
 
             $converted_data_type = $this->convert_data_type($result);
             return $converted_data_type;
         }
-        
+
         $this->is_success = $this->database->is_error;
         return array();
-        
     }
 
     public function update_testimony_by_id(array $data, $where, $id)
@@ -99,50 +96,48 @@ class Binhusenstore_testimony_model
 
         $result = $this->database->update($this->table, $data, $where, $id);
 
-        if($this->database->is_error === null) {
-    
-            if($result === 0) {
+        if ($this->database->is_error === null) {
+
+            if ($result === 0) {
 
                 $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
                 return $this->database->sqlQuery($query)->fetchColumn();
             }
-            
+
             return $result;
-        } 
+        }
 
         $this->is_success = $this->database->is_error;
-
     }
 
     public function remove_testimony_by_id($id)
     {
         $result = $this->database->delete($this->table, 'id', $id);
 
-        if($this->database->is_error === null) {
-    
+        if ($this->database->is_error === null) {
+
             return $result;
         }
-        
-        $this->is_success = $this->database->is_error;
 
+        $this->is_success = $this->database->is_error;
     }
 
-    
+
     public function get_testimony_landing_page()
     {
-        
+
         $table_testimony = $this->table;
         $query_testimony = "SELECT * FROM $table_testimony ORDER BY RAND() LIMIT 1";
         $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
 
-        if(count($result) === 0) return;
+        if (count($result) === 0) return array();
 
         $product_model = new Binhusenstore_product_model();
         $retrieve_product = $product_model->get_product_by_id($result[0]['id_product']);
-        
-        if(count($retrieve_product) === 0) return;
-        
-        if($this->database->is_error === null && count($result) > 0) {
+
+        if (count($retrieve_product) === 0) return array();
+
+        if ($this->database->is_error === null && count($result) > 0) {
 
             return array(
                 'id' => $result[0]['id'],
@@ -158,7 +153,8 @@ class Binhusenstore_testimony_model
     }
 
 
-    public function convert_data_type($testimonies) {
+    public function convert_data_type($testimonies)
+    {
         $result = array();
 
         foreach ($testimonies as $value) {

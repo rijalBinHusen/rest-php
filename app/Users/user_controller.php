@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/user_model.php');
 
 class User
-{   
+{
     protected $user;
 
     function __construct($table_name)
@@ -20,7 +20,7 @@ class User
         $token = $this->user->login($email, $password);
         $errorLogin = $this->user->error;
 
-        if(is_null($errorLogin)) {
+        if (is_null($errorLogin)) {
 
             setcookie('JWT-Authorization', $token, time() + 3600, '/', '', false, true);
 
@@ -28,9 +28,7 @@ class User
                 'success' => true,
                 'token' => $token,
             ], 200);
-        }
-        
-        else {
+        } else {
             Flight::json([
                 'success' => false,
                 'message' => $errorLogin
@@ -38,7 +36,8 @@ class User
         }
     }
 
-    public function register() {
+    public function register()
+    {
         $req = Flight::request();
         $email = $req->data->email;
         $password = $req->data->password;
@@ -46,20 +45,18 @@ class User
 
         $invalid_request_body = is_null($email) || is_null($password) || is_null($name) || empty($email) || empty($password) || empty($name);
 
-        if($invalid_request_body) {
+        if ($invalid_request_body) {
 
             Flight::json([
                 "success" => false,
                 "message" => "Unprocessable Entity"
             ], 422);
-        } 
-
-        else {
+        } else {
 
             $this->user->register($name, $email, $password);
             $errorLogin = $this->user->error;
-            
-            if(is_null($errorLogin)) {
+
+            if (is_null($errorLogin)) {
                 Flight::json([
                     'success' => true,
                     'message' => 'Registration success.',
@@ -73,29 +70,41 @@ class User
         }
     }
 
-    public function check_token () {
+    public function check_token()
+    {
 
-        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+        $cookie_token = $_COOKIE['JWT-Authorization'];
+        $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
 
-            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+        $is_token_set = $cookie_token || $is_http_jwt_set;
+
+        if ($is_token_set) {
+
+            $jwt_token = "";
+
+            if ($is_http_jwt_set) {
+
+                $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            } else {
+
+                $jwt_token = $cookie_token;
+            }
+
             $is_token_valid = $this->user->validate($jwt_token);
-            
-            if($is_token_valid) {
+
+            if ($is_token_valid) {
 
                 Flight::json([
                     'success' => true,
                     'message' => 'Valid token'
                 ], 200);
-            } 
-            
-            else {
+            } else {
 
                 Flight::json([
                     'success' => false,
                     'message' => 'Invalid token',
                 ], 401);
             }
-
         } else {
 
             Flight::json([
@@ -103,19 +112,19 @@ class User
                 'message' => 'You must be authenticated to access this resource.',
             ], 401);
         }
-        
     }
 
-    public function is_valid_token() {
-        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+    public function is_valid_token()
+    {
+        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $is_token_valid = $this->user->validate($jwt_token);
-            if($is_token_valid) {
+            if ($is_token_valid) {
 
                 return $is_token_valid;
             } else {
-                
+
                 Flight::json([
                     'success' => false,
                     'message' => 'Invalid token',
@@ -123,7 +132,6 @@ class User
 
                 return false;
             }
-            
         } else {
             Flight::json([
                 'success' => false,
@@ -134,23 +142,22 @@ class User
         }
     }
 
-    public function get_user_info() {
-        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+    public function get_user_info()
+    {
+        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $user_info_by_jwt = $this->user->validate($jwt_token);
-            if($user_info_by_jwt) {
+            if ($user_info_by_jwt) {
 
                 return $user_info_by_jwt;
             } else {
-                
+
                 Flight::json([
                     'success' => false,
                     'message' => 'Invalid token',
                 ], 401);
-                
             }
-            
         } else {
 
             Flight::json([
@@ -162,15 +169,16 @@ class User
         return false;
     }
 
-    public function update_password_by_id($id_user) {
+    public function update_password_by_id($id_user)
+    {
 
         $req = Flight::request();
         $password_old = $req->data->password_old;
         $password_new = $req->data->password_new;
 
-        $invalid_request_body = is_null($password_old)|| empty($password_old) || is_null($password_new)|| empty($password_new);
+        $invalid_request_body = is_null($password_old) || empty($password_old) || is_null($password_new) || empty($password_new);
 
-        if($invalid_request_body) {
+        if ($invalid_request_body) {
 
             Flight::json([
                 "success" => false,
@@ -182,16 +190,14 @@ class User
 
         $row_updated = $this->user->update_password($id_user, $password_old, $password_new);
         $errorUpdateUser = $this->user->error;
-        
-        if(is_null($errorUpdateUser) && $row_updated > 0) {
+
+        if (is_null($errorUpdateUser) && $row_updated > 0) {
 
             Flight::json([
                 'success' => true,
                 'message' => 'Update password success.'
             ]);
-        }
-        
-        else {
+        } else {
 
             Flight::json([
                 'success' => false,
@@ -200,27 +206,26 @@ class User
         }
     }
 
-    public function is_admin($id_admin) {
+    public function is_admin($id_admin)
+    {
 
-        if(isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
             $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
             $user_info_by_jwt = $this->user->validate($jwt_token);
 
             $is_no_error = $this->user->error === null;
 
-            if($is_no_error) {
+            if ($is_no_error) {
 
                 $is_admin = $user_info_by_jwt->data->id == $id_admin;
-                if($is_admin) return true;
+                if ($is_admin) return true;
             }
-            
         }
 
         Flight::json([
             'success' => false,
             'message' => 'You must be authenticated to access this resource.',
         ], 401);
-    
     }
 }
