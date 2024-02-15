@@ -73,22 +73,9 @@ class User
     public function check_token()
     {
 
-        $cookie_token = $_COOKIE['JWT-Authorization'];
-        $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
+        $jwt_token = $this->get_jwt_token_on_request();
 
-        $is_token_set = $cookie_token || $is_http_jwt_set;
-
-        if ($is_token_set) {
-
-            $jwt_token = "";
-
-            if ($is_http_jwt_set) {
-
-                $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
-            } else {
-
-                $jwt_token = $cookie_token;
-            }
+        if ($jwt_token) {
 
             $is_token_valid = $this->user->validate($jwt_token);
 
@@ -117,22 +104,9 @@ class User
     public function is_valid_token()
     {
 
-        $cookie_token = $_COOKIE['JWT-Authorization'];
-        $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
+        $jwt_token = $this->get_jwt_token_on_request();
 
-        $is_token_set = $cookie_token || $is_http_jwt_set;
-
-        if ($is_token_set) {
-
-            $jwt_token = "";
-
-            if ($is_http_jwt_set) {
-
-                $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
-            } else {
-
-                $jwt_token = $cookie_token;
-            }
+        if ($jwt_token) {
 
             $is_token_valid = $this->user->validate($jwt_token);
             if ($is_token_valid) {
@@ -159,9 +133,11 @@ class User
 
     public function get_user_info()
     {
-        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
 
-            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+        $jwt_token = $this->get_jwt_token_on_request();
+
+        if ($jwt_token) {
+
             $user_info_by_jwt = $this->user->validate($jwt_token);
             if ($user_info_by_jwt) {
 
@@ -224,9 +200,10 @@ class User
     public function is_admin($id_admin)
     {
 
-        if (isset($_SERVER['HTTP_JWT_AUTHORIZATION'])) {
+        $jwt_token = $this->get_jwt_token_on_request();
 
-            $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+        if ($jwt_token) {
+
             $user_info_by_jwt = $this->user->validate($jwt_token);
 
             $is_no_error = $this->user->error === null;
@@ -242,5 +219,32 @@ class User
             'success' => false,
             'message' => 'You must be authenticated to access this resource.',
         ], 401);
+    }
+
+    public function get_jwt_token_on_request()
+    {
+
+        $cookie_token = $_COOKIE['JWT-Authorization'];
+        $is_http_jwt_set = isset($_SERVER['HTTP_JWT_AUTHORIZATION']);
+
+        $is_token_set = $cookie_token || $is_http_jwt_set;
+
+        if ($is_token_set) {
+
+            $jwt_token = "";
+
+            if ($is_http_jwt_set) {
+
+                $jwt_token = $_SERVER['HTTP_JWT_AUTHORIZATION'];
+            } else {
+
+                $jwt_token = $cookie_token;
+            }
+
+            return $jwt_token;
+        } else {
+
+            return false;
+        }
     }
 }
