@@ -22,7 +22,7 @@ class User
 
         if (is_null($errorLogin)) {
 
-            setcookie('JWT-Authorization', $token, time() + 3600, '/', '', false, true);
+            setcookie('JWT-Authorization', $token, time() + ((3600 * 24) * 7), '/', '', false, true);
 
             Flight::json([
                 'success' => true,
