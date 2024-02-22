@@ -1,0 +1,233 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/memverses
+    description: memverses end point
+tags:
+  - name: folder
+    description: folder user
+
+paths:
+  /folder:
+    post:
+      tags:
+        - folder
+      summary: Lets user post a new folder
+      requestBody:
+        $ref: "#/components/requestBodies/folder"
+      responses:
+        "201":
+          description: Successfully created a new folder
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /folders:
+    get:
+      tags:
+        - folder
+      summary: Get all folder.
+      parameters:
+        - name: id_user
+          in: query
+          description: the user of id
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: user_001
+      responses:
+        "200":
+          $ref: "#/components/responses/get_folders200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /folder/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the folder
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - folder
+      summary: Get folder by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/get_folders200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - folder
+      summary: Update folder by id
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/folder"
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - folder
+      summary: Delete folder by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of folder end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    folder:
+      type: object
+      properties:
+        id_folder:
+          type: string
+        id_user:
+          type: string
+        name:
+          type: string
+        verse_to_show:
+          type: number
+        next_chapter_on_second:
+          type: number
+        read_target:
+          type: number
+        show_first_letter:
+          type: boolean
+        show_tafseer:
+          type: boolean
+        arabic_size:
+          type: number
+        changed_by:
+          type: string
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    get_folders200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/folder"
+  requestBodies:
+    folder:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                required:
+                  - "false"
+              id_folder:
+                type: string
+              id_user:
+                type: string
+              name:
+                type: string
+              verse_to_show:
+                type: number
+              next_chapter_on_second:
+                type: number
+              read_target:
+                type: number
+              show_first_letter:
+                type: boolean
+              show_tafseer:
+                type: boolean
+              arabic_size:
+                type: number
+              changed_by:
+                type: string
