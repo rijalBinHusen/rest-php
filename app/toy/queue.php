@@ -93,7 +93,71 @@ class Queue
         if ($err || $http_code != 200) {
             echo "cURL Error #:" . $err . "http response: " . $http_code . "Coba lagi!";
         } else {
-            echo $response;
+            $parsed = $this->parsed_as_json($response);
+            Flight::json(
+                array(
+                    "success" => true,
+                    "data" => $parsed
+                ),
+                200
+            );
         }
+    }
+
+    public function parsed_as_json($html)
+    {
+        // r\n\t\
+        $remove_all_r = str_replace(array("\r"), '', $html);
+        $remove_all_n = str_replace(array("\n"), ' ', $remove_all_r);
+        $remove_all_t = str_replace(array("\t"), ' ', $remove_all_n);
+        $split_by_end_div = explode("<div", $remove_all_t);
+
+
+        $arr = array();
+
+        for ($i = 0; $i < count($split_by_end_div); $i++) {
+
+            $current_string = $split_by_end_div[$i];
+            $is_any_tag = strpos($current_string, "<p class=");
+
+            if ($is_any_tag) {
+
+                // $is_any_label_tag = strpos($current_string, "label");
+                // if ($is_any_label_tag) {
+
+                $pattern = '/<p class[^>]*>(.*?)<\/P>/';
+                // Use preg_match to find the text
+                preg_match($pattern, $current_string, $matches_label);
+
+                if (isset($matches_label[1])) {
+                    $extracted_text = $matches_label[1];
+
+                    array_push(
+                        $arr,
+                        array(
+                            "area" => $extracted_text,
+                            "lists" => array()
+                        )
+                    );
+                }
+                // }
+
+                $pattern = '/<p class[^>]*>(.*?)<\/p>/';
+                // Use preg_match to find the text
+                preg_match($pattern, $current_string, $matches_vehicle);
+
+                if (isset($matches_vehicle[1])) {
+                    $extracted_text = $matches_vehicle[1];
+
+                    array_push(
+                        $arr[count($arr) - 1]['lists'],
+                        $extracted_text
+                    );
+                }
+            }
+        }
+
+        return $arr;
+        // return $split_by_end_div;
     }
 }
