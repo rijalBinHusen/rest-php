@@ -163,6 +163,7 @@ class Binhusenstore_payment_model
                 );
 
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+                // $this->insert_payment_to_spreadsheet($payment_id, $id_order, $date_paid, $payment_balance);
             } else {
 
                 $data_to_update = array(
@@ -172,6 +173,7 @@ class Binhusenstore_payment_model
                 );
 
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
+                // $this->insert_payment_to_spreadsheet($payment_id, $id_order, $date_paid, $data_to_update['balance']);
             }
 
             $payment_left = $payment_left - $payment_balance; // 1000 - 900= +100
@@ -180,6 +182,35 @@ class Binhusenstore_payment_model
         $this->is_success = $this->database->is_error;
 
         return true;
+    }
+
+    public function insert_payment_to_spreadsheet($id_payment, $id_order, $date_payment, $balance) {
+
+        $app_script_url = APP_SCRIPT_URL .  "?action=insert&id_payment=$id_payment&id_order=$id_order&date_payment=$date_payment&balance=$balance";
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+        CURLOPT_URL => $app_script_url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "Accept: */*",
+            "User-Agent: Thunder Client (https://www.thunderclient.com)"
+        ],
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        // debugger
+        
+        $myfile = fopen("debug.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, json_encode($response));
+        fclose($myfile);
     }
 
     public function sum_balance()

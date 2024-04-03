@@ -24,5 +24,6 @@ define("JWT_ALGO", "HS256");
 
 // key to encrypt descrypt string
 define("ENCRYPT_DECRYPT_PHONE", "wGk11X03ju");
+define("APP_SCRIPT_URL", "https://script.google.com/macros/s/AKfycbwMpwdiDkgwm7PC");
 
 ```
