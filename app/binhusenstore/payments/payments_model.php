@@ -270,9 +270,9 @@ class Binhusenstore_payment_model
         FROM binhusenstore_payments
         WHERE (id_order, date_payment) IN (
           SELECT id_order, MIN(date_payment)
-          FROM binhusenstore_payments WHERE date_payment <= CURRENT_DATE() AND id_order_group = ''
+          FROM binhusenstore_payments WHERE is_paid = 0 AND id_order_group = ''
           GROUP BY id_order
-        ) AND is_paid = 0";
+        ) AND date_payment <= CURRENT_DATE()";
 
         if ($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
 
