@@ -9,3 +9,5 @@ token.txt
 *.jpeg
 *.cache
 utils/constant_named.php
+config.json
+node_modules
