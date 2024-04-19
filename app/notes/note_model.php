@@ -79,12 +79,8 @@ class Note_app_model
         $result = $this->database->update($this->table_name, $data, $where, $id);
 
         if($this->database->is_error === null) {
-    
-            if($result === 0) {
 
-                $query = "SELECT EXISTS(SELECT id FROM $this->table_name WHERE id = '$id')";
-                return $this->database->sqlQuery($query)->fetchColumn();
-            }
+            if($result === 0) return $this->database->is_id_exists($this->table_name, $id);
             
             return $result;
         } 

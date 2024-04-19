@@ -147,6 +147,21 @@ class Query_builder {
 
         return $last_id;
     }
+
+    function is_id_exists($table_name, $id){
+        
+        try {
+
+            $row = $this->db->prepare("SELECT * FROM $table_name WHERE id = ?");
+            $row->execute(array($id));
+            return $row === 1;
+
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            return false;
+        }
+    }
 }
 
 ?>
