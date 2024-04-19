@@ -13,14 +13,17 @@ export class FetchRequest {
     bodyContent = {}
     fileNameToken = "token.txt";
 
-    async doFetch(endPoint, body, method) {
+    async doFetch(endPoint, body, method, isIncludeCookie) {
         
         if(body) {
 
             this.bodyContent = body;
         }
 
-        await this.includeCookie();
+        if(isIncludeCookie){
+
+          await this.includeCookie();
+        }
         
         const response = await fetch(config.url + endPoint, { 
             method: method,
@@ -66,4 +69,9 @@ export class FetchRequest {
           });
         });
       }
+
+    async loginAdmin() {
+        const body = { email: "test@test.com", password: "123456" };
+        await this.doFetch("user/login", body, "POST")
+    }
 }

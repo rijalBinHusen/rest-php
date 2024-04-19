@@ -15,7 +15,7 @@ describe("User end point test", () => {
             "name": "sdkfjsldkfj"
         }
 
-        const response = await fetchReq.doFetch("user/register", body, "POST")
+        const response = await fetchReq.doFetch("user/register", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(409);
@@ -26,7 +26,7 @@ describe("User end point test", () => {
     it("Register failed because not contain name", async () => {
 
         const body = { email: faker.string + "@test.com", password: '123123' };
-        const response = await fetchReq.doFetch("user/register", body, "POST")
+        const response = await fetchReq.doFetch("user/register", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(422);
@@ -41,7 +41,7 @@ describe("User end point test", () => {
     it("New account should be registered", async () => {
 
         const body = { email: newEmailAccount, password: newPasswordAccount, name: newNameAccount };
-        const response = await fetchReq.doFetch("user/register", body, "POST")
+        const response = await fetchReq.doFetch("user/register", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
@@ -52,7 +52,7 @@ describe("User end point test", () => {
     it("Login new account should be success", async () => {
 
         const body = { email: newEmailAccount, password: newPasswordAccount };
-        const response = await fetchReq.doFetch("user/login", body, "POST")
+        const response = await fetchReq.doFetch("user/login", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
@@ -62,7 +62,7 @@ describe("User end point test", () => {
 
     it("Login with wrong password", async () => {
         const body = { email: newEmailAccount, password: 'sdflkj123' };
-        const response = await fetchReq.doFetch("user/login", body, "POST")
+        const response = await fetchReq.doFetch("user/login", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
@@ -71,7 +71,7 @@ describe("User end point test", () => {
     })
 
     it("Validate token", async () => {
-        const response = await fetchReq.doFetch("user/validate", false, "POST");
+        const response = await fetchReq.doFetch("user/validate", false, "POST", true);
         const responseJSON = await response.json();
         
         expect(response.status).equal(200);
