@@ -26,4 +26,11 @@ define("JWT_ALGO", "HS256");
 define("ENCRYPT_DECRYPT_PHONE", "wGk11X03ju");
 define("APP_SCRIPT_URL", "https://script.google.com/macros/s/AKfycbwMpwdiDkgwm7PC");
 
+// database config
+
+define("MYSQL_HOST", "localhost");
+define("MYSQL_DB_NAME", "myreport");
+define("MYSQL_DB_USER", "root");
+define("MYSQL_DB_PASSWORD", "null");
+
 ```

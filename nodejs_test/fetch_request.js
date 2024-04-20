@@ -16,6 +16,7 @@ export class FetchRequest {
     async doFetch(endPoint, body, method, isIncludeCookie) {
         
       if(isIncludeCookie) await this.includeCookie();
+      else this.headersList.Cookie = "";
       
       const fetchConfig = { 
         method: method,
@@ -67,9 +68,9 @@ export class FetchRequest {
         });
       }
 
-    async loginAdmin() {
-        const body = { email: "test@test.com", password: "123456" };
-        await this.doFetch("user/login", body, "POST")
+    async loginAdmin(email, password, url) {
+        const body = { email, password };
+        await this.doFetch(url, body, "POST")
     }
 
     addHeader(headerName, content) {

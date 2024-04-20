@@ -10,7 +10,7 @@ describe("Binhusenstore access code point test", () => {
 
     it("Should be create new access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
         const body = { 'code':  newCode }
 
@@ -24,7 +24,7 @@ describe("Binhusenstore access code point test", () => {
 
     it("Failed crete new access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
         const response = await fetchReq.doFetch("binhusenstore/access_code", false, "POST", true)
         const responseJSON = await response.json();
@@ -36,7 +36,7 @@ describe("Binhusenstore access code point test", () => {
 
     it("Failed validate access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
         const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
         const responseJSON = await response.json();
@@ -48,7 +48,7 @@ describe("Binhusenstore access code point test", () => {
 
     it("Invalid access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
         fetchReq.addHeader("Code-Authorization", "sdfkj")
         const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
@@ -62,7 +62,7 @@ describe("Binhusenstore access code point test", () => {
     it("Access code should be valid", async () => {
 
         fetchReq.addHeader("Code-Authorization", newCode)
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
         const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
         const responseJSON = await response.json();

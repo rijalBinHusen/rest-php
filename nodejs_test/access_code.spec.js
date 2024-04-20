@@ -10,7 +10,7 @@ describe("Access code point test", () => {
 
     it("Should be create new access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { 
             'source_name': 'tests',
@@ -27,7 +27,7 @@ describe("Access code point test", () => {
 
     it("Failed crete new access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { 'source_name': 'tests' }
         const response = await fetchReq.doFetch("access_code/create", body, "POST", true)
@@ -40,7 +40,7 @@ describe("Access code point test", () => {
 
     it("Failed validate access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { 'source_name': 'tests' }
         const response = await fetchReq.doFetch("access_code/validate", body, "POST", true)
@@ -53,7 +53,7 @@ describe("Access code point test", () => {
 
     it("Invalid access code", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { 'source_name': 'tests', code: "sldkjflskd" }
         const response = await fetchReq.doFetch("access_code/validate", body, "POST", true)
@@ -66,7 +66,7 @@ describe("Access code point test", () => {
 
     it("Invalid source name", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { 'source_name': 'tests4444', code: newCode }
         const response = await fetchReq.doFetch("access_code/validate", body, "POST", true)
@@ -79,7 +79,7 @@ describe("Access code point test", () => {
 
     it("Access code should be valid", async () => {
 
-        await fetchReq.loginAdmin();
+        await fetchReq.loginAdmin("test@test.com", "123456", "user/login");
 
         const body = { source_name: 'tests', code: newCode }
         const response = await fetchReq.doFetch("access_code/validate", body, "POST", true)
