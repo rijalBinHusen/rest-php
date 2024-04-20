@@ -15,31 +15,28 @@ export class FetchRequest {
 
     async doFetch(endPoint, body, method, isIncludeCookie) {
         
-        if(body) {
+      if(isIncludeCookie) await this.includeCookie();
+      
+      const fetchConfig = { 
+        method: method,
+        headers: this.headersList
+      }
 
-            this.bodyContent = body;
-        }
-
-        if(isIncludeCookie){
-
-          await this.includeCookie();
-        }
+      if(body) {
+        this.bodyContent = body;
+        fetchConfig.body = JSON.stringify(this.bodyContent)
+      }
         
-        const response = await fetch(config.url + endPoint, { 
-            method: method,
-            body: JSON.stringify(this.bodyContent),
-            headers: this.headersList
-        });
+      const response = await fetch(config.url + endPoint, fetchConfig);
 
-        const headers = response.headers;
-        const cookieHeader = headers.get('set-cookie');
-        // console.log("The cookie header", cookieHeader)
+      const headers = response.headers;
+      const cookieHeader = headers.get('set-cookie');
 
-        if (cookieHeader) {
-            await this.saveStringToFile(this.fileNameToken, cookieHeader);
-        }
+      if (cookieHeader) {
+          await this.saveStringToFile(this.fileNameToken, cookieHeader);
+      }
 
-        return response
+      return response
     }
 
     async saveStringToFile (fileName, content) {
@@ -73,5 +70,9 @@ export class FetchRequest {
     async loginAdmin() {
         const body = { email: "test@test.com", password: "123456" };
         await this.doFetch("user/login", body, "POST")
+    }
+
+    addHeader(headerName, content) {
+      this.headersList[headerName] = content
     }
 }

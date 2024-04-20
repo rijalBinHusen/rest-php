@@ -158,7 +158,9 @@ class Access_code {
         $req = Flight::request();
         $code = $req->data->code;
 
-        $valid_request_body = !is_null($source_name) 
+        $valid_request_body =   !empty($req)
+                                && !empty($req->data)
+                                && !is_null($source_name) 
                                 && !empty($source_name)
                                 && !is_null($code)
                                 && !empty($code);
