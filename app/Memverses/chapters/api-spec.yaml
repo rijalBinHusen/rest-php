@@ -1,0 +1,245 @@
+openapi: 3.0.0
+info:
+  title: Memverses chapter
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/memverses
+    description: memverses end point
+tags:
+  - name: chapter
+    description: chapter of folder
+
+paths:
+  /chapter:
+    post:
+      tags:
+        - chapter
+      summary: Lets user post a new chapter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_chapter:
+                  type: string
+                name:
+                  type: string
+                total_verse_to_show:
+                  type: number
+                show_next_chapter_on_second:
+                  type: number
+                read_target:
+                  type: number
+                is_show_first_letter:
+                  type: boolean
+                is_show_tafseer:
+                  type: boolean
+                arabic_size:
+                  type: number
+      responses:
+        "201":
+          description: Successfully created a new chapter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+  /chapters:
+    get:
+      tags:
+        - chapter
+      summary: Get all chapter.
+      responses:
+        "200":
+          $ref: "#/components/responses/get_chapters200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /chapter/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the chapter
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - chapter
+      summary: Get chapter by id.
+      responses:
+        "200":
+          $ref: "#/components/responses/get_chapters200"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    put:
+      tags:
+        - chapter
+      summary: Update chapter by id
+      requestBody:
+        required: true
+        $ref: "#/components/requestBodies/chapter"
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+    delete:
+      tags:
+        - chapter
+      summary: Delete chapter by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of chapter end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    chapter:
+      type: object
+      properties:
+        id_chapter:
+          type: string
+        id_user:
+          type: string
+        name:
+          type: string
+        verse_to_show:
+          type: number
+        next_chapter_on_second:
+          type: number
+        read_target:
+          type: number
+        show_first_letter:
+          type: boolean
+        show_tafseer:
+          type: boolean
+        arabic_size:
+          type: number
+        last_changed:
+          type: string
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    get_chapters200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/chapter"
+  requestBodies:
+    chapter:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                required:
+                  - "false"
+              id_chapter:
+                type: string
+              id_user:
+                type: string
+              name:
+                type: string
+              verse_to_show:
+                type: number
+              next_chapter_on_second:
+                type: number
+              read_target:
+                type: number
+              show_first_letter:
+                type: boolean
+              show_tafseer:
+                type: boolean
+              arabic_size:
+                type: number
+              changed_by:
+                type: string
