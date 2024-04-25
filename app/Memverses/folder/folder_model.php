@@ -65,7 +65,7 @@ class Memverses_folder_model
         $retrieve_folder = $this->database->select_where_s($this->table, $where_s)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($retrieve_folder) > 0) {
-            
+
             $convert_data_type = $this->convert_data_type($retrieve_folder);
 
             return $convert_data_type[0];
@@ -75,17 +75,18 @@ class Memverses_folder_model
         return array();
     }
 
-    public function update_folder_by_id(array $data, $where, $id)
+    public function update_folder_by_id(array $data, $id_user, $id_folder)
     {
 
-        $result = $this->database->update($this->table, $data, $where, $id);
+        $where_s = array(
+            'id_user' => $id_user,
+            'id_folder' => $id_folder
+        );
 
-        if ($this->database->is_error === null) {
+        $result = $this->database->update_where_s($this->table, $data, $where_s);
 
-            if ($result === 0) return $this->database->is_id_exists($this->table, $id);
-            
-            return $result;
-        }
+        if ($this->database->is_error === null) return $result;
+
 
         $this->is_success = $this->database->is_error;
     }
@@ -104,7 +105,7 @@ class Memverses_folder_model
 
     private function convert_data_type($folders)
     {
-        
+
         $result = array();
         // mapping folders
         foreach ($folders as $folder_value) {
@@ -127,5 +128,4 @@ class Memverses_folder_model
 
         return $result;
     }
-
 }

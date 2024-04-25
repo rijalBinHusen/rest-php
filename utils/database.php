@@ -1,18 +1,21 @@
-<?php 
+<?php
 
 require_once(__DIR__ . "/piece/addslahes_array.php");
 
-class Query_builder {
+class Query_builder
+{
 
     private static $instance;
     protected $db;
     public $is_error = null;
 
-    function __construct(PDO $connection){
-        $this->db = $connection;            
+    function __construct(PDO $connection)
+    {
+        $this->db = $connection;
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance === null) {
             $host = MYSQL_HOST;
             $db_name = MYSQL_DB_NAME;
@@ -34,34 +37,31 @@ class Query_builder {
 
             $result = $this->db->query("SELECT * FROM $tabel");
             return $result;
-
         } catch (PDOException $e) {
 
             $this->is_error = $e;
-            
         }
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function select_where($tabel,$where,$id)
+    function select_where($tabel, $where, $id)
     {
         try {
 
             $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where = ?");
             $row->execute(array($id));
             return $row;
-
         } catch (PDOException $e) {
 
             $this->is_error = $e;
-            
         }
     }
 
-    function select_where_s($table, $where_s) {
+    function select_where_s($table, $where_s)
+    {
         $setPart = array();
 
-        foreach($where_s as $key => $value) {
+        foreach ($where_s as $key => $value) {
             $setPart[] = $key . "=:" . $key;
         }
 
@@ -77,7 +77,7 @@ class Query_builder {
     }
 
     // merupakan fungsi untuk tambah data
-    function insert($tabel,$paramsArr)
+    function insert($tabel, $paramsArr)
     {
         $key = array_keys($paramsArr);
         $val = adslashes_array(array_values($paramsArr));
@@ -85,16 +85,14 @@ class Query_builder {
         $query = "INSERT INTO $tabel (" . implode(', ', $key) . ") "
             . "VALUES ('" . implode("', '", $val) . "')";
 
-        try {   
+        try {
 
             $row = $this->db->prepare($query);
-            $row ->execute();
+            $row->execute();
             return $this->db->lastInsertId();
-
         } catch (PDOException $e) {
 
             $this->is_error = $e;
-            
         }
     }
 
@@ -103,60 +101,93 @@ class Query_builder {
     {
         $setPart = array();
 
-        foreach ($data as $key => $value)
-        {
-            $setPart[] = $key."=:".$key;
+        foreach ($data as $key => $value) {
+            $setPart[] = $key . "=:" . $key;
         }
 
         try {
 
-            $sql = "UPDATE $tabel SET ".implode(', ', $setPart)." WHERE $where = :id";
+            $sql = "UPDATE $tabel SET " . implode(', ', $setPart) . " WHERE $where = :id";
             $row = $this->db->prepare($sql);
             //Bind our values.
-            
-            $row ->bindValue(':id',$id); // where
-            
-            foreach($data as $param => $val)
-            {
-                $row ->bindValue($param, $val);
+
+            $row->bindValue(':id', $id); // where
+
+            foreach ($data as $param => $val) {
+                $row->bindValue($param, $val);
             }
 
             $row->execute();
 
             return $row->rowCount();
-
-        }  catch (PDOException $e) {
+        } catch (PDOException $e) {
 
             $this->is_error = $e;
-            
         }
     }
-    
+
+    function update_where_s($tabel, $data, $where_s)
+    {
+        $setPart = array();
+
+        foreach ($data as $key => $value) {
+            $setPart[] = $key . "=:" . $key;
+        }
+
+        $where_part = array();
+        foreach ($where_s as $key => $value) {
+            $where_part[] = $key . "=:" . $key;
+        }
+
+        try {
+
+            $sql = "UPDATE $tabel SET " . implode(', ', $setPart) . " WHERE " . implode(" AND ", $where_part);
+            $row = $this->db->prepare($sql);
+            //Bind our values.
+
+            // $row->bindValue(':id', $id); // where
+            foreach ($where_s as $param => $val) {
+                $row->bindValue($param, $val);
+            }
+
+            foreach ($data as $param => $val) {
+                $row->bindValue($param, $val);
+            }
+
+            $row->execute();
+
+            return $row->rowCount();
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+        }
+    }
+
     // merupakan fungsi untuk hapus data
-    function delete($tabel,$where,$id)
+    function delete($tabel, $where, $id)
     {
         try {
 
             $sql = "DELETE FROM $tabel WHERE $where = ?";
             $row = $this->db->prepare($sql);
-            $row ->execute(array($id));
+            $row->execute(array($id));
             return $row->rowCount();
-
-        }  catch (PDOException $e) {
+        } catch (PDOException $e) {
 
             $this->is_error = $e;
-            
         }
     }
 
-    function sqlQuery($your_query) {
+    function sqlQuery($your_query)
+    {
         // return $this->db->query($your_query);
         $stmt = $this->db->prepare($your_query);
         $stmt->execute();
         return $stmt;
     }
 
-    function getMaxId($tableName) {
+    function getMaxId($tableName)
+    {
         $last_id = $this->db->lastInsertId();
 
         if ($last_id == 0) {
@@ -171,14 +202,14 @@ class Query_builder {
         return $last_id;
     }
 
-    function is_id_exists($table_name, $id){
-        
+    function is_id_exists($table_name, $id)
+    {
+
         try {
 
             $row = $this->db->prepare("SELECT * FROM $table_name WHERE id = ?");
             $row->execute(array($id));
             return $row === 1;
-
         } catch (PDOException $e) {
 
             $this->is_error = $e;
@@ -186,5 +217,3 @@ class Query_builder {
         }
     }
 }
-
-?>
