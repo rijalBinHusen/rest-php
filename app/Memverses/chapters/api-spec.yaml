@@ -25,19 +25,13 @@ paths:
               properties:
                 id_chapter:
                   type: string
-                name:
+                id_folder:
                   type: string
-                total_verse_to_show:
+                chapter:
                   type: number
-                show_next_chapter_on_second:
+                verse:
                   type: number
-                read_target:
-                  type: number
-                is_show_first_letter:
-                  type: boolean
-                is_show_tafseer:
-                  type: boolean
-                arabic_size:
+                readed_times:
                   type: number
       responses:
         "201":
@@ -88,7 +82,15 @@ paths:
       summary: Update chapter by id
       requestBody:
         required: true
-        $ref: "#/components/requestBodies/chapter"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                readed_times:
+                  type: number
+                id_folder:
+                  type: string
       responses:
         "200":
           $ref: "#/components/responses/200Success"
@@ -127,24 +129,14 @@ components:
       properties:
         id_chapter:
           type: string
-        id_user:
+        id_folder:
           type: string
-        name:
-          type: string
-        verse_to_show:
+        chapter:
           type: number
-        next_chapter_on_second:
+        verse:
           type: number
-        read_target:
+        readed_times:
           type: number
-        show_first_letter:
-          type: boolean
-        show_tafseer:
-          type: boolean
-        arabic_size:
-          type: number
-        last_changed:
-          type: string
   responses:
     400Error:
       description: Invalid request
@@ -219,27 +211,15 @@ components:
           schema:
             type: object
             properties:
-              id:
-                type: string
-                required:
-                  - "false"
               id_chapter:
                 type: string
-              id_user:
+              id_folder:
                 type: string
-              name:
-                type: string
-              verse_to_show:
+              chapter:
                 type: number
-              next_chapter_on_second:
+              verse:
                 type: number
-              read_target:
-                type: number
-              show_first_letter:
-                type: boolean
-              show_tafseer:
-                type: boolean
-              arabic_size:
+              readed_times:
                 type: number
               changed_by:
                 type: string

@@ -3,38 +3,37 @@ import { describe, expect, it } from "vitest"
 import { FetchRequest } from "./fetch_request";
 import { faker } from "@faker-js/faker"
 
-describe("Memverses Folder", async () => {
+describe("Memverses chapter", async () => {
 
 
     const fetchReq = new FetchRequest();
     await fetchReq.loginAdmin("mem_test@test.com", "123456", "memverses/user/login");
-    const newFolder = {
-        id_folder: faker.number.int({ max: 100 }),
-        name: faker.string.sample({ max: 12 }),
-        total_verse_to_show: faker.number.int({ max: 50 }),
-        show_next_chapter_on_second: faker.number.int({ max: 10 }),
+    
+    const newchapter = {
+        id_chapter: faker.string.sample({ max: 100 }),
+        id_folder: faker.string.sample({ max: 12 }),
+        chapter: faker.number.int({ max: 112 }),
+        verse: faker.number.int({ max: 13 }),
         read_target: faker.number.int({ max: 70 }),
-        is_show_first_letter: false,
-        is_show_tafseer: true,
-        arabic_size: faker.number.int({ max: 40 })
+        readed_times: 0
     }
 
-    let idFolderCreated = "";
+    let idChapterCreated = "";
 
-    it("Should be create new folder", async () => {
+    it("Should be create new chapter", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folder", newFolder, "POST", true)
+        const response = await fetchReq.doFetch("memverses/chapter", newchapter, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        idFolderCreated = responseJSON.id;
+        idChapterCreated = responseJSON.id;
     })
 
-    it("Failed create folder invalid request body", async () => {
+    it("Failed create chapter invalid request body", async () => {
 
         const body = {
-            id_folder: faker.number.int({ max: 100 }),
+            id_chapter: faker.number.int({ max: 100 }),
             name: faker.string.sample({ max: 12 }),
             total_verse_to_show: faker.number.int({ max: 50 }),
             show_next_chapter_on_second: faker.number.int({ max: 10 }),
@@ -43,18 +42,18 @@ describe("Memverses Folder", async () => {
             arabic_size: faker.number.int({ max: 40 })
         }
 
-        const response = await fetchReq.doFetch("memverses/folder", body, "POST", true)
+        const response = await fetchReq.doFetch("memverses/chapter", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(400);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Failed to add folder, check the data you sent");
+        expect(responseJSON.message).equal("Failed to add chapter, check the data you sent");
 
     })
 
-    it("Failed create new folder because non authenticated", async () => {
+    it("Failed create new chapter because non authenticated", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folder", newFolder, "POST", false)
+        const response = await fetchReq.doFetch("memverses/chapter", newchapter, "POST", false)
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
@@ -63,9 +62,9 @@ describe("Memverses Folder", async () => {
 
     })
 
-    it("Should get folders", async () => {
+    it("Should get chapters", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folders", false, "GET", true)
+        const response = await fetchReq.doFetch("memverses/chapters", false, "GET", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
@@ -74,9 +73,9 @@ describe("Memverses Folder", async () => {
 
     })
 
-    it("Failed get folders because non authenticated", async () => {
+    it("Failed get chapters because non authenticated", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folders", false, "GET")
+        const response = await fetchReq.doFetch("memverses/chapters", false, "GET")
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
@@ -84,19 +83,19 @@ describe("Memverses Folder", async () => {
         expect(responseJSON.message).equal("You must be authenticated to access this resource.");
     })
 
-    it("Should get folder by id", async () => {
+    it("Should get chapter by id", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folder?id=" + idFolderCreated, false, "GET", true)
+        const response = await fetchReq.doFetch("memverses/chapter?id=" + idchapterCreated, false, "GET", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.data.name).equal(newFolder.name);
+        expect(responseJSON.data.name).equal(newchapter.name);
     })
 
-    it("Failed get folder because not authenticated", async () => {
+    it("Failed get chapter because not authenticated", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folder?id=" + idFolderCreated, false, "GET")
+        const response = await fetchReq.doFetch("memverses/chapter?id=" + idchapterCreated, false, "GET")
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
@@ -104,33 +103,33 @@ describe("Memverses Folder", async () => {
         expect(responseJSON.message).equal("You must be authenticated to access this resource.");
     })
 
-    it("Folder not found", async () => {
+    it("chapter not found", async () => {
 
-        const response = await fetchReq.doFetch("memverses/folder?id=ldldl", false, "GET")
+        const response = await fetchReq.doFetch("memverses/chapter?id=ldldl", false, "GET")
         const responseJSON = await response.json();
 
         expect(response.status).equal(404);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Folder not found");
+        expect(responseJSON.message).equal("chapter not found");
     })
 
-    it("Update folder should be success", async () => {
+    it("Update readed times should be success", async () => {
 
-        const body = { name: "Bismillah" }
+        const body = { readed_times: 1 }
 
-        const response = await fetchReq.doFetch("memverses/folder?id=folder" + idFolderCreated, body, "PUT", true)
+        const response = await fetchReq.doFetch("memverses/chapter?id=" + idChapterCreated, body, "PUT", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.message).equal("Update folder success");
+        expect(responseJSON.message).equal("Update chapter success");
 
-        const responseGET = await fetchReq.doFetch("memverses/folder?id=" + idFolderCreated, false, "GET", true)
+        const responseGET = await fetchReq.doFetch("memverses/chapter?id=" + idchapterCreated, false, "GET", true)
         const getResponseJSON = await responseGET.json();
 
         expect(responseGET.status).equal(200);
         expect(getResponseJSON.success).equal(true);
-        expect(getResponseJSON.data.name).equal(body.name);
+        expect(getResponseJSON.data.readed_times).equal(body.readed_times);
 
     })
 
@@ -138,25 +137,25 @@ describe("Memverses Folder", async () => {
 
         const body = { 'failed': "failed test" }
 
-        const response = await fetchReq.doFetch("memverses/folder?id=" + idFolderCreated, body, "PUT", true)
+        const response = await fetchReq.doFetch("memverses/chapter?id=" + idchapterCreated, body, "PUT", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(400);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Failed to update folder, check the data you sent");
+        expect(responseJSON.message).equal("Failed to update chapter, check the data you sent");
 
     })
 
-    it("Failed update unkown folder", async () => {
+    it("Failed update unkown chapter", async () => {
 
-        const body = { 'name': 60000 }
+        const body = { readed_times: 60000 }
 
-        const response = await fetchReq.doFetch("memverses/folder?id=folder" + "ksdjfh", body, "PUT")
+        const response = await fetchReq.doFetch("memverses/chapter?id=chapter" + "ksdjfh", body, "PUT")
         const responseJSON = await response.json();
 
         expect(response.status).equal(404);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Folder not found");
+        expect(responseJSON.message).equal("chapter not found");
 
     })
 

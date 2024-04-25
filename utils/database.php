@@ -58,6 +58,24 @@ class Query_builder {
         }
     }
 
+    function select_where_s($table, $where_s) {
+        $setPart = array();
+
+        foreach($where_s as $key => $value) {
+            $setPart[] = $key . "=:" . $key;
+        }
+
+        $sql = "SELECT * FROM $table WHERE "  . implode(" AND ", $setPart);
+        $row = $this->db->prepare($sql);
+
+        foreach ($where_s as $param => $val) {
+            $row->bindValue($param, $val);
+        }
+
+        $row->execute();
+        return $row;
+    }
+
     // merupakan fungsi untuk tambah data
     function insert($tabel,$paramsArr)
     {

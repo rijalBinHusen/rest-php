@@ -131,15 +131,15 @@ components:
           type: string
         name:
           type: string
-        verse_to_show:
+        total_verse_to_show:
           type: number
-        next_chapter_on_second:
+        show_next_chapter_on_second:
           type: number
         read_target:
           type: number
-        show_first_letter:
+        is_show_first_letter:
           type: boolean
-        show_tafseer:
+        is_show_tafseer:
           type: boolean
         arabic_size:
           type: number
@@ -229,15 +229,15 @@ components:
                 type: string
               name:
                 type: string
-              verse_to_show:
+              total_verse_to_show:
                 type: number
-              next_chapter_on_second:
+              show_next_chapter_on_second:
                 type: number
               read_target:
                 type: number
-              show_first_letter:
+              is_show_first_letter:
                 type: boolean
-              show_tafseer:
+              is_show_tafseer:
                 type: boolean
               arabic_size:
                 type: number
