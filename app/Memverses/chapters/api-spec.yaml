@@ -23,7 +23,7 @@ paths:
             schema:
               type: object
               properties:
-                id_chapter:
+                id_chapter_client:
                   type: string
                 id_folder:
                   type: string
@@ -128,6 +128,8 @@ components:
       type: object
       properties:
         id_chapter:
+          type: string
+        id_chapter_client:
           type: string
         id_folder:
           type: string
