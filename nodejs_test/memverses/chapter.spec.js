@@ -8,9 +8,9 @@ describe("Memverses chapter", async () => {
 
     const fetchReq = new FetchRequest();
     await fetchReq.loginAdmin("mem_test@test.com", "123456", "memverses/user/login");
-    
+
     const newchapter = {
-        id_chapter_client: faker.string.sample({ max: 100 }),
+        id_chapter_client: faker.string.sample({ max: 7 }),
         id_folder: faker.number.int({ max: 12 }) + "",
         chapter: faker.number.int({ max: 112 }),
         verse: faker.number.int({ max: 13 }),

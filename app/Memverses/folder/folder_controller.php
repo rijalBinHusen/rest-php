@@ -65,7 +65,7 @@ class Memverses_folder
                 );
             }
         } else {
-   
+
             Flight::json(
                 array(
                     'success' => false,
@@ -265,7 +265,8 @@ class Memverses_folder
                 array(
                     'success' => false,
                     'message' => 'Failed to update folder, check the data you sent'
-                ), 400
+                ),
+                400
             );
         }
     }

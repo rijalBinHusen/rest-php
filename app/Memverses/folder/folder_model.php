@@ -22,9 +22,9 @@ class Memverses_folder_model
             'total_verse_to_show' => $total_verse_to_show,
             'show_next_chapter_on_second' => $show_next_chapter_on_second,
             'read_target' => $read_target,
-            'is_show_first_letter' => $is_show_first_letter,
-            'is_show_tafseer' => boolval($is_show_tafseer),
-            'arabic_size' => boolval($arabic_size),
+            'is_show_tafseer' => (int)$is_show_tafseer,
+            'is_show_first_letter' => (int)$is_show_first_letter,
+            'arabic_size' => $arabic_size,
             'changed_by' => $changed_by,
         );
 
@@ -69,9 +69,7 @@ class Memverses_folder_model
             $convert_data_type = $this->convert_data_type($retrieve_folder);
 
             return $convert_data_type[0];
-        } 
-        
-        else if (count($retrieve_folder) === 0) {
+        } else if (count($retrieve_folder) === 0) {
 
             return array();
         }
