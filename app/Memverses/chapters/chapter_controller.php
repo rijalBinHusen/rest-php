@@ -13,14 +13,14 @@ class Memverses_chapter
     {
         // request
         $req = Flight::request();
-        $id_chapter = $req->data->id_chapter;
+        $id_folder = $req->data->id_folder;
         $id_chapter_client = $req->data->id_chapter_client;
         $chapter = $req->data->chapter;
         $verse = $req->data->verse;
         $readed_times = $req->data->readed_times;
 
-        $valid_request_body = !is_null($id_chapter)
-            && is_string($id_chapter)
+        $valid_request_body = !is_null($id_folder)
+            && is_string($id_folder)
             && !is_null($id_chapter_client)
             && is_string($id_chapter_client)
             && !is_null($chapter)
@@ -34,7 +34,7 @@ class Memverses_chapter
 
         if ($valid_request_body) {
 
-            $result = $this->memverses_chapter->append_chapter($id_chapter, $id_user, $chapter, $verse, 0);
+            $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, 0, $id_folder);
 
             if ($this->memverses_chapter->is_success !== true) {
 
@@ -57,13 +57,16 @@ class Memverses_chapter
             }
         }
 
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'Failed to add chapter, check the data you sent'
-            ),
-            400
-        );
+        else {
+   
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to add chapter, check the data you sent'
+                ),
+                400
+            );
+        }
     }
     public function get_chapters($id_user, $id_folder)
     {
@@ -174,7 +177,7 @@ class Memverses_chapter
         // catch the query string request
         $req = Flight::request();
         $id_folder = $req->data->id_folder;
-        $readed_tiems = $req->data->readed_tiems;
+        $readed_times = $req->data->readed_times;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
@@ -183,9 +186,9 @@ class Memverses_chapter
         $valid_id_folder = !is_null($id_folder) && !empty($id_folder) && is_string($id_folder);
         if ($valid_id_folder) $keyValueToUpdate["id_folder"] = $id_folder;
 
-        // conditional $readed_tiems
-        $valid_readed_tiems = !is_null($readed_tiems) && !empty($readed_tiems) && is_numeric($readed_tiems);
-        if ($valid_readed_tiems) $keyValueToUpdate["readed_tiems"] = $readed_tiems;
+        // conditional $readed_times
+        $valid_readed_times = !is_null($readed_times) && !empty($readed_times) && is_numeric($readed_times);
+        if ($valid_readed_times) $keyValueToUpdate["readed_times"] = $readed_times;
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 

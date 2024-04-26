@@ -13,7 +13,7 @@ class Memverses_chapter_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times)
+    public function append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times, $id_folder)
     {
 
         $data_to_insert = array(
@@ -21,7 +21,8 @@ class Memverses_chapter_model
             'id_user' => $id_user,
             'chapter' => $chapter,
             'verse' => $verse,
-            'readed_times' => $readed_times
+            'readed_times' => $readed_times,
+            'id_folder' => $id_folder
         );
 
         $this->database->insert($this->table, $data_to_insert);
@@ -49,6 +50,8 @@ class Memverses_chapter_model
             return $convert_data_type_chapters;
         }
 
+        else if(count($result) === 0) return array();
+        
         $this->is_success = $this->database->is_error;
     }
 
@@ -78,7 +81,7 @@ class Memverses_chapter_model
 
         $where_s = array(
             'id_user' => $id_user,
-            'id_chapter' => $id_chapter
+            'id' => $id_chapter
         );
 
         $result = $this->database->update_where_s($this->table, $data, $where_s);
