@@ -216,4 +216,10 @@ class Query_builder
             return false;
         }
     }
+
+    function __destruct()
+    {
+        self::$instance = null;
+        $this->db = null;
+    }
 }
