@@ -43,7 +43,7 @@ class Memverses_folder
 
         if ($valid_request_body) {
 
-            $result = $this->memverses_folder->append_folder($id_folder, $id_user, $name, $total_verse_to_show, $show_next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, "");
+            $result = $this->memverses_folder->append_folder($id_user, $name, $total_verse_to_show, $show_next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, 0);
 
             if ($this->memverses_folder->is_success !== true) {
 
@@ -64,15 +64,16 @@ class Memverses_folder
                     201
                 );
             }
+        } else {
+   
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to add folder, check the data you sent'
+                ),
+                400
+            );
         }
-
-        Flight::json(
-            array(
-                'success' => false,
-                'message' => 'Failed to add folder, check the data you sent'
-            ),
-            400
-        );
     }
     public function get_folders($id_user)
     {
@@ -94,7 +95,8 @@ class Memverses_folder
             Flight::json(
                 array(
                     "success" => false,
-                    "message" => $result
+                    "message" => $result,
+                    'id_user' => $id_user
                 ),
                 500
             );
@@ -238,7 +240,7 @@ class Memverses_folder
                 Flight::json(
                     array(
                         'success' => true,
-                        'message' => 'Update Folder success',
+                        'message' => 'Update folder success',
                     )
                 );
             } else if ($is_success !== true) {
@@ -263,7 +265,7 @@ class Memverses_folder
                 array(
                     'success' => false,
                     'message' => 'Failed to update folder, check the data you sent'
-                )
+                ), 400
             );
         }
     }

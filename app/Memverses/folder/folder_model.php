@@ -13,17 +13,17 @@ class Memverses_folder_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_folder($id_user, $name, $total_verse_to_show, $next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, $changed_by)
+    public function append_folder($id_user, $name, $total_verse_to_show, $show_next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, $changed_by)
     {
 
         $data_to_insert = array(
             'id_user' => $id_user,
             'name' => $name,
             'total_verse_to_show' => $total_verse_to_show,
-            'next_chapter_on_second' => $next_chapter_on_second,
+            'show_next_chapter_on_second' => $show_next_chapter_on_second,
             'read_target' => $read_target,
-            'show_first_letter' => $is_show_first_letter,
-            'show_tafseer' => boolval($is_show_tafseer),
+            'is_show_first_letter' => $is_show_first_letter,
+            'is_show_tafseer' => boolval($is_show_tafseer),
             'arabic_size' => boolval($arabic_size),
             'changed_by' => $changed_by,
         );
@@ -50,15 +50,16 @@ class Memverses_folder_model
             return $convert_data_type_folders;
         }
 
-        $this->is_success = $this->database->is_error;
+        // $this->is_success = $this->database->is_error;
+        $this->is_success = $result;
     }
 
-    public function get_folder_by_id($id_user, $id_folder)
+    public function get_folder_by_id($id_user, $id)
     {
 
         $where_s = array(
             'id_user' => $id_user,
-            'id_folder' => $id_folder
+            'id' => $id
         );
 
         $retrieve_folder = $this->database->select_where_s($this->table, $where_s)->fetchAll(PDO::FETCH_ASSOC);
@@ -68,18 +69,22 @@ class Memverses_folder_model
             $convert_data_type = $this->convert_data_type($retrieve_folder);
 
             return $convert_data_type[0];
+        } 
+        
+        else if (count($retrieve_folder) === 0) {
+
+            return array();
         }
 
         $this->is_success = $this->database->is_error;
-        return array();
     }
 
-    public function update_folder_by_id(array $data, $id_user, $id_folder)
+    public function update_folder_by_id(array $data, $id_user, $id)
     {
 
         $where_s = array(
             'id_user' => $id_user,
-            'id_folder' => $id_folder
+            'id' => $id
         );
 
         $result = $this->database->update_where_s($this->table, $data, $where_s);
@@ -110,15 +115,15 @@ class Memverses_folder_model
         foreach ($folders as $folder_value) {
 
             $array_to_push = array(
-                "id_folder" => $folder_value['id_folder'],
+                "id" => $folder_value['id'],
                 "name" => $folder_value['name'],
-                "verse_to_show" => (int)$folder_value['verse_to_show'],
-                "next_chapter_on_second" => (int)$folder_value['next_chapter_on_second'],
+                "total_verse_to_show" => (int)$folder_value['total_verse_to_show'],
+                "show_next_chapter_on_second" => (int)$folder_value['show_next_chapter_on_second'],
                 "read_target" => (int)$folder_value['read_target'],
                 "is_show_first_letter" => boolval($folder_value['is_show_first_letter']),
                 "is_show_tafseer" => boolval($folder_value['is_show_tafseer']),
                 "arabic_size" => (int)$folder_value['arabic_size'],
-                "last_changed" => $folder_value['last_changed'],
+                "changed_by" => $folder_value['changed_by'],
             );
 
             array_push($result, $array_to_push);

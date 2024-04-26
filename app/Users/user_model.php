@@ -50,7 +50,7 @@ class User_model
 
     if (!$isUserExists) {
 
-      $this->error = "User exist.";
+      $this->error = "User doesn't exist.";
       // stop here
       return;
     }

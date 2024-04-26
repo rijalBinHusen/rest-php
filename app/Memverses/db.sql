@@ -4,7 +4,7 @@ CREATE TABLE
         id_user VARCHAR(9) NOT NULL,
         name TEXT NOT NULL,
         total_verse_to_show INT NOT NULL,
-        show_next_chapter_second INT NOT NULL,
+        show_next_chapter_on_second INT NOT NULL,
         read_target INT NOT NULL,
         is_show_first_letter TINYINT,
         is_show_tafseer TINYINT,
