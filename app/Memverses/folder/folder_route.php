@@ -16,7 +16,7 @@ Flight::route('POST /memverses/folder', function () {
 
 Flight::route('GET /memverses/folders', function () {
     $user = new User("memverses_users");
-    $user_info = $user->is_valid_token();
+    $user_info = $user->get_user_info();
 
     if ($user_info && $user_info['data']['id']) {
 
@@ -27,7 +27,7 @@ Flight::route('GET /memverses/folders', function () {
 
 Flight::route("GET /memverses/folder/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->is_valid_token();
+    $user_info = $user->get_user_info();
 
     if ($user_info && $user_info['data']['id']) {
 
@@ -38,7 +38,7 @@ Flight::route("GET /memverses/folder/@id", function ($id) {
 
 Flight::route("PUT /memverses/folder/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->is_valid_token();
+    $user_info = $user->get_user_info();
 
     if ($user_info && $user_info['data']['id']) {
 
@@ -49,7 +49,7 @@ Flight::route("PUT /memverses/folder/@id", function ($id) {
 
 // Flight::route("DELETE /memverses/folder/@id", function ($id) {
 //     $user = new User("memverses_users");
-//     $user_info = $user->is_valid_token();
+//     $user_info = $user->get_user_info();
 
 //     if ($user_info && $user_info['data']['id']) {
 
