@@ -49,14 +49,14 @@ describe("Memverses user end point test", () => {
         expect(responseJSON.token).not.equal("");
     })
 
-    it("Login with wrong password", async () => {
+    it("Login with Invalid user/password", async () => {
         const body = { email: newAccount.email, password: 'sdflkj123' };
         const response = await fetchReq.doFetch("memverses/user/login", body, "POST")
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Invalid memverses/user/password");
+        expect(responseJSON.message).equal("Invalid user/password");
     })
 
     it("Validate token", async () => {
@@ -70,27 +70,27 @@ describe("Memverses user end point test", () => {
 
     it("Update password failed, because wrong old password", async () => {
         const body = { password_old: 'sdflkj123', password_new: "sdlkkfjsldkfj" };
-        const response = await fetchReq.doFetch("memverses/user/login", body, "POST")
+        const response = await fetchReq.doFetch("memverses/user/login", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Wrong password");
+        expect(responseJSON.message).equal("Invalid user/password");
     })
 
     it("Update password failed, because no new password", async () => {
         const body = { password_old: newAccount.password, password_new: "" };
-        const response = await fetchReq.doFetch("memverses/user/login", body, "POST")
+        const response = await fetchReq.doFetch("memverses/user/login", body, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(401);
         expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Wrong password");
+        expect(responseJSON.message).equal("Invalid user/password");
     })
 
     it("Update password success", async () => {
         const body = { password_old: newAccount.password, password_new: "123456" };
-        const response = await fetchReq.doFetch("memverses/user/login", body, "POST")
+        const response = await fetchReq.doFetch("memverses/user/update_password", body, "PUT", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
