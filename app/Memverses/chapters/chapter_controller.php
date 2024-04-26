@@ -55,10 +55,8 @@ class Memverses_chapter
                     201
                 );
             }
-        }
+        } else {
 
-        else {
-   
             Flight::json(
                 array(
                     'success' => false,
@@ -102,39 +100,39 @@ class Memverses_chapter
             );
         }
     }
-    // public function get_chapter_by_id($id_user, $id_chapter)
-    // {
+    public function get_chapter_by_id($id_user, $id_chapter)
+    {
 
-    //     $result = $this->memverses_chapter->get_chapter_by_id($id_user, $id_chapter);
+        $result = $this->memverses_chapter->get_chapter_by_id($id_user, $id_chapter);
 
-    //     $is_success = $this->memverses_chapter->is_success;
-    //     $is_found = count($result) > 0;
+        $is_success = $this->memverses_chapter->is_success;
+        $is_found = count($result) > 0;
 
-    //     if ($is_success === true && $is_found) {
-    //         Flight::json(
-    //             array(
-    //                 'success' => true,
-    //                 'data' => $result
-    //             )
-    //         );
-    //     } else if ($is_success !== true) {
-    //         Flight::json(
-    //             array(
-    //                 'success' => false,
-    //                 'message' => $is_success
-    //             ),
-    //             500
-    //         );
-    //     } else {
-    //         Flight::json(
-    //             array(
-    //                 'success' => false,
-    //                 'message' => 'chapter not found'
-    //             ),
-    //             404
-    //         );
-    //     }
-    // }
+        if ($is_success === true && $is_found) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'data' => $result
+                )
+            );
+        } else if ($is_success !== true) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ),
+                500
+            );
+        } else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Chapter not found'
+                ),
+                404
+            );
+        }
+    }
 
     // public function remove_chapter($id) {
     //     // myguest/8
@@ -217,7 +215,7 @@ class Memverses_chapter
                 Flight::json(
                     array(
                         'success' => false,
-                        'message' => 'chapter not found'
+                        'message' => 'Chapter not found'
                     ),
                     404
                 );
@@ -227,7 +225,8 @@ class Memverses_chapter
                 array(
                     'success' => false,
                     'message' => 'Failed to update chapter, check the data you sent'
-                )
+                ),
+                400
             );
         }
     }

@@ -48,33 +48,30 @@ class Memverses_chapter_model
             $convert_data_type_chapters = $this->convert_data_type($result);
 
             return $convert_data_type_chapters;
-        }
+        } else if (count($result) === 0) return array();
 
-        else if(count($result) === 0) return array();
-        
         $this->is_success = $this->database->is_error;
     }
 
-    // public function get_chapter_by_id($id_user, $id_chapter)
-    // {
+    public function get_chapter_by_id($id_user, $id_chapter)
+    {
 
-    //     $where_s = array(
-    //         'id_user' => $id_user,
-    //         'id_chapter' => $id_chapter
-    //     );
+        $where_s = array(
+            'id_user' => $id_user,
+            'id' => $id_chapter
+        );
 
-    //     $retrieve_chapter = $this->database->select_where_s($this->table, $where_s)->fetchAll(PDO::FETCH_ASSOC);
+        $retrieve_chapter = $this->database->select_where_s($this->table, $where_s)->fetchAll(PDO::FETCH_ASSOC);
 
-    //     if ($this->database->is_error === null && count($retrieve_chapter) > 0) {
+        if ($this->database->is_error === null && count($retrieve_chapter) > 0) {
 
-    //         $convert_data_type = $this->convert_data_type($retrieve_chapter);
+            $convert_data_type = $this->convert_data_type($retrieve_chapter);
 
-    //         return $convert_data_type[0];
-    //     }
+            return $convert_data_type[0];
+        } else if (count($retrieve_chapter) === 0) return array();
 
-    //     $this->is_success = $this->database->is_error;
-    //     return array();
-    // }
+        $this->is_success = $this->database->is_error;
+    }
 
     public function update_chapter_by_id(array $data, $id_user, $id_chapter)
     {
@@ -113,7 +110,6 @@ class Memverses_chapter_model
 
             $array_to_push = array(
                 "id" => $chapter_value['id'],
-                "id_chapter" => $chapter_value['id_chapter'],
                 "id_chapter_client" => $chapter_value['id_chapter_client'],
                 "id_folder" => $chapter_value['id_folder'],
                 "chapter" => (int)$chapter_value['chapter'],

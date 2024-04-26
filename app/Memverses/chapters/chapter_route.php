@@ -25,16 +25,16 @@ Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
     }
 });
 
-// Flight::route("GET /memverses/chapter/@id", function ($id) {
-//     $user = new User("memverses_users");
-//     $user_info = $user->get_user_info();
+Flight::route("GET /memverses/chapter/@id", function ($id) {
+    $user = new User("memverses_users");
+    $user_info = $user->get_user_info();
 
-//     if ($user_info && $user_info->data->id) {
+    if ($user_info && $user_info->data->id) {
 
-//         $memverses_chapter = new Memverses_chapter();
-//         $memverses_chapter->get_chapter_by_id($user_info->data->id, $id);
-//     }
-// });
+        $memverses_chapter = new Memverses_chapter();
+        $memverses_chapter->get_chapter_by_id($user_info->data->id, $id);
+    }
+});
 
 Flight::route("PUT /memverses/chapter/@id", function ($id) {
     $user = new User("memverses_users");
