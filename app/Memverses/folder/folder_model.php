@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../../../utils/database.php');
 class Memverses_folder_model
 {
     protected $database;
-    var $table = "memverses_folder";
+    var $table = "memverses_folders";
     var $is_success = true;
 
     function __construct()
@@ -13,11 +13,10 @@ class Memverses_folder_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_folder($id_folder, $id_user, $name, $total_verse_to_show, $next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, $changed_by)
+    public function append_folder($id_user, $name, $total_verse_to_show, $next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, $changed_by)
     {
 
         $data_to_insert = array(
-            'id_folder' => $id_folder,
             'id_user' => $id_user,
             'name' => $name,
             'total_verse_to_show' => $total_verse_to_show,
@@ -111,7 +110,6 @@ class Memverses_folder_model
         foreach ($folders as $folder_value) {
 
             $array_to_push = array(
-                "id" => $folder_value['id'],
                 "id_folder" => $folder_value['id_folder'],
                 "name" => $folder_value['name'],
                 "verse_to_show" => (int)$folder_value['verse_to_show'],

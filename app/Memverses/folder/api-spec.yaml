@@ -23,8 +23,6 @@ paths:
             schema:
               type: object
               properties:
-                id_folder:
-                  type: string
                 name:
                   type: string
                 total_verse_to_show:
@@ -125,7 +123,7 @@ components:
     folder:
       type: object
       properties:
-        id_folder:
+        id:
           type: string
         id_user:
           type: string
@@ -143,7 +141,7 @@ components:
           type: boolean
         arabic_size:
           type: number
-        last_changed:
+        changed_by:
           type: string
   responses:
     400Error:
@@ -220,10 +218,6 @@ components:
             type: object
             properties:
               id:
-                type: string
-                required:
-                  - "false"
-              id_folder:
                 type: string
               id_user:
                 type: string

@@ -127,7 +127,7 @@ components:
     chapter:
       type: object
       properties:
-        id_chapter:
+        id:
           type: string
         id_chapter_client:
           type: string
@@ -213,7 +213,7 @@ components:
           schema:
             type: object
             properties:
-              id_chapter:
+              id:
                 type: string
               id_folder:
                 type: string

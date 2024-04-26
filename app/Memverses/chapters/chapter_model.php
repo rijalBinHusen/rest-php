@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../../../utils/database.php');
 class Memverses_chapter_model
 {
     protected $database;
-    var $table = "memverses_chapter";
+    var $table = "memverses_chapters";
     var $is_success = true;
 
     function __construct()
