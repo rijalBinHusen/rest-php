@@ -9,209 +9,428 @@ describe("Binhusenstore order endpoint test", async () => {
     const fetchReq = new FetchRequest();
     await fetchReq.loginAdmin("binhusen_test@test.com", "123456", "binhusenstore/user/login");
 
-    const newOrder = {
-        date_order: faker.date.past(),
-        id_group: "",
-        is_group: false,
-        id_product: faker.string.sample(9),
-        name_of_customer: faker.person.firstName(),
-        sent: false,
-        title: faker.color(),
-        total_balance: faker.number.int({ min: 700000 }),
-        phone: faker.phone.number(),
-        admin_charge: true
-    }
+    it("Should merge 2 order in 1 id group", async () => {
 
-    let idOrderCreated = ""
+        let id_order_1 = "";
+        let id_order_2 = ""
 
-    it("New order should be created", async () => {
+        const phone_order = faker.phone.number();
 
-        const response = await fetchReq.doFetch("binhusenstore/order", newOrder, "POST", true)
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
         expect(responseJSON.id).not.equal("");
-        idOrderCreated = responseJSON.id
-    })
+        id_order_1 = responseJSON.id
 
-    it("Failed create new order because request body invalid", async () => {
-
-        const body = {
-            date_order: "Failed",
-            id_group: "Failed",
-            is_group: "Failed",
-            id_product: "Failed",
-            name_of_customer: "Failed",
-            sent: "Failed",
-            title: "Failed",
-            total_balance: "Failed",
-            phone: "Failed",
-            admin_charge: "Failed"
+        // create order 2
+        const order_2 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", body, "POST", true)
-        const responseJSON = await response.json();
+        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const responseJSON2 = await response2.json();
 
-        expect(response.status).equal(400);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Failed to add order, check the data you sent");
+        expect(response2.status).equal(201);
+        expect(responseJSON2.success).equal(true);
+        expect(responseJSON2.id).not.equal("");
+        id_order_2 = responseJSON2.id
 
+        // merge order
+        const body = { id_order_1, id_order_2 }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(200);
+        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.message).equal("Order merged");
+
+        // Get both order
+        // Order 1
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const responseGetOrder1 = await getOrder1.json();
+
+        expect(getOrder1).equal(200);
+        expect(responseGetOrder1.success).equal(true)
+
+        // Order 2
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const responseGetOrder2 = await getOrder2.json();
+
+        expect(getOrder2).equal(200);
+        expect(responseGetOrder2.success).equal(true)
+
+        // compare both order
+        expect(responseGetOrder1.data[0].id_group).equal(responseGetOrder2.data[0].id_group)
     })
 
-    it("Failed create new order because non authenticated", async () => {
+    it("Should add id order group 1 to order 2", async () => {
 
-        const response = await fetchReq.doFetch("binhusenstore/order", newOrder, "POST", false)
+        let id_order_1 = "";
+        let id_order_2 = ""
+
+        const phone_order = faker.phone.number();
+
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: faker.string.sample(9),
+            is_group: true,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
-        expect(response.status).equal(401);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
-
-    })
-
-    it("Should get the order", async () => {
-
-        const response = await fetchReq.doFetch("binhusenstore/orders", false, "GET", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(200);
+        expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.data[0]).haveOwnProperty("date_order");
-        expect(responseJSON.data[0]).haveOwnProperty("id_group");
-        expect(responseJSON.data[0]).haveOwnProperty("is_group");
-        expect(responseJSON.data[0]).haveOwnProperty("name_of_customer");
-        expect(responseJSON.data[0]).haveOwnProperty("sent");
-        expect(responseJSON.data[0]).haveOwnProperty("title");
-        expect(responseJSON.data[0]).haveOwnProperty("total_balance");
-        expect(responseJSON.data[0]).haveOwnProperty("phone");
-        expect(responseJSON.data[0]).haveOwnProperty("admin_charge");
+        expect(responseJSON.id).not.equal("");
+        id_order_1 = responseJSON.id
 
+        // create order 2
+        const order_2 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const responseJSON2 = await response2.json();
+
+        expect(response2.status).equal(201);
+        expect(responseJSON2.success).equal(true);
+        expect(responseJSON2.id).not.equal("");
+        id_order_2 = responseJSON2.id
+
+        // merge order
+        const body = { id_order_1, id_order_2 }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(200);
+        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.message).equal("Order merged");
+
+        // Get both order
+        // Order 1
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const responseGetOrder1 = await getOrder1.json();
+
+        expect(getOrder1).equal(200);
+        expect(responseGetOrder1.success).equal(true)
+
+        // Order 2
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const responseGetOrder2 = await getOrder2.json();
+
+        expect(getOrder2).equal(200);
+        expect(responseGetOrder2.success).equal(true)
+
+        // compare both order
+        expect(responseGetOrder1.data[0].id_group).equal(responseGetOrder2.data[0].id_group)
+        expect(order_1.id_group).equal(responseGetOrder2.data[0].id_group)
     })
 
-    it("Failed get order because non authenticated", async () => {
+    it("Should add id order group 2 to order 1", async () => {
 
-        const response = await fetchReq.doFetch("binhusenstore/orders", false, "GET")
+        let id_order_1 = "";
+        let id_order_2 = ""
+
+        const phone_order = faker.phone.number();
+
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
-        expect(response.status).equal(401);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
-    })
-
-    it("Should get order by Id", async () => {
-        const response = await fetchReq("binhusenstore/order/" + idOrderCreated, "GET", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(200);
-        // expect(responseJSON.data.admin_charge).equal(newOrder.admin_charge);
-        expect(responseJSON.data.date_order).equal(newOrder.date_order);
-        expect(responseJSON.data.id_group).equal(newOrder.id_group);
-        expect(responseJSON.data.is_group).equal(newOrder.is_group);
-        expect(responseJSON.data.id_product).equal(newOrder.id_product);
-        expect(responseJSON.data.name_of_customer).equal(newOrder.name_of_customer);
-        expect(responseJSON.data.sent).equal(newOrder.sent);
-        expect(responseJSON.data.title).equal(newOrder.title);
-        expect(responseJSON.data.total_balance).equal(newOrder.total_balance);
-    })
-
-
-    it("Failed get order by id because non authenticated", async () => {
-
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, false, "GET")
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(401);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
-    })
-
-
-    it("Order by id not found", async () => {
-
-        const response = await fetchReq.doFetch("binhusenstore/order/aaaa", false, "GET", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(404);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Order not found");
-    })
-
-    it("Put Order by id should be success", async () => {
-
-        const body = { title: "Updated" }
-
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, body, "PUT", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(200);
+        expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.message).equal("Update order success");
+        expect(responseJSON.id).not.equal("");
+        id_order_1 = responseJSON.id
+
+        // create order 2
+        const order_2 = {
+            date_order: faker.date.past(),
+            id_group: faker.string.sample(9),
+            is_group: true,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const responseJSON2 = await response2.json();
+
+        expect(response2.status).equal(201);
+        expect(responseJSON2.success).equal(true);
+        expect(responseJSON2.id).not.equal("");
+        id_order_2 = responseJSON2.id
+
+        // merge order
+        const body = { id_order_1, id_order_2 }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(200);
+        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.message).equal("Order merged");
+
+        // Get both order
+        // Order 1
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const responseGetOrder1 = await getOrder1.json();
+
+        expect(getOrder1).equal(200);
+        expect(responseGetOrder1.success).equal(true)
+
+        // Order 2
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const responseGetOrder2 = await getOrder2.json();
+
+        expect(getOrder2).equal(200);
+        expect(responseGetOrder2.success).equal(true)
+
+        // compare both order
+        expect(responseGetOrder1.data[0].id_group).equal(responseGetOrder2.data[0].id_group)
+        expect(order_2.id_group).equal(responseGetOrder1.data[0].id_group)
     })
 
-    it("Put Order by id failed", async () => {
+    it("Merge order error 400", async () => {
+        const body = {
+            id_order_1: "Failed",
+            id_order_2: " Failed"
+        }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
 
-        const body = { date_order: "Failed" }
+        expect(responseMergeOrder.status).equal(400);
+        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.message).equal("Failed to merge order, check the data you sent");
+    })
 
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, body, "PUT", true)
+    it("Merge order error 401 non authenticated", async () => {
+        const body = {
+            id_order_1: faker.string.sample(9),
+            id_order_2: faker.string.sample(9)
+        }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT")
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(401);
+        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.message).equal("You must be authenticated to access this resource.");
+    })
+
+    it("Merge order error 404 not found, 1 order not found", async () => {
+
+        let id_order_1 = "";
+        let id_order_2 = ""
+
+        const phone_order = faker.phone.number();
+
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
-        expect(response.status).equal(400);
+        expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.message).equal("Failed to update order, check the data you sent");
+        expect(responseJSON.id).not.equal("");
+        id_order_1 = responseJSON.id
+
+        // merge order
+        const body = { id_order_1, id_order_2: "G23456789" }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(404);
+        expect(responseJSONMergeOrder.success).equal(false);
+        expect(responseJSONMergeOrder.message).equal("Order not found");
     })
 
-    it("Put Order by id failed", async () => {
 
-        const body = { title: "Failed" }
+    it("Merge order but each order has id group", async () => {
 
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, body, "PUT")
+        let id_order_1 = "";
+        let id_order_2 = ""
+
+        const phone_order = faker.phone.number();
+
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: faker.string.sample(9),
+            is_group: true,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
-        expect(response.status).equal(400);
+        expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
+        expect(responseJSON.id).not.equal("");
+        id_order_1 = responseJSON.id
+
+        // create order 2
+        const order_2 = {
+            date_order: faker.date.past(),
+            id_group: faker.string.sample(9),
+            is_group: true,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: phone_order,
+            admin_charge: true
+        }
+
+        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const responseJSON2 = await response2.json();
+
+        expect(response2.status).equal(201);
+        expect(responseJSON2.success).equal(true);
+        expect(responseJSON2.id).not.equal("");
+        id_order_2 = responseJSON2.id
+
+        // merge order
+        const body = { id_order_1, id_order_2 }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
+
+        expect(responseMergeOrder.status).equal(400);
+        expect(responseJSONMergeOrder.success).equal(false);
+        expect(responseJSONMergeOrder.message).equal("Semua order telah memiliki group masing masing");
     })
 
-    it("Put Order by id not found", async () => {
+    it("Merge order but phone not same", async () => {
 
-        const body = { title: "Failed" }
+        let id_order_1 = "";
+        let id_order_2 = ""
 
-        const response = await fetchReq.doFetch("binhusenstore/order/aaaaa", body, "PUT", true)
+        // create order 1
+        const order_1 = {
+            date_order: faker.date.past(),
+            id_group: faker.string.sample(9),
+            is_group: true,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: faker.phone.number(),
+            admin_charge: true
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
         const responseJSON = await response.json();
 
-        expect(response.status).equal(404);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Order not found");
-    })
-
-    it("Order should be removed", async () => {
-
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, false, "DELETE", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(200);
+        expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
-        expect(responseJSON.message).equal("Delete order success");
-    })
+        expect(responseJSON.id).not.equal("");
+        id_order_1 = responseJSON.id
 
-    it("Remove order non authenticated", async () => {
+        // create order 2
+        const order_2 = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: faker.phone.number(),
+            admin_charge: true
+        }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/" + idOrderCreated, false, "DELETE")
-        const responseJSON = await response.json();
+        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const responseJSON2 = await response2.json();
 
-        expect(response.status).equal(401);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
-    })
+        expect(response2.status).equal(201);
+        expect(responseJSON2.success).equal(true);
+        expect(responseJSON2.id).not.equal("");
+        id_order_2 = responseJSON2.id
 
-    it("Remove order non authenticated", async () => {
+        // merge order
+        const body = { id_order_1, id_order_2 }
+        const responseMergeOrder = await fetchReq.doFetch("binhusenstore/orders/merge/add_id_group", body, "PUT", true)
+        const responseJSONMergeOrder = await responseMergeOrder.json();
 
-        const response = await fetchReq.doFetch("binhusenstore/order/aaaaa", false, "DELETE", true)
-        const responseJSON = await response.json();
-
-        expect(response.status).equal(404);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Order not found");
+        expect(responseMergeOrder.status).equal(400);
+        expect(responseJSONMergeOrder.success).equal(false);
+        expect(responseJSONMergeOrder.message).equal("Nomor handphone pemesan tidak sama");
     })
 })
