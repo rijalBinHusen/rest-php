@@ -13,6 +13,17 @@ Flight::route('POST /binhusenstore/order', function () {
     }
 });
 
+Flight::route('POST /binhusenstore/order_also_payment', function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_admin(1);
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->add_order();
+    }
+});
+
 Flight::route('GET /binhusenstore/orders', function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_valid_token();
@@ -112,7 +123,7 @@ Flight::route("PUT /binhusenstore/orders/merge/add_id_group", function () {
     }
 });
 
-Flight::route("PUT /binhusenstore/orders/unmerge/add_id_group", function () {
+Flight::route("PUT /binhusenstore/orders/merge/remove_id_group", function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 

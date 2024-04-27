@@ -54,6 +54,56 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
+    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $end_date_payment)
+    {
+        $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
+
+        $data_to_insert = array(
+            'date_order' => $date_order,
+            'id_group' => $id_group,
+            'is_group' => (int)$is_group,
+            'id_product' => $id_product,
+            'name_of_customer' => $name_of_customer,
+            'sent' => $sent,
+            'title' => $title,
+            'total_balance' => $total_balance,
+            'phone' => $encrypted_phone,
+            'admin_charge' => 0
+        );
+
+        if ($admin_chrage) {
+            // retrieve admin charge
+            $retrieve_charge = $this->database->select_where('admin_charge', 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
+
+            // set the admin charge
+            if ($retrieve_charge) {
+
+                $data_to_insert['admin_charge'] = $retrieve_charge[0]['admin_charge'];
+            }
+        }
+
+        $this->database->insert($this->table, $data_to_insert);
+
+        if ($this->database->is_error === null) {
+
+            $id_order = $this->database->getMaxId($this->table);
+
+            $payment_model = new Binhusenstore_payment_model();
+            $balance_remaining = $total_balance;
+
+            for ($i = $start_date_payment; $i <= $end_date_payment; $i++) {
+                $is_last_payment = $balance_remaining <= $balance_payment;
+                if ($is_last_payment) $payment_model->append_payment($i, $id_order, $balance_remaining, "");
+                else $payment_model->append_payment($i, $id_order, $balance_payment, "");
+                $balance_remaining = $balance_remaining - $balance_payment;
+            }
+
+            return $id_order;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
     public function get_orders($limit)
     {
         $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance";

@@ -81,6 +81,85 @@ class Binhusenstore_order
         }
     }
 
+    public function add_order_and_payment()
+    {
+        // request
+        $req = Flight::request();
+        $date_order = $req->data->date_order;
+        $id_group = $req->data->id_group;
+        $is_group = $req->data->is_group;
+        $id_product = $req->data->id_product;
+        $name_of_customer = $req->data->name_of_customer;
+        $sent = $req->data->sent;
+        $title = $req->data->title;
+        $total_balance = $req->data->total_balance;
+        $phone = $req->data->phone;
+        $admin_charge = $req->data->admin_charge;
+        $start_date_payment = $req->data->start_date_payment;
+        $balance_payment = $req->data->balance_payment;
+        $end_date_payment = $req->data->end_date_payment;
+
+        $result = null;
+
+        $is_request_body_not_oke = is_null($date_order)
+            || is_null($start_date_payment)
+            || is_null($end_date_payment)
+            || is_null($id_group)
+            || !is_string($id_group)
+            || is_null($is_group)
+            || !is_bool($is_group)
+            || is_null($id_product)
+            || !is_string($id_product)
+            || is_null($name_of_customer)
+            || !is_string($name_of_customer)
+            || is_null($sent)
+            || !is_string($sent)
+            || is_null($title)
+            || !is_string($title)
+            || is_null($total_balance)
+            || !is_numeric($total_balance)
+            || is_null($balance_payment)
+            || !is_numeric($balance_payment)
+            || is_null($phone)
+            || !is_numeric($phone)
+            || is_null($admin_charge)
+            || !is_bool($admin_charge);
+
+        if ($is_request_body_not_oke) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to add order, check the data you sent'
+                ),
+                400
+            );
+            return;
+        }
+
+        $result = $this->Binhusenstore_order->append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_charge, $start_date_payment, $balance_payment, $end_date_payment);
+
+        if ($this->Binhusenstore_order->is_success === true) {
+
+            Flight::json(
+                array(
+                    'success' => true,
+                    'id' => $result
+                ),
+                201
+            );
+        } else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $this->Binhusenstore_order->is_success
+                ),
+                500
+            );
+        }
+    }
+
     public function get_orders()
     {
 
@@ -479,7 +558,7 @@ class Binhusenstore_order
 
                 Flight::json([
                     'success' => true,
-                    'message' => 'Order grouped',
+                    'message' => 'Order merged',
                 ]);
             }
             // 

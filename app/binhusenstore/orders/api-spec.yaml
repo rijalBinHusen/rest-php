@@ -29,6 +29,54 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /order_also_payment:
+    post:
+      tags:
+        - order
+      summary: Lets a user post a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date_order:
+                  type: string
+                  example: "2023-07-23"
+                id_group:
+                  type: string
+                is_group:
+                  type: boolean
+                id_product:
+                  type: string
+                name_of_customer:
+                  type: string
+                sent:
+                  type: string
+                title:
+                  type: string
+                total_balance:
+                  type: number
+                admin_charge:
+                  type: boolean
+                start_date_payment:
+                  type: string
+                balance_payment:
+                  type: number
+                end_date_payment:
+                  type: string
+      responses:
+        "201":
+          description: Successfully created a new order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /orders:
     parameters:
       - name: limit
@@ -267,6 +315,65 @@ paths:
                   message:
                     type: boolean
                     example: "Order grouped"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "400":
+          description: order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        "404":
+          description: order not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  message:
+                    type: boolean
+                    example: false
+  /orders/merge/remove_id_group:
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_group:
+                  type: string
+                  example: "O23041230"
+                phone:
+                  type: string
+                  example: "6128376123"
+      tags:
+        - order
+      summary: Remove Id group for orders and payment (phone_order must same).
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: boolean
+                    example: "Order unmerged"
         "401":
           $ref: "#/components/responses/401Error"
         "400":
