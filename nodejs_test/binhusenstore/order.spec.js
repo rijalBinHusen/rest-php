@@ -205,7 +205,7 @@ describe("Binhusenstore order endpoint test", async () => {
         expect(responseJSON.message).equal("You must be authenticated to access this resource.");
     })
 
-    it("Remove order non authenticated", async () => {
+    it("Remove order error 404 not found", async () => {
 
         const response = await fetchReq.doFetch("binhusenstore/order/aaaaa", false, "DELETE", true)
         const responseJSON = await response.json();
@@ -213,5 +213,128 @@ describe("Binhusenstore order endpoint test", async () => {
         expect(response.status).equal(404);
         expect(responseJSON.success).equal(false);
         expect(responseJSON.message).equal("Order not found");
+    })
+
+    it("Move order to archive error 401 non authencticated", async () => {
+
+        const body = {
+            id_order: "123456789",
+            phone: "0987654321"
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseJSON = await response.json();
+
+        expect(response.status).equal(401);
+        expect(responseJSON.success).equal(false);
+        expect(responseJSON.message).equal("You must be authenticated to access this resource.");
+    })
+
+    it("Move order to archive error 400 invalid phone number", async () => {
+
+        const body = {
+            id_order: "123456789",
+            phone: "a;sdjfsl;dfskdjfhskdfkj"
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseJSON = await response.json();
+
+        expect(response.status).equal(400);
+        expect(responseJSON.success).equal(false);
+        expect(responseJSON.message).equal("Failed to archive order, check the data you sent");
+    })
+
+    it("Move order to archive error 400 invalid id order", async () => {
+
+        const body = {
+            id_order: "123456789",
+            phone: "0987654321"
+        }
+
+        const response = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseJSON = await response.json();
+
+        expect(response.status).equal(404);
+        expect(responseJSON.success).equal(false);
+        expect(responseJSON.message).equal("Order not found");
+    })
+
+    it("Move order to archive error 400 phone number not same", async () => {
+
+        const newOrder = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: faker.phone.number(),
+            admin_charge: true
+        }
+
+        let idOrderCreated = ""
+
+        const response = await fetchReq.doFetch("binhusenstore/order", newOrder, "POST", true)
+        const responseJSON = await response.json();
+
+        expect(response.status).equal(201);
+        expect(responseJSON.success).equal(true);
+        expect(responseJSON.id).not.equal("");
+        idOrderCreated = responseJSON.id
+
+        const body = {
+            id_order: idOrderCreated,
+            phone: 234567245
+        }
+
+        const responseMoveToArchive = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseMoveToArchiveJSON = await responseMoveToArchive.json();
+
+        expect(responseMoveToArchive.status).equal(201);
+        expect(responseMoveToArchiveJSON.success).equal(true);
+        expect(responseMoveToArchiveJSON.id).not.equal("");
+        idOrderCreated = responseMoveToArchiveJSON.id
+    })
+
+    it("Move order to archive success", async () => {
+
+        const newOrder = {
+            date_order: faker.date.past(),
+            id_group: "",
+            is_group: false,
+            id_product: faker.string.sample(9),
+            name_of_customer: faker.person.firstName(),
+            sent: false,
+            title: faker.color(),
+            total_balance: faker.number.int({ min: 700000 }),
+            phone: faker.phone.number(),
+            admin_charge: true
+        }
+
+        let idOrderCreated = ""
+
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment", newOrder, "POST", true)
+        const responseJSON = await response.json();
+
+        expect(response.status).equal(201);
+        expect(responseJSON.success).equal(true);
+        expect(responseJSON.id).not.equal("");
+        idOrderCreated = responseJSON.id
+
+        const body = {
+            id_order: idOrderCreated,
+            phone: 234567245
+        }
+
+        const responseMoveToArchive = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseMoveToArchiveJSON = await responseMoveToArchive.json();
+
+        expect(responseMoveToArchive.status).equal(201);
+        expect(responseMoveToArchiveJSON.success).equal(true);
+        expect(responseMoveToArchiveJSON.id).not.equal("");
+        idOrderCreated = responseMoveToArchiveJSON.id
     })
 })
