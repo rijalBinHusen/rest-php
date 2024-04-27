@@ -302,9 +302,9 @@ describe("Binhusenstore order endpoint test", async () => {
 
         const start_date = faker.date.past();
         const end_date = new Date(start_date);
-        end_date.setDate(start_date.getDate() + 10);
+        end_date.setDate(start_date.getDate() + 30);
 
-        const total_balance = faker.number.int({ min: 700000, max: 999999999 });
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
         const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // console.log(`Start date: ${start_date}, end date: ${end_date}, total_balance: ${total_balance}, total day: ${totalDay}, balance_payment: ${total_balance / totalDay}`)
@@ -322,7 +322,7 @@ describe("Binhusenstore order endpoint test", async () => {
             admin_charge: true,
             start_date_payment: start_date.toISOString().slice(0, 10),
             end_date_payment: end_date.toISOString().slice(0, 10),
-            balance_payment: total_balance / totalDay,
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
         let idOrderCreated = ""
@@ -334,19 +334,17 @@ describe("Binhusenstore order endpoint test", async () => {
         expect(responseJSON.success).equal(true);
         expect(responseJSON.id).not.equal("");
         idOrderCreated = responseJSON.id
-        console.log(idOrderCreated)
 
-        // const body = {
-        //     id_order: idOrderCreated,
-        //     phone: newOrder.phone
-        // }
+        const body = {
+            id_order: idOrderCreated,
+            phone: newOrder.phone
+        }
         
-        // const responseMoveToArchive = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
-        // const responseMoveToArchiveJSON = await responseMoveToArchive.json();
+        const responseMoveToArchive = await fetchReq.doFetch("binhusenstore/order/move_to_archive", body, "POST", true)
+        const responseMoveToArchiveJSON = await responseMoveToArchive.json();
         
-        // console.log(responseMoveToArchiveJSON)
-        // expect(responseMoveToArchive.status).equal(200);
-        // expect(responseMoveToArchiveJSON.success).equal(true);
-        // expect(responseMoveToArchiveJSON.id).not.equal("");
+        expect(responseMoveToArchive.status).equal(201);
+        expect(responseMoveToArchiveJSON.success).equal(true);
+        expect(responseMoveToArchiveJSON.message).equal("Order archived");
     }, { timeout: 10000})
 })

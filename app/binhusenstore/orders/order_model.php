@@ -101,10 +101,9 @@ class Binhusenstore_order_model
                 $balance_remaining = $balance_remaining - $balance_payment;
 
                 $current_date->modify('+1 day');
-                if($is_payment_created === false) {
-                    // $this->is_success = $payment_model->is_success;
-                    $this->is_success = "Gagal menambahkan payment";
-                    return "";
+                if(!$is_payment_created) {
+                    $this->is_success = $payment_model->is_success;
+                    return;
                 }
             }
 
