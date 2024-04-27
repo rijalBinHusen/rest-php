@@ -90,12 +90,22 @@ class Binhusenstore_order_model
 
             $payment_model = new Binhusenstore_payment_model();
             $balance_remaining = $total_balance;
+            $is_payment_created = false;
 
-            for ($i = $start_date_payment; $i <= $end_date_payment; $i++) {
-                $is_last_payment = $balance_remaining <= $balance_payment;
-                if ($is_last_payment) $payment_model->append_payment($i, $id_order, $balance_remaining, "");
-                else $payment_model->append_payment($i, $id_order, $balance_payment, "");
+            $current_date = new DateTime($start_date_payment);
+
+            while ($balance_remaining > 0) {
+
+                $balance_to_insert = $balance_remaining >= $balance_payment ? $balance_payment : $balance_remaining;
+                $is_payment_created = $payment_model->append_payment($current_date->format('Y-m-d'), $id_order, $balance_to_insert, "");
                 $balance_remaining = $balance_remaining - $balance_payment;
+
+                $current_date->modify('+1 day');
+                if($is_payment_created === false) {
+                    // $this->is_success = $payment_model->is_success;
+                    $this->is_success = "Gagal menambahkan payment";
+                    return "";
+                }
             }
 
             return $id_order;
@@ -106,7 +116,7 @@ class Binhusenstore_order_model
 
     public function get_orders($limit)
     {
-        $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance";
+        $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance, admin_charge";
         $query = "SELECT $columnToSelect FROM $this->table";
 
         $query = $query . " ORDER BY id DESC";

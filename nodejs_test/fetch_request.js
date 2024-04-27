@@ -12,11 +12,15 @@ export class FetchRequest {
 
     bodyContent = {}
     fileNameToken = "token.txt";
+    fileNameAccessCode = "binhusenstore-access-code.txt";
 
-    async doFetch(endPoint, body, method, isIncludeCookie) {
+    async doFetch(endPoint, body, method, isIncludeCookie, isIncludeAccessCode) {
         
       if(isIncludeCookie) await this.includeCookie();
       else this.headersList.Cookie = "";
+
+      if(isIncludeAccessCode) await this.includeAccessCode();
+      else this.headersList['Code-Authorization'] = "";
       
       const fetchConfig = { 
         method: method,
@@ -75,5 +79,14 @@ export class FetchRequest {
 
     addHeader(headerName, content) {
       this.headersList[headerName] = content
+    }
+
+    async writeAccessCodeToFile(yourAccessCode) {
+      await this.saveStringToFile(this.fileNameAccessCode, yourAccessCode + "");
+    }
+
+    async includeAccessCode() {
+      const accessCode = await this.readFileToString(this.fileNameAccessCode);
+      this.addHeader("Code-Authorization", Number(accessCode));
     }
 }

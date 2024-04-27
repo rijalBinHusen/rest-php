@@ -11,3 +11,4 @@ token.txt
 utils/constant_named.php
 config.json
 node_modules
+*.test.php

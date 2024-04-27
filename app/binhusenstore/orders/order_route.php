@@ -20,7 +20,7 @@ Flight::route('POST /binhusenstore/order_also_payment', function () {
     if ($is_token_valid) {
 
         $myreport_base_file = new Binhusenstore_order();
-        $myreport_base_file->add_order();
+        $myreport_base_file->add_order_and_payment();
     }
 });
 

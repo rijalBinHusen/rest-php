@@ -27,6 +27,7 @@ class Binhusenstore_order
         $result = null;
 
         $is_request_body_not_oke = is_null($date_order)
+            || !is_string($date_order)  
             || is_null($id_group)
             || !is_string($id_group)
             || is_null($is_group)
@@ -319,35 +320,35 @@ class Binhusenstore_order
         $keyValueToUpdate = array();
 
         // conditional $date_order
-        $valid_date_order = !is_null($date_order);
+        $valid_date_order = !is_null($date_order) && is_string($date_order);
         if ($valid_date_order) $keyValueToUpdate["date_order"] = $date_order;
 
         // conditional $id_group
-        $valid_id_group = !is_null($id_group);
+        $valid_id_group = !is_null($id_group) && is_string($id_group) && strlen($id_group) === 9;
         if ($valid_id_group) $keyValueToUpdate["id_group"] = $id_group;
 
         // conditional $is_group
-        $valid_is_group = !is_null($is_group);
+        $valid_is_group = !is_null($is_group) && is_bool($is_group);
         if ($valid_is_group) $keyValueToUpdate["is_group"] = $is_group;
 
         // conditional $id_product
-        $valid_id_product = !is_null($id_product);
+        $valid_id_product = !is_null($id_product)  && is_string($id_product) && strlen($id_product) === 9;
         if ($valid_id_product) $keyValueToUpdate["id_product"] = $id_product;
 
         // conditional $name_of_customer
-        $valid_name_of_customer = !is_null($name_of_customer);
+        $valid_name_of_customer = !is_null($name_of_customer) && is_string($name_of_customer);
         if ($valid_name_of_customer) $keyValueToUpdate["name_of_customer"] = $name_of_customer;
 
         // conditional $sent
-        $valid_sent = !is_null($sent);
+        $valid_sent = !is_null($sent) && is_string($sent);
         if ($valid_sent) $keyValueToUpdate["sent"] = $sent;
 
         // conditional $title
-        $valid_title = !is_null($title);
+        $valid_title = !is_null($title) && is_string($title);
         if ($valid_title) $keyValueToUpdate["title"] = $title;
 
         // conditional $total_balance
-        $valid_total_balance = !is_null($total_balance);
+        $valid_total_balance = !is_null($total_balance) && is_numeric($total_balance);
         if ($valid_total_balance) $keyValueToUpdate["total_balance"] = $total_balance;
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;

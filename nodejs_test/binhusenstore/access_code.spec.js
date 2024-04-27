@@ -7,6 +7,7 @@ describe("Binhusenstore access code point test", () => {
 
     const fetchReq = new FetchRequest();
     const newCode = faker.number.int({ min: 1000, max: 9999 })
+    fetchReq.writeAccessCodeToFile(newCode)
 
     it("Should be create new access code", async () => {
 
@@ -61,10 +62,9 @@ describe("Binhusenstore access code point test", () => {
 
     it("Access code should be valid", async () => {
 
-        fetchReq.addHeader("Code-Authorization", newCode)
         await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
-        const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
+        const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET", false, true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(200);
