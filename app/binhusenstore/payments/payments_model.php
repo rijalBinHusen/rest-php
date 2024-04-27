@@ -184,30 +184,31 @@ class Binhusenstore_payment_model
         return true;
     }
 
-    public function insert_payment_to_spreadsheet($id_payment, $id_order, $date_payment, $balance) {
+    public function insert_payment_to_spreadsheet($id_payment, $id_order, $date_payment, $balance)
+    {
 
         $app_script_url = APP_SCRIPT_URL .  "?action=insert&id_payment=$id_payment&id_order=$id_order&date_payment=$date_payment&balance=$balance";
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-        CURLOPT_URL => $app_script_url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "GET",
-        CURLOPT_HTTPHEADER => [
-            "Accept: */*",
-            "User-Agent: Thunder Client (https://www.thunderclient.com)"
-        ],
+            CURLOPT_URL => $app_script_url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [
+                "Accept: */*",
+                "User-Agent: Thunder Client (https://www.thunderclient.com)"
+            ],
         ]);
 
         $response = curl_exec($curl);
         curl_close($curl);
 
         // debugger
-        
+
         $myfile = fopen("debug.txt", "w") or die("Unable to open file!");
         fwrite($myfile, json_encode($response));
         fclose($myfile);
@@ -298,6 +299,16 @@ class Binhusenstore_payment_model
             return $result;
         }
 
+        $this->is_success = $this->database->is_error;
+    }
+
+    public function remove_id_group_payment_by_id_order($id_order)
+    {
+
+        $data_to_update = array('id_order_group' => "");
+        $result = $this->database->update($this->table, $data_to_update, 'id_order', $id_order);
+
+        if ($this->database->is_error === null) return $result;
         $this->is_success = $this->database->is_error;
     }
 

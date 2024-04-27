@@ -201,6 +201,9 @@ class Binhusenstore_order_model
     public function merge_order_as_group($id_order_1, $id_order_2)
     {
 
+        // in this function, we're just add information in the table binhusenstore_orders.is_group and binhusenstore_orders.id_group
+        // also in the table binhusenstore_payments.id_order_group
+
         $order_1 = $this->database->select_where($this->table, 'id', $id_order_1)->fetchAll(PDO::FETCH_ASSOC);
         $order_2 = $this->database->select_where($this->table, 'id', $id_order_2)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -256,5 +259,32 @@ class Binhusenstore_order_model
 
             $this->is_success = $this->database->is_error;
         }
+    }
+
+    function unmerge_order_group($id_group, $phone)
+    {
+        // the phone number should be matched
+        // update binhusenstore_orders.is_group and binhusenstore_orders.id_group = "" where id_group = $id_group
+        // also in the table binhusenstore_payments.id_order_group = ""
+
+        $order = $this->database->select_where($this->table, 'id_group', $id_group)->fetchAll(PDO::FETCH_ASSOC);
+
+        $is_order_exists = count($order) > 0;
+        if (!$is_order_exists) return 0;
+
+        $phone_1_decrypted =  decrypt_string($order[0]['phone'], ENCRYPT_DECRYPT_PHONE_KEY);
+
+        $is_phone_unmatched = $phone_1_decrypted != $phone;
+        if ($is_phone_unmatched) return "Nomor handphone pemesan tidak sama";
+
+        $data_order_to_update = array(
+            'is_group' => 0,
+            'id_group' => ""
+        );
+
+        $payment_model = new Binhusenstore_payment_model();
+
+        $payment_model->remove_id_group_payment_by_id_order($order[0]['id_order']);
+        return $this->update_order_by_id($data_order_to_update, 'id_group', $id_group);
     }
 }

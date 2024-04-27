@@ -508,4 +508,63 @@ class Binhusenstore_order
             ], 400);
         }
     }
+
+    public function unmerge_order()
+    {
+        // catch the query string request
+        $error_message = "Check the data you sent!";
+
+        $req = Flight::request();
+        $id_group = $req->data->id_group;
+        $phone = $req->data->phone;
+
+        $is_id_group_oke = strlen($id_group) === 9;
+        $is_phone_oke = strlen($phone) >= 10;
+        if ($is_id_group_oke && $is_phone_oke) {
+
+            $result = $this->Binhusenstore_order->unmerge_order_group($id_group, $phone);
+
+            $is_success = $this->Binhusenstore_order->is_success;
+
+            if ($result === 0) {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => 'Order not found'
+                ], 404);
+            }
+            // 
+            else if ($is_success === true && is_numeric($result) && $result > 0) {
+
+                Flight::json([
+                    'success' => true,
+                    'message' => 'Order unmerged',
+                ]);
+            }
+            // 
+            else if ($is_success !== true) {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $is_success
+                ], 500);
+            }
+            // 
+            else {
+
+                Flight::json([
+                    'success' => false,
+                    'message' => $result
+                ], 400);
+            }
+        }
+        // 
+        else {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'Failed to merge order, ' . $error_message
+            ], 400);
+        }
+    }
 }

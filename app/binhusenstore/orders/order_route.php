@@ -111,3 +111,14 @@ Flight::route("PUT /binhusenstore/orders/merge/add_id_group", function () {
         $myreport_base_file->merge_order();
     }
 });
+
+Flight::route("PUT /binhusenstore/orders/unmerge/add_id_group", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_admin(1);
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->unmerge_order();
+    }
+});
