@@ -14,25 +14,26 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
-        const phone_order = faker.phone.number();
+        const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
+        // console.log(responseJSON);
         expect(response.status).equal(201);
         expect(responseJSON.success).equal(true);
         expect(responseJSON.id).not.equal("");
@@ -40,19 +41,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 2
         const order_2 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -71,17 +72,17 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // Get both order
         // Order 1
-        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order/" + id_order_1, false, "GET", true, true)
         const responseGetOrder1 = await getOrder1.json();
 
-        expect(getOrder1).equal(200);
+        expect(getOrder1.status).equal(200);
         expect(responseGetOrder1.success).equal(true)
 
         // Order 2
-        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order/" + id_order_2, false, "GET", true, true)
         const responseGetOrder2 = await getOrder2.json();
 
-        expect(getOrder2).equal(200);
+        expect(getOrder2.status).equal(200);
         expect(responseGetOrder2.success).equal(true)
 
         // compare both order
@@ -93,23 +94,23 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
-        const phone_order = faker.phone.number();
+        const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: faker.string.sample(9),
             is_group: true,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -119,19 +120,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 2
         const order_2 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -150,17 +151,17 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // Get both order
         // Order 1
-        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order/" + id_order_1, false, "GET", true, true)
         const responseGetOrder1 = await getOrder1.json();
 
-        expect(getOrder1).equal(200);
+        expect(getOrder1.status).equal(200);
         expect(responseGetOrder1.success).equal(true)
 
         // Order 2
-        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order/" + id_order_2, false, "GET", true, true)
         const responseGetOrder2 = await getOrder2.json();
 
-        expect(getOrder2).equal(200);
+        expect(getOrder2.status).equal(200);
         expect(responseGetOrder2.success).equal(true)
 
         // compare both order
@@ -173,23 +174,23 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
-        const phone_order = faker.phone.number();
+        const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -199,19 +200,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 2
         const order_2 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: faker.string.sample(9),
             is_group: true,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -230,17 +231,17 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // Get both order
         // Order 1
-        const getOrder1 = await fetchReq.doFetch("binhusenstore/order" + id_order_1, false, "GET", true)
+        const getOrder1 = await fetchReq.doFetch("binhusenstore/order/" + id_order_1, false, "GET", true, true)
         const responseGetOrder1 = await getOrder1.json();
 
-        expect(getOrder1).equal(200);
+        expect(getOrder1.status).equal(200);
         expect(responseGetOrder1.success).equal(true)
 
         // Order 2
-        const getOrder2 = await fetchReq.doFetch("binhusenstore/order" + id_order_2, false, "GET", true)
+        const getOrder2 = await fetchReq.doFetch("binhusenstore/order/" + id_order_2, false, "GET", true, true)
         const responseGetOrder2 = await getOrder2.json();
 
-        expect(getOrder2).equal(200);
+        expect(getOrder2.status).equal(200);
         expect(responseGetOrder2.success).equal(true)
 
         // compare both order
@@ -257,8 +258,8 @@ describe("Binhusenstore order endpoint test", async () => {
         const responseJSONMergeOrder = await responseMergeOrder.json();
 
         expect(responseMergeOrder.status).equal(400);
-        expect(responseJSONMergeOrder.success).equal(true);
-        expect(responseJSONMergeOrder.message).equal("Failed to merge order, check the data you sent");
+        expect(responseJSONMergeOrder.success).equal(false);
+        expect(responseJSONMergeOrder.message).equal("Failed to merge order, check the data you sent!");
     })
 
     it("Merge order error 401 non authenticated", async () => {
@@ -270,7 +271,7 @@ describe("Binhusenstore order endpoint test", async () => {
         const responseJSONMergeOrder = await responseMergeOrder.json();
 
         expect(responseMergeOrder.status).equal(401);
-        expect(responseJSONMergeOrder.success).equal(true);
+        expect(responseJSONMergeOrder.success).equal(false);
         expect(responseJSONMergeOrder.message).equal("You must be authenticated to access this resource.");
     })
 
@@ -279,23 +280,23 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
-        const phone_order = faker.phone.number();
+        const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -319,23 +320,23 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
-        const phone_order = faker.phone.number();
+        const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: faker.string.sample(9),
             is_group: true,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -345,19 +346,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 2
         const order_2 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: faker.string.sample(9),
             is_group: true,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
             phone: phone_order,
             admin_charge: true
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -382,19 +383,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 1
         const order_1 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: faker.string.sample(9),
             is_group: true,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
-            phone: faker.phone.number(),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            phone: faker.number.int({ min: 6280000000000, max: 6289999999999 }),
             admin_charge: true
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -404,19 +405,19 @@ describe("Binhusenstore order endpoint test", async () => {
 
         // create order 2
         const order_2 = {
-            date_order: faker.date.past(),
+            date_order: faker.date.past().toISOString().slice(0, 10),
             id_group: "",
             is_group: false,
             id_product: faker.string.sample(9),
             name_of_customer: faker.person.firstName(),
-            sent: false,
-            title: faker.color(),
-            total_balance: faker.number.int({ min: 700000 }),
-            phone: faker.phone.number(),
+            sent: "",
+            title: faker.string.sample(13),
+            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            phone: faker.number.int({ min: 6280000000000, max: 6289999999999 }),
             admin_charge: true
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
