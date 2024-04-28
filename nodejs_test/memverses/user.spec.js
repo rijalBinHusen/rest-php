@@ -6,7 +6,7 @@ import { faker } from "@faker-js/faker"
 describe("Memverses user end point test", () => {
 
     const fetchReq = new FetchRequest();
-    const newAccount = { email: faker.string.sample({ max: 13 }) + "@test.com", password: faker.number.int({ max: 13 }), name: faker.person.firstName() };
+    const newAccount = { email: faker.string.sample({ max: 13 }) + "@test.com", password: faker.number.int({ min: 100000, max: 999999 }), name: faker.person.firstName() };
 
     it("New account should be registered", async () => {
 

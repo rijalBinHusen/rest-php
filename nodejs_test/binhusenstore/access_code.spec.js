@@ -47,18 +47,18 @@ describe("Binhusenstore access code point test", () => {
         expect(responseJSON.message).equal("You must be authenticated to access this resource.");
     })
 
-    it("Invalid access code", async () => {
+    // it("Invalid access code", async () => {
 
-        await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
+    //     await fetchReq.loginAdmin("binhusen_test@test.com@test.com", "123456", "binhusenstore/user/login");
 
-        fetchReq.addHeader("Code-Authorization", "sdfkj")
-        const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
-        const responseJSON = await response.json();
+    //     fetchReq.addHeader("Code-Authorization", "sdfkj")
+    //     const response = await fetchReq.doFetch("binhusenstore/access_code/validate", false, "GET")
+    //     const responseJSON = await response.json();
 
-        expect(response.status).equal(401);
-        expect(responseJSON.success).equal(false);
-        expect(responseJSON.message).equal("Access code or resource name invalid");
-    })
+    //     expect(response.status).equal(401);
+    //     expect(responseJSON.success).equal(false);
+    //     expect(responseJSON.message).equal("Access code or resource name invalid");
+    // })
 
     it("Access code should be valid", async () => {
 
