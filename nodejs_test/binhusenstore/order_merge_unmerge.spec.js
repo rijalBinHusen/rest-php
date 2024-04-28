@@ -14,8 +14,12 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
         const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
-
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
         // create order 1
         const order_1 = {
             date_order: faker.date.past().toISOString().slice(0, 10),
@@ -25,12 +29,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         // console.log(responseJSON);
@@ -48,12 +55,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -94,7 +104,12 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
         const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // create order 1
         const order_1 = {
@@ -105,12 +120,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -127,12 +145,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order_also_payment", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -174,7 +195,12 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
         const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // create order 1
         const order_1 = {
@@ -185,12 +211,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -207,12 +236,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -278,9 +310,13 @@ describe("Binhusenstore order endpoint test", async () => {
     it("Merge order error 404 not found, 1 order not found", async () => {
 
         let id_order_1 = "";
-        let id_order_2 = ""
 
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
         const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // create order 1
         const order_1 = {
@@ -291,12 +327,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -320,7 +359,13 @@ describe("Binhusenstore order endpoint test", async () => {
         let id_order_1 = "";
         let id_order_2 = ""
 
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
+
         const phone_order = faker.number.int({ min: 6280000000000, max: 6289999999999 });
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // create order 1
         const order_1 = {
@@ -331,12 +376,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -353,12 +401,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: phone_order,
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
@@ -380,6 +431,13 @@ describe("Binhusenstore order endpoint test", async () => {
 
         let id_order_1 = "";
         let id_order_2 = ""
+        
+        const start_date = faker.date.past();
+        const end_date = new Date(start_date);
+        end_date.setDate(start_date.getDate() + 30);
+
+        const total_balance = faker.number.int({ min: 70000, max: 999999 });
+        const totalDay = (end_date - start_date) / ( 1000 * 60 * 60 * 24);
 
         // create order 1
         const order_1 = {
@@ -390,12 +448,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: faker.number.int({ min: 6280000000000, max: 6289999999999 }),
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response = await fetchReq.doFetch("binhusenstore/order/", order_1, "POST", true)
+        const response = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_1, "POST", true)
         const responseJSON = await response.json();
 
         expect(response.status).equal(201);
@@ -412,12 +473,15 @@ describe("Binhusenstore order endpoint test", async () => {
             name_of_customer: faker.person.firstName(),
             sent: "",
             title: faker.string.sample(13),
-            total_balance: faker.number.int({ min: 700000, max: 999999999 }),
+            total_balance,
             phone: faker.number.int({ min: 6280000000000, max: 6289999999999 }),
-            admin_charge: true
+            admin_charge: true,
+            start_date_payment: start_date.toISOString().slice(0, 10),
+            end_date_payment: end_date.toISOString().slice(0, 10),
+            balance_payment: Math.round(total_balance / totalDay),
         }
 
-        const response2 = await fetchReq.doFetch("binhusenstore/order/", order_2, "POST", true)
+        const response2 = await fetchReq.doFetch("binhusenstore/order_also_payment/", order_2, "POST", true)
         const responseJSON2 = await response2.json();
 
         expect(response2.status).equal(201);
