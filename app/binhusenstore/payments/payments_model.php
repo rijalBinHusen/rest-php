@@ -116,38 +116,62 @@ class Binhusenstore_payment_model
 
         // find order by order_id and phone
         $phone_order = $order_model->phone_by_order_id($id_order);
-
         $is_phone_not_matched = $phone_order != $phone;
-
         if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
 
-        $query_payment_by_id_order = "SELECT id, balance, date_payment FROM $this->table WHERE id_order = '$id_order' AND is_paid = '0' ORDER BY date_payment";
-        $retrieve_all_payment = $this->database->sqlQuery($query_payment_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
-
-        if (count($retrieve_all_payment) === 0) return 0;
-
+        $where_s = array('id_order' => $id_order, 'is_paid' => '0');
+        $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($retrieve_payments) === 0) return 0;
 
         $total_balance = 0;
-        foreach ($retrieve_all_payment as $value) {
+        foreach ($retrieve_payments as $value) {
             $total_balance += $value['balance'];
         }
 
         if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
+        $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
+        return $mark_as_paid;
+    }
+
+    public function mark_payment_as_paid_by_id_order_group($id_order_group, $date_paid, $payment, $phone)
+    {
+        $where_s = array('id_order_group' => $id_order_group, 'is_paid' => '0');
+        $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($retrieve_payments) === 0) return 0;
+
+        $id_order = $retrieve_payments[0]['id_order'];
+
+        $order_model = new Binhusenstore_order_model();
+        // find order by order_id and phone
+        $phone_order = $order_model->phone_by_order_id($id_order);
+        $is_phone_not_matched = $phone_order != $phone;
+        if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
+
+
+        $total_balance = 0;
+        foreach ($retrieve_payments as $value) {
+            $total_balance += $value['balance'];
+        }
+
+        if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
+        $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
+        return $mark_as_paid;
+    }
+
+    private function mark_payment_as_paid($payments_schedule, $payment, $date_paid)
+    {
 
         $payment_left = $payment;
 
         for ($i = 0; $i < $payment; $i++) {
 
-            $is_the_last_bill = $i >= (count($retrieve_all_payment) - 1);
+            $is_the_last_bill = $i >= (count($payments_schedule) - 1);
             $payment_index = $i;
 
-            if ($is_the_last_bill) {
+            if ($is_the_last_bill) $payment_index = count($payments_schedule) - 1;
 
-                $payment_index = count($retrieve_all_payment) - 1;
-            }
-
-            $payment_id = $retrieve_all_payment[$payment_index]['id'];
-            $payment_balance = $retrieve_all_payment[$payment_index]['balance'];
+            $payment_id = $payments_schedule[$payment_index]['id'];
+            $payment_balance = $payments_schedule[$payment_index]['balance'];
 
             if ($payment_left === 0) return true;
 
@@ -155,7 +179,8 @@ class Binhusenstore_payment_model
 
                 if ($is_the_last_bill) {
 
-                    $the_payment_date = $retrieve_all_payment[$i - 1]['date_payment'];
+                    $the_payment_date = $payments_schedule[$i - 1]['date_payment'];
+                    $id_order = $payments_schedule[$i - 1]['id_order'];
                     $this->append_payment($the_payment_date, $id_order, (-$payment_left), false);
                 } else {
 
@@ -177,7 +202,6 @@ class Binhusenstore_payment_model
                 );
 
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
-                // $this->insert_payment_to_spreadsheet($payment_id, $id_order, $date_paid, $payment_balance);
             } else {
 
                 $data_to_update = array(
@@ -187,7 +211,6 @@ class Binhusenstore_payment_model
                 );
 
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
-                // $this->insert_payment_to_spreadsheet($payment_id, $id_order, $date_paid, $data_to_update['balance']);
             }
 
             $payment_left = $payment_left - $payment_balance; // 1000 - 900= +100

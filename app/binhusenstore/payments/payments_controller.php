@@ -284,6 +284,7 @@ class Binhusenstore_payment
         $req = Flight::request();
         $date_paid = $req->data->date_paid;
         $id_order = $req->data->id_order;
+        $id_order_group = $req->data->id_order_group;
         $phone = $req->data->phone;
         $balance = $req->data->balance;
 
@@ -293,17 +294,24 @@ class Binhusenstore_payment
         $isDatePaymentValid = $validator->isYMDDate($date_paid);
 
         $is_request_body_oke = !is_null($date_paid)
-            && !is_null($id_order)
             && $isDatePaymentValid
-            && is_string($id_order)
             && !is_null($phone)
             && is_numeric($phone)
             && !is_null($balance)
             && is_numeric($balance);
 
-        if ($is_request_body_oke) {
+        $is_id_order_oke = !is_null($id_order) && is_string($id_order) && strlen($id_order) === 9;
+        $is_id_order_group_oke = !is_null($id_order_group) && is_string($id_order_group) && strlen($id_order_group) === 9;
 
-            $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id($id_order, $date_paid, $balance, $phone);
+        if ($is_request_body_oke && ($is_id_order_oke || $is_id_order_group_oke)) {
+
+            $result = array();
+
+            if ($is_id_order_oke) {
+                $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id($id_order, $date_paid, $balance, $phone);
+            } else {
+                $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id_order_group($id_order_group, $date_paid, $balance, $phone);
+            }
 
             $is_success = $this->Binhusenstore_payment->is_success;
 

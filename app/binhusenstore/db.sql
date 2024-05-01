@@ -10,6 +10,7 @@ CREATE TABLE
         default_total_week VARCHAR(2),
         is_available TINYINT,
         links TEXT,
+        is_admin_charge TINYINT,
         date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FULLTEXT(categories) FULLTEXT(name)
     );
@@ -372,6 +373,7 @@ CREATE TABLE
 ALTER TABLE `binhusenstore_orders` ADD `admin_charge` INT(11) NOT NULL AFTER `total_balance`; 
 ALTER TABLE `binhusenstore_orders` ADD `phone` TEXT NOT NULL AFTER `date_order`; 
 ALTER TABLE `binhusenstore_payments` ADD `id_order_group` VARCHAR(9) NOT NULL AFTER `id_order`, ADD `date_paid` VARCHAR(10) NOT NULL AFTER `id_order_group`; 
+ALTER TABLE `binhusenstore_products` ADD `is_admin_charge` TINYINT(1) NULL DEFAULT '0' AFTER `links`; 
 
 CREATE TABLE
     if not exists binhusenstore_orders_archived (

@@ -57,7 +57,7 @@ class Query_builder
         }
     }
 
-    function select_where_s($table, $where_s)
+    function select_where_s($table, $where_s, $order_by = "")
     {
         $setPart = array();
 
@@ -66,6 +66,11 @@ class Query_builder
         }
 
         $sql = "SELECT * FROM $table WHERE "  . implode(" AND ", $setPart);
+
+        if ($order_by) {
+            $sql = $sql . " ORDER BY " . $order_by;
+        }
+
         $row = $this->db->prepare($sql);
 
         foreach ($where_s as $param => $val) {
