@@ -101,7 +101,7 @@ class Binhusenstore_order_model
                 $balance_remaining = $balance_remaining - $balance_payment;
 
                 $current_date->modify('+1 day');
-                if(!$is_payment_created) {
+                if (!$is_payment_created) {
                     $this->is_success = $payment_model->is_success;
                     return;
                 }
@@ -343,7 +343,7 @@ class Binhusenstore_order_model
 
         $payment_model = new Binhusenstore_payment_model();
 
-        $payment_model->remove_id_group_payment_by_id_order($order[0]['id_order']);
-        return $this->update_order_by_id($data_order_to_update, 'id_group', $id_group);
+        $this->update_order_by_id($data_order_to_update, 'id_group', $id_group);
+        return $payment_model->remove_id_group_payment_by_id_order($id_group);
     }
 }

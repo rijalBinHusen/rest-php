@@ -27,7 +27,7 @@ class Binhusenstore_order
         $result = null;
 
         $is_request_body_not_oke = is_null($date_order)
-            || !is_string($date_order)  
+            || !is_string($date_order)
             || is_null($id_group)
             || !is_string($id_group)
             || is_null($is_group)

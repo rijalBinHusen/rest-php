@@ -40,6 +40,14 @@ paths:
           schema:
             type: string
             example: O23060001
+        - name: id_order_group
+          in: query
+          description: Id of order
+          required: false
+          explode: true
+          schema:
+            type: string
+            example: O23060001
       tags:
         - payment
       summary: Get all payments.
