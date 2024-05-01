@@ -44,12 +44,17 @@ class Query_builder
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function select_where($tabel, $where, $id)
+    function select_where($tabel, $where, $id, $order_by = "")
     {
         try {
 
-            $row = $this->db->prepare("SELECT * FROM $tabel WHERE $where = ?");
-            $row->execute(array($id));
+            $query = "SELECT * FROM $tabel WHERE $where = :$where";
+
+            if ($order_by != "") $query .= " ORDER BY " . $order_by;
+
+            $row = $this->db->prepare($query);
+            $row->bindValue($where, $id);
+            $row->execute();
             return $row;
         } catch (PDOException $e) {
 

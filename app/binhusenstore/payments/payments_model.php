@@ -39,7 +39,7 @@ class Binhusenstore_payment_model
 
     public function get_payments($id_order)
     {
-        $result  = $this->database->select_where($this->table, 'id_order', $id_order)->fetchAll(PDO::FETCH_ASSOC);
+        $result  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -67,7 +67,7 @@ class Binhusenstore_payment_model
     public function get_payment_by_id($id)
     {
 
-        $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where($this->table, 'id', $id, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
