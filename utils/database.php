@@ -227,6 +227,23 @@ class Query_builder
         }
     }
 
+    function select_where_like($table_name, $where, $like)
+    {
+
+        try {
+
+            $row = $this->db->prepare("SELECT * FROM $table_name WHERE :table_column LIKE :criteria ");
+            $row->bindValue('table_column', $where);
+            $row->bindValue('criteria', $like);
+            $row->execute();
+            return $row;
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            return false;
+        }
+    }
+
     function __destruct()
     {
         self::$instance = null;

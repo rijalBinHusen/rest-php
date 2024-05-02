@@ -1,16 +1,18 @@
 <?php
 
+require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/image_function.php');
 
 class Binhusenstore_image
 {
     var $image_dir = "uploaded/binhusenstore/";
-    
+    protected $database;
+
     function __construct()
     {
-        
+        $this->database = Query_builder::getInstance();
     }
-    
+
     public function upload_image()
     {
         // request
@@ -25,7 +27,8 @@ class Binhusenstore_image
                 array(
                     'success' => false,
                     'message' => 'Failed to upload image, check the data you sent'
-                ), 400
+                ),
+                400
             );
             return;
         }
@@ -41,7 +44,8 @@ class Binhusenstore_image
                 array(
                     'success' => false,
                     'message' => 'Invalid image data' . $extension
-                ), 400
+                ),
+                400
             );
             return;
         }
@@ -56,51 +60,71 @@ class Binhusenstore_image
         $path_small_image = $this->image_dir . $filename_small_image;
         resize_image_and_save($path_default_image, 320, 320, false, $extension, $path_small_image);
 
-        if($is_uploaded) {
+        if ($is_uploaded) {
 
             // Return a success response.
             Flight::json(
                 array(
                     'success' => true,
                     'filename' => $filename_small_image
-                ), 201
+                ),
+                201
             );
         } else {
-            
+
             Flight::json(
                 array(
                     'success' => true,
                     'message' => 'Failed to move image to server folder!',
-                ), 500
+                ),
+                500
             );
         }
-            
     }
 
-    public function remove_image($filename) {
+    public function remove_image($filename)
+    {
 
         $is_small_image = strpos($filename, "-small") > -1;
 
         $another_file_name = "";
 
-        if($is_small_image) {
-            
+        if ($is_small_image) {
+
             $another_file_name = str_replace("-small", "", $filename);
         } else {
-            
+
             $another_file_name = str_replace(".", "-small.", $filename);
         }
 
         $filepath = $this->image_dir . $filename;
-
         $is_filename_exist = file_exists($filepath);
-        
+
+        $file_name_to_search_on_db = "";
+
+        if ($is_small_image) $file_name_to_search_on_db = str_replace(".jpeg", "", $another_file_name);
+        else $file_name_to_search_on_db = str_replace(".jpeg", "", $filename);
+
+        $find_image_on_db = $this->database->select_where_like("binhusenstore_products", "images", $file_name_to_search_on_db);
+        $is_image_exists_on_db = is_array($find_image_on_db);
+
+        if ($is_image_exists_on_db) {
+            Flight::json(
+                [
+                    'success' => true,
+                    'message' => 'The file used by some record on database.'
+                ],
+                200
+            );
+            return;
+        };
+
         $another_file_path = $this->image_dir . $another_file_name;
         $is_another_image_exists = file_exists($another_file_path);
-        if($is_another_image_exists) unlink($another_file_path);
+        if ($is_another_image_exists) unlink($another_file_path);
 
 
-        if($is_filename_exist) {
+        if ($is_filename_exist) {
 
             unlink($filepath);
 
@@ -108,28 +132,31 @@ class Binhusenstore_image
 
             if ($error) {
 
-                Flight::json([
+                Flight::json(
+                    [
                         'success' => false,
                         'message' => 'An error occurred while deleting the file: ' . $error['message']
-                    ], 500
+                    ],
+                    500
                 );
             } else {
 
-                Flight::json([
+                Flight::json(
+                    [
                         'success' => true,
-                        'message' => 'The file was successfully deleted.'
-                    ], 200
+                        'message' => 'The file deleted.'
+                    ],
+                    200
                 );
             }
+        } else {
 
-        }
-
-        else {
-
-            Flight::json([
+            Flight::json(
+                [
                     'success' => false,
                     'message' => 'Image not found'
-                ], 404
+                ],
+                404
             );
         }
     }
