@@ -83,24 +83,11 @@ class User_model
     $valid = is_array($user);
 
     // (F2) CHECK PASSWORD
-    if ($valid) {
-      $valid = password_verify($password, $user["password"]);
-    }
+    if ($valid) $valid = password_verify($password, $user["password"]);
 
     // (F3) RETURN JWT IF OK, FALSE IF NOT
-    if ($valid) {
-      $now = strtotime("now");
-
-      return Firebase\JWT\JWT::encode([
-        "iat" => $now, // issued at - time when token is generated
-        "nbf" => $now, // not before - when this token is considered valid
-        "exp" => $now + ((3600 * 24) * 7), // expiry - 7 days (3600 secs * 24 * 7) from now in this example
-        "jti" => "RANDOM TOKEN TOKEN RANDOM", // json token id
-        "iss" => JWT_ISSUER, // issuer
-        "aud" => JWT_AUD, // audience
-        "data" => ["id" => $user["id"]] // whatever data you want to add
-      ], JWT_SECRET, JWT_ALGO);
-    } else {
+    if ($valid) return $this->generate_token($user['id']);
+    else {
 
       $this->error = "Invalid user/password";
     }
@@ -122,7 +109,21 @@ class User_model
     }
 
     if ($valid) return $valid;
-
     else $this->error = "Invalid JWT";
+  }
+
+  function generate_token($user_id) {
+   
+    $now = strtotime("now");
+
+    Firebase\JWT\JWT::encode([
+      "iat" => $now, // issued at - time when token is generated
+      "nbf" => $now, // not before - when this token is considered valid
+      "exp" => $now + ((3600 * 24) * 7), // expiry - 7 days (3600 secs * 24 * 7) from now in this example
+      "jti" => "RANDOM TOKEN TOKEN RANDOM", // json token id
+      "iss" => JWT_ISSUER, // issuer
+      "aud" => JWT_AUD, // audience
+      "data" => ["id" => $user_id] // whatever data you want to add
+    ], JWT_SECRET, JWT_ALGO);
   }
 }

@@ -108,10 +108,11 @@ class User
 
         if ($jwt_token) {
 
-            $is_token_valid = $this->user->validate($jwt_token);
-            if ($is_token_valid) {
+            $token_info = $this->user->validate($jwt_token);
+            if ($token_info) {
 
-                return $is_token_valid;
+                $this->check_and_renew_jwt_token($jwt_token);
+                return $token_info;
             } else {
 
                 Flight::json([
@@ -141,6 +142,7 @@ class User
             $user_info_by_jwt = $this->user->validate($jwt_token);
             if ($user_info_by_jwt) {
 
+                $this->check_and_renew_jwt_token($jwt_token);
                 return $user_info_by_jwt;
             } else {
 
@@ -211,7 +213,10 @@ class User
             if ($is_no_error) {
 
                 $is_admin = $user_info_by_jwt->data->id === $id_admin;
-                if ($is_admin) return true;
+                if ($is_admin) {
+                    $this->check_and_renew_jwt_token($jwt_token);
+                    return true;
+                }
             }
         }
 
@@ -245,6 +250,18 @@ class User
         } else {
 
             return false;
+        }
+    }
+
+    private function check_and_renew_jwt_token($token_info) {
+        
+
+        $expired_time = strtotime("now") - 3600; // 1 hour before token expired
+        $is_gonna_expired = $token_info->exp >= $expired_time;
+        if($is_gonna_expired) {
+            // renew the token
+            $new_token = $this->user->generate_token($token_info->data->id);
+            setcookie('JWT-Authorization', $new_token, time() + ((3600 * 24) * 7), '/', '', false, true);
         }
     }
 }
