@@ -160,4 +160,53 @@ class Binhusenstore_image
             );
         }
     }
+    public function remove_image_operation($filename)
+    {
+
+        $is_small_image = strpos($filename, "-small") > -1;
+
+        $another_file_name = "";
+
+        if ($is_small_image) {
+
+            $another_file_name = str_replace("-small", "", $filename);
+        } else {
+
+            $another_file_name = str_replace(".", "-small.", $filename);
+        }
+
+        $filepath = $this->image_dir . $filename;
+        $is_filename_exist = file_exists($filepath);
+
+        $file_name_to_search_on_db = "";
+
+        if ($is_small_image) {
+            $explode_name = explode(".", $another_file_name);
+            $file_name_to_search_on_db = $explode_name[0];
+        } else {
+            $explode_name = explode(".", $filename);
+            $file_name_to_search_on_db = $explode_name[0];
+        }
+
+        $find_image_on_db = $this->database->select_where_like("binhusenstore_products", "images", $file_name_to_search_on_db);
+        $is_image_exists_on_db = is_array($find_image_on_db);
+
+        if ($is_image_exists_on_db) return true;
+
+        $another_file_path = $this->image_dir . $another_file_name;
+        $is_another_image_exists = file_exists($another_file_path);
+        if ($is_another_image_exists) unlink($another_file_path);
+
+
+        if ($is_filename_exist) {
+
+            unlink($filepath);
+
+            $error = error_get_last();
+            if ($error) return false;
+            else return true;
+        }
+
+        return true;
+    }
 }

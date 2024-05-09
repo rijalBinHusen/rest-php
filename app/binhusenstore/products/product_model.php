@@ -49,24 +49,21 @@ class Binhusenstore_product_model
         $is_category_valid = !is_null($id_category) && !empty($id_category) && $id_category != "";
         $is_name_product_valid = !is_null($name_product) && !empty($name_product) && $name_product != "";
 
-        // search category
+        $where_to_search = false;
+        $what_to_search = false;
+
         if ($is_category_valid) {
-            $query = $query . "  WHERE MATCH(categories) AGAINST ('$id_category' IN NATURAL LANGUAGE MODE)";
+            $where_to_search = "categories";
+            $what_to_search = $id_category;
         } else if ($is_name_product_valid) {
-            $query = $query . "  WHERE MATCH(name) AGAINST ('$name_product' IN NATURAL LANGUAGE MODE)";
+            $where_to_search = "name";
+            $what_to_search = $name_product;
         }
 
-        // order
-        $query = $query . " ORDER BY id DESC";
+        $limiter = 30;
+        if (is_numeric($limit) && $limit > 0) $limiter = $limit;
 
-        // limiter
-        if ($limit > 0) {
-            $query = $query . " LIMIT " . $limit;
-        } else if (!is_numeric($limit)) {
-            $query = $query . " LIMIT 30";
-        }
-
-        $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where_match_full_text($this->table, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -84,7 +81,7 @@ class Binhusenstore_product_model
         $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($result) > 0) {
-            
+
             $convert_data_type = $this->convert_data_type_detail($result);
 
             return $convert_data_type;
@@ -240,7 +237,7 @@ class Binhusenstore_product_model
     {
         $admin_charge_class = new Binhusenstore_admin_charge_model();
         $admin_charge = $admin_charge_class->retrieve_admin_charge();
-        
+
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
@@ -256,7 +253,7 @@ class Binhusenstore_product_model
                 "default_total_week" => (int)$product_value['default_total_week'],
             );
 
-            if(array_key_exists('is_admin_charge', $product_value)) {
+            if (array_key_exists('is_admin_charge', $product_value)) {
 
                 $array_to_push['admin_charge'] = (int) $product_value['is_admin_charge'] ? $admin_charge : 0;
             }
@@ -271,11 +268,11 @@ class Binhusenstore_product_model
     {
         $admin_charge_class = new Binhusenstore_admin_charge_model();
         $admin_charge = $admin_charge_class->retrieve_admin_charge();
-        
+
         $result = array();
         // mapping products
         foreach ($products as $product_value) {
-            
+
             $images = $this->convert_image_url($product_value['images']);
 
             $array_to_push = array(
@@ -299,7 +296,8 @@ class Binhusenstore_product_model
         return $result;
     }
 
-    function convert_image_url($images) {
+    function convert_image_url($images)
+    {
 
         $result = array();
 
@@ -326,7 +324,7 @@ class Binhusenstore_product_model
 
     public function retrieve_products_and_detail()
     {
-    
+
         $result = $this->database->select_from($this->table);
 
         if ($this->database->is_error === null) {
@@ -338,5 +336,4 @@ class Binhusenstore_product_model
 
         $this->is_success = $this->database->is_error;
     }
-
 }

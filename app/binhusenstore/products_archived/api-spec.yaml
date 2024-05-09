@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: All my rest api
+  description: Rest API for experiment.
+  version: 0.1.1
+servers:
+  - url: http://localhost/rest-php/binhusenstore
+    description: Binhusenstore end point
+tags:
+  - name: products_archived
+    description: products which is archived
+
+paths:
+  /products_archived:
+    parameters:
+      - name: id_category
+        in: query
+        required: true
+        description: The ID of the category
+        schema:
+          type: string
+        example: P220203902
+      - name: limit
+        in: query
+        required: true
+        description: The ID of the category
+        schema:
+          type: number
+        example: 10
+    get:
+      tags:
+        - products_archived
+      summary: Get all products_archived.
+      responses:
+        "200":
+          $ref: "#/components/responses/getProducts_archived200"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: products_archived not found
+  /product_archived/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the product
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - products_archived
+      summary: Get product by id.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "WAR22500001"
+                  name:
+                    type: string
+                    example: "name of product"
+                  categories:
+                    type: array
+                    items:
+                      type: string
+                      example: "categories1"
+                  price:
+                    type: number
+                    example: 1000000
+                  weight:
+                    type: number
+                    example: 1000
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      example: "IMG22500001"
+                  description:
+                    type: string
+                    example: "will contain very length of string"
+                  default_total_week:
+                    type: number
+                    example: 59
+                  is_available:
+                    type: boolean
+                    example: false
+                  admin_charge:
+                    type: number
+                    example: 6000
+                  links:
+                    type: string
+                    example: "https://sdlfsdfjhsdfsdf.com"
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+    delete:
+      tags:
+        - products_archived
+      summary: Delete product by id
+      responses:
+        "201":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of product end point
+
+components:
+  schemas:
+    Return_after_post:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WAR22500001"
+    product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "WAR22500001"
+        name:
+          type: string
+          example: "name of product"
+        categories:
+          type: string
+          example: "CAT22500001, CAT22500002, CAT22500003"
+        price:
+          type: number
+          example: 1000000
+        weight:
+          type: number
+          example: 1000
+        images:
+          type: string
+          example: "IMG22500001, IMG22500002, IMG22500003"
+        description:
+          type: string
+          example: "will contain very length of string"
+        default_total_week:
+          type: number
+          example: 59
+        is_available:
+          type: boolean
+          example: false
+        is_admin_charge:
+          type: boolean
+          example: true
+        links:
+          type: string
+          example: "https://sdlfsdfjhsdfsdf.com"
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+    401Error:
+      description: Invalid Authorization Or Unauthorization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: "You must be authenticated to access this resource."
+    200Success:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              message:
+                type: string
+                default: Update source success
+    404Error:
+      description: Source not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: false
+              message:
+                type: string
+                default: Source not found
+    getProducts_archivedLandingPage200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  properties:
+                    category:
+                      type: string
+                      example: "Shoes"
+                    products_archived:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: "WAR22500001"
+                          name:
+                            type: string
+                            example: "name of product"
+                          images:
+                            type: array
+                            items:
+                              type: string
+                              example: "image123.jpg"
+                          price:
+                            type: number
+                            example: 1000000
+                          default_total_week:
+                            type: number
+                            example: 59
+    getProducts_archived200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "WAR22500001"
+                    name:
+                      type: string
+                      example: "name of product"
+                    images:
+                      type: array
+                      items:
+                        type: string
+                        example: "image123.jpg"
+                    price:
+                      type: number
+                      example: 1000000
+                    default_total_week:
+                      type: number
+                      example: 59
+                    admin_charge:
+                      type: number
+                      example: 6000
+  requestBodies:
+    product:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+            $ref: "#/components/schemas/product"

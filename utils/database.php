@@ -227,6 +227,40 @@ class Query_builder
         }
     }
 
+    function select_where_match_full_text($table, $column_str, $where, $against, $order_by, $is_desc, $limit)
+    {
+        try {
+
+            $query = "SELECT $column_str FROM $table";
+
+            if ($where && $against) $query = $query . " WHERE MATCH(:where) AGAINST (':against' IN NATURAL LANGUAGE MODE)";
+
+            if ($order_by) {
+                $query = $query . " ORDER BY :order_by";
+
+                if ($is_desc) $query = $query . " DESC";
+            }
+
+            if ($limit) $query = $query . " LIMIT :limit";
+
+            $row = $this->db->prepare($query);
+
+            if ($where && $against) {
+                $row->bindValue('where', $where);
+                $row->bindValue('against', $against);
+            }
+            if ($order_by) $row->bindValue('order_by', $order_by);
+            if ($where) $row->bindValue('limit', $limit);
+
+            $row->execute();
+            return $row;
+        } catch (PDOException $e) {
+
+            $this->is_error = $e;
+            return false;
+        }
+    }
+
     function select_where_like($table_name, $where, $like)
     {
 
