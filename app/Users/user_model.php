@@ -112,11 +112,12 @@ class User_model
     else $this->error = "Invalid JWT";
   }
 
-  function generate_token($user_id) {
-   
+  function generate_token($user_id)
+  {
+
     $now = strtotime("now");
 
-    Firebase\JWT\JWT::encode([
+    return Firebase\JWT\JWT::encode([
       "iat" => $now, // issued at - time when token is generated
       "nbf" => $now, // not before - when this token is considered valid
       "exp" => $now + ((3600 * 24) * 7), // expiry - 7 days (3600 secs * 24 * 7) from now in this example

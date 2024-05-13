@@ -34,7 +34,7 @@ class Query_builder
     function select_from($tabel, $column_str = "*", $order_by = "", $is_desc = false, $limiter = 0)
     {
         $is_limiter_oke = is_numeric($limiter) && $limiter > 0;
-        $is_order_by_oke = is_string($order_by) && strlen($order_by) <= 40;
+        $is_order_by_oke = !is_null($order_by) && !empty($order_by) && is_string($order_by) && strlen($order_by) <= 40;
 
         try {
             $sql = "SELECT $column_str FROM $tabel";
@@ -55,7 +55,7 @@ class Query_builder
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
     function select_where($tabel, $where, $id, $order_by = "", $is_desc = false)
     {
-        $is_order_by_oke = is_string($order_by) && strlen($order_by) <= 40;
+        $is_order_by_oke = !is_null($order_by) && !empty($order_by) && is_string($order_by) && strlen($order_by) <= 40;
         try {
 
             $query = "SELECT * FROM $tabel WHERE $where = :$where";
@@ -83,7 +83,7 @@ class Query_builder
 
         $sql = "SELECT * FROM $table WHERE "  . implode(" AND ", $setPart);
 
-        $is_order_by_oke = is_string($order_by) && strlen($order_by) <= 40;
+        $is_order_by_oke = !is_null($order_by) && !empty($order_by) && is_string($order_by) && strlen($order_by) <= 40;
         if ($is_order_by_oke) $sql = $sql . " ORDER BY " . $order_by;
         if ($is_order_by_oke && $is_desc) $sql = $sql . " DESC ";
 
