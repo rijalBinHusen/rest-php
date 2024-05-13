@@ -44,7 +44,6 @@ class Binhusenstore_product_model
     public function get_products($limit, $id_category = null, $name_product)
     {
         $columnToSelect = "id, images, name, price, default_total_week, is_admin_charge";
-        $query = "SELECT $columnToSelect FROM $this->table";
 
         $is_category_valid = !is_null($id_category) && !empty($id_category) && $id_category != "";
         $is_name_product_valid = !is_null($name_product) && !empty($name_product) && $name_product != "";
@@ -97,8 +96,8 @@ class Binhusenstore_product_model
         $result = $this->database->update($this->table, $data, $where, $id);
 
         if ($this->database->is_error === null) {
-            
-            if($result === 0) return $this->database->is_id_exists($this->table, $id);
+
+            if ($result === 0) return $this->database->is_id_exists($this->table, $id);
             return $result;
         }
 
@@ -135,8 +134,7 @@ class Binhusenstore_product_model
         foreach ($categories as $value) {
             $category_id = $value['id'];
             $columnToSelect = "id, images, name, price, default_total_week";
-            $query_product = "SELECT $columnToSelect FROM $table_product WHERE MATCH(categories) AGAINST ('$category_id' IN NATURAL LANGUAGE MODE) ORDER BY id DESC LIMIT 4";
-            $get_products = $this->database->sqlQuery($query_product)->fetchAll(PDO::FETCH_ASSOC);
+            $get_products = $this->database->select_where_match_full_text($table_product, $columnToSelect, "categories", $category_id, "id", true, 4)->fetchAll(PDO::FETCH_ASSOC);
 
             $is_product_exists = count($get_products) > 0;
 
@@ -155,8 +153,7 @@ class Binhusenstore_product_model
         }
 
         $column_product_to_select = "id, images, name, price, default_total_week";
-        $query_3_product = "SELECT $column_product_to_select FROM $table_product ORDER BY id DESC LIMIT 3";
-        $retrieve_3_new_product = $this->database->sqlQuery($query_3_product)->fetchAll(PDO::FETCH_ASSOC);
+        $retrieve_3_new_product = $this->database->select_from($table_product, $column_product_to_select, "id", true, 3)->fetchAll(PDO::FETCH_ASSOC);
 
         $is_3_product_exists = count($retrieve_3_new_product) > 0;
 

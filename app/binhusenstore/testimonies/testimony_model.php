@@ -39,18 +39,11 @@ class Binhusenstore_testimony_model
     {
 
         $table_testimony = $this->table;
-        $query_testimony = "SELECT * FROM $table_testimony ORDER BY id DESC";
 
-        if (is_numeric($limit)) {
+        $limiter = 10;
+        if (is_numeric($limit) && $limit > 1) $limiter = $limit;
 
-            if ($limit > 1) $query_testimony = $query_testimony . " LIMIT $limit";
-        } else {
-
-            $query_testimony = $query_testimony . " LIMIT 10";
-        }
-
-        $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
-
+        $result = $this->database->select_from($table_testimony, "*", "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
         if ($this->database->is_error === null && count($result) > 0) {
 
             $converted_data_type = $this->convert_data_type($result);
@@ -63,8 +56,7 @@ class Binhusenstore_testimony_model
     public function get_testimoniesByIdProduct($id_product)
     {
         $table_testimony = $this->table;
-        $query_testimony = "SELECT * FROM $table_testimony WHERE id_product =  '$id_product' ORDER BY id DESC";
-        $result = $this->database->sqlQuery($query_testimony)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where($table_testimony, "id", $id_product, "id", true)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -98,12 +90,7 @@ class Binhusenstore_testimony_model
 
         if ($this->database->is_error === null) {
 
-            if ($result === 0) {
-
-                $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
-                return $this->database->sqlQuery($query)->fetchColumn();
-            }
-
+            if ($result === 0) return $this->database->is_id_exists($this->table, $id);
             return $result;
         }
 
