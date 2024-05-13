@@ -67,12 +67,7 @@ class Binhusenstore_cart_model
 
         if($this->database->is_error === null) {
     
-            if($result === 0) {
-
-                $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
-                return $this->database->sqlQuery($query)->fetchColumn();
-            }
-            
+            if($result === 0) return $this->database->is_id_exists($this->table, $id);
             return $result;
         } 
 

@@ -97,13 +97,8 @@ class Binhusenstore_product_model
         $result = $this->database->update($this->table, $data, $where, $id);
 
         if ($this->database->is_error === null) {
-
-            if ($result === 0) {
-
-                $query = "SELECT EXISTS(SELECT id FROM $this->table WHERE id = '$id')";
-                return $this->database->sqlQuery($query)->fetchColumn();
-            }
-
+            
+            if($result === 0) return $this->database->is_id_exists($this->table, $id);
             return $result;
         }
 
@@ -130,13 +125,10 @@ class Binhusenstore_product_model
 
         // get categories first
 
-        $category_testimony = "SELECT * FROM binhusenstore_categories WHERE is_landing_page = 1 ORDER BY id DESC";
-        $categories = $this->database->sqlQuery($category_testimony)->fetchAll(PDO::FETCH_ASSOC);
+        $categories = $this->database->select_where("binhusenstore_categories", "is_landing_page", 1, "id", true)->fetchAll(PDO::FETCH_ASSOC);
         $is_categories_exists = count($categories) > 0;
 
-        if (!$is_categories_exists) {
-            return $result;
-        };
+        if (!$is_categories_exists) return $result;
 
         // get products where category = cat, limit 4
 

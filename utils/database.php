@@ -44,13 +44,15 @@ class Query_builder
     }
 
     // merupakan fungsi untuk melihat data table dari database berdasarkan id
-    function select_where($tabel, $where, $id, $order_by = "")
+    function select_where($tabel, $where, $id, $order_by = "", $is_desc = false)
     {
+        $is_order_by_oke = is_string($order_by) && strlen($order_by) <= 40;
         try {
 
             $query = "SELECT * FROM $tabel WHERE $where = :$where";
 
-            if ($order_by != "") $query .= " ORDER BY " . $order_by;
+            if ($is_order_by_oke) $query .= " ORDER BY " . $order_by;
+            if ($is_order_by_oke && $is_desc) $query = $query . " DESC ";
 
             $row = $this->db->prepare($query);
             $row->bindValue($where, $id);
@@ -62,7 +64,7 @@ class Query_builder
         }
     }
 
-    function select_where_s($table, $where_s, $order_by = "")
+    function select_where_s($table, $where_s, $order_by = "", $is_desc = false)
     {
         $setPart = array();
 
@@ -72,9 +74,9 @@ class Query_builder
 
         $sql = "SELECT * FROM $table WHERE "  . implode(" AND ", $setPart);
 
-        if ($order_by) {
-            $sql = $sql . " ORDER BY " . $order_by;
-        }
+        $is_order_by_oke = is_string($order_by) && strlen($order_by) <= 40;
+        if ($is_order_by_oke) $sql = $sql . " ORDER BY " . $order_by;
+        if ($is_order_by_oke && $is_desc) $sql = $sql . " DESC ";
 
         $row = $this->db->prepare($sql);
 
