@@ -257,11 +257,12 @@ class Query_builder
             $row = $this->db->prepare($query);
 
             if ($where && $against) {
-                $row->bindValue('where', $where);
-                $row->bindValue('against', $against);
+                $row->bindValue('where', $where, PDO::PARAM_STR);
+                $row->bindValue('against', $against, PDO::PARAM_STR);
             }
-            if ($order_by) $row->bindValue('order_by', $order_by);
-            if ($limit) $row->bindValue('limit', $limit);
+            if ($order_by) $row->bindValue('order_by', $order_by, PDO::PARAM_STR);
+            if ($limit) $row->bindValue('limit', (int)$limit, PDO::PARAM_INT);
+
 
             $row->execute();
             return $row;

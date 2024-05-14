@@ -63,6 +63,7 @@ class Binhusenstore_product_model
         if (is_numeric($limit) && $limit > 0) $limiter = $limit;
 
         $result = $this->database->select_where_match_full_text($this->table, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
+        // $result = $this->database->select_from($this->table)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
