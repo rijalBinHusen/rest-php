@@ -244,10 +244,10 @@ class Query_builder
 
             $query = "SELECT $column_str FROM $table";
 
-            if ($where && $against) $query = $query . " WHERE MATCH(:where) AGAINST (':against' IN NATURAL LANGUAGE MODE)";
+            if ($where && $against) $query = $query . " WHERE MATCH($where) AGAINST (:against IN NATURAL LANGUAGE MODE)";
 
             if ($order_by) {
-                $query = $query . " ORDER BY :order_by";
+                $query = $query . " ORDER BY $order_by";
 
                 if ($is_desc) $query = $query . " DESC";
             }
@@ -256,13 +256,8 @@ class Query_builder
 
             $row = $this->db->prepare($query);
 
-            if ($where && $against) {
-                $row->bindValue('where', $where, PDO::PARAM_STR);
-                $row->bindValue('against', $against, PDO::PARAM_STR);
-            }
-            if ($order_by) $row->bindValue('order_by', $order_by, PDO::PARAM_STR);
+            if ($where && $against) $row->bindValue('against', $against, PDO::PARAM_STR);
             if ($limit) $row->bindValue('limit', (int)$limit, PDO::PARAM_INT);
-
 
             $row->execute();
             return $row;
