@@ -110,15 +110,15 @@ class folder_test extends TestCase
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
 
         $data_posted = $this->data_posted;
-        $this->assertArrayHasKey($data_posted['id_user'], $convertToAssocArray['data'][0]['id_user']);
-        $this->assertArrayHasKey($data_posted['name'], $convertToAssocArray['data'][0]['name']);
-        $this->assertArrayHasKey($data_posted['total_verse_to_show'], $convertToAssocArray['data'][0]['total_verse_to_show']);
-        $this->assertArrayHasKey($data_posted['show_next_chapter_on_second'], $convertToAssocArray['data'][0]['show_next_chapter_on_second']);
-        $this->assertArrayHasKey($data_posted['read_target'], $convertToAssocArray['data'][0]['read_target']);
-        $this->assertArrayHasKey($data_posted['is_show_first_letter'], $convertToAssocArray['data'][0]['is_show_first_letter']);
-        $this->assertArrayHasKey($data_posted['is_show_tafseer'], $convertToAssocArray['data'][0]['is_show_tafseer']);
-        $this->assertArrayHasKey($data_posted['arabic_size'], $convertToAssocArray['data'][0]['arabic_size']);
-        $this->assertArrayHasKey($data_posted['changed_by'], $convertToAssocArray['data'][0]);
+        $last_data_posted = $convertToAssocArray['data'][count($convertToAssocArray['data']) - 1];
+        $this->assertEquals($data_posted['name'], $last_data_posted['name']);
+        $this->assertEquals($data_posted['total_verse_to_show'], $last_data_posted['total_verse_to_show']);
+        $this->assertEquals($data_posted['show_next_chapter_on_second'], $last_data_posted['show_next_chapter_on_second']);
+        $this->assertEquals($data_posted['read_target'], $last_data_posted['read_target']);
+        $this->assertEquals($data_posted['is_show_first_letter'], $last_data_posted['is_show_first_letter']);
+        $this->assertEquals($data_posted['is_show_tafseer'], $last_data_posted['is_show_tafseer']);
+        $this->assertEquals($data_posted['arabic_size'], $last_data_posted['arabic_size']);
+        $this->assertArrayHasKey('changed_by', $last_data_posted);
     }
 
     // get folder error 404, 401
@@ -149,23 +149,22 @@ class folder_test extends TestCase
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($this->url_host_id, true));
+        // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $data_posted = $this->data_posted;
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
 
-        $this->assertArrayHasKey($data_posted['id_user'], $convertToAssocArray['data'][0]['id_user']);
-        $this->assertArrayHasKey($data_posted['name'], $convertToAssocArray['data'][0]['name']);
-        $this->assertArrayHasKey($data_posted['total_verse_to_show'], $convertToAssocArray['data'][0]['total_verse_to_show']);
-        $this->assertArrayHasKey($data_posted['show_next_chapter_on_second'], $convertToAssocArray['data'][0]['show_next_chapter_on_second']);
-        $this->assertArrayHasKey($data_posted['read_target'], $convertToAssocArray['data'][0]['read_target']);
-        $this->assertArrayHasKey($data_posted['is_show_first_letter'], $convertToAssocArray['data'][0]['is_show_first_letter']);
-        $this->assertArrayHasKey($data_posted['is_show_tafseer'], $convertToAssocArray['data'][0]['is_show_tafseer']);
-        $this->assertArrayHasKey($data_posted['arabic_size'], $convertToAssocArray['data'][0]['arabic_size']);
-        $this->assertArrayHasKey($data_posted['changed_by'], $convertToAssocArray['data'][0]);
+        $this->assertEquals($data_posted['name'], $convertToAssocArray['data']['name']);
+        $this->assertEquals($data_posted['total_verse_to_show'], $convertToAssocArray['data']['total_verse_to_show']);
+        $this->assertEquals($data_posted['show_next_chapter_on_second'], $convertToAssocArray['data']['show_next_chapter_on_second']);
+        $this->assertEquals($data_posted['read_target'], $convertToAssocArray['data']['read_target']);
+        $this->assertEquals($data_posted['is_show_first_letter'], $convertToAssocArray['data']['is_show_first_letter']);
+        $this->assertEquals($data_posted['is_show_tafseer'], $convertToAssocArray['data']['is_show_tafseer']);
+        $this->assertEquals($data_posted['arabic_size'], $convertToAssocArray['data']['arabic_size']);
+        $this->assertArrayHasKey('changed_by', $convertToAssocArray['data']);
     }
 
     public function testGetByIdEndpointFailed401()
@@ -201,7 +200,7 @@ class folder_test extends TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("folder not found", $convertToAssocArray['message']);
+        $this->assertEquals("Folder not found", $convertToAssocArray['message']);
     }
 
     public function testPutEndpoint201()
@@ -290,7 +289,7 @@ class folder_test extends TestCase
         $this->assertEquals(false, $convertToAssocArray['success']);
 
         $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("folder not found", $convertToAssocArray['message']);
+        $this->assertEquals("Folder not found", $convertToAssocArray['message']);
     }
 
     // public function testDeleteEndpoint201()

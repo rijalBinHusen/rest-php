@@ -13,7 +13,6 @@ class Memverses_folder
     {
         // request
         $req = Flight::request();
-        $id_folder = $req->data->id_folder;
         $name = $req->data->name;
         $total_verse_to_show = $req->data->total_verse_to_show;
         $show_next_chapter_on_second = $req->data->show_next_chapter_on_second;
@@ -22,9 +21,7 @@ class Memverses_folder
         $is_show_tafseer = $req->data->is_show_tafseer;
         $arabic_size = $req->data->arabic_size;
 
-        $valid_request_body = !is_null($id_folder)
-            && is_string($id_folder)
-            && !is_null($name)
+        $valid_request_body = !is_null($name)
             && is_string($name)
             && !is_null($total_verse_to_show)
             && is_numeric($total_verse_to_show)
