@@ -91,7 +91,7 @@ class Testimony_test extends TestCase
     {
         $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url .'testimonies');
+        $http = new HttpCall($this->url . 'testimonies');
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -115,13 +115,14 @@ class Testimony_test extends TestCase
 
         $id_product = $this->data_posted['id_product'];
 
-        $http = new HttpCall($this->url .'testimonies?id_product=' .$id_product);
+        $http = new HttpCall($this->url . 'testimonies?id_product=' . $id_product);
 
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($id_product, true));
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -141,7 +142,7 @@ class Testimony_test extends TestCase
 
         $id_product = $this->data_posted['id_product'];
 
-        $http = new HttpCall($this->url .'testimonies?id_product=1231223');
+        $http = new HttpCall($this->url . 'testimonies?id_product=1231223');
 
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
@@ -150,7 +151,7 @@ class Testimony_test extends TestCase
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
-        
+
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(false, $convertToAssocArray['success']);
 
@@ -180,7 +181,7 @@ class Testimony_test extends TestCase
         $this->testPostEndpoint();
 
         $http = new HttpCall($this->url_host_id);
-        
+
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -240,7 +241,7 @@ class Testimony_test extends TestCase
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
         $data = array('rating' => 2);
-        
+
         $httpCallVar->setData($data);
 
         $httpCallVar->addJWTToken();
@@ -248,6 +249,8 @@ class Testimony_test extends TestCase
         $response = $httpCallVar->getResponse("PUT");
 
         $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, true));
+
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);

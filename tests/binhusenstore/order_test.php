@@ -426,7 +426,7 @@ class Order_test extends TestCase
         // fwrite(STDERR, print_r($data_to_sent, true));
         // fwrite(STDERR, print_r($convertToAssocArray, true));
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Order grouped", $convertToAssocArray['message']);
+        $this->assertEquals("Order merged", $convertToAssocArray['message']);
 
         // get the both order
         $http_get_order_1 = new HttpCall($this->url . "order/" . $id_order_id1);
@@ -526,7 +526,7 @@ class Order_test extends TestCase
         $response_update = $httpToUpdate->getResponse("PUT");
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Order grouped", $convertToAssocArray['message']);
+        $this->assertEquals("Order merged", $convertToAssocArray['message']);
 
         // get the both order
         $http_get_order_1 = new HttpCall($this->url . "order/" . $id_order_id1);
@@ -624,7 +624,7 @@ class Order_test extends TestCase
         $response_update = $httpToUpdate->getResponse("PUT");
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Order grouped", $convertToAssocArray['message']);
+        $this->assertEquals("Order merged", $convertToAssocArray['message']);
 
         // get the both order
         $http_get_order_1 = new HttpCall($this->url . "order/" . $id_order_id1);
@@ -669,7 +669,7 @@ class Order_test extends TestCase
         $response_update = $httpToUpdate->getResponse("PUT");
         $convertToAssocArray = json_decode($response_update, true);
         $this->assertEquals(false, $convertToAssocArray['success']);
-        $this->assertEquals("Failed to merge order, check the data you sent", $convertToAssocArray['message']);
+        $this->assertEquals("Failed to merge order, check the data you sent!", $convertToAssocArray['message']);
     }
 
     // error 401 Auth failed

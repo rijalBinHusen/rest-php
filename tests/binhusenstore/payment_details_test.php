@@ -13,7 +13,8 @@ class Payment_details_test extends TestCase
     private $order_id = "";
     private $phone = "";
 
-    public function testCreateOrder() {
+    public function testCreateOrder()
+    {
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->url . "order");
         // Define the request body
@@ -65,16 +66,16 @@ class Payment_details_test extends TestCase
         );
 
         // create new payment
-        for($i = 0; $i <= 3; $i++) {
+        for ($i = 0; $i <= 3; $i++) {
 
             $this->total_balance += $data['balance'];
 
             $httpPostNewPayment->setData($data);
             $httpPostNewPayment->addJWTToken();
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -84,7 +85,7 @@ class Payment_details_test extends TestCase
 
         // get payment by id order
         $id_order = $data['id_order'];
-        $httpGetPaymentByIdOrder = new HttpCall($this->url .'payments?id_order=' .$id_order);
+        $httpGetPaymentByIdOrder = new HttpCall($this->url . 'payments?id_order=' . $id_order);
         $httpGetPaymentByIdOrder->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
         $response = $httpGetPaymentByIdOrder->getResponse("GET");
@@ -122,9 +123,9 @@ class Payment_details_test extends TestCase
         // reset total balance
         $this->total_balance = 300;
         $id_order = $this->order_id;
-        
+
         // create payment
-        for($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -138,9 +139,9 @@ class Payment_details_test extends TestCase
             $httpPostNewPayment->addJWTToken();
 
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -149,7 +150,7 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPostPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
+        $httpPostPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
         $data_to_send2 = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
@@ -180,6 +181,8 @@ class Payment_details_test extends TestCase
 
         $convertToAssocArray = json_decode($response, true);
 
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
@@ -192,12 +195,12 @@ class Payment_details_test extends TestCase
         $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+        $this->assertEquals(50, $convertToAssocArray['data'][2]['balance']);
+        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][2]['date_payment']);
         $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
 
-        $this->assertEquals(50, $convertToAssocArray['data'][3]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][3]['date_payment']);
+        $this->assertEquals(100, $convertToAssocArray['data'][3]['balance']);
+        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][3]['date_payment']);
         $this->assertEquals("0", $convertToAssocArray['data'][3]['is_paid']);
     }
 
@@ -209,9 +212,9 @@ class Payment_details_test extends TestCase
 
         // reset total balance
         $this->total_balance = 300;
-        
+
         // create payment
-        for($i = 1; $i <= 3; $i++) {
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -224,9 +227,9 @@ class Payment_details_test extends TestCase
             $httpPostNewPayment->addJWTToken();
 
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -235,8 +238,8 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
-        
+        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
@@ -293,8 +296,8 @@ class Payment_details_test extends TestCase
 
         // reset total balance
         $this->total_balance = 300;
-        
-        for($i = 1; $i <= 3; $i++) {
+
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -307,9 +310,9 @@ class Payment_details_test extends TestCase
             $httpPostNewPayment->addJWTToken();
 
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -318,8 +321,8 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
-        
+        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
@@ -368,15 +371,15 @@ class Payment_details_test extends TestCase
 
     public function testPaymentMoreThanBalance200()
     {
-        
+
         $this->testCreateOrder();
         $id_order = $this->order_id;
         $httpPostPayment = new HttpCall($this->url . "payment");
 
         // reset total balance
         $this->total_balance = 300;
-        
-        for($i = 1; $i <= 3; $i++) {
+
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -389,9 +392,9 @@ class Payment_details_test extends TestCase
             $httpPostPayment->addJWTToken();
 
             $response = $httpPostPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -400,8 +403,8 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
-        
+        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
@@ -456,8 +459,8 @@ class Payment_details_test extends TestCase
 
         // reset total balance
         $this->total_balance = 300;
-        
-        for($i = 1; $i <= 3; $i++) {
+
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -470,9 +473,9 @@ class Payment_details_test extends TestCase
             $httpPostNewPayment->addJWTToken();
 
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -481,8 +484,8 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPutPayment = new HttpCall($this->url .'payment_mark_as_paid');
-        
+        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",
@@ -543,8 +546,8 @@ class Payment_details_test extends TestCase
 
         // reset total balance
         $this->total_balance = 300;
-        
-        for($i = 1; $i <= 3; $i++) {
+
+        for ($i = 1; $i <= 3; $i++) {
             // Define the request body
             $data_to_send = array(
                 'date_payment' => "2023-10-0" . $i,
@@ -557,9 +560,9 @@ class Payment_details_test extends TestCase
             $httpPostNewPayment->addJWTToken();
 
             $response = $httpPostNewPayment->getResponse("POST");
-    
+
             $convertToAssocArray = json_decode($response, true);
-    
+
             // fwrite(STDERR, print_r($response, true));
             // Verify that the response same as expected
             $this->assertArrayHasKey('success', $convertToAssocArray);
@@ -568,8 +571,8 @@ class Payment_details_test extends TestCase
         }
 
         // pay the bill
-        $httpPutNewPayment = new HttpCall($this->url .'payment_mark_as_paid');
-        
+        $httpPutNewPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
         $data_to_send = array(
             'id_order' => $id_order,
             'date_paid' => "2023-10-01",

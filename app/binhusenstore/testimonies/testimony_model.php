@@ -56,7 +56,7 @@ class Binhusenstore_testimony_model
     public function get_testimoniesByIdProduct($id_product)
     {
         $table_testimony = $this->table;
-        $result = $this->database->select_where($table_testimony, "id", $id_product, "id", true)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where($table_testimony, "id_product", $id_product, "id", true)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 

@@ -3,12 +3,12 @@ require_once(__DIR__ . '/testimony_model.php');
 
 class Binhusenstore_testimony
 {
-    protected $Binhusenstore_testimony;
+    protected $Binhusenstore_testimony_model;
     function __construct()
     {
-        $this->Binhusenstore_testimony = new Binhusenstore_testimony_model();
+        $this->Binhusenstore_testimony_model = new Binhusenstore_testimony_model();
     }
-    
+
     public function add_testimony()
     {
         // request
@@ -22,49 +22,50 @@ class Binhusenstore_testimony
         $result = null;
 
         $is_request_body_not_oke = is_null($id_user)
-                                    || is_null($display_name)
-                                    || is_null($id_product)
-                                    || is_null($rating)
-                                    || empty($id_user)
-                                    || empty($display_name)
-                                    || empty($id_product)
-                                    || !is_numeric($rating);
-        if(is_null($content) || empty($content)) $content = "Tidak ada review dari pengguna";
+            || is_null($display_name)
+            || is_null($id_product)
+            || is_null($rating)
+            || empty($id_user)
+            || empty($display_name)
+            || empty($id_product)
+            || !is_numeric($rating);
+        if (is_null($content) || empty($content)) $content = "Tidak ada review dari pengguna";
 
-        if($is_request_body_not_oke) {
+        if ($is_request_body_not_oke) {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Failed to add testimony, check the data you sent',
-                ), 400
+                ),
+                400
             );
             return;
         }
 
-        $result = $this->Binhusenstore_testimony->append_testimony($id_user, $id_product, $rating, $content, $display_name);
+        $result = $this->Binhusenstore_testimony_model->append_testimony($id_user, $id_product, $rating, $content, $display_name);
 
-        if($this->Binhusenstore_testimony->is_success === true) {
-        
+        if ($this->Binhusenstore_testimony_model->is_success === true) {
+
             Flight::json(
                 array(
                     'success' => true,
                     'id' => $result
-                ), 201
+                ),
+                201
             );
-        } 
-        
-        else {
-            
+        } else {
+
             Flight::json(
                 array(
-                    'success'=> false,
-                    'message'=> $this->Binhusenstore_testimony->is_success
-                ), 500
+                    'success' => false,
+                    'message' => $this->Binhusenstore_testimony_model->is_success
+                ),
+                500
             );
         }
     }
-    
+
     public function get_testimonies()
     {
         // catch the query string request
@@ -74,57 +75,51 @@ class Binhusenstore_testimony
 
         $result = array();
 
-        if(is_null($id_product)) {
+        if (is_null($id_product)) {
 
-            $result = $this->Binhusenstore_testimony->get_testimonies($limit);
+            $result = $this->Binhusenstore_testimony_model->get_testimonies($limit);
+        } else {
+
+            $result = $this->Binhusenstore_testimony_model->get_testimoniesByIdProduct($id_product);
         }
 
-        else {
-            
-            $result = $this->Binhusenstore_testimony->get_testimoniesByIdProduct($id_product);
-        }
-                
         $is_exists = count($result) > 0;
 
-        if($this->Binhusenstore_testimony->is_success === true && $is_exists) {
+        if ($this->Binhusenstore_testimony_model->is_success === true && $is_exists) {
 
             Flight::json(
                 array(
                     "success" => true,
                     "data" => $result
-                    )
-            , 200);
-        }
+                ),
+                200
+            );
+        } else if ($this->Binhusenstore_testimony_model->is_success !== true) {
 
-        else if ($this->Binhusenstore_testimony->is_success !== true) {
-
-            Flight::json( array(
+            Flight::json(array(
                 "success" => false,
                 "message" => $result
             ), 500);
-        }
-        
-        else {
+        } else {
 
-            Flight::json( array(
-            "success" => false,
-            "message" => "Testimony not found"
+            Flight::json(array(
+                "success" => false,
+                "message" => "Testimony not found"
             ), 404);
         }
-
     }
-    
+
     public function get_testimony_by_id($id)
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_testimony->get_testimony_by_id($id);
+        $result = $this->Binhusenstore_testimony_model->get_testimony_by_id($id);
 
-        $is_success = $this->Binhusenstore_testimony->is_success;
+        $is_success = $this->Binhusenstore_testimony_model->is_success;
 
         $is_found = count($result) > 0;
 
-        if($is_success === true && $is_found) {
+        if ($is_success === true && $is_found) {
 
             Flight::json(
                 array(
@@ -132,40 +127,38 @@ class Binhusenstore_testimony
                     'data' => $result
                 )
             );
-        }
-
-        else if($is_success !== true) {
+        } else if ($is_success !== true) {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => $is_success
-                ), 500
+                ),
+                500
             );
-        }
-
-        else {
+        } else {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Testimony not found'
-                ), 404
+                ),
+                404
             );
         }
     }
-    
+
     public function get_testimony_for_landing_page()
     {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_testimony->get_testimony_landing_page();
+        $result = $this->Binhusenstore_testimony_model->get_testimony_landing_page();
 
-        $is_success = $this->Binhusenstore_testimony->is_success;
+        $is_success = $this->Binhusenstore_testimony_model->is_success;
 
         $is_found = count($result) > 0;
 
-        if($is_success === true && $is_found) {
+        if ($is_success === true && $is_found) {
 
             Flight::json(
                 array(
@@ -173,61 +166,58 @@ class Binhusenstore_testimony
                     'data' => $result
                 )
             );
-        }
-
-        else if($is_success !== true) {
+        } else if ($is_success !== true) {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => $is_success
-                ), 500
+                ),
+                500
             );
-        }
-
-        else {
+        } else {
 
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Testimony not found'
-                ), 404
+                ),
+                404
             );
         }
     }
 
-    public function remove_testimony($id) {
+    public function remove_testimony($id)
+    {
         // myguest/8
         // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_testimony->remove_testimony_by_id($id);
+        $result = $this->Binhusenstore_testimony_model->remove_testimony_by_id($id);
 
-        $is_success = $this->Binhusenstore_testimony->is_success;
-    
-        if($is_success === true && $result > 0) {
+        $is_success = $this->Binhusenstore_testimony_model->is_success;
+
+        if ($is_success === true && $result > 0) {
             Flight::json(
                 array(
                     'success' => true,
                     'message' => 'Delete testimony success',
                 )
             );
-        }
-
-        else if($is_success !== true) {
+        } else if ($is_success !== true) {
             Flight::json(
                 array(
                     'success' => false,
                     'message' => $is_success
-                ), 500
+                ),
+                500
             );
             return;
-        }
-
-        else {
+        } else {
             Flight::json(
                 array(
                     'success' => false,
                     'message' => 'Testimony not found'
-                ), 404
+                ),
+                404
             );
         }
     }
@@ -252,13 +242,13 @@ class Binhusenstore_testimony
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 
-        if($is_oke_to_update) {
+        if ($is_oke_to_update) {
 
-            $result = $this->Binhusenstore_testimony->update_testimony_by_id($keyValueToUpdate, "id", $id);
-    
-            $is_success = $this->Binhusenstore_testimony->is_success;
-    
-            if($is_success === true && $result > 0) {
+            $result = $this->Binhusenstore_testimony_model->update_testimony_by_id($keyValueToUpdate, "id", $id);
+
+            $is_success = $this->Binhusenstore_testimony_model->is_success;
+
+            if ($is_success === true && $result > 0) {
 
                 Flight::json(
                     array(
@@ -266,31 +256,27 @@ class Binhusenstore_testimony
                         'message' => 'Update testimony success',
                     )
                 );
-            }
-    
-            else if($is_success !== true) {
+            } else if ($is_success !== true) {
 
                 Flight::json(
                     array(
                         'success' => false,
                         'message' => $is_success
-                    ), 500
+                    ),
+                    500
                 );
                 return;
-            }
-    
-            else {
+            } else {
 
                 Flight::json(
                     array(
                         'success' => false,
                         'message' => 'Testimony not found'
-                    ), 404
+                    ),
+                    404
                 );
             }
-        } 
-        
-        else {
+        } else {
 
             Flight::json(
                 array(
