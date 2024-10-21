@@ -75,7 +75,7 @@ paths:
       summary: Get folder by id.
       responses:
         "200":
-          $ref: "#/components/responses/get_folders200"
+          $ref: "#/components/responses/get_folder200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -209,6 +209,18 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/folder"
+    get_folder200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/components/schemas/folder"
   requestBodies:
     folder:
       required: true
