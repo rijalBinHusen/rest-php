@@ -122,6 +122,21 @@ class folder_test extends TestCase
     }
 
     // get folder error 404, 401
+    public function testGetEndpointFailed401()
+    {
+
+        $http = new HttpCall($this->url . 'folders');
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
     public function testGetByIdEndpoint()
     {
