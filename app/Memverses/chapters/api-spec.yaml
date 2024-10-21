@@ -71,7 +71,7 @@ paths:
       summary: Get chapter by id.
       responses:
         "200":
-          $ref: "#/components/responses/get_chapters200"
+          $ref: "#/components/responses/get_chapter200"
         "404":
           $ref: "#/components/responses/404Error"
         "401":
@@ -205,6 +205,18 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/chapter"
+    get_chapter200:
+      description: Success operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                default: true
+              data:
+                $ref: "#/components/schemas/chapter"
   requestBodies:
     chapter:
       required: true

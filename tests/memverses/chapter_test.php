@@ -14,16 +14,14 @@ class folder_test extends TestCase
     public function testPostEndpoint()
     {
         $faker = Faker\Factory::create();
-        $http = new HttpCall($this->url . "folder");
+        $http = new HttpCall($this->url . "chapter");
         // Define the request body
         $data = array(
-            "name" => $faker->text(80),
-            "total_verse_to_show" => $faker->numberBetween(1, 10),
-            "show_next_chapter_on_second" => $faker->numberBetween(1, 1000000),
-            "read_target" => $faker->numberBetween(1, 75),
-            "is_show_first_letter" => $faker->boolean(),
-            "is_show_tafseer" => $faker->boolean(),
-            "arabic_size" => $faker->numberBetween(1, 75),
+            "id_chapter_client" => $faker->text(20),
+            "id_folder" => $faker->text(20),
+            "chapter" => $faker->numberBetween(1, 1000000),
+            "verse" => $faker->numberBetween(1, 75),
+            "readed_times" => $faker->numberBetween(1, 75),
         );
 
         $this->data_posted = $data;
@@ -40,21 +38,19 @@ class folder_test extends TestCase
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->url_host_id = $this->url . "folder/" . $convertToAssocArray['id'];
+        $this->url_host_id = $this->url . "chapter/" . $convertToAssocArray['id'];
     }
 
     public function testPostEndpointFailed400()
     {
-        $httpCallVar = new HttpCall($this->url . 'folder');
+        $httpCallVar = new HttpCall($this->url . 'chapter');
         // Define the request body
         $data = array(
-            "name" => "false",
-            "total_verse_to_show" => "false",
-            "show_next_chapter_on_second" => "false",
-            "read_target" => "false",
-            "is_show_first_letter" => "false",
-            "is_show_tafseer" => "false",
-            "arabic_size" => "false",
+            "id_chapter_client" => "false",
+            "id_folder" => "false",
+            "chapter" => "false",
+            "verse" => "false",
+            "readed_times" => "false",
         );
 
         $httpCallVar->setData($data);
@@ -74,10 +70,16 @@ class folder_test extends TestCase
 
     public function testPostEndpointFailed401()
     {
-        $httpCallVar = new HttpCall($this->url . 'folder');
+        $httpCallVar = new HttpCall($this->url . 'chapter');
         // Define the request body
 
-        $data = array('id_user' => "Failed test");
+        $data = array(
+            "id_chapter_client" => "false",
+            "id_folder" => "false",
+            "chapter" => 1,
+            "verse" => 2,
+            "readed_times" => 0,
+        );
 
         $httpCallVar->setData($data);
 
@@ -96,7 +98,7 @@ class folder_test extends TestCase
     {
         $this->testPostEndpoint();
 
-        $http = new HttpCall($this->url . 'folders');
+        $http = new HttpCall($this->url . 'chapters');
         $http->addJWTToken();
         // Send a GET request to the /endpoint URL
         $response = $http->getResponse("GET");
@@ -106,19 +108,16 @@ class folder_test extends TestCase
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
 
         $data_posted = $this->data_posted;
-        $this->assertArrayHasKey($data_posted['id_user'], $convertToAssocArray['data'][0]['id_user']);
-        $this->assertArrayHasKey($data_posted['name'], $convertToAssocArray['data'][0]['name']);
-        $this->assertArrayHasKey($data_posted['total_verse_to_show'], $convertToAssocArray['data'][0]['total_verse_to_show']);
-        $this->assertArrayHasKey($data_posted['show_next_chapter_on_second'], $convertToAssocArray['data'][0]['show_next_chapter_on_second']);
-        $this->assertArrayHasKey($data_posted['read_target'], $convertToAssocArray['data'][0]['read_target']);
-        $this->assertArrayHasKey($data_posted['is_show_first_letter'], $convertToAssocArray['data'][0]['is_show_first_letter']);
-        $this->assertArrayHasKey($data_posted['is_show_tafseer'], $convertToAssocArray['data'][0]['is_show_tafseer']);
-        $this->assertArrayHasKey($data_posted['arabic_size'], $convertToAssocArray['data'][0]['arabic_size']);
-        $this->assertArrayHasKey($data_posted['changed_by'], $convertToAssocArray['data'][0]);
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+        $this->assertArrayHasKey($data_posted['id_chapter_client'], $convertToAssocArray['data'][0]['id_chapter_client']);
+        $this->assertArrayHasKey($data_posted['id_folder'], $convertToAssocArray['data'][0]['id_folder']);
+        $this->assertArrayHasKey($data_posted['chapter'], $convertToAssocArray['data'][0]['chapter']);
+        $this->assertArrayHasKey($data_posted['verse'], $convertToAssocArray['data'][0]['verse']);
+        $this->assertArrayHasKey($data_posted['readed_times'], $convertToAssocArray['data'][0]['readed_times']);
     }
 
     // get folder error 404, 401
@@ -136,21 +135,18 @@ class folder_test extends TestCase
         $convertToAssocArray = json_decode($response, true);
         // fwrite(STDERR, print_r($this->url_host_id, true));
         // Verify that the response same as expected
-        $data_posted = $this->data_posted;
         $this->assertArrayHasKey('success', $convertToAssocArray);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertArrayHasKey('data', $convertToAssocArray);
-        $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
 
-        $this->assertArrayHasKey($data_posted['id_user'], $convertToAssocArray['data'][0]['id_user']);
-        $this->assertArrayHasKey($data_posted['name'], $convertToAssocArray['data'][0]['name']);
-        $this->assertArrayHasKey($data_posted['total_verse_to_show'], $convertToAssocArray['data'][0]['total_verse_to_show']);
-        $this->assertArrayHasKey($data_posted['show_next_chapter_on_second'], $convertToAssocArray['data'][0]['show_next_chapter_on_second']);
-        $this->assertArrayHasKey($data_posted['read_target'], $convertToAssocArray['data'][0]['read_target']);
-        $this->assertArrayHasKey($data_posted['is_show_first_letter'], $convertToAssocArray['data'][0]['is_show_first_letter']);
-        $this->assertArrayHasKey($data_posted['is_show_tafseer'], $convertToAssocArray['data'][0]['is_show_tafseer']);
-        $this->assertArrayHasKey($data_posted['arabic_size'], $convertToAssocArray['data'][0]['arabic_size']);
-        $this->assertArrayHasKey($data_posted['changed_by'], $convertToAssocArray['data'][0]);
+        $data_posted = $this->data_posted;
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
+        $this->assertArrayHasKey($data_posted['id_chapter_client'], $convertToAssocArray['data']['id_chapter_client']);
+        $this->assertArrayHasKey($data_posted['id_folder'], $convertToAssocArray['data']['id_folder']);
+        $this->assertArrayHasKey($data_posted['chapter'], $convertToAssocArray['data']['chapter']);
+        $this->assertArrayHasKey($data_posted['verse'], $convertToAssocArray['data']['verse']);
+        $this->assertArrayHasKey($data_posted['readed_times'], $convertToAssocArray['data']['readed_times']);
     }
 
     public function testGetByIdEndpointFailed401()
@@ -173,7 +169,7 @@ class folder_test extends TestCase
     public function testGetByIdEndpointFailed404()
     {
         $this->testPostEndpoint();
-        $http = new HttpCall($this->url . 'folder/SDFLSKDFJ');
+        $http = new HttpCall($this->url . 'chapter/SDFLSKDFJ');
 
         $http->addJWTToken();
 
@@ -194,7 +190,7 @@ class folder_test extends TestCase
         $this->testPostEndpoint();
         $httpCallVar = new HttpCall($this->url_host_id);
         // Define the request body
-        $data = array('name' => "Updated via unit testing");
+        $data = array('readed_times' => 70);
 
         $httpCallVar->setData($data);
 
@@ -240,9 +236,9 @@ class folder_test extends TestCase
     public function testPutEndpointFailed401()
     {
         $this->testPostEndpoint();
-        $httpCallVar = new HttpCall($this->url . 'folder/loremipsum');
+        $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
         // Define the request body
-        $data = array('name' => "Failed test");
+        $data = array('readed_times' => 9);
 
         $httpCallVar->setData($data);
 
@@ -259,9 +255,9 @@ class folder_test extends TestCase
 
     public function testPutEndpointFailed404()
     {
-        $httpCallVar = new HttpCall($this->url . 'folder/loremipsum');
+        $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
         // Define the request body
-        $data = array('read_target' => 9);
+        $data = array('readed_times' => 9);
 
         $httpCallVar->setData($data);
 
@@ -299,7 +295,7 @@ class folder_test extends TestCase
 
     // public function testDeleteEndpointFailed401()
     // {
-    //     $httpCallVar = new HttpCall($this->url . 'folder/loremipsum');
+    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
 
     //     $response = $httpCallVar->getResponse("DELETE");
 
@@ -314,7 +310,7 @@ class folder_test extends TestCase
 
     // public function testDeleteEndpointFailed404()
     // {
-    //     $httpCallVar = new HttpCall($this->url . 'folder/loremipsum');
+    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
 
     //     $httpCallVar->addJWTToken();
 
