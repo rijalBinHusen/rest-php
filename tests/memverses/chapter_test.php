@@ -121,58 +121,201 @@ class chapter_test extends TestCase
     }
 
     // // get folder error 404, 401
-    // public function testGetEndpointFailed401()
-    // {
+    public function testGetEndpointFailed401()
+    {
 
-    //     $http = new HttpCall($this->url . 'chapters');
-    //     $response = $http->getResponse("GET");
+        $http = new HttpCall($this->url . 'chapters/1231231231');
+        $response = $http->getResponse("GET");
 
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
 
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // }
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
 
-    // public function testGetByIdEndpoint()
+    public function testGetByIdEndpoint()
+    {
+        $this->testPostEndpoint();
+
+        $http = new HttpCall($this->url_host_id);
+
+        $http->addJWTToken();
+        // Send a GET request to the /endpoint URL
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($this->url_host_id, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $data_posted = $this->data_posted;
+        $last_data_posted = $convertToAssocArray['data'];
+
+        $this->assertArrayHasKey('data', $convertToAssocArray);
+        $this->assertArrayHasKey('id', $convertToAssocArray['data']);
+        $this->assertEquals($data_posted['id_chapter_client'], $last_data_posted['id_chapter_client']);
+        $this->assertEquals($data_posted['id_folder'], $last_data_posted['id_folder']);
+        $this->assertEquals($data_posted['chapter'], $last_data_posted['chapter']);
+        $this->assertEquals($data_posted['verse'], $last_data_posted['verse']);
+        $this->assertEquals($data_posted['readed_times'], $last_data_posted['readed_times']);
+    }
+
+    public function testGetByIdEndpointFailed401()
+    {
+        $this->testPostEndpoint();
+
+        $http = new HttpCall($this->url_host_id);
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    public function testGetByIdEndpointFailed404()
+    {
+        $this->testPostEndpoint();
+        $http = new HttpCall($this->url . 'chapter/SDFLSKDFJ');
+
+        $http->addJWTToken();
+
+        $response = $http->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("Chapter not found", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpoint201()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->url_host_id);
+        // Define the request body
+        $data = array('readed_times' => 70);
+
+        $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
+
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($response, true));
+
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("Update chapter success", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed400()
+    {
+        $this->testPostEndpoint();
+
+        $httpCallVar = new HttpCall($this->url_host_id);
+        // Define the request body
+        $data = array('nobody' => "Failed test");
+
+        $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
+
+        $response = $httpCallVar->getResponse("PUT");
+
+        // fwrite(STDERR, print_r($response, true));
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals('Failed to update chapter, check the data you sent', $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed401()
+    {
+        $this->testPostEndpoint();
+        $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
+        // Define the request body
+        $data = array('readed_times' => 9);
+
+        $httpCallVar->setData($data);
+
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    }
+
+    public function testPutEndpointFailed404()
+    {
+        $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
+        // Define the request body
+        $data = array('readed_times' => 9);
+
+        $httpCallVar->setData($data);
+
+        $httpCallVar->addJWTToken();
+
+        $response = $httpCallVar->getResponse("PUT");
+
+        $convertToAssocArray = json_decode($response, true);
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+
+        $this->assertArrayHasKey('message', $convertToAssocArray);
+        $this->assertEquals("Chapter not found", $convertToAssocArray['message']);
+    }
+
+    // public function testDeleteEndpoint201()
     // {
     //     $this->testPostEndpoint();
+    //     $httpCallVar = new HttpCall($this->url_host_id);
 
-    //     $http = new HttpCall($this->url_host_id);
+    //     $httpCallVar->addJWTToken();
 
-    //     $http->addJWTToken();
-    //     // Send a GET request to the /endpoint URL
-    //     $response = $http->getResponse("GET");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
     //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($this->url_host_id, true));
     //     // Verify that the response same as expected
+    //     // fwrite(STDERR, print_r($response, true));
     //     $this->assertArrayHasKey('success', $convertToAssocArray);
     //     $this->assertEquals(true, $convertToAssocArray['success']);
 
-    //     $data_posted = $this->data_posted;
-
-    //     $this->assertArrayHasKey('data', $convertToAssocArray);
-    //     $this->assertArrayHasKey('id', $convertToAssocArray['data']);
-    //     $this->assertArrayHasKey($data_posted['id_chapter_client'], $convertToAssocArray['data']['id_chapter_client']);
-    //     $this->assertArrayHasKey($data_posted['id_folder'], $convertToAssocArray['data']['id_folder']);
-    //     $this->assertArrayHasKey($data_posted['chapter'], $convertToAssocArray['data']['chapter']);
-    //     $this->assertArrayHasKey($data_posted['verse'], $convertToAssocArray['data']['verse']);
-    //     $this->assertArrayHasKey($data_posted['readed_times'], $convertToAssocArray['data']['readed_times']);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("Delete folder success", $convertToAssocArray['message']);
     // }
 
-    // public function testGetByIdEndpointFailed401()
+    // public function testDeleteEndpointFailed401()
     // {
-    //     $this->testPostEndpoint();
+    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
 
-    //     $http = new HttpCall($this->url_host_id);
-    //     $response = $http->getResponse("GET");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
     //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
     //     // Verify that the response same as expected
     //     $this->assertArrayHasKey('success', $convertToAssocArray);
     //     $this->assertEquals(false, $convertToAssocArray['success']);
@@ -181,17 +324,15 @@ class chapter_test extends TestCase
     //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
     // }
 
-    // public function testGetByIdEndpointFailed404()
+    // public function testDeleteEndpointFailed404()
     // {
-    //     $this->testPostEndpoint();
-    //     $http = new HttpCall($this->url . 'chapter/SDFLSKDFJ');
+    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
 
-    //     $http->addJWTToken();
+    //     $httpCallVar->addJWTToken();
 
-    //     $response = $http->getResponse("GET");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
     //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
     //     // Verify that the response same as expected
     //     $this->assertArrayHasKey('success', $convertToAssocArray);
     //     $this->assertEquals(false, $convertToAssocArray['success']);
@@ -199,144 +340,4 @@ class chapter_test extends TestCase
     //     $this->assertArrayHasKey('message', $convertToAssocArray);
     //     $this->assertEquals("folder not found", $convertToAssocArray['message']);
     // }
-
-    // public function testPutEndpoint201()
-    // {
-    //     $this->testPostEndpoint();
-    //     $httpCallVar = new HttpCall($this->url_host_id);
-    //     // Define the request body
-    //     $data = array('readed_times' => 70);
-
-    //     $httpCallVar->setData($data);
-
-    //     $httpCallVar->addJWTToken();
-
-    //     $response = $httpCallVar->getResponse("PUT");
-
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // fwrite(STDERR, print_r($response, true));
-
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(true, $convertToAssocArray['success']);
-
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("Update folder success", $convertToAssocArray['message']);
-    // }
-
-    // public function testPutEndpointFailed400()
-    // {
-    //     $this->testPostEndpoint();
-
-    //     $httpCallVar = new HttpCall($this->url_host_id);
-    //     // Define the request body
-    //     $data = array('nobody' => "Failed test");
-
-    //     $httpCallVar->setData($data);
-
-    //     $httpCallVar->addJWTToken();
-
-    //     $response = $httpCallVar->getResponse("PUT");
-
-    //     // fwrite(STDERR, print_r($response, true));
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
-
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals('Failed to update folder, check the data you sent', $convertToAssocArray['message']);
-    // }
-
-    // public function testPutEndpointFailed401()
-    // {
-    //     $this->testPostEndpoint();
-    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
-    //     // Define the request body
-    //     $data = array('readed_times' => 9);
-
-    //     $httpCallVar->setData($data);
-
-    //     $response = $httpCallVar->getResponse("PUT");
-
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
-
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // }
-
-    // public function testPutEndpointFailed404()
-    // {
-    //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
-    //     // Define the request body
-    //     $data = array('readed_times' => 9);
-
-    //     $httpCallVar->setData($data);
-
-    //     $httpCallVar->addJWTToken();
-
-    //     $response = $httpCallVar->getResponse("PUT");
-
-    //     $convertToAssocArray = json_decode($response, true);
-    //     // Verify that the response same as expected
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertEquals(false, $convertToAssocArray['success']);
-
-    //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    //     $this->assertEquals("Chapter not found", $convertToAssocArray['message']);
-    // }
-
-    // // public function testDeleteEndpoint201()
-    // // {
-    // //     $this->testPostEndpoint();
-    // //     $httpCallVar = new HttpCall($this->url_host_id);
-
-    // //     $httpCallVar->addJWTToken();
-
-    // //     $response = $httpCallVar->getResponse("DELETE");
-
-    // //     $convertToAssocArray = json_decode($response, true);
-    // //     // Verify that the response same as expected
-    // //     // fwrite(STDERR, print_r($response, true));
-    // //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    // //     $this->assertEquals(true, $convertToAssocArray['success']);
-
-    // //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    // //     $this->assertEquals("Delete folder success", $convertToAssocArray['message']);
-    // // }
-
-    // // public function testDeleteEndpointFailed401()
-    // // {
-    // //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
-
-    // //     $response = $httpCallVar->getResponse("DELETE");
-
-    // //     $convertToAssocArray = json_decode($response, true);
-    // //     // Verify that the response same as expected
-    // //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    // //     $this->assertEquals(false, $convertToAssocArray['success']);
-
-    // //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    // //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    // // }
-
-    // // public function testDeleteEndpointFailed404()
-    // // {
-    // //     $httpCallVar = new HttpCall($this->url . 'chapter/loremipsum');
-
-    // //     $httpCallVar->addJWTToken();
-
-    // //     $response = $httpCallVar->getResponse("DELETE");
-
-    // //     $convertToAssocArray = json_decode($response, true);
-    // //     // Verify that the response same as expected
-    // //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    // //     $this->assertEquals(false, $convertToAssocArray['success']);
-
-    // //     $this->assertArrayHasKey('message', $convertToAssocArray);
-    // //     $this->assertEquals("folder not found", $convertToAssocArray['message']);
-    // // }
 }

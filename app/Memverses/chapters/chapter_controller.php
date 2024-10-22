@@ -34,7 +34,7 @@ class Memverses_chapter
 
         if ($valid_request_body) {
 
-            $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, 0, $id_folder);
+            $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times, $id_folder);
 
             if ($this->memverses_chapter->is_success !== true) {
 
