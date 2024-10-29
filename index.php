@@ -49,6 +49,8 @@ require_once(__DIR__ . '/app/Memverses/user_route.php');
 require_once(__DIR__ . '/app/Memverses/chapters/chapter_route.php');
 require_once(__DIR__ . '/app/Memverses/folder/folder_route.php');
 
+// google
+require_once(__DIR__ . '/app/google/route.php');
 
 require_once(__DIR__ . '/app/toy/queue_route.php');
 
