@@ -302,9 +302,12 @@ class Binhusenstore_product_model
         } else {
 
             $image_as_arr = explode(",", $images);
+            $index = 0;
             foreach ($image_as_arr as $image) {
-
-                array_push($result, $host_url . $image);
+                $image_name_to_push = $image;
+                if ($index == 0) $image_name_to_push = str_replace("-small", "", $image);
+                array_push($result, $host_url . $image_name_to_push);
+                $index++;
             }
         }
 
