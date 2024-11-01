@@ -262,7 +262,7 @@ class Binhusenstore_product_model
         // mapping products
         foreach ($products as $product_value) {
 
-            $images = $this->convert_image_url($product_value['images']);
+            $images = $this->convert_image_url($product_value['images'], true);
 
             $array_to_push = array(
                 'id' => $product_value['id'],
@@ -285,7 +285,7 @@ class Binhusenstore_product_model
         return $result;
     }
 
-    function convert_image_url($images)
+    function convert_image_url($images_url, $is_first_image_large = false)
     {
 
         $result = array();
@@ -294,18 +294,18 @@ class Binhusenstore_product_model
         $is_localhost = $server_name == 'localhost' || $server_name == '127.0.0.1';
         $host_url = $is_localhost ? "http://$server_name/rest-php/uploaded/binhusenstore/" : "https://$server_name/uploaded/binhusenstore/";
 
-        $is_external_image = strpos($images, 'http') > -1;
+        $is_external_image = strpos($images_url, 'http') > -1;
 
         if ($is_external_image) {
 
-            $result = explode(",", $images);
+            $result = explode(",", $images_url);
         } else {
 
-            $image_as_arr = explode(",", $images);
+            $image_as_arr = explode(",", $images_url);
             $index = 0;
             foreach ($image_as_arr as $image) {
                 $image_name_to_push = $image;
-                if ($index == 0) $image_name_to_push = str_replace("-small", "", $image);
+                if ($index == 0 && $is_first_image_large) $image_name_to_push = str_replace("-small", "", $image);
                 array_push($result, $host_url . $image_name_to_push);
                 $index++;
             }
