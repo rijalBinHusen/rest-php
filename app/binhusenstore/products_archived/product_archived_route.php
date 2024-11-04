@@ -13,14 +13,14 @@ Flight::route('GET /binhusenstore/products_archived', function () {
     }
 });
 
-Flight::route("GET /binhusenstore/product_archived/@id", function ($id) {
+Flight::route("PUT /binhusenstore/product_archived/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_admin = $user->is_admin(1);
 
     if ($is_admin) {
 
         $binhusenstore_product = new Binhusenstore_product_archived();
-        $binhusenstore_product->get_product_by_id($id);
+        $binhusenstore_product->move_product_from_archived($id);
     }
 });
 

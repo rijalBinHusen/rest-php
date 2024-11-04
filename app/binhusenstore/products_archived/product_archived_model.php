@@ -6,8 +6,8 @@ require_once(__DIR__ . '/../images/image_controller.php');
 class Binhusenstore_product_archived_model
 {
     protected $database;
-    var $table = "binhusenstore_products";
-    var $table_archive = "binhusenstore_products_archived";
+    var $table_products = "binhusenstore_products";
+    var $table_archived = "binhusenstore_products_archived";
     var $is_success = true;
 
     function __construct()
@@ -38,7 +38,7 @@ class Binhusenstore_product_archived_model
         $limiter = 30;
         if (is_numeric($limit) && $limit > 0) $limiter = $limit;
 
-        $result = $this->database->select_where_match_full_text($this->table, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where_match_full_text($this->table_archived, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -53,7 +53,7 @@ class Binhusenstore_product_archived_model
     public function get_product_archived_by_id($id)
     {
 
-        $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where($this->table_archived, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($result) > 0) {
 
@@ -80,7 +80,7 @@ class Binhusenstore_product_archived_model
             $image_controller->remove_image_operation($image);
         }
 
-        $result = $this->database->delete($this->table, 'id', $id);
+        $result = $this->database->delete($this->table_archived, 'id', $id);
 
         if ($this->database->is_error === null) {
 
@@ -177,5 +177,41 @@ class Binhusenstore_product_archived_model
         }
 
         return $result;
+    }
+
+    public function move_product_from_archived_by_id($id_product)
+    {
+        // get product by id
+        $retrieve_product = $this->get_product_archived_by_id($id_product);
+
+        $is_product_exists = count($retrieve_product) > 0;
+        if ($is_product_exists) {
+            // create product to archived table
+            $data_to_insert = array(
+                'id' => $id_product,
+                'name' => $retrieve_product[0]['name'],
+                'categories' => implode(",", $retrieve_product[0]['categories']),
+                'price' => $retrieve_product[0]['price'],
+                'weight' => $retrieve_product[0]['weight'],
+                'images' => implode(",", $retrieve_product[0]['images']),
+                'description' => $retrieve_product[0]['description'],
+                'default_total_week' => $retrieve_product[0]['default_total_week'],
+                'is_available' => (int)$retrieve_product[0]['is_available'],
+                'links' => implode(",", $retrieve_product[0]['links']),
+            );
+
+            // insert to products
+            $this->database->insert($this->table_products, $data_to_insert);
+
+            if ($this->database->is_error === null) {
+
+                // remove product from archived products table
+                return $this->remove_product_archived_by_id($id_product);
+            }
+
+            $this->is_success = $this->database->is_error;
+        }
+
+        return false;
     }
 }

@@ -41,11 +41,10 @@ class Binhusenstore_product_archived
         }
     }
 
-    public function get_product_by_id($id)
+    public function move_product_from_archived($id)
     {
-        // myguest/8
-        // the 8 will automatically becoming parameter $id
-        $result = $this->Binhusenstore_product->get_product_archived_by_id($id);
+        // product_archived/8,the 8 will automatically becoming parameter $id
+        $result = $this->Binhusenstore_product->move_product_from_archived_by_id($id);
 
         $is_success = $this->Binhusenstore_product->is_success;
 
@@ -55,7 +54,7 @@ class Binhusenstore_product_archived
             Flight::json(
                 array(
                     'success' => true,
-                    'data' => $result
+                    'message' => "Product unarchived"
                 )
             );
         } else if ($is_success !== null && !$is_found) {
@@ -66,7 +65,6 @@ class Binhusenstore_product_archived
                 ),
                 500
             );
-            return;
         } else {
             Flight::json(
                 array(
@@ -101,7 +99,6 @@ class Binhusenstore_product_archived
                 ),
                 500
             );
-            return;
         } else {
             Flight::json(
                 array(
