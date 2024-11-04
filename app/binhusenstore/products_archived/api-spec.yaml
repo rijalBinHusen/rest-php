@@ -20,6 +20,13 @@ paths:
         schema:
           type: string
         example: P220203902
+      - name: name
+        in: query
+        required: true
+        description: Name of product
+        schema:
+          type: string
+        example: Shoe
       - name: limit
         in: query
         required: true

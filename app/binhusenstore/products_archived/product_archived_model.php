@@ -38,13 +38,14 @@ class Binhusenstore_product_archived_model
         $limiter = 30;
         if (is_numeric($limit) && $limit > 0) $limiter = $limit;
 
-        $result = $this->database->select_where_match_full_text($this->table_archived, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter)->fetchAll(PDO::FETCH_ASSOC);
+        $get_data = $this->database->select_where_match_full_text($this->table_archived, $columnToSelect, $where_to_search, $what_to_search, "id", true, $limiter);
 
-        if ($this->database->is_error === null) {
+        if ($this->database->is_error === null && $get_data != false) {
+            $result = $get_data->fetchAll(PDO::FETCH_ASSOC);
+            // $convert_data_type_products = $this->convert_data_type($result);
 
-            $convert_data_type_products = $this->convert_data_type($result);
-
-            return $convert_data_type_products;
+            // return $convert_data_type_products;
+            return $result;
         }
 
         $this->is_success = $this->database->is_error;
