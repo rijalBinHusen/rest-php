@@ -12,23 +12,23 @@ tags:
 
 paths:
   /product:
-      post:
-        tags:
-          - products
-        summary: Lets a user post a new product
-        requestBody:
-          $ref: "#/components/requestBodies/product"
-        responses:
-          "201":
-            description: Successfully created a new product
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/Return_after_post"
-          "400":
-            $ref: "#/components/responses/400Error"
-          "401":
-            $ref: "#/components/responses/401Error"
+    post:
+      tags:
+        - products
+      summary: Lets a user post a new product
+      requestBody:
+        $ref: "#/components/requestBodies/product"
+      responses:
+        "201":
+          description: Successfully created a new product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /products:
     parameters:
       - name: id_category
@@ -85,7 +85,7 @@ paths:
                     example: "name of product"
                   categories:
                     type: array
-                    items: 
+                    items:
                       type: string
                       example: "categories1"
                   price:
@@ -96,7 +96,7 @@ paths:
                     example: 1000
                   images:
                     type: array
-                    items: 
+                    items:
                       type: string
                       example: "IMG22500001"
                   description:
@@ -146,7 +146,7 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-  # End of product end point
+
   /products/landing_page:
     get:
       tags:
@@ -159,29 +159,64 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
+
+  /product/move_to_archive:
+    post:
+      tags:
+        - products
+      summary: Move product to archive.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: "WAR22500001"
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  message:
+                    type: string
+                    default: Product archived
+
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
   /products/count:
-      get:
-        tags:
-          - products
-        summary: Get count of products.
-        responses:
-          "200":
-            description: Success operation
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    success:
-                      type: boolean
-                      default: true
-                    data:
-                      type: number
-                      example: 100
-          "401":
-            $ref: "#/components/responses/401Error"
-          "404":
-            description: products not found
+    get:
+      tags:
+        - products
+      summary: Get count of products.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: number
+                    example: 100
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          description: products not found
 components:
   schemas:
     Return_after_post:
@@ -311,7 +346,7 @@ components:
                             example: "name of product"
                           images:
                             type: array
-                            items: 
+                            items:
                               type: string
                               example: "image123.jpg"
                           price:
@@ -343,7 +378,7 @@ components:
                       example: "name of product"
                     images:
                       type: array
-                      items: 
+                      items:
                         type: string
                         example: "image123.jpg"
                     price:

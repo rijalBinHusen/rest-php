@@ -71,8 +71,8 @@ class Binhusenstore_product_archived_model
     {
         $product_info = $this->get_product_archived_by_id($id);
 
-        $is_product_exists = is_array($product_info);
-        if (!$is_product_exists) return;
+        $is_product_exists = is_array($product_info) && count($product_info) > 0;;
+        if (!$is_product_exists) return array();
 
         $images = explode(",", $product_info['images']);
         $image_controller = new Binhusenstore_image();
@@ -89,37 +89,6 @@ class Binhusenstore_product_archived_model
         }
 
         $this->is_success = $this->database->is_error;
-    }
-
-    private function convert_data_type($products)
-    {
-        $admin_charge_class = new Binhusenstore_admin_charge_model();
-        $admin_charge = $admin_charge_class->retrieve_admin_charge();
-
-        $result = array();
-        // mapping products
-        foreach ($products as $product_value) {
-            // $product_name = strlen($product_value['name']) <= 44 ? $product_value['name'] : substr($product_value['name'], 0, 44) . "...";
-            $product_name = $product_value['name'];
-            $images = $this->convert_image_url($product_value['images']);
-
-            $array_to_push = array(
-                "id" => $product_value['id'],
-                "name" => $product_name,
-                "images" => $images,
-                "price" => (int)$product_value['price'],
-                "default_total_week" => (int)$product_value['default_total_week'],
-            );
-
-            if (array_key_exists('is_admin_charge', $product_value)) {
-
-                $array_to_push['admin_charge'] = (int) $product_value['is_admin_charge'] ? $admin_charge : 0;
-            }
-
-            array_push($result, $array_to_push);
-        }
-
-        return $result;
     }
 
     private function convert_data_type_detail($products)
@@ -213,6 +182,6 @@ class Binhusenstore_product_archived_model
             $this->is_success = $this->database->is_error;
         }
 
-        return false;
+        return array();
     }
 }

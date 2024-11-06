@@ -388,7 +388,7 @@ class Binhusenstore_product
             Flight::json(
                 array(
                     'success' => true,
-                    'id' => 'Product archived'
+                    'message' => 'Product archived'
                 ),
                 200
             );

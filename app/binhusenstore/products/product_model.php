@@ -192,6 +192,7 @@ class Binhusenstore_product_model
                 'default_total_week' => $retrieve_product[0]['default_total_week'],
                 'is_available' => (int)$retrieve_product[0]['is_available'],
                 'links' => implode(",", $retrieve_product[0]['links']),
+                'is_admin_charge' => (int)$retrieve_product[0]['is_admin_charge'],
             );
 
             $this->database->insert($this->table_archive, $data_to_insert);

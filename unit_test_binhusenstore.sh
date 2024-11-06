@@ -10,6 +10,7 @@ vendor/bin/phpunit tests/binhusenstore/product_test.php
 vendor/bin/phpunit tests/binhusenstore/testimony_test.php
 vendor/bin/phpunit tests/binhusenstore/date_test.php
 vendor/bin/phpunit tests/binhusenstore/admin_charge_test.php
+vendor/bin/phpunit tests/binhusenstore/product_archived_test.php
 sleep 6
 
 #run all those command by using unit_test_binhusenstore.sh
