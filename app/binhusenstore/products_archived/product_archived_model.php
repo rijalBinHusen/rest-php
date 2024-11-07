@@ -72,9 +72,9 @@ class Binhusenstore_product_archived_model
         $product_info = $this->get_product_archived_by_id($id);
 
         $is_product_exists = is_array($product_info) && count($product_info) > 0;;
-        if (!$is_product_exists) return array();
+        if (!$is_product_exists) return 0;
 
-        $images = explode(",", $product_info['images']);
+        $images = $product_info[0]['images'];
         $image_controller = new Binhusenstore_image();
 
         foreach ($images as $image) {
@@ -88,6 +88,7 @@ class Binhusenstore_product_archived_model
             return $result;
         }
 
+        return false;
         $this->is_success = $this->database->is_error;
     }
 

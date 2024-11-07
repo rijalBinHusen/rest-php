@@ -48,7 +48,7 @@ class Binhusenstore_product_archived
 
         $is_success = $this->Binhusenstore_product->is_success;
 
-        $is_found = count($result) > 0;
+        $is_found = $result > 0;
 
         if ($is_success === true && $is_found) {
             Flight::json(
@@ -88,7 +88,7 @@ class Binhusenstore_product_archived
             Flight::json(
                 array(
                     'success' => true,
-                    'message' => 'Delete product success',
+                    'message' => 'Product removed',
                 )
             );
         } else if ($is_success !== true) {

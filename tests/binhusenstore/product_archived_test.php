@@ -88,7 +88,7 @@ class Product_archived_test extends TestCase
         $response = $http->getResponse("PUT");
         $convertToAssocArray = json_decode($response, true);
 
-        fwrite(STDERR, print_r(PHP_EOL . $response . PHP_EOL, true));
+        // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
         $this->assertArrayHasKey('success', $convertToAssocArray, $response);
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success'], $response);
@@ -96,21 +96,21 @@ class Product_archived_test extends TestCase
     }
 
     // remove product
-    // public function testRemoveProduct()
-    // {
-    //     $this->testMoveProductToArchive();
-    //     $http = new HttpCall($this->url . "product_archived/" . $this->id_posted);
+    public function testRemoveProduct()
+    {
+        $this->testMoveProductToArchive();
+        $http = new HttpCall($this->url . "product_archived/" . $this->id_posted);
 
-    //     $this->loginToAdmin();
-    //     $http->addJWTToken();
+        $this->loginToAdmin();
+        $http->addJWTToken();
 
-    //     $response = $http->getResponse("DELETE");
-    //     $convertToAssocArray = json_decode($response, true);
+        $response = $http->getResponse("DELETE");
+        $convertToAssocArray = json_decode($response, true);
 
-    //     fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
-    //     $this->assertArrayHasKey('success', $convertToAssocArray);
-    //     $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-    //     $this->assertEquals(true, $convertToAssocArray['success']);
-    //     $this->assertEquals("Product removed", $convertToAssocArray['message']);
-    // }
+        // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals("Product removed", $convertToAssocArray['message']);
+    }
 }
