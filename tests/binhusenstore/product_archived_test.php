@@ -10,6 +10,7 @@ class Product_archived_test extends TestCase
 {
     private $url = "binhusenstore/";
     private $id_posted = null;
+    private $data_posted = null;
 
     private function generateNewProductData()
     {
@@ -26,6 +27,8 @@ class Product_archived_test extends TestCase
             'is_available' => $faker->boolean(),
             'is_admin_charge' => $faker->boolean()
         );
+
+        $data_posted = $data;
 
         return $data;
     }
@@ -76,26 +79,67 @@ class Product_archived_test extends TestCase
         $this->assertEquals("Product archived", $convertToAssocArray['message'], $response);
     }
 
-    // bring back product
-    public function testBringBackProduct()
-    {
-        $this->testMoveProductToArchive();
-        $http = new HttpCall($this->url . "product_archived/" . $this->id_posted);
+    // // bring back product
+    // public function testBringBackProduct()
+    // {
+    //     $this->testMoveProductToArchive();
+    //     $http = new HttpCall($this->url . "product_archived/" . $this->id_posted);
 
-        $this->loginToAdmin();
-        $http->addJWTToken();
+    //     $this->loginToAdmin();
+    //     $http->addJWTToken();
 
-        $response = $http->getResponse("PUT");
-        $convertToAssocArray = json_decode($response, true);
+    //     $response = $http->getResponse("PUT");
+    //     $convertToAssocArray = json_decode($response, true);
 
-        // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray, $response);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success'], $response);
-        $this->assertEquals("Product unarchived", $convertToAssocArray['message'], $response);
-    }
+    //     // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray, $response);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success'], $response);
+    //     $this->assertEquals("Product unarchived", $convertToAssocArray['message'], $response);
 
-    // remove product
+    //     //================= product should be not exists on archive
+    //     $http_get_product_archived = new HttpCall($this->url . 'product_archived/' . $this->id_posted);
+    //     $this->loginToAdmin();
+    //     $http_get_product_archived->addJWTToken();
+
+    //     $response = $http_get_product_archived->getResponse("PUT");
+    //     $convertToAssocArray = json_decode($response, true);
+
+    //     // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray, $response);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(false, $convertToAssocArray['success'], $response);
+    //     $this->assertEquals("Product not found", $convertToAssocArray['message'], $response);
+
+    //     //=================== product should be exists on product end point
+    //     $http_get_product = new HttpCall($this->url . 'product/' . $this->id_posted);
+    //     $http_get_product->addAccessCode("binhusenstore-access-code.txt");
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $http_get_product->getResponse("GET");
+
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+
+    //     $data_response = $convertToAssocArray['data'][0];
+    //     $data_posted = $this->data_posted;
+
+    //     $this->assertArrayHasKey('data', $convertToAssocArray);
+    //     $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);
+
+    //     $this->assertEquals($data_posted['name'], $data_response['name']);
+    //     $this->assertEquals($data_posted['categories'], $data_response['categories']);
+    //     $this->assertEquals($data_posted['price'], $data_response['price']);
+    //     $this->assertEquals($data_posted['weight'], $data_response['weight']);
+    //     $this->assertEquals($data_posted['images'], $data_response['images']);
+    //     $this->assertEquals($data_posted['description'], $data_response['description']);
+    //     $this->assertEquals($data_posted['default_total_week'], $data_response['default_total_week']);
+    //     $this->assertEquals($data_posted['is_available'], $data_response['is_available']);
+    // }
+
+    // // remove product
     public function testRemoveProduct()
     {
         $this->testMoveProductToArchive();
@@ -112,5 +156,32 @@ class Product_archived_test extends TestCase
         $this->assertArrayHasKey('message', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->assertEquals("Product removed", $convertToAssocArray['message']);
+
+        //================= product should be not exists on archive
+        // $http_get_product_archived = new HttpCall($this->url . 'product_archived/' . $this->id_posted);
+        // $this->loginToAdmin();
+        // $http_get_product_archived->addJWTToken();
+
+        // $response = $http_get_product_archived->getResponse("PUT");
+        // $convertToAssocArray = json_decode($response, true);
+
+        // // fwrite(STDERR, print_r(PHP_EOL . $this->id_posted . PHP_EOL, true));
+        // $this->assertArrayHasKey('success', $convertToAssocArray, $response);
+        // $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+        // $this->assertEquals(false, $convertToAssocArray['success'], $response);
+        // $this->assertEquals("Product not found", $convertToAssocArray['message'], $response);
+
+        //=================== product should be not exists on product end point
+        $http_get_product = new HttpCall($this->url . 'product/' . $this->id_posted);
+        $http_get_product->addAccessCode("binhusenstore-access-code.txt");
+        // Send a GET request to the /endpoint URL
+        $response = $http_get_product->getResponse("GET");
+
+        $convertToAssocArray = json_decode($response, true);
+        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // Verify that the response same as expected
+        $this->assertArrayHasKey('success', $convertToAssocArray);
+        $this->assertEquals(false, $convertToAssocArray['success']);
+        $this->assertEquals("Product not found", $convertToAssocArray['message']);
     }
 }
