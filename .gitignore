@@ -12,3 +12,4 @@ utils/constant_named.php
 config.json
 node_modules
 *.test.php
+google-config.json
