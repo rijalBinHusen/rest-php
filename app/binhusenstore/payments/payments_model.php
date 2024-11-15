@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
 require_once(__DIR__ . '/../orders/order_model.php');
+require_once(__DIR__ . '/../../google/spreadsheet.php');
 
 class Binhusenstore_payment_model
 {
@@ -83,12 +84,7 @@ class Binhusenstore_payment_model
 
         $result = $this->database->update($this->table, $data, $where, $id);
 
-        if ($this->database->is_error === null) {        
-    
-            if($result === 0) return $this->database->is_id_exists($this->table, $id);
-            return $result;
-        }
-
+        if ($this->database->is_error === null) return $result;
         $this->is_success = $this->database->is_error;
     }
 
@@ -125,6 +121,19 @@ class Binhusenstore_payment_model
 
         if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
         $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
+        $values_to_append = [
+            [
+                $date_paid,
+                (int)$payment,
+                "",
+                "",
+                $id_order
+            ]
+        ];
+        // append new data to spreadsheet
+        $spreadsheetId = PAYMENT_SPREADSHEET_ID;
+        $sSOperation = new Google_sheet_operation();
+        $sSOperation->append_data_to_spreadsheet($spreadsheetId, "Binhusenstore!A:E", $values_to_append);
         return $mark_as_paid;
     }
 
