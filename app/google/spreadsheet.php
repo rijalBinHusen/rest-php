@@ -22,6 +22,10 @@ class Google_sheet_operation
     function append_data_to_spreadsheet($spreadsheetId, $range, $values)
     {
         // checck $spreadsheetId, $$range, values
+        if (!$spreadsheetId) return false;
+        if (!$range) return false;
+        if (!$values) return false;
+        if (!is_array($values) || !is_array($values[0])) return false;
         // $values must be array = [
         //     [
         //         'A1',
@@ -29,6 +33,7 @@ class Google_sheet_operation
         //         'C1'
         //     ]
         // ];
+        // check value, must 2D array
 
         $body = new Google_Service_Sheets_ValueRange(['values' => $values]);
         $params = ['valueInputOption' => 'RAW'];
