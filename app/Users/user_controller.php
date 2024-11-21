@@ -212,7 +212,7 @@ class User
 
             if ($is_no_error) {
 
-                $is_admin = $user_info_by_jwt->data->id === $id_admin;
+                $is_admin = $user_info_by_jwt->data->id == $id_admin;
                 if ($is_admin) {
                     $this->check_and_renew_jwt_token($user_info_by_jwt);
                     return true;
