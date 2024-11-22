@@ -121,19 +121,7 @@ class Binhusenstore_payment_model
 
         if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
         $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
-        $values_to_append = [
-            [
-                $date_paid,
-                (int)$payment,
-                "",
-                "",
-                $id_order
-            ]
-        ];
-        // append new data to spreadsheet
-        $spreadsheetId = PAYMENT_SPREADSHEET_ID;
-        $sSOperation = new Google_sheet_operation();
-        $sSOperation->append_data_to_spreadsheet($spreadsheetId, "Binhusenstore!A:E", $values_to_append);
+        $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order);
         return $mark_as_paid;
     }
 
@@ -151,14 +139,16 @@ class Binhusenstore_payment_model
         $is_phone_not_matched = $phone_order != $phone;
         if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
 
-
         $total_balance = 0;
+        $id_order_all = "";
         foreach ($retrieve_payments as $value) {
             $total_balance += $value['balance'];
+            $id_order_all = $id_order . $value['id_order'] . " ,";
         }
 
         if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
         $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
+        $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order_all);
         return $mark_as_paid;
     }
 
@@ -375,5 +365,24 @@ class Binhusenstore_payment_model
         }
 
         return $result;
+    }
+
+    private function append_payment_to_google_spreadsheet($date_paid, $payment, $id_order)
+    {
+
+        $date_to_push  = date("m-d-Y", strtotime($date_paid));
+        $values_to_append = [
+            [
+                $date_to_push,
+                (int)$payment,
+                "",
+                "",
+                $id_order
+            ]
+        ];
+
+        $spreadsheetId = PAYMENT_SPREADSHEET_ID;
+        $sSOperation = new Google_sheet_operation();
+        $sSOperation->append_data_to_spreadsheet($spreadsheetId, "Binhusenstore!A:E", $values_to_append);
     }
 }
