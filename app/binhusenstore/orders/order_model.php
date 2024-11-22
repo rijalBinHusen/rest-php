@@ -132,8 +132,60 @@ class Binhusenstore_order_model
 
     public function get_order_by_id($id)
     {
+        if (substr($id, 0, 1) !== 'G' && substr($id, 0, 1) !== 'O') return array();
 
-        $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
+        // Check the string length
+        if (strlen($id) !== 9) return array();
+
+        // Check if the rest of the characters are numbers
+        for ($i = 1; $i < strlen($id); $i++) {
+            if (!is_numeric($id[$i])) {
+                return array();
+            }
+        }
+
+        $is_group_order = substr($id, 0, 1) === 'G';
+
+        $result = array();
+        if ($is_group_order) {
+            $get_orders = $this->database->select_where($this->table, 'id_group', $id)->fetchAll(PDO::FETCH_ASSOC);;
+            if (count($get_orders)) {
+
+                $array_to_push = array(
+                    "date_order" => "",
+                    "id_group" => "",
+                    "is_group" => true,
+                    "id_product" => "",
+                    "name_of_customer" => "",
+                    "sent" => "",
+                    "title" => array(),
+                    "total_balance" => 0,
+                    "admin_charge" => 0
+                );
+
+                foreach ($get_orders as $order) {
+                    //  check date order, is date order older than date pushed
+                    // if yes push the date
+                    $is_date_order_older = $order['date_order'] > $array_to_push['date_order'];
+                    if ($is_date_order_older) {
+                        $array_to_push['date_order'] = $order['date_order'];
+                    }
+
+                    $array_to_push['id_group'] = $order['id_group'];
+                    $array_to_push['id_product'] = $order['id_product'];
+                    $array_to_push['sent'] = $order['sent'];
+
+                    // sum the total balance and admin charge
+                    $array_to_push['total_balance'] += $order['total_balance'];
+                    $array_to_push['admin_charge'] += $order['admin_charge'];
+
+                    // title order should be array which contain both order title
+                    array_push($array_to_push['title'], $order['title']);
+                }
+
+                array_push($result, $array_to_push);
+            }
+        } else $result = $this->database->select_where($this->table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -151,7 +203,7 @@ class Binhusenstore_order_model
 
         if ($this->database->is_error === null) {
 
-            if($result === 0) return $this->database->is_id_exists($this->table, $id);
+            if ($result === 0) return $this->database->is_id_exists($this->table, $id);
             return $result;
         }
 

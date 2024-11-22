@@ -109,7 +109,7 @@ paths:
     get:
       tags:
         - order
-      summary: Get order by id.
+      summary: Get order by id_order or get order by id_group_order.
       responses:
         "200":
           $ref: "#/components/responses/getorder200"
