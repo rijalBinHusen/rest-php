@@ -44,12 +44,12 @@ paths:
                 date_order:
                   type: string
                   example: "2023-07-23"
+                id_product:
+                  type: string
                 id_group:
                   type: string
                 is_group:
                   type: boolean
-                id_product:
-                  type: string
                 name_of_customer:
                   type: string
                 sent:
@@ -58,11 +58,13 @@ paths:
                   type: string
                 total_balance:
                   type: number
+                phone:
+                  type: number
                 admin_charge:
                   type: boolean
                 start_date_payment:
                   type: string
-                balance_payment:
+                balance_per_period:
                   type: number
                 end_date_payment:
                   type: string
@@ -531,6 +533,8 @@ components:
               title:
                 type: string
               total_balance:
+                type: number
+              phone:
                 type: number
               admin_charge:
                 type: boolean
