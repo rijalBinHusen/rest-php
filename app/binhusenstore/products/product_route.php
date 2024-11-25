@@ -47,16 +47,16 @@ Flight::route("PUT /binhusenstore/product/@id", function ($id) {
     }
 });
 
-Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
-    $user = new User("binhusenstore_users");
-    $is_admin = $user->is_admin(1);
+// Flight::route("DELETE /binhusenstore/product/@id", function ($id) {
+//     $user = new User("binhusenstore_users");
+//     $is_admin = $user->is_admin(1);
 
-    if ($is_admin) {
+//     if ($is_admin) {
 
-        $binhusenstore_product = new Binhusenstore_product();
-        $binhusenstore_product->remove_product($id);
-    }
-});
+//         $binhusenstore_product = new Binhusenstore_product();
+//         $binhusenstore_product->remove_product($id);
+//     }
+// });
 
 Flight::route("GET /binhusenstore/products/landing_page", function () {
     $access_code = new Access_code();
@@ -92,7 +92,7 @@ Flight::route('POST /binhusenstore/product/move_to_archive', function () {
 });
 
 Flight::route('GET /binhusenstore/products_and_details', function () {
-    
+
     $access_code = new Access_code();
     $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 

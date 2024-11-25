@@ -301,59 +301,59 @@ class Product_test extends TestCase
         $this->assertEquals("Product not found", $convertToAssocArray['message']);
     }
 
-    public function testDeleteEndpoint201()
-    {
-        $this->testPostEndpoint();
-        $httpCallVar = new HttpCall($this->url_host_id);
+    // public function testDeleteEndpoint201()
+    // {
+    //     $this->testPostEndpoint();
+    //     $httpCallVar = new HttpCall($this->url_host_id);
 
-        $user = new User_test();
-        $user->LoginAdmin();
+    //     $user = new User_test();
+    //     $user->LoginAdmin();
 
-        $httpCallVar->addJWTToken();
+    //     $httpCallVar->addJWTToken();
 
-        $response = $httpCallVar->getResponse("DELETE");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
-        $convertToAssocArray = json_decode($response, true);
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Delete product success", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("Delete product success", $convertToAssocArray['message']);
+    // }
 
-    public function testDeleteEndpointFailed401()
-    {
-        $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
+    // public function testDeleteEndpointFailed401()
+    // {
+    //     $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
 
-        $response = $httpCallVar->getResponse("DELETE");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
-        $convertToAssocArray = json_decode($response, true);
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(false, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(false, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("You must be authenticated to access this resource.", $convertToAssocArray['message']);
+    // }
 
-    public function testDeleteEndpointFailed404()
-    {
-        $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
+    // public function testDeleteEndpointFailed404()
+    // {
+    //     $httpCallVar = new HttpCall($this->url . 'product/loremipsum');
 
-        $user = new User_test();
-        $user->LoginAdmin();
+    //     $user = new User_test();
+    //     $user->LoginAdmin();
 
-        $httpCallVar->addJWTToken();
+    //     $httpCallVar->addJWTToken();
 
-        $response = $httpCallVar->getResponse("DELETE");
+    //     $response = $httpCallVar->getResponse("DELETE");
 
-        $convertToAssocArray = json_decode($response, true);
-        // Verify that the response same as expected
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(false, $convertToAssocArray['success']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // Verify that the response same as expected
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertEquals(false, $convertToAssocArray['success']);
 
-        $this->assertArrayHasKey('message', $convertToAssocArray);
-        $this->assertEquals("Product not found", $convertToAssocArray['message']);
-    }
+    //     $this->assertArrayHasKey('message', $convertToAssocArray);
+    //     $this->assertEquals("Product not found", $convertToAssocArray['message']);
+    // }
 }
