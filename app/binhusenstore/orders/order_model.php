@@ -54,7 +54,7 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $end_date_payment)
+    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $week_distance)
     {
         $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
@@ -93,6 +93,7 @@ class Binhusenstore_order_model
             $is_payment_created = false;
 
             $current_date = new DateTime($start_date_payment);
+            $dayPlus = $week_distance * 7;
 
             while ($balance_remaining > 0) {
 
@@ -100,10 +101,10 @@ class Binhusenstore_order_model
                 $is_payment_created = $payment_model->append_payment($current_date->format('Y-m-d'), $id_order, $balance_to_insert, "");
                 $balance_remaining = $balance_remaining - $balance_payment;
 
-                $current_date->modify('+1 day');
+                $current_date->modify('+' . $dayPlus . 'day');
                 if (!$is_payment_created) {
                     $this->is_success = $payment_model->is_success;
-                    return;
+                    return "Failed to create payment";
                 }
             }
 

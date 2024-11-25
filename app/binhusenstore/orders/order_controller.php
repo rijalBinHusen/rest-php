@@ -87,34 +87,33 @@ class Binhusenstore_order
             "admin_charge" => "boolean",
             "start_date_payment" => "string",
             "balance_per_period" => "number",
-            "end_date_payment" => "string",
+            "week_distance" => "number",
         );
 
         $is_request_body_oke = $this->check_is_request_body_oke($req->data, $whats_request_body_to_check);
-        if (!$is_request_body_oke) $error_400_message = 'Failed to add order, check the data you sent';
+        if (!$is_request_body_oke) $error_400_message = 'check the data you sent!';
 
         $date_start = new DateTime($req->data->start_date_payment);
         $date_end =  new DateTime($req->data->end_date_payment);
         $interval_date = $date_start->diff($date_end);
         $days_different = $interval_date->days;
 
-        if ($days_different <= 56) {
-            $error_400_message = 'Failed to add order, the payment schedule too short, less than 56 days';
-        }
+        if ($days_different <= 56) $error_400_message = 'the schedule too short, less than 56 days!';
+        if ($req->data->week_distance > 8 || $req->data->week_distance < 1) $error_400_message = "week distance too short or too long!";
 
         if ($error_400_message) {
 
             Flight::json(
                 array(
                     'success' => false,
-                    'message' => $error_400_message
+                    'message' => 'Failed to add order, ' . $error_400_message
                 ),
                 400
             );
             return;
         }
 
-        $result = $this->Binhusenstore_order->append_order_and_payment($req->data->date_order, $req->data->id_group, $req->data->is_group, $req->data->id_product, $req->data->name_of_customer, $req->data->sent, $req->data->title, $req->data->total_balance, $req->data->phone, $req->data->admin_charge, $req->data->start_date_payment, $req->data->balance_per_period, $req->data->end_date_payment);
+        $result = $this->Binhusenstore_order->append_order_and_payment($req->data->date_order, $req->data->id_group, $req->data->is_group, $req->data->id_product, $req->data->name_of_customer, $req->data->sent, $req->data->title, $req->data->total_balance, $req->data->phone, $req->data->admin_charge, $req->data->start_date_payment, $req->data->balance_per_period, $req->data->week_distance);
 
         if ($this->Binhusenstore_order->is_success === true) {
 

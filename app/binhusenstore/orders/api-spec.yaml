@@ -66,6 +66,8 @@ paths:
                   type: string
                 balance_per_period:
                   type: number
+                week_distance:
+                  type: number
                 end_date_payment:
                   type: string
       responses:
