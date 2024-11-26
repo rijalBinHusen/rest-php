@@ -116,7 +116,47 @@ paths:
       summary: Get order by id_order or get order by id_group_order.
       responses:
         "200":
-          $ref: "#/components/responses/getorder200"
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: "WAR22500001"
+                      date_order:
+                        type: string
+                        example: "2023-07-23"
+                      id_group:
+                        type: string
+                      is_group:
+                        type: boolean
+                      id_product:
+                        type: string
+                      name_of_customer:
+                        type: string
+                      sent:
+                        type: string
+                      title:
+                        type: string
+                      titles_group:
+                        type: array
+                        items:
+                          default: string
+
+                      total_balance:
+                        type: number
+                        example: 2000000
+                      admin_charge:
+                        type: number
+                        example: 10000
         "404":
           $ref: "#/components/responses/404Error"
         "401":

@@ -159,7 +159,7 @@ class Binhusenstore_order_model
                     "id_product" => "",
                     "name_of_customer" => "",
                     "sent" => "",
-                    "title" => array(),
+                    "titles_group" => array(),
                     "total_balance" => 0,
                     "admin_charge" => 0
                 );
@@ -181,7 +181,7 @@ class Binhusenstore_order_model
                     $array_to_push['admin_charge'] += $order['admin_charge'];
 
                     // title order should be array which contain both order title
-                    array_push($array_to_push['title'], $order['title']);
+                    array_push($array_to_push['titles_group'], $order['title']);
                 }
 
                 array_push($result, $array_to_push);
