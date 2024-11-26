@@ -40,6 +40,22 @@ class Binhusenstore_payment_model
 
     public function get_payments($id_order)
     {
+        if (substr($id_order, 0, 1) !== 'G' && substr($id_order, 0, 1) !== 'O') return array();
+
+        // Check the string length
+        if (strlen($id_order) !== 9) return array();
+
+        // Check if the rest of the characters are numbers
+        for ($i = 1; $i < strlen($id_order); $i++) {
+            if (!is_numeric($id_order[$i])) {
+                return array();
+            }
+        }
+
+        $is_group_order = substr($id_order, 0, 1) === 'G';
+        if ($is_group_order) {
+            return $this->get_payments_by_id_order_group($id_order);
+        }
         $result  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
@@ -54,7 +70,7 @@ class Binhusenstore_payment_model
 
     public function get_payments_by_id_order_group($id_order_group)
     {
-        $result  = $this->database->select_where($this->table, 'id_order_group', $id_order_group)->fetchAll(PDO::FETCH_ASSOC);
+        $result  = $this->database->select_where($this->table, 'id_order_group', $id_order_group, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
@@ -100,19 +116,36 @@ class Binhusenstore_payment_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function mark_payment_as_paid_by_id($id_order, $date_paid, $payment, $phone)
+    public function mark_payment_as_paid_by_id_order_or_id_group($id_order, $date_paid, $payment, $phone)
     {
+
+        if (substr($id_order, 0, 1) !== 'G' && substr($id_order, 0, 1) !== 'O') return array();
+
+        // Check the string length
+        if (strlen($id_order) !== 9) return array();
+
+        // Check if the rest of the characters are numbers
+        for ($i = 1; $i < strlen($id_order); $i++) {
+            if (!is_numeric($id_order[$i])) {
+                return array();
+            }
+        }
+
+        $is_group_order = substr($id_order, 0, 1) === 'G';
+
+        $where_s = "";
+        if ($is_group_order) $where_s = array('id_order_group' => $id_order, 'is_paid' => '0');
+        else $where_s = array('id_order' => $id_order, 'is_paid' => '0');
+
+        $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
+        if (count($retrieve_payments) === 0) return 0;
 
         $order_model = new Binhusenstore_order_model();
 
         // find order by order_id and phone
-        $phone_order = $order_model->phone_by_order_id($id_order);
+        $phone_order = $order_model->phone_by_order_id($retrieve_payments[0]['id_order']);
         $is_phone_not_matched = $phone_order != $phone;
         if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
-
-        $where_s = array('id_order' => $id_order, 'is_paid' => '0');
-        $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
-        if (count($retrieve_payments) === 0) return 0;
 
         $total_balance = 0;
         foreach ($retrieve_payments as $value) {
@@ -122,33 +155,6 @@ class Binhusenstore_payment_model
         if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
         $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
         $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order);
-        return $mark_as_paid;
-    }
-
-    public function mark_payment_as_paid_by_id_order_group($id_order_group, $date_paid, $payment, $phone)
-    {
-        $where_s = array('id_order_group' => $id_order_group, 'is_paid' => '0');
-        $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
-        if (count($retrieve_payments) === 0) return 0;
-
-        $id_order = $retrieve_payments[0]['id_order'];
-
-        $order_model = new Binhusenstore_order_model();
-        // find order by order_id and phone
-        $phone_order = $order_model->phone_by_order_id($id_order);
-        $is_phone_not_matched = $phone_order != $phone;
-        if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
-
-        $total_balance = 0;
-        $id_order_all = "";
-        foreach ($retrieve_payments as $value) {
-            $total_balance += $value['balance'];
-            $id_order_all = $id_order . $value['id_order'] . " ,";
-        }
-
-        if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
-        $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
-        $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order_all);
         return $mark_as_paid;
     }
 
@@ -214,36 +220,6 @@ class Binhusenstore_payment_model
 
         return true;
     }
-
-    // public function insert_payment_to_spreadsheet($id_payment, $id_order, $date_payment, $balance)
-    // {
-
-    //     $app_script_url = APP_SCRIPT_URL .  "?action=insert&id_payment=$id_payment&id_order=$id_order&date_payment=$date_payment&balance=$balance";
-    //     $curl = curl_init();
-
-    //     curl_setopt_array($curl, [
-    //         CURLOPT_URL => $app_script_url,
-    //         CURLOPT_RETURNTRANSFER => true,
-    //         CURLOPT_ENCODING => "",
-    //         CURLOPT_MAXREDIRS => 10,
-    //         CURLOPT_TIMEOUT => 30,
-    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //         CURLOPT_CUSTOMREQUEST => "GET",
-    //         CURLOPT_HTTPHEADER => [
-    //             "Accept: */*",
-    //             "User-Agent: Thunder Client (https://www.thunderclient.com)"
-    //         ],
-    //     ]);
-
-    //     $response = curl_exec($curl);
-    //     curl_close($curl);
-
-    //     // debugger
-
-    //     $myfile = fopen("debug.txt", "w") or die("Unable to open file!");
-    //     fwrite($myfile, json_encode($response));
-    //     fclose($myfile);
-    // }
 
     public function sum_balance()
     {

@@ -284,7 +284,6 @@ class Binhusenstore_payment
         $req = Flight::request();
         $date_paid = $req->data->date_paid;
         $id_order = $req->data->id_order;
-        $id_order_group = $req->data->id_order_group;
         $phone = $req->data->phone;
         $balance = $req->data->balance;
 
@@ -300,51 +299,41 @@ class Binhusenstore_payment
             && !is_null($balance)
             && is_numeric($balance);
 
-        $is_id_order_oke = !is_null($id_order) && is_string($id_order) && strlen($id_order) === 9;
-        $is_id_order_group_oke = !is_null($id_order_group) && is_string($id_order_group) && strlen($id_order_group) === 9;
-
-        if ($is_request_body_oke && ($is_id_order_oke || $is_id_order_group_oke)) {
-
-            $result = array();
-
-            if ($is_id_order_oke) {
-                $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id($id_order, $date_paid, $balance, $phone);
-            } else {
-                $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id_order_group($id_order_group, $date_paid, $balance, $phone);
-            }
-
-            $is_success = $this->Binhusenstore_payment->is_success;
-
-            if ($is_success === true && $result === true) {
-
-                Flight::json([
-                    'success' => true,
-                    'message' => 'Update payment success'
-                ]);
-            } else if ($result === 0) {
-
-                Flight::json([
-                    'success' => false,
-                    'message' => 'Payment not found'
-                ], 404);
-            } else if ($is_success !== true) {
-
-                Flight::json([
-                    'success' => false,
-                    'message' => $is_success
-                ], 500);
-            } else {
-
-                Flight::json([
-                    'success' => false,
-                    'message' => $result
-                ], 400);
-            }
-        } else {
+        if (!$is_request_body_oke) {
 
             Flight::json([
                 'success' => false,
                 'message' => 'Failed to update payment, check the data you sent'
+            ], 400);
+        }
+
+        $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id_order_or_id_group($id_order, $date_paid, $balance, $phone);
+
+        $is_success = $this->Binhusenstore_payment->is_success;
+
+        if ($is_success === true && $result === true) {
+
+            Flight::json([
+                'success' => true,
+                'message' => 'Update payment success'
+            ]);
+        } else if ($result === 0) {
+
+            Flight::json([
+                'success' => false,
+                'message' => 'Payment not found'
+            ], 404);
+        } else if ($is_success !== true) {
+
+            Flight::json([
+                'success' => false,
+                'message' => $is_success
+            ], 500);
+        } else {
+
+            Flight::json([
+                'success' => false,
+                'message' => $result
             ], 400);
         }
     }
