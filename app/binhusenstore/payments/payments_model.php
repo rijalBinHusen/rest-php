@@ -53,9 +53,8 @@ class Binhusenstore_payment_model
         }
 
         $is_group_order = substr($id_order, 0, 1) === 'G';
-        if ($is_group_order) {
-            return $this->get_payments_by_id_order_group($id_order);
-        }
+        if ($is_group_order) return $this->get_payments_by_id_order_group($id_order);
+
         $result  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {

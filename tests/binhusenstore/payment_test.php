@@ -20,7 +20,7 @@ class Payment_test extends TestCase
         $data = array(
             'date_payment' => $faker->date('Y-m-d'),
             'id_payment' => $faker->text(30),
-            'id_order' => $faker->text(5),
+            'id_order' => "O" . $faker->numberBetween(20000000, 29999999),
             'balance' => $faker->numberBetween(10000, 100000),
             'is_paid' => false,
             'id_order_group' => $faker->text(5)
@@ -227,10 +227,10 @@ class Payment_test extends TestCase
         $response = $http->getResponse("GET");
 
         $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
+        // fwrite(STDERR, print_r($this->data_posted, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+        $this->assertEquals(true, $convertToAssocArray['success'], $response);
 
         $this->assertArrayHasKey('data', $convertToAssocArray);
         $this->assertArrayHasKey('id', $convertToAssocArray['data'][0]);

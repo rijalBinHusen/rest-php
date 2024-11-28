@@ -71,11 +71,8 @@ class Binhusenstore_payment
         // catch the query string request
         $req = Flight::request();
         $id_order = $req->query->id_order;
-        $id_order_group = $req->query->id_order_group;
 
-        $result = array();
-        if ($id_order) $result = $this->Binhusenstore_payment->get_payments($id_order);
-        else $result =  $this->Binhusenstore_payment->get_payments_by_id_order_group($id_order_group);
+        $result = $this->Binhusenstore_payment->get_payments($id_order);
 
         $is_exists = count($result) > 0;
 
@@ -305,6 +302,7 @@ class Binhusenstore_payment
                 'success' => false,
                 'message' => 'Failed to update payment, check the data you sent'
             ], 400);
+            return;
         }
 
         $result = $this->Binhusenstore_payment->mark_payment_as_paid_by_id_order_or_id_group($id_order, $date_paid, $balance, $phone);
