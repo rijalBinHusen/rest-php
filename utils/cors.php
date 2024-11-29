@@ -1,6 +1,16 @@
 <?php
+
+$allowed_origins = ALLOWED_ORIGINS;
+
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-	header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+
+	$origin = $_SERVER['HTTP_ORIGIN'];
+	if (!in_array($origin, $allowed_origins)) {
+		header('HTTP/1.1 403 Forbidden');
+		exit(0);
+		return;
+	}
+	header("Access-Control-Allow-Origin: {$origin}");
 	header('Access-Control-Allow-Credentials: true');
 	header('Access-Control-Max-Age: 86400');
 }

@@ -2,16 +2,15 @@
 
 require_once(__DIR__ . '/../../utils/database.php');
 
-class Google_sign_modal
+class Google_sign_model
 {
     protected $client;
 
-    function __construct()
+    function __construct($redirectUri)
     {
         // init configuration
         $clientID = GOOGLE_CLIENT_ID;
         $clientSecret = GOOGLE_CLIENT_SECRET;
-        $redirectUri = REDIRECT_URI;
 
         $this->client = new Google_Client();
         $this->client->setClientId($clientID);
@@ -21,32 +20,40 @@ class Google_sign_modal
         $this->client->addScope("profile");
     }
 
-    function getAuthURL()
+    public function getAuthURL()
     {
         return $this->client->createAuthUrl();
     }
 
-    function getUserInfoByCode($code)
+    public function getAccessTokenByCode($code)
     {
 
         $token = $this->client->fetchAccessTokenWithAuthCode($code);
         // check is it token exists or not
-        if (isset($token['access_token'])) $this->client->setAccessToken($token['access_token']);
-        else return false;
+        if (isset($token['access_token'])) return $token['access_token'];
+        return false;
+    }
 
+    public function getUserInfoByAccessToken($access_token)
+    {
+        if (is_null($access_token)) return false;
+
+        $this->client->setAccessToken($access_token);
         // get profile info
         $google_oauth = new Google_Service_Oauth2($this->client);
         $google_account_info = $google_oauth->userinfo->get();
-        $email =  $google_account_info->email;
-        $name =  $google_account_info->name;
-        echo "<a href='" . $client->revokeToken() . "'>Google Logout</a>";
+
+        return array(
+            "email" =>  $google_account_info->email,
+            "name" =>  $google_account_info->name
+        );
     }
-}
 
-// create Client Request to access Google API
+    public function signOut($access_token)
+    {
+        if (is_null($access_token)) return false;
 
-// authenticate code from Google OAuth Flow
-if (isset($_GET['code'])) {
-
-    // now you can use this profile info to create account in your website and make user logged in.
+        $this->client->setAccessToken($access_token);
+        $this->client->revokeToken();
+    }
 }

@@ -77,10 +77,10 @@ require_once(__DIR__ . '/app/toy/queue_route.php');
 //         'secure' => $request->secure,
 //         'accept' => $request->accept,
 //         'proxy_ip' => $request->proxy_ip,
+//         'referrer' => $request->referrer,
 //         'end_point' => $endpoint,
-//         'name' => $request->data->name
+//         'name' => $request->data->name,
 //     ]);
-
 // });
 
 Flight::map('notFound', function () {
