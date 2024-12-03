@@ -8,9 +8,9 @@ class Google_sign_controller
     public function generate_auth_url()
     {
         $req = Flight::request();
-        $redirect_url = $req->referrer;
+        $url_to_application = $req->query->url_app;
 
-        if (is_null($redirect_url)) {
+        if (is_null($url_to_application)) {
 
             Flight::json(array(
                 "success" => false,
@@ -19,22 +19,31 @@ class Google_sign_controller
             return;
         }
 
-        $google_sign_in = new Google_sign_model($redirect_url);
+        $google_sign_in = new Google_sign_model();
         $auth_url = $google_sign_in->getAuthURL();
 
-        Flight::json(array(
-            "success" => false,
-            "data" => $auth_url
-        ), 200);
+        setcookie("url_to_application", $url_to_application);
+        echo "<a href='" . $auth_url . "'>Google login</a>";
+        // Flight::redirect($auth_url);
+    }
+
+    public function redirect_to_origin_url()
+    {
+        $req = Flight::request();
+        $access_code = $req->query->code;
+
+        $url_to_application = $this->get_cookie_on_request("url_to_application");
+        $encoded_url = urldecode($url_to_application) . "?code=" . $access_code;
+        setcookie("url_to_application", $url_to_application, time() - 3600); // remove cookie
+        Flight::redirect($encoded_url);
     }
 
     public function getAccessToken()
     {
         $req = Flight::request();
-        $access_code = $req->query->access_code;
-        $redirect_url = $req->referrer;
+        $access_code = $req->query->code;
 
-        if (is_null($access_code) || is_null($redirect_url)) {
+        if (is_null($access_code)) {
 
             Flight::json(array(
                 "success" => false,
@@ -43,7 +52,7 @@ class Google_sign_controller
             return;
         }
 
-        $google_sign_in = new Google_sign_model($redirect_url);
+        $google_sign_in = new Google_sign_model();
         $token = $google_sign_in->getAccessTokenByCode($access_code);
 
         if (!$token) {
@@ -56,19 +65,18 @@ class Google_sign_controller
         }
 
         setcookie('Google-access-token', $token, time() + ((3600 * 24) * 7), '/', '', false, true);
+
         Flight::json(array(
-            "success" => false,
-            "token" => $token
+            "success" => true,
+            "token" => "Token setted"
         ), 200);
     }
 
     public function getUserInfo()
     {
-        $req = Flight::request();
-        $access_token = $this->get_access_token_on_request();
-        $redirect_url = $req->referrer;
+        $access_token = $this->get_cookie_on_request("Google-access-token");
 
-        if (is_null($access_token) || is_null($redirect_url)) {
+        if (is_null($access_token)) {
 
             Flight::json(array(
                 "success" => false,
@@ -77,7 +85,7 @@ class Google_sign_controller
             return;
         }
 
-        $google_sign_in = new Google_sign_model($redirect_url);
+        $google_sign_in = new Google_sign_model();
         $data = $google_sign_in->getUserInfoByAccessToken($access_token);
 
         if (!$data) {
@@ -90,34 +98,24 @@ class Google_sign_controller
         }
 
         Flight::json(array(
-            "success" => false,
-            "data" => $data
+            "success" => true,
+            "data" => $data,
         ), 200);
     }
 
+    public function sign_out() {}
 
 
-    protected function get_access_token_on_request()
+    protected function get_cookie_on_request($cookie_name)
     {
 
-        $is_cookie_set =  array_key_exists('Google-access-token', $_COOKIE) && strlen($_COOKIE['Google-access-token']) > 0;
-        $is_http_access_set = isset($_SERVER['HTTP_GOOGLE_ACCESS_TOKEN']);
+        $is_cookie_set =  array_key_exists($cookie_name, $_COOKIE) && strlen($_COOKIE[$cookie_name]) > 0;
 
-        $is_token_set = $is_cookie_set || $is_http_access_set;
+        $is_token_set = $is_cookie_set;
 
         if ($is_token_set) {
 
-            $access_token = "";
-
-            if ($is_http_access_set) {
-
-                $access_token = $_SERVER['HTTP_GOOGLE_ACCESS_TOKEN'];
-            } else {
-
-                $access_token = $_COOKIE['Google-access-token'];;
-            }
-
-            return $access_token;
+            return $_COOKIE[$cookie_name];
         } else {
 
             return false;

@@ -6,7 +6,7 @@ class Google_sign_model
 {
     protected $client;
 
-    function __construct($redirectUri)
+    function __construct()
     {
         // init configuration
         $clientID = GOOGLE_CLIENT_ID;
@@ -15,7 +15,7 @@ class Google_sign_model
         $this->client = new Google_Client();
         $this->client->setClientId($clientID);
         $this->client->setClientSecret($clientSecret);
-        $this->client->setRedirectUri($redirectUri);
+        $this->client->setRedirectUri("http://localhost:8000/google/redirect_to_application");
         $this->client->addScope("email");
         $this->client->addScope("profile");
     }
