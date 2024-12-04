@@ -79,6 +79,7 @@ class Binhusenstore_order_model
             if ($retrieve_charge) {
 
                 $data_to_insert['admin_charge'] = $retrieve_charge[0]['admin_charge'];
+                $data_to_insert['total_balance'] = $total_balance + $retrieve_charge[0]['admin_charge'];
             }
         }
 
@@ -89,7 +90,7 @@ class Binhusenstore_order_model
             $id_order = $this->database->getMaxId($this->table);
 
             $payment_model = new Binhusenstore_payment_model();
-            $balance_remaining = $total_balance;
+            $balance_remaining = $data_to_insert['total_balance'];
             $is_payment_created = false;
 
             $current_date = new DateTime($start_date_payment);
