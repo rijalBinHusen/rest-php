@@ -99,11 +99,15 @@ class Google_sign_controller
             return;
         }
 
+        // generate jwt token
+        $token = $google_sign_in->generate_jwt_token($data['email']);
+
+        setcookie('JWT-Authorization', $token, time() + ((3600 * 24) * 3), '/', NULL, true, true);
         Flight::json(array(
             "success" => true,
-            "data" => $data,
-            Flight::response()->cache(time() + (60 * 60 * 24)) // cache for 24hours
+            "data" => $data
         ), 200);
+        Flight::response()->cache(time() + (60 * 60 * 24)); // cache for 24hours
     }
 
     public function sign_out()

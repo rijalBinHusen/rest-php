@@ -1,10 +1,12 @@
 <?php
 
 require_once(__DIR__ . '/../../utils/database.php');
+require_once(__DIR__ . '/../../app/Users/user_model.php');
 
 class Google_sign_model
 {
     protected $client;
+    protected $database;
 
     function __construct()
     {
@@ -18,6 +20,8 @@ class Google_sign_model
         $this->client->setRedirectUri("http://localhost:8000/google/redirect_to_application");
         $this->client->addScope("email");
         $this->client->addScope("profile");
+
+        $this->database = Query_builder::getInstance();
     }
 
     public function getAuthURL()
@@ -48,6 +52,26 @@ class Google_sign_model
             "name" =>  $google_account_info->name,
             "profile_picture" =>  $google_account_info->picture,
         );
+    }
+
+    public function generate_jwt_token($email)
+    {
+        $database_table_name = "google_accounts";
+        // get users id on db
+        $email_info = $this->database->select_from($database_table_name, "id", "", false, 0, "email", $email)->fetchAll(PDO::FETCH_ASSOC);
+        $is_email_null = count($email_info) == 0;
+        // else write email to db
+        if ($is_email_null) {
+            $this->database->insert($database_table_name, array('email' => $email));
+            if ($this->database->is_error === null) {
+                // get users id
+                $email_info = $this->database->select_from($database_table_name, "id", "", false, 0, "email", $email)->fetchAll(PDO::FETCH_ASSOC);
+            }
+        }
+
+        $user_model = new User_model($database_table_name);
+        // return jwt token too
+        return $user_model->generate_token($email_info[0]['id']);
     }
 
     public function signOut($access_token)

@@ -31,7 +31,7 @@ class Query_builder
     }
 
     // merupakan fungsi untuk melihat tabel dari database ( select *from )
-    function select_from($tabel, $column_str = "*", $order_by = "", $is_desc = false, $limiter = 0)
+    function select_from($tabel, $column_str = "*", $order_by = "", $is_desc = false, $limiter = 0, $where = false, $criteria = false)
     {
         $is_limiter_oke = is_numeric($limiter) && $limiter > 0;
         $is_order_by_oke = !is_null($order_by) && !empty($order_by) && is_string($order_by) && strlen($order_by) <= 40;
@@ -39,11 +39,13 @@ class Query_builder
         try {
             $sql = "SELECT $column_str FROM $tabel";
 
+            if ($where && $criteria) $sql = $sql .= " WHERE $where = :$where ";
             if ($is_order_by_oke) $sql = $sql . " ORDER BY " . $order_by;
             if ($is_order_by_oke && $is_desc) $sql = $sql . " DESC ";
             if ($is_limiter_oke) $sql = $sql . " LIMIT " . $limiter;
 
             $result = $this->db->prepare($sql);
+            if ($where && $criteria) $result->bindValue($where, $criteria);
             $result->execute();
             return $result;
         } catch (PDOException $e) {
