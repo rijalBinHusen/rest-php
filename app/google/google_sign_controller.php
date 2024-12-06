@@ -55,7 +55,7 @@ class Google_sign_controller
         $google_sign_in = new Google_sign_model();
         $token = $google_sign_in->getAccessTokenByCode($access_code);
 
-        if (!$token) {
+        if ($token == false) {
 
             Flight::json(array(
                 "success" => false,
@@ -64,7 +64,8 @@ class Google_sign_controller
             return;
         }
 
-        setcookie('Google-access-token', $token, time() + ((3600 * 24) * 7), '/', '', false, true);
+        // setcookie('my_cookie', 'value', time() + 3600, '/', NULL, true, true);
+        setcookie('Google-access-token', $token, time() + ((3600 * 24) * 3), '/', NULL, true, true);
 
         Flight::json(array(
             "success" => true,
@@ -76,11 +77,12 @@ class Google_sign_controller
     {
         $access_token = $this->get_cookie_on_request("Google-access-token");
 
-        if (is_null($access_token)) {
+        if (is_null($access_token) || $access_token == false) {
 
             Flight::json(array(
                 "success" => false,
-                "message" => "Request invalid"
+                "message" => "Request invalid",
+                "token" => $access_token
             ), 400);
             return;
         }
@@ -92,7 +94,39 @@ class Google_sign_controller
 
             Flight::json(array(
                 "success" => false,
-                "message" => "Access code invalid"
+                "message" => "Access token invalid"
+            ), 400);
+            return;
+        }
+
+        Flight::json(array(
+            "success" => true,
+            "data" => $data,
+            Flight::response()->cache(time() + (60 * 60 * 24)) // cache for 24hours
+        ), 200);
+    }
+
+    public function sign_out()
+    {
+        $access_token = $this->get_cookie_on_request("Google-access-token");
+
+        if (is_null($access_token) || $access_token == false) {
+
+            Flight::json(array(
+                "success" => false,
+                "message" => "Request invalid"
+            ), 400);
+            return;
+        }
+
+        $google_sign_in = new Google_sign_model();
+        $data = $google_sign_in->signOut($access_token);
+
+        if (!$data) {
+
+            Flight::json(array(
+                "success" => false,
+                "message" => "Access token invalid"
             ), 400);
             return;
         }
@@ -102,8 +136,6 @@ class Google_sign_controller
             "data" => $data,
         ), 200);
     }
-
-    public function sign_out() {}
 
 
     protected function get_cookie_on_request($cookie_name)

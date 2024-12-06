@@ -20,3 +20,8 @@ Flight::route('GET /google/get_user_info', function () {
     $google_sign_in = new Google_sign_controller();
     $google_sign_in->getUserInfo();
 });
+
+Flight::route('GET /google/sign_out', function () {
+    $google_sign_in = new Google_sign_controller();
+    $google_sign_in->sign_out();
+});

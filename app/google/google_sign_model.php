@@ -45,7 +45,8 @@ class Google_sign_model
 
         return array(
             "email" =>  $google_account_info->email,
-            "name" =>  $google_account_info->name
+            "name" =>  $google_account_info->name,
+            "profile_picture" =>  $google_account_info->picture,
         );
     }
 
