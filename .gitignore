@@ -8,7 +8,7 @@ token.txt
 *.gif
 *.jpeg
 *.cache
-utils/constant_named.php
+*constant_named.php
 config.json
 node_modules
 *.test.php

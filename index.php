@@ -1,7 +1,7 @@
 <?php
 
 // contant name variable
-require_once(__DIR__ . '/utils/constant_named.php');
+require_once('constant_named.php');
 
 require_once('vendor/autoload.php');
 require_once(__DIR__ . '/app/index_route.php');

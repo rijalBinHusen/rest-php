@@ -22,7 +22,7 @@ class Memverses_chapter
         $valid_request_body = !is_null($id_folder)
             && is_string($id_folder)
             && !is_null($id_chapter_client)
-            && is_string($id_chapter_client)
+            && is_numeric($id_chapter_client)
             && !is_null($chapter)
             && is_numeric($chapter)
             && !is_null($verse)
