@@ -175,6 +175,12 @@ class Binhusenstore_product_model
 
     public function move_product_to_archive($id_product)
     {
+        // make sure there is no order for this id product
+        $order_model = new Binhusenstore_order_model();
+        $get_order = $order_model->get_order_by_id_product($id_product);
+        $is_order_exists = count($get_order) > 0;
+        if ($is_order_exists) return false;
+
         // get product by id
         $retrieve_product = $this->get_product_by_id($id_product);
 

@@ -381,9 +381,9 @@ class Binhusenstore_product
             return;
         }
 
-        $this->Binhusenstore_product->move_product_to_archive($id);
-
-        if ($this->Binhusenstore_product->is_success === true) {
+        $move_product = $this->Binhusenstore_product->move_product_to_archive($id);
+        $is_success = $move_product === true;
+        if ($this->Binhusenstore_product->is_success === true && $is_success) {
 
             Flight::json(
                 array(
@@ -391,6 +391,14 @@ class Binhusenstore_product
                     'message' => 'Product archived'
                 ),
                 200
+            );
+        } else if ($is_success) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => "Produk sudah ada order, atau produk tidak ditemukan"
+                ),
+                400
             );
         } else {
 

@@ -198,6 +198,15 @@ class Binhusenstore_order_model
         return array();
     }
 
+    public function get_order_by_id_product($id_product)
+    {
+
+        $result = $this->database->select_where($this->table, 'id_product', $id_product)->fetchAll(PDO::FETCH_ASSOC);;
+        if ($this->database->is_error === null) return $result;
+        $this->is_success = $this->database->is_error;
+        return array();
+    }
+
     public function update_order_by_id(array $data, $where, $id)
     {
 
