@@ -5,7 +5,7 @@ require_once(__DIR__ . "/chapter_controller.php");
 
 Flight::route('POST /memverses/chapter', function () {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -16,7 +16,7 @@ Flight::route('POST /memverses/chapter', function () {
 
 Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -27,7 +27,7 @@ Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
 
 Flight::route("GET /memverses/chapter/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -38,7 +38,7 @@ Flight::route("GET /memverses/chapter/@id", function ($id) {
 
 Flight::route("PUT /memverses/chapter/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 

@@ -121,7 +121,7 @@ class User_model
       "iat" => $now, // issued at - time when token is generated
       "nbf" => $now, // not before - when this token is considered valid
       "exp" => $now + ((3600 * 24) * 7), // expiry - 7 days (3600 secs * 24 * 7) from now in this example
-      "jti" => "RANDOM TOKEN TOKEN RANDOM", // json token id
+      "jti" => uniqid(), // json token id
       "iss" => JWT_ISSUER, // issuer
       "aud" => JWT_AUD, // audience
       "data" => ["id" => $user_id] // whatever data you want to add
