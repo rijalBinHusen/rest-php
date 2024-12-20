@@ -101,7 +101,7 @@ class User
         }
     }
 
-    public function is_valid_token()
+    public function is_valid_token($is_need_to_renew_token = false)
     {
 
         $jwt_token = $this->get_jwt_token_on_request();
@@ -110,8 +110,7 @@ class User
 
             $token_info = $this->user->validate($jwt_token);
             if ($token_info) {
-
-                $this->check_and_renew_jwt_token($token_info);
+                if ($is_need_to_renew_token) $this->check_and_renew_jwt_token($token_info);
                 return $token_info;
             } else {
 
@@ -132,7 +131,7 @@ class User
         }
     }
 
-    public function get_user_info()
+    public function get_user_info($is_need_to_renew_token = false)
     {
 
         $jwt_token = $this->get_jwt_token_on_request();
@@ -141,8 +140,7 @@ class User
 
             $user_info_by_jwt = $this->user->validate($jwt_token);
             if ($user_info_by_jwt) {
-
-                $this->check_and_renew_jwt_token($user_info_by_jwt);
+                if ($is_need_to_renew_token) $this->check_and_renew_jwt_token($user_info_by_jwt);
                 return $user_info_by_jwt;
             } else {
 
@@ -199,7 +197,7 @@ class User
         }
     }
 
-    public function is_admin($id_admin)
+    public function is_admin($id_admin, $is_need_to_renew_token = false)
     {
 
         $jwt_token = $this->get_jwt_token_on_request();
@@ -214,7 +212,7 @@ class User
 
                 $is_admin = $user_info_by_jwt->data->id == $id_admin;
                 if ($is_admin) {
-                    $this->check_and_renew_jwt_token($user_info_by_jwt);
+                    if ($is_need_to_renew_token) $this->check_and_renew_jwt_token($user_info_by_jwt);
                     return true;
                 }
             }

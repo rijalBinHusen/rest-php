@@ -105,9 +105,9 @@ class Google_sign_controller
         setcookie('JWT-Authorization', $token, time() + ((3600 * 24) * 3), '/', NULL, true, true);
         Flight::json(array(
             "success" => true,
-            "data" => $data
+            "data" => $data,
+            Flight::response()->cache(time() + (60 * 60 * 24)) // cache for 24hours
         ), 200);
-        Flight::response()->cache(time() + (60 * 60 * 24)); // cache for 24hours
     }
 
     public function sign_out()
