@@ -66,10 +66,10 @@ class Memverses_chapter
             );
         }
     }
-    public function get_chapters($id_user, $id_folder)
+    public function get_chapters($id_user, $id_folder, $json_token_id)
     {
 
-        $result = $this->memverses_chapter->get_chapters($id_user, $id_folder);
+        $result = $this->memverses_chapter->get_chapters($id_user, $id_folder, $json_token_id);
 
         $is_found = count($result) > 0;
         $is_success = $this->memverses_chapter->is_success;

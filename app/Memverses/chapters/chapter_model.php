@@ -35,18 +35,24 @@ class Memverses_chapter_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function get_chapters($id_user, $id_folder)
+    public function get_chapters($id_user, $id_folder, $json_token_id)
     {
+        // check is folder updated by other devices? if false return empty array();
+        $folder_operation = new Memverses_folder();
+        $is_folder_changed = $folder_operation->is_folder_changed_by_other_devices($id_folder, $id_user, $json_token_id);
+        if ($is_folder_changed  == false) return array();
+
         $where_s = array(
             'id_user' => $id_user,
             'id_folder' => $id_folder
         );
+
         $result = $this->database->select_where_s($this->table, $where_s)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($result) > 0) {
 
             $convert_data_type_chapters = $this->convert_data_type($result);
-
+            // update folder changed
             return $convert_data_type_chapters;
         } else if (count($result) === 0) return array();
 

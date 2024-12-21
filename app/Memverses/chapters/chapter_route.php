@@ -21,7 +21,7 @@ Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->get_chapters($user_info->data->id, $id_folder);
+        $memverses_chapter->get_chapters($user_info->data->id, $id_folder, $user_info->jti);
     }
 });
 

@@ -141,6 +141,15 @@ class Memverses_folder
         }
     }
 
+    public function is_folder_changed_by_other_devices($folder_id, $id_user, $json_token_id): bool
+    {
+
+        $result = $this->memverses_folder->get_folder_by_id($id_user, $folder_id);
+
+        $is_changed_by_other_devices = count($result) > 0 && $result['changed_by'] != $json_token_id && $result['changed_by'] != "";
+        return $is_changed_by_other_devices;
+    }
+
     // public function remove_folder($id) {
     //     // myguest/8
     //     // the 8 will automatically becoming parameter $id
