@@ -107,6 +107,40 @@ class Memverses_chapter_model
     //     $this->is_success = $this->database->is_error;
     // }
 
+
+    public function get_unreaded_verses_and_reset_if_all_readed($id_user, $id_folder, $json_token_id)
+    {
+        $db_virtual_table_view = "memverses_unreaded_verses";
+        // check is folder updated by other devices? if false return empty array();
+        $folder_operation = new Memverses_folder();
+        $folder_info = $folder_operation->get_folder_info_by_id($id_user, $id_folder);
+        if ($folder_info['changed_by']  == $json_token_id) return array();
+
+        $where_s = array('id_user' => $id_user, 'id_folder' => $id_folder);
+
+        $result = $this->database->select_where_s($db_virtual_table_view, $where_s, "", false, $folder_info['total_verse_to_show'])->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->database->is_error === null && count($result) > 0) {
+
+            $convert_data_type_chapters = $this->convert_data_type($result);
+            // update folder changed
+            return $convert_data_type_chapters;
+        } else if (count($result) === 0) {
+            // if all verses readed, reset readed times
+            $this->reset_readed_times($id_folder);
+            return array();
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
+    private function reset_readed_times($id_folder)
+    {
+        $data_to_update = array('readed_times', 0);
+        $this->database->update($this->table, $data_to_update, 'id_folder', $id_folder);
+    }
+
+
     private function convert_data_type($chapters)
     {
 

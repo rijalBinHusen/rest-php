@@ -230,4 +230,39 @@ class Memverses_chapter
             );
         }
     }
+
+    public function get_unreaded_verses($id_user, $id_folder, $json_token_id)
+    {
+
+        $result = $this->memverses_chapter->get_unreaded_verses_and_reset_if_all_readed($id_user, $id_folder, $json_token_id);
+
+        $is_found = count($result) > 0;
+        $is_success = $this->memverses_chapter->is_success;
+
+        if ($is_success === true && $is_found) {
+            Flight::json(
+                array(
+                    "success" => true,
+                    "data" => $result
+                ),
+                200
+            );
+        } else if ($is_success !== true) {
+            Flight::json(
+                array(
+                    "success" => false,
+                    "message" => $result
+                ),
+                500
+            );
+        } else {
+            Flight::json(
+                array(
+                    "success" => false,
+                    "message" => "chapter not found"
+                ),
+                404
+            );
+        }
+    }
 }

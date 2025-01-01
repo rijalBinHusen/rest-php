@@ -149,6 +149,34 @@ class Memverses_folder
         $is_changed_by_other_devices = count($result) > 0 && $result['changed_by'] != $json_token_id && $result['changed_by'] != "";
         return $is_changed_by_other_devices;
     }
+    /**
+     * This function returns an array with 'id' and 'name' keys.
+     *
+     * @return array {
+     *      'id' => string, 
+     *      'name' => string,
+     *      'total_verse_to_show' => string,
+     *      'show_next_chapter_on_second' => string,
+     *      'read_target' => string,
+     *      'is_show_first_letter' => string,
+     *      'is_show_tafseer' => string,
+     *      'arabic_size' => string,
+     *      'changed_by' => string,
+     * }
+     * 
+     */
+
+    public function get_folder_info_by_id($id_user, $id_folder): array|false
+    {
+
+        $result = $this->memverses_folder->get_folder_by_id($id_user, $id_folder);
+
+        $is_success = $this->memverses_folder->is_success;
+        $is_found = count($result) > 0;
+
+        if ($is_success && $is_found) return $result;
+        return false;
+    }
 
     // public function remove_folder($id) {
     //     // myguest/8

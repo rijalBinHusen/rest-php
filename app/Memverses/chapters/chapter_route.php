@@ -47,6 +47,17 @@ Flight::route("PUT /memverses/chapter/@id", function ($id) {
     }
 });
 
+Flight::route('GET /memverses/unread_verses', function ($id_folder) {
+    $user = new User("memverses_users");
+    $user_info = $user->get_user_info(true);
+
+    if ($user_info && $user_info->data->id) {
+
+        $memverses_chapter = new Memverses_chapter();
+        $memverses_chapter->get_unreaded_verses($user_info->data->id, $id_folder, $user_info->jti);
+    }
+});
+
 // Flight::route("DELETE /memverses/chapter/@id", function ($id) {
 //     $user = new User("memverses_users");
 //     $user_info = $user->get_user_info();

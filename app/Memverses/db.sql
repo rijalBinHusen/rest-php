@@ -1,23 +1,21 @@
-CREATE TABLE
-    if not exists memverses_folders (
-        id VARCHAR(9) NOT NULL PRIMARY KEY,
-        id_user VARCHAR(9) NOT NULL,
-        name TEXT NOT NULL,
-        total_verse_to_show INT NOT NULL,
-        show_next_chapter_on_second INT NOT NULL,
-        read_target INT NOT NULL,
-        is_show_first_letter TINYINT,
-        is_show_tafseer TINYINT,
-        arabic_size TINYINT,
-        changed_by TEXT
-    );
+CREATE TABLE if not exists memverses_folders (
+    id VARCHAR(9) NOT NULL PRIMARY KEY,
+    id_user VARCHAR(9) NOT NULL,
+    name TEXT NOT NULL,
+    total_verse_to_show INT NOT NULL,
+    show_next_chapter_on_second INT NOT NULL,
+    read_target INT NOT NULL,
+    is_show_first_letter TINYINT,
+    is_show_tafseer TINYINT,
+    arabic_size INT NOT NULL,
+    changed_by TEXT
+);
 
 -- THE PREFIX FOR CUSTOM ID memverses_folders
 
-CREATE TABLE
-    if not exists memverses_folders_prefix(
-        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    );
+CREATE TABLE if not exists memverses_folders_prefix (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
 
 -- TRIGGER TO CREATE UNIQUEEE ID BASED ON PREFIX
 
@@ -36,28 +34,25 @@ FOR EACH ROW BEGIN
 	    );
 	END $$
 
-
 DELIMITER;
 
 -- ============================== BORDER
 
-CREATE TABLE
-    if not exists memverses_chapters (
-        id VARCHAR(9) NOT NULL PRIMARY KEY,
-        id_chapter_client VARCHAR(9) NOT NULL,
-        chapter INT,
-        verse INT,
-        readed_times INT,
-        id_user VARCHAR(30),
-        id_folder VARCHAR(30)
-    );
+CREATE TABLE if not exists memverses_chapters (
+    id VARCHAR(9) NOT NULL PRIMARY KEY,
+    id_chapter_client VARCHAR(9) NOT NULL,
+    chapter INT,
+    verse INT,
+    readed_times INT,
+    id_user VARCHAR(30),
+    id_folder VARCHAR(30)
+);
 
 -- THE PREFIX FOR CUSTOM ID memverses_chapters
 
-CREATE TABLE
-    if not exists memverses_chapters_prefix(
-        id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
-    );
+CREATE TABLE if not exists memverses_chapters_prefix (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+);
 
 -- CUSTOM UNIQUEEE ID BASED ON PREFIX
 
@@ -76,19 +71,17 @@ FOR EACH ROW BEGIN
 	    );
 	END $$
 
-
 DELIMITER;
 
 -- ========================================================BORDER
 
-CREATE TABLE
-    if not exists memverses_users (
-        id bigint(20) PRIMARY KEY AUTO_INCREMENT,
-        name varchar(255) NOT NULL,
-        email varchar(255) NOT NULL,
-        password varchar(255) NOT NULL,
-        date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );
+CREATE TABLE if not exists memverses_users (
+    id bigint(20) PRIMARY KEY AUTO_INCREMENT,
+    name varchar(255) NOT NULL,
+    email varchar(255) NOT NULL,
+    password varchar(255) NOT NULL,
+    date_created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 INSERT INTO
     memverses_users (id, name, email, password)
@@ -98,3 +91,22 @@ VALUES (
         'mem_test@test.com',
         '$2y$10$5S0BORM0dC/pVrddltxbg.Fa5EBa5zZDXxNhL5Jt57bCi1aFZpcee'
     );
+
+-- VIEW VIRTUAL TABLE TABLE
+
+CREATE OR REPLACE VIEW memverses_unreaded_verses (
+    id,
+    id_chapter_client,
+    chapter,
+    verse,
+    readed_times,
+    id_user,
+    id_folder
+) AS
+SELECT t1.id, t1.id_chapter_client, t1.chapter, t1.verse, t1.readed_times, t1.id_user, t1.id_folder
+FROM
+    memverses_chapters t1
+    JOIN memverses_folders t2 ON t1.id_user = t2.id_user
+    AND t1.id_folder = t2.id
+WHERE
+    t1.readed_times < t2.read_target;

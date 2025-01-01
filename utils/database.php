@@ -75,7 +75,7 @@ class Query_builder
         }
     }
 
-    function select_where_s($table, $where_s, $order_by = "", $is_desc = false)
+    function select_where_s($table, $where_s, $order_by = "", $is_desc = false, $limit = 0)
     {
         $setPart = array();
 
@@ -86,10 +86,13 @@ class Query_builder
         $sql = "SELECT * FROM $table WHERE "  . implode(" AND ", $setPart);
 
         $is_order_by_oke = !is_null($order_by) && !empty($order_by) && is_string($order_by) && strlen($order_by) <= 40;
-        if ($is_order_by_oke) $sql = $sql . " ORDER BY " . $order_by;
+        if ($is_order_by_oke) $sql = $sql . " ORDER BY :order_by";
         if ($is_order_by_oke && $is_desc) $sql = $sql . " DESC ";
+        if ($limit > 0) $sql = $sql . " LIMIT :limit";
 
         $row = $this->db->prepare($sql);
+        if ($is_order_by_oke) $row->bindValue('order_by', $order_by, PDO::PARAM_STR);
+        if ($limit > 0) $row->bindValue('limit', (int)$limit, PDO::PARAM_INT);
 
         foreach ($where_s as $param => $val) {
             $row->bindValue($param, $val);
