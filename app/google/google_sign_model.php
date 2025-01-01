@@ -20,6 +20,7 @@ class Google_sign_model
         $this->client->setRedirectUri("http://localhost:8000/google/redirect_to_application");
         $this->client->addScope("email");
         $this->client->addScope("profile");
+        $this->client->setAccessType("offline");
 
         $this->database = Query_builder::getInstance();
     }
@@ -34,7 +35,7 @@ class Google_sign_model
 
         $token = $this->client->fetchAccessTokenWithAuthCode($code);
         // check is it token exists or not
-        if (isset($token['access_token'])) return $token['access_token'];
+        if (isset($token['access_token'])) return $token;
         return false;
     }
 

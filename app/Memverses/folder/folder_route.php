@@ -5,7 +5,7 @@ require_once(__DIR__ . "/folder_controller.php");
 
 Flight::route('POST /memverses/folder', function () {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -16,7 +16,7 @@ Flight::route('POST /memverses/folder', function () {
 
 Flight::route('GET /memverses/folders', function () {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -27,7 +27,7 @@ Flight::route('GET /memverses/folders', function () {
 
 Flight::route("GET /memverses/folder/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -38,7 +38,7 @@ Flight::route("GET /memverses/folder/@id", function ($id) {
 
 Flight::route("PUT /memverses/folder/@id", function ($id) {
     $user = new User("memverses_users");
-    $user_info = $user->get_user_info();
+    $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
@@ -49,7 +49,7 @@ Flight::route("PUT /memverses/folder/@id", function ($id) {
 
 // Flight::route("DELETE /memverses/folder/@id", function ($id) {
 //     $user = new User("memverses_users");
-//     $user_info = $user->get_user_info();
+//     $user_info = $user->get_user_info(true);
 
 //     if ($user_info && $user_info->data->id) {
 

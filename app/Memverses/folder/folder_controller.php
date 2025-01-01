@@ -84,7 +84,8 @@ class Memverses_folder
             Flight::json(
                 array(
                     "success" => true,
-                    "data" => $result
+                    "data" => $result,
+                    Flight::response()->cache(time() + 30) // cache for 24hours
                 ),
                 200
             );
@@ -93,7 +94,6 @@ class Memverses_folder
                 array(
                     "success" => false,
                     "message" => $result,
-                    'id_user' => $id_user
                 ),
                 500
             );

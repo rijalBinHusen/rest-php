@@ -65,7 +65,8 @@ class Google_sign_controller
         }
 
         // setcookie('my_cookie', 'value', time() + 3600, '/', NULL, true, true);
-        setcookie('Google-access-token', $token, time() + ((3600 * 24) * 3), '/', NULL, true, true);
+        setcookie('Google-access-token', $token['access_token'], time() + ((3600 * 24) * 3), '/', NULL, true, true);
+        setcookie('Google-refresh-token', $token['refresh_token'], time() + ((3600 * 24) * 3), '/', NULL, true, true);
 
         Flight::json(array(
             "success" => true,
