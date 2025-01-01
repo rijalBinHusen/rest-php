@@ -47,7 +47,7 @@ Flight::route("PUT /memverses/chapter/@id", function ($id) {
     }
 });
 
-Flight::route('GET /memverses/unread_verses', function ($id_folder) {
+Flight::route('GET /memverses/unread_verses/@id', function ($id_folder) {
     $user = new User("memverses_users");
     $user_info = $user->get_user_info(true);
 

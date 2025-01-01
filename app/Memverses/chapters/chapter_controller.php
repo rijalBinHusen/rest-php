@@ -234,6 +234,22 @@ class Memverses_chapter
     public function get_unreaded_verses($id_user, $id_folder, $json_token_id)
     {
 
+        // check is id user id folder and jti is valid?
+        $is_parameter_not_oke = !is_string($id_user) || is_null($id_user) || empty($id_user) ||
+            !is_string($id_folder) || is_null($id_folder) || empty($id_folder) ||
+            !is_string($json_token_id) || is_null($json_token_id) || empty($json_token_id);
+
+        if ($is_parameter_not_oke) {
+            Flight::json(
+                array(
+                    "success" => false,
+                    "data" => "Request invalid, check the data you sent"
+                ),
+                400
+            );
+            return;
+        }
+
         $result = $this->memverses_chapter->get_unreaded_verses_and_reset_if_all_readed($id_user, $id_folder, $json_token_id);
 
         $is_found = count($result) > 0;
@@ -259,7 +275,9 @@ class Memverses_chapter
             Flight::json(
                 array(
                     "success" => false,
-                    "message" => "chapter not found"
+                    "message" => "chapter not found",
+                    "id_user" => $id_user,
+                    "id_folder" => $id_folder
                 ),
                 404
             );
