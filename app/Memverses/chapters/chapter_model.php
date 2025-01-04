@@ -79,6 +79,37 @@ class Memverses_chapter_model
         $this->is_success = $this->database->is_error;
     }
 
+    public function update_readed_times($id_user, $id_chapter, $json_token_id)
+    {
+        $chapter = $this->get_chapter_by_id($id_user, $id_chapter);
+        $is_found = count($chapter) > 0;
+        if (!$is_found) return array();
+
+        $data_to_update = array(
+            "readed_times" => $chapter["readed_times"] + 1
+        );
+
+        $is_updated = $this->update_chapter_by_id($data_to_update, $id_user, $id_chapter);
+        if ($is_updated > 0) $this->update_changed_by_on_folder($json_token_id, $id_user, $chapter["id_folder"]);
+        return $is_updated;
+    }
+
+    public function move_chapter_to_folder($id_folder_destination, $id_user, $id_chapter, $json_token_id)
+    {
+        $chapter = $this->get_chapter_by_id($id_user, $id_chapter);
+        $is_found = count($chapter) > 0;
+        if (!$is_found) return array();
+
+        $data_to_update = array("id_folder" => $id_folder_destination);
+
+        $is_updated = $this->update_chapter_by_id($data_to_update, $id_user, $id_chapter);
+        if ($is_updated > 0) {
+            $this->update_changed_by_on_folder($json_token_id, $id_user, $chapter["id_folder"]);
+            $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder_destination);
+        }
+        return $is_updated;
+    }
+
     public function update_chapter_by_id(array $data, $id_user, $id_chapter)
     {
 
@@ -118,28 +149,37 @@ class Memverses_chapter_model
 
         $where_s = array('id_user' => $id_user, 'id_folder' => $id_folder);
 
-        $result = $this->database->select_where_s($db_virtual_table_view, $where_s, "", false, $folder_info['total_verse_to_show'])->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where_s($db_virtual_table_view, $where_s, "", false)->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($this->database->is_error === null && count($result) > 0) {
+        $is_no_error = $this->database->is_error === null;
+        $is_found = count($result) > 0;
+        if ($is_no_error && $is_found) {
 
             $convert_data_type_chapters = $this->convert_data_type($result);
             // update folder changed
             return $convert_data_type_chapters;
-        } else if (count($result) === 0) {
+        } else if ($is_no_error && count($result) === 0) {
             // if all verses readed, reset readed times
-            $this->reset_readed_times($id_folder);
+            $this->reset_readed_times($json_token_id, $id_user, $id_folder);
             return array();
         }
 
         $this->is_success = $this->database->is_error;
     }
 
-    private function reset_readed_times($id_folder)
+    public function reset_readed_times($json_token_id, $id_user, $id_folder)
     {
-        $data_to_update = array('readed_times', 0);
+        $data_to_update = array('readed_times' => '0');
         $this->database->update($this->table, $data_to_update, 'id_folder', $id_folder);
+        $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder);
     }
 
+    private function update_changed_by_on_folder($json_token_id, $id_user, $id_folder)
+    {
+        $data_to_update = array("changed_by" => $json_token_id);
+        $folder_operation = new Memverses_folder_model();
+        $folder_operation->update_folder_by_id($data_to_update, $id_user, $id_folder);
+    }
 
     private function convert_data_type($chapters)
     {

@@ -231,6 +231,123 @@ class Memverses_chapter
         }
     }
 
+    public function update_folder($id_chapter, $id_user, $json_token_id)
+    {
+        // catch the query string request
+        $req = Flight::request();
+        $id_folder = $req->data->id_folder;
+
+        // conditional id_folder
+        $valid_id_folder = !is_null($id_folder) && !empty($id_folder) && is_string($id_folder);
+        if ($valid_id_folder) $keyValueToUpdate["id_folder"] = $id_folder;
+
+        if ($valid_id_folder) {
+
+            $result = $this->memverses_chapter->move_chapter_to_folder($id_folder, $id_user, $id_chapter, $json_token_id);
+
+            $is_success = $this->memverses_chapter->is_success;
+
+            if ($is_success === true && $result > 0) {
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'message' => 'Chapter moved',
+                    )
+                );
+            } else if ($is_success !== true) {
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $is_success
+                    ),
+                    500
+                );
+            } else {
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => 'Chapter not found'
+                    ),
+                    404
+                );
+            }
+        } else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to update chapter, check the data you sent'
+                ),
+                400
+            );
+        }
+    }
+
+    public function update_readed($id_chapter, $id_user, $json_token_id)
+    {
+
+        $result = $this->memverses_chapter->update_readed_times($id_user, $id_chapter, $json_token_id);
+
+        $is_success = $this->memverses_chapter->is_success;
+
+        if ($is_success === true && $result > 0) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'message' => 'Readed times updated',
+                )
+            );
+        } else if ($is_success !== true) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ),
+                500
+            );
+        } else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Chapter not found'
+                ),
+                404
+            );
+        }
+    }
+
+    public function reset_readed($id_folder, $id_user, $json_token_id)
+    {
+
+        $result = $this->memverses_chapter->reset_readed_times($json_token_id, $id_user, $id_folder);
+
+        $is_success = $this->memverses_chapter->is_success;
+
+        if ($is_success === true && $result > 0) {
+            Flight::json(
+                array(
+                    'success' => true,
+                    'message' => 'Read times reset',
+                )
+            );
+        } else if ($is_success !== true) {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $is_success
+                ),
+                500
+            );
+        } else {
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Chapters not found'
+                ),
+                404
+            );
+        }
+    }
+
     public function get_unreaded_verses($id_user, $id_folder, $json_token_id)
     {
 
@@ -275,9 +392,7 @@ class Memverses_chapter
             Flight::json(
                 array(
                     "success" => false,
-                    "message" => "chapter not found",
-                    "id_user" => $id_user,
-                    "id_folder" => $id_folder
+                    "message" => "chapter not found"
                 ),
                 404
             );

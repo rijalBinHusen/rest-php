@@ -36,14 +36,36 @@ Flight::route("GET /memverses/chapter/@id", function ($id) {
     }
 });
 
-Flight::route("PUT /memverses/chapter/@id", function ($id) {
+Flight::route("PUT /memverses/read/chapter/@id", function ($id) {
     $user = new User("memverses_users");
     $user_info = $user->get_user_info(true);
 
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->update_chapter_by_id($id, $user_info->data->id);
+        $memverses_chapter->update_readed($id, $user_info->data->id, $user_info->jti);
+    }
+});
+
+Flight::route("PUT /memverses/move_to_folder/chapter/@id", function ($id) {
+    $user = new User("memverses_users");
+    $user_info = $user->get_user_info(true);
+
+    if ($user_info && $user_info->data->id) {
+
+        $memverses_chapter = new Memverses_chapter();
+        $memverses_chapter->update_folder($id, $user_info->data->id, $user_info->jti);
+    }
+});
+
+Flight::route("PUT /memverses/reset_readed_times/folder/@id", function ($id) {
+    $user = new User("memverses_users");
+    $user_info = $user->get_user_info(true);
+
+    if ($user_info && $user_info->data->id) {
+
+        $memverses_chapter = new Memverses_chapter();
+        $memverses_chapter->reset_readed($id, $user_info->data->id, $user_info->jti);
     }
 });
 
