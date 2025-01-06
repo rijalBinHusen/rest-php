@@ -54,8 +54,41 @@ paths:
         - folder
       summary: Get all folder.
       responses:
-        "200":
-          $ref: "#/components/responses/get_folders200"
+        "201":
+          description: Successfully created a new folder
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      id_user:
+                        type: string
+                      name:
+                        type: string
+                      total_verse_to_show:
+                        type: number
+                      show_next_chapter_on_second:
+                        type: number
+                      read_target:
+                        type: number
+                      is_show_first_letter:
+                        type: boolean
+                      is_show_tafseer:
+                        type: boolean
+                      arabic_size:
+                        type: number
+                      changed_by:
+                        type: string
+                      is_changed_by_other_devices:
+                        type: boolean
         "401":
           $ref: "#/components/responses/401Error"
         "404":

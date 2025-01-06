@@ -9,7 +9,7 @@ class Memverses_folder
         $this->memverses_folder = new Memverses_folder_model();
     }
 
-    public function add_folder($id_user)
+    public function add_folder($id_user, $json_token_id)
     {
         // request
         $req = Flight::request();
@@ -40,7 +40,7 @@ class Memverses_folder
 
         if ($valid_request_body) {
 
-            $result = $this->memverses_folder->append_folder($id_user, $name, $total_verse_to_show, $show_next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, 0);
+            $result = $this->memverses_folder->append_folder($id_user, $name, $total_verse_to_show, $show_next_chapter_on_second, $read_target, $is_show_first_letter, $is_show_tafseer, $arabic_size, $json_token_id);
 
             if ($this->memverses_folder->is_success !== true) {
 
@@ -72,10 +72,10 @@ class Memverses_folder
             );
         }
     }
-    public function get_folders($id_user)
+    public function get_folders($id_user, $json_token_id)
     {
 
-        $result = $this->memverses_folder->get_folders($id_user);
+        $result = $this->memverses_folder->get_folders($id_user, $json_token_id);
 
         $is_found = count($result) > 0;
         $is_success = $this->memverses_folder->is_success;
@@ -107,10 +107,10 @@ class Memverses_folder
             );
         }
     }
-    public function get_folder_by_id($id_user, $id_folder)
+    public function get_folder_by_id($id_user, $id_folder, $json_token_id)
     {
 
-        $result = $this->memverses_folder->get_folder_by_id($id_user, $id_folder);
+        $result = $this->memverses_folder->get_folder_by_id($id_user, $id_folder, $json_token_id);
 
         $is_success = $this->memverses_folder->is_success;
         $is_found = count($result) > 0;
@@ -144,7 +144,7 @@ class Memverses_folder
     public function is_folder_changed_by_other_devices($folder_id, $id_user, $json_token_id): bool
     {
 
-        $result = $this->memverses_folder->get_folder_by_id($id_user, $folder_id);
+        $result = $this->memverses_folder->get_folder_by_id($id_user, $folder_id, $json_token_id);
 
         $is_changed_by_other_devices = count($result) > 0 && $result['changed_by'] != $json_token_id && $result['changed_by'] != "";
         return $is_changed_by_other_devices;
@@ -166,10 +166,10 @@ class Memverses_folder
      * 
      */
 
-    public function get_folder_info_by_id($id_user, $id_folder): array|false
+    public function get_folder_info_by_id($id_user, $id_folder, $json_token_id): array|false
     {
 
-        $result = $this->memverses_folder->get_folder_by_id($id_user, $id_folder);
+        $result = $this->memverses_folder->get_folder_by_id($id_user, $id_folder, $json_token_id);
 
         $is_success = $this->memverses_folder->is_success;
         $is_found = count($result) > 0;
@@ -214,7 +214,7 @@ class Memverses_folder
     //     }
     // }
 
-    public function update_folder_by_id($id_folder, $id_user)
+    public function update_folder_by_id($id_folder, $id_user, $json_token_id)
     {
         // catch the query string request
         $req = Flight::request();
@@ -225,7 +225,6 @@ class Memverses_folder
         $is_show_first_letter = $req->data->is_show_first_letter;
         $is_show_tafseer = $req->data->is_show_tafseer;
         $arabic_size = $req->data->arabic_size;
-        $changed_by = $req->data->changed_by;
 
         // initiate the column and values to update
         $keyValueToUpdate = array();
@@ -259,8 +258,7 @@ class Memverses_folder
         if ($valid_arabic_size) $keyValueToUpdate["arabic_size"] = $arabic_size;
 
         // conditional $changed_by
-        $valid_changed_by = !is_null($changed_by) && !empty($changed_by) && is_string($changed_by);
-        if ($valid_changed_by) $keyValueToUpdate["changed_by"] = $changed_by;
+        $keyValueToUpdate["changed_by"] = $json_token_id;
 
         $is_oke_to_update = count($keyValueToUpdate) > 0;
 

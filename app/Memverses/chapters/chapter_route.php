@@ -10,7 +10,7 @@ Flight::route('POST /memverses/chapter', function () {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->add_chapter($user_info->data->id);
+        $memverses_chapter->add_chapter($user_info->data->id, $user_info->jti);
     }
 });
 

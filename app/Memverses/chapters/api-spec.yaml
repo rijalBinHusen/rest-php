@@ -111,6 +111,74 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
+  /read/chapter/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the chapter
+        schema:
+          type: string
+        example: "WAR220203902"
+    put:
+      tags:
+        - chapter
+      summary: Update chapter by id
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /move_to_folder/chapter/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the chapter
+        schema:
+          type: string
+        example: "WAR220203902"
+    put:
+      tags:
+        - chapter
+      summary: Update chapter by id
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  /reset_readed_times/folder/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the folder
+        schema:
+          type: string
+        example: "WAR220203902"
+    put:
+      tags:
+        - chapter
+      summary: Reset readed times chapter by id folder
+      responses:
+        "200":
+          $ref: "#/components/responses/200Success"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
+        "404":
+          $ref: "#/components/responses/404Error"
+  # End of chapter end point
+  # End of chapter end point
   # End of chapter end point
 
 components:

@@ -10,7 +10,7 @@ Flight::route('POST /memverses/folder', function () {
     if ($user_info && $user_info->data->id) {
 
         $memverses_folder = new Memverses_folder();
-        $memverses_folder->add_folder($user_info->data->id);
+        $memverses_folder->add_folder($user_info->data->id, $user_info->jti);
     }
 });
 
@@ -21,7 +21,7 @@ Flight::route('GET /memverses/folders', function () {
     if ($user_info && $user_info->data->id) {
 
         $memverses_folder = new Memverses_folder();
-        $memverses_folder->get_folders($user_info->data->id);
+        $memverses_folder->get_folders($user_info->data->id, $user_info->jti);
     }
 });
 
@@ -32,7 +32,7 @@ Flight::route("GET /memverses/folder/@id", function ($id) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_folder = new Memverses_folder();
-        $memverses_folder->get_folder_by_id($user_info->data->id, $id);
+        $memverses_folder->get_folder_by_id($user_info->data->id, $id, $user_info->jti);
     }
 });
 
@@ -43,7 +43,7 @@ Flight::route("PUT /memverses/folder/@id", function ($id) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_folder = new Memverses_folder();
-        $memverses_folder->update_folder_by_id($id, $user_info->data->id);
+        $memverses_folder->update_folder_by_id($id, $user_info->data->id, $user_info->jti);
     }
 });
 

@@ -38,14 +38,14 @@ class Memverses_folder_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function get_folders($id_user)
+    public function get_folders($id_user, $json_token_id)
     {
 
         $result = $this->database->select_where($this->table, 'id_user', $id_user)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null && count($result) > 0) {
 
-            $convert_data_type_folders = $this->convert_data_type($result);
+            $convert_data_type_folders = $this->convert_data_type($result, $json_token_id);
 
             return $convert_data_type_folders;
         }
@@ -54,7 +54,7 @@ class Memverses_folder_model
         $this->is_success = $result;
     }
 
-    public function get_folder_by_id($id_user, $id)
+    public function get_folder_by_id($id_user, $id, $json_token_id)
     {
 
         $where_s = array(
@@ -66,7 +66,7 @@ class Memverses_folder_model
 
         if ($this->database->is_error === null && count($retrieve_folder) > 0) {
 
-            $convert_data_type = $this->convert_data_type($retrieve_folder);
+            $convert_data_type = $this->convert_data_type($retrieve_folder, $json_token_id);
 
             return $convert_data_type[0];
         } else if (count($retrieve_folder) === 0) {
@@ -105,7 +105,7 @@ class Memverses_folder_model
     //     $this->is_success = $this->database->is_error;
     // }
 
-    private function convert_data_type($folders)
+    private function convert_data_type($folders, $json_token_id)
     {
 
         $result = array();
@@ -122,6 +122,7 @@ class Memverses_folder_model
                 "is_show_tafseer" => boolval($folder_value['is_show_tafseer']),
                 "arabic_size" => (int)$folder_value['arabic_size'],
                 "changed_by" => $folder_value['changed_by'],
+                "is_changed_by_other_devices" => $folder_value['changed_by'] != $json_token_id
             );
 
             array_push($result, $array_to_push);

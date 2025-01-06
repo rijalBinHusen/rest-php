@@ -94,7 +94,7 @@ VALUES (
 
 -- VIEW VIRTUAL TABLE TABLE
 
-CREATE OR REPLACE VIEW memverses_unreaded_verses (
+CREATE OR REPLACE VIEW memverses_verses (
     id,
     id_chapter_client,
     chapter,
@@ -108,5 +108,4 @@ FROM
     memverses_chapters t1
     JOIN memverses_folders t2 ON t1.id_user = t2.id_user
     AND t1.id_folder = t2.id
-WHERE
-    t1.readed_times < t2.read_target;
+ORDER BY id_chapter_client

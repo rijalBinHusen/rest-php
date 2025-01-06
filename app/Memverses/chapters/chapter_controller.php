@@ -9,7 +9,7 @@ class Memverses_chapter
         $this->memverses_chapter = new Memverses_chapter_model();
     }
 
-    public function add_chapter($id_user)
+    public function add_chapter($id_user, $json_token_id)
     {
         // request
         $req = Flight::request();
@@ -34,7 +34,7 @@ class Memverses_chapter
 
         if ($valid_request_body) {
 
-            $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times, $id_folder);
+            $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times, $id_folder, $json_token_id);
 
             if ($this->memverses_chapter->is_success !== true) {
 
@@ -367,7 +367,7 @@ class Memverses_chapter
             return;
         }
 
-        $result = $this->memverses_chapter->get_unreaded_verses_and_reset_if_all_readed($id_user, $id_folder, $json_token_id);
+        $result = $this->memverses_chapter->get_verses($id_user, $id_folder, $json_token_id);
 
         $is_found = count($result) > 0;
         $is_success = $this->memverses_chapter->is_success;
