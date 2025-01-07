@@ -255,7 +255,7 @@ class User
     {
 
         $expired_time = strtotime("now") - 3600; // 1 hour before token expired
-        $is_gonna_expired = intval($token_info->exp) >= $expired_time;
+        $is_gonna_expired = $expired_time >= intval($token_info->exp);
         if ($is_gonna_expired) {
             // renew the token
             $new_token = $this->user->generate_token($token_info->data->id);

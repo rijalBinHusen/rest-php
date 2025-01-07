@@ -10,7 +10,7 @@ Flight::route('POST /memverses/chapter', function () {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->add_chapter($user_info->data->id, $user_info->jti);
+        $memverses_chapter->add_chapter($user_info->data->id, $user_info->data->device_id);
     }
 });
 
@@ -21,7 +21,7 @@ Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->get_chapters($user_info->data->id, $id_folder, $user_info->jti);
+        $memverses_chapter->get_chapters($user_info->data->id, $id_folder, $user_info->data->device_id);
     }
 });
 
@@ -43,7 +43,7 @@ Flight::route("PUT /memverses/read/chapter/@id", function ($id) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->update_readed($id, $user_info->data->id, $user_info->jti);
+        $memverses_chapter->update_readed($id, $user_info->data->id, $user_info->data->device_id);
     }
 });
 
@@ -54,7 +54,7 @@ Flight::route("PUT /memverses/move_to_folder/chapter/@id", function ($id) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->update_folder($id, $user_info->data->id, $user_info->jti);
+        $memverses_chapter->update_folder($id, $user_info->data->id, $user_info->data->device_id);
     }
 });
 
@@ -65,7 +65,7 @@ Flight::route("PUT /memverses/reset_readed_times/folder/@id", function ($id) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->reset_readed($id, $user_info->data->id, $user_info->jti);
+        $memverses_chapter->reset_readed($id, $user_info->data->id, $user_info->data->device_id);
     }
 });
 
@@ -76,7 +76,7 @@ Flight::route('GET /memverses/unread_verses/@id', function ($id_folder) {
     if ($user_info && $user_info->data->id) {
 
         $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->get_unreaded_verses($user_info->data->id, $id_folder, $user_info->jti);
+        $memverses_chapter->get_unreaded_verses($user_info->data->id, $id_folder, $user_info->data->device_id);
     }
 });
 

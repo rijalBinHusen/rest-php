@@ -124,7 +124,10 @@ class User_model
       "jti" => uniqid(), // json token id
       "iss" => JWT_ISSUER, // issuer
       "aud" => JWT_AUD, // audience
-      "data" => ["id" => $user_id] // whatever data you want to add
+      "data" => [
+        "id" => $user_id,
+        "device_id" => uniqid()
+      ] // whatever data you want to add
     ], JWT_SECRET, JWT_ALGO);
   }
 }

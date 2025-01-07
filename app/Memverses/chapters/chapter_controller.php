@@ -317,6 +317,18 @@ class Memverses_chapter
 
     public function reset_readed($id_folder, $id_user, $json_token_id)
     {
+        // conditional id_folder
+        $valid_id_folder = !is_null($id_folder) && !empty($id_folder) && is_string($id_folder);
+        if ($valid_id_folder) {
+            Flight::json(
+                array(
+                    "success" => false,
+                    "data" => "Request invalid, check the data you sent"
+                ),
+                400
+            );
+            return;
+        }
 
         $result = $this->memverses_chapter->reset_readed_times($json_token_id, $id_user, $id_folder);
 

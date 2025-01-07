@@ -159,8 +159,13 @@ class Memverses_chapter_model
     public function reset_readed_times($json_token_id, $id_user, $id_folder)
     {
         $data_to_update = array('readed_times' => '0');
-        $this->database->update($this->table, $data_to_update, 'id_folder', $id_folder);
-        $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder);
+        $result = $this->database->update($this->table, $data_to_update, 'id_folder', $id_folder);
+
+        if ($this->database->is_error === null) {
+            return $result;
+            $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder);
+        }
+        $this->is_success = $this->database->is_error;
     }
 
     private function update_changed_by_on_folder($json_token_id, $id_user, $id_folder)
