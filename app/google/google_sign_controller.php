@@ -18,12 +18,19 @@ class Google_sign_controller
             ), 400);
             return;
         }
+        setcookie("url_to_application", $url_to_application);
 
         $google_sign_in = new Google_sign_model();
         $auth_url = $google_sign_in->getAuthURL();
+        Flight::json([
+            'message' => 'Redirecting in 3 seconds...'
+        ]);
 
-        setcookie("url_to_application", $url_to_application);
-        echo "<a href='" . $auth_url . "'>Google login</a>";
+        Flight::stop(); // Important: Stop further execution
+
+        // This header will be sent after Flight::stop()
+        header("Refresh: 3; URL=" . $auth_url);
+        // echo "<a href='" . $auth_url . "'>Google login</a>";
         // Flight::redirect($auth_url);
     }
 
