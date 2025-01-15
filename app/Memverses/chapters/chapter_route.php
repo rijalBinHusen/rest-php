@@ -14,6 +14,17 @@ Flight::route('POST /memverses/chapter', function () {
     }
 });
 
+Flight::route('POST /memverses/chapter_and_verses', function () {
+    $user = new User("memverses_users");
+    $user_info = $user->get_user_info(true);
+
+    if ($user_info && $user_info->data->id) {
+
+        $memverses_chapter = new Memverses_chapter();
+        $memverses_chapter->add_chapter_and_verses($user_info->data->id, $user_info->data->device_id);
+    }
+});
+
 Flight::route('GET /memverses/chapters/@id_folder', function ($id_folder) {
     $user = new User("memverses_users");
     $user_info = $user->get_user_info(true);

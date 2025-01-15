@@ -50,8 +50,8 @@ class Memverses_folder_model
             return $convert_data_type_folders;
         }
 
-        // $this->is_success = $this->database->is_error;
-        $this->is_success = $result;
+        $this->is_success = $this->database->is_error;
+        return array();
     }
 
     public function get_folder_by_id($id_user, $id, $json_token_id)

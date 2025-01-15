@@ -44,6 +44,37 @@ paths:
           $ref: "#/components/responses/400Error"
         "401":
           $ref: "#/components/responses/401Error"
+  /chapter_and_verses:
+    post:
+      tags:
+        - chapter
+      summary: Lets user post a new chapter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_folder:
+                  type: string
+                chapter:
+                  type: number
+                verse_start:
+                  type: number
+                verse_end:
+                  type: number
+      responses:
+        "201":
+          description: Successfully created a new chapter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Return_after_post"
+        "400":
+          $ref: "#/components/responses/400Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   /chapters:
     get:
       tags:

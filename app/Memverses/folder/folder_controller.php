@@ -89,21 +89,21 @@ class Memverses_folder
                 ),
                 200
             );
-        } else if ($is_success !== true) {
-            Flight::json(
-                array(
-                    "success" => false,
-                    "message" => $result,
-                ),
-                500
-            );
-        } else {
+        } else if (!$is_found) {
             Flight::json(
                 array(
                     "success" => false,
                     "message" => "Folder not found"
                 ),
                 404
+            );
+        } else {
+            Flight::json(
+                array(
+                    "success" => false,
+                    "message" => $result,
+                ),
+                500
             );
         }
     }

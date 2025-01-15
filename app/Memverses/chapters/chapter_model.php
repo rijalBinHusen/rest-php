@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../../utils/database.php');
+require_once(__DIR__ . '/../../../utils/piece/array_function.php');
 
 class Memverses_chapter_model
 {
@@ -26,6 +27,48 @@ class Memverses_chapter_model
         );
 
         $this->database->insert($this->table, $data_to_insert);
+
+        if ($this->database->is_error === null) {
+
+            $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder);
+            return $this->database->getMaxId($this->table);
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
+
+    public function append_chapter_and_verses($id_user, $chapter, $verse_start, $verse_end, $id_folder, $json_token_id)
+    {
+
+        $get_all_verses_in_folder = $this->get_verses($id_user, $id_folder);
+        $is_found = count($get_all_verses_in_folder) > 0;
+
+        for ($i = $verse_start; $i <= $verse_end; $i++) {
+            $id_chapter_client = $chapter + 300 + $i;
+
+            $data_to_insert = array(
+                'id_chapter_client' => $id_chapter_client,
+                'id_user' => $id_user,
+                'chapter' => $chapter,
+                'verse' => $i,
+                'readed_times' => 0,
+                'id_folder' => $id_folder
+            );
+
+            $is_need_to_insert = true;
+
+            if ($is_found) {
+
+                $find_index_on_exists_verses = findIndexByKeyAndValue($get_all_verses_in_folder, "id_chapter_client", $id_chapter_client);
+                $is_verse_found = $find_index_on_exists_verses > 0;
+
+                // if exists, don't push it
+                if ($is_verse_found) $is_need_to_insert = false;
+            }
+
+            // insert to database
+            if ($is_need_to_insert) $this->database->insert($this->table, $data_to_insert);
+        }
 
         if ($this->database->is_error === null) {
 

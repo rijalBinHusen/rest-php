@@ -66,6 +66,68 @@ class Memverses_chapter
             );
         }
     }
+
+    public function add_chapter_and_verses($id_user, $json_token_id)
+    {
+        // request
+        $req = Flight::request();
+        $id_folder = $req->data->id_folder;
+        $chapter = $req->data->chapter;
+        $verse_start = $req->data->verse_start;
+        $verse_end = $req->data->verse_end;
+
+        $whats_to_check = array(
+            "id_folder" => "string",
+            "chapter" => "number",
+            "verse_start" => "number",
+            "verse_end" => "number",
+        );
+
+        $validator = new Validator();
+        $is_valid_request_body = $validator->check_type($req->data, $whats_to_check);
+        // verse_start should > 0;
+        if ($verse_start < 0) $is_valid_request_body = false;
+        // verse_start should be < verse_end
+        if ($verse_start > $verse_end) $is_valid_request_body = false;
+        // end start should <= 286;
+        if ($verse_end > 286) $is_valid_request_body = false;
+
+        $result = null;
+
+        if ($is_valid_request_body) {
+
+            $result = $this->memverses_chapter->append_chapter_and_verses($id_user, $chapter, $verse_start, $verse_end, $id_folder, $json_token_id);
+
+            if ($this->memverses_chapter->is_success !== true) {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $this->memverses_chapter->is_success
+                    ),
+                    500
+                );
+            } else {
+
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'id' => $result
+                    ),
+                    201
+                );
+            }
+        } else {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => 'Failed to add chapter, check the data you sent'
+                ),
+                400
+            );
+        }
+    }
     public function get_chapters($id_user, $id_folder, $json_token_id)
     {
 
