@@ -36,16 +36,7 @@ class Memverses_chapter
 
             $result = $this->memverses_chapter->append_chapter($id_chapter_client, $id_user, $chapter, $verse, $readed_times, $id_folder, $json_token_id);
 
-            if ($this->memverses_chapter->is_success !== true) {
-
-                Flight::json(
-                    array(
-                        'success' => false,
-                        'message' => $this->memverses_chapter->is_success
-                    ),
-                    500
-                );
-            } else {
+            if ($result) {
 
                 Flight::json(
                     array(
@@ -53,6 +44,15 @@ class Memverses_chapter
                         'id' => $result
                     ),
                     201
+                );
+            } else {
+
+                Flight::json(
+                    array(
+                        'success' => false,
+                        'message' => $this->memverses_chapter->is_success
+                    ),
+                    500
                 );
             }
         } else {
@@ -98,7 +98,16 @@ class Memverses_chapter
 
             $result = $this->memverses_chapter->append_chapter_and_verses($id_user, $chapter, $verse_start, $verse_end, $id_folder, $json_token_id);
 
-            if ($this->memverses_chapter->is_success !== true) {
+            if ($result) {
+
+                Flight::json(
+                    array(
+                        'success' => true,
+                        'message' => "Chapter and verses added"
+                    ),
+                    201
+                );
+            } else {
 
                 Flight::json(
                     array(
@@ -106,15 +115,6 @@ class Memverses_chapter
                         'message' => $this->memverses_chapter->is_success
                     ),
                     500
-                );
-            } else {
-
-                Flight::json(
-                    array(
-                        'success' => true,
-                        'id' => $result
-                    ),
-                    201
                 );
             }
         } else {
@@ -131,7 +131,7 @@ class Memverses_chapter
     public function get_chapters($id_user, $id_folder, $json_token_id)
     {
 
-        $result = $this->memverses_chapter->get_chapters($id_user, $id_folder, $json_token_id);
+        $result = $this->memverses_chapter->get_verses($id_user, $id_folder, $json_token_id);
 
         $is_found = count($result) > 0;
         $is_success = $this->memverses_chapter->is_success;
@@ -422,54 +422,54 @@ class Memverses_chapter
         }
     }
 
-    public function get_unreaded_verses($id_user, $id_folder, $json_token_id)
-    {
+    // public function get_unreaded_verses($id_user, $id_folder, $json_token_id)
+    // {
 
-        // check is id user id folder and jti is valid?
-        $is_parameter_not_oke = !is_string($id_user) || is_null($id_user) || empty($id_user) ||
-            !is_string($id_folder) || is_null($id_folder) || empty($id_folder) ||
-            !is_string($json_token_id) || is_null($json_token_id) || empty($json_token_id);
+    //     // check is id user id folder and jti is valid?
+    //     $is_parameter_not_oke = !is_string($id_user) || is_null($id_user) || empty($id_user) ||
+    //         !is_string($id_folder) || is_null($id_folder) || empty($id_folder) ||
+    //         !is_string($json_token_id) || is_null($json_token_id) || empty($json_token_id);
 
-        if ($is_parameter_not_oke) {
-            Flight::json(
-                array(
-                    "success" => false,
-                    "data" => "Request invalid, check the data you sent"
-                ),
-                400
-            );
-            return;
-        }
+    //     if ($is_parameter_not_oke) {
+    //         Flight::json(
+    //             array(
+    //                 "success" => false,
+    //                 "data" => "Request invalid, check the data you sent"
+    //             ),
+    //             400
+    //         );
+    //         return;
+    //     }
 
-        $result = $this->memverses_chapter->get_verses($id_user, $id_folder, $json_token_id);
+    //     $result = $this->memverses_chapter->get_verses($id_user, $id_folder, $json_token_id);
 
-        $is_found = count($result) > 0;
-        $is_success = $this->memverses_chapter->is_success;
+    //     $is_found = count($result) > 0;
+    //     $is_success = $this->memverses_chapter->is_success;
 
-        if ($is_success === true && $is_found) {
-            Flight::json(
-                array(
-                    "success" => true,
-                    "data" => $result
-                ),
-                200
-            );
-        } else if ($is_success !== true) {
-            Flight::json(
-                array(
-                    "success" => false,
-                    "message" => $result
-                ),
-                500
-            );
-        } else {
-            Flight::json(
-                array(
-                    "success" => false,
-                    "message" => "chapter not found"
-                ),
-                404
-            );
-        }
-    }
+    //     if ($is_success === true && $is_found) {
+    //         Flight::json(
+    //             array(
+    //                 "success" => true,
+    //                 "data" => $result
+    //             ),
+    //             200
+    //         );
+    //     } else if ($is_success !== true) {
+    //         Flight::json(
+    //             array(
+    //                 "success" => false,
+    //                 "message" => $result
+    //             ),
+    //             500
+    //         );
+    //     } else {
+    //         Flight::json(
+    //             array(
+    //                 "success" => false,
+    //                 "message" => "chapter not found"
+    //             ),
+    //             404
+    //         );
+    //     }
+    // }
 }

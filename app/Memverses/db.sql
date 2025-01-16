@@ -108,4 +108,4 @@ FROM
     memverses_chapters t1
     JOIN memverses_folders t2 ON t1.id_user = t2.id_user
     AND t1.id_folder = t2.id
-ORDER BY id_chapter_client
+ORDER BY t1.id_chapter_client

@@ -41,7 +41,7 @@ class Memverses_chapter_model
     {
 
         $get_all_verses_in_folder = $this->get_verses($id_user, $id_folder);
-        $is_found = count($get_all_verses_in_folder) > 0;
+        $is_found = $get_all_verses_in_folder && count($get_all_verses_in_folder) > 0;
 
         for ($i = $verse_start; $i <= $verse_end; $i++) {
             $id_chapter_client = $chapter + 300 + $i;
@@ -73,10 +73,11 @@ class Memverses_chapter_model
         if ($this->database->is_error === null) {
 
             $this->update_changed_by_on_folder($json_token_id, $id_user, $id_folder);
-            return $this->database->getMaxId($this->table);
+            return true;
         }
 
         $this->is_success = $this->database->is_error;
+        return false;
     }
 
     public function get_chapters($id_user, $id_folder)
@@ -181,11 +182,11 @@ class Memverses_chapter_model
 
     public function get_verses($id_user, $id_folder)
     {
-        $db_virtual_table_view = "memverses_unreaded_verses";
+        $db_virtual_table_view = "memverses_verses";
 
         $where_s = array('id_user' => $id_user, 'id_folder' => $id_folder);
 
-        $result = $this->database->select_where_s($db_virtual_table_view, $where_s, "", false)->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where_s($db_virtual_table_view, $where_s)->fetchAll(PDO::FETCH_ASSOC);
 
         $is_no_error = $this->database->is_error === null;
         $is_found = count($result) > 0;
@@ -196,6 +197,7 @@ class Memverses_chapter_model
             return $convert_data_type_chapters;
         }
 
+        if ($is_no_error) return array();
         $this->is_success = $this->database->is_error;
     }
 

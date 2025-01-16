@@ -80,16 +80,16 @@ Flight::route("PUT /memverses/reset_readed_times/folder/@id", function ($id) {
     }
 });
 
-Flight::route('GET /memverses/unread_verses/@id', function ($id_folder) {
-    $user = new User("memverses_users");
-    $user_info = $user->get_user_info(true);
+// Flight::route('GET /memverses/unread_verses/@id', function ($id_folder) {
+//     $user = new User("memverses_users");
+//     $user_info = $user->get_user_info(true);
 
-    if ($user_info && $user_info->data->id) {
+//     if ($user_info && $user_info->data->id) {
 
-        $memverses_chapter = new Memverses_chapter();
-        $memverses_chapter->get_unreaded_verses($user_info->data->id, $id_folder, $user_info->data->device_id);
-    }
-});
+//         $memverses_chapter = new Memverses_chapter();
+//         $memverses_chapter->get_unreaded_verses($user_info->data->id, $id_folder, $user_info->data->device_id);
+//     }
+// });
 
 // Flight::route("DELETE /memverses/chapter/@id", function ($id) {
 //     $user = new User("memverses_users");
