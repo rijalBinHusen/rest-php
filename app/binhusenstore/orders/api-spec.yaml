@@ -445,6 +445,76 @@ paths:
                   message:
                     type: boolean
                     example: false
+  /order/dashboard/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the order
+        schema:
+          type: string
+        example: "WAR220203902"
+    get:
+      tags:
+        - order
+      summary: Get order dashboard by id_order.
+      responses:
+        "200":
+          description: Success operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  data:
+                    type: object
+                    properties:
+                      day_percent:
+                        type: number
+                        example: 30
+                      day_remaining:
+                        type: number
+                        example: 120
+                      total_balance_percent:
+                        type: number
+                        example: 20
+                      total_payments_count:
+                        type: number
+                        example: 30
+                      date_order:
+                        type: string
+                        example: "2023-07-23"
+                      name_of_customer:
+                        type: string
+                      title:
+                        type: string
+                      total_balance:
+                        type: number
+                        example: 2000000
+                      admin_charge:
+                        type: number
+                        example: 10000
+                      payments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            order_number:
+                              type: number
+                            date_paid:
+                              type: string
+                              example: "2023-07-23"
+                            balance:
+                              type: number
+        "404":
+          $ref: "#/components/responses/404Error"
+        "401":
+          $ref: "#/components/responses/401Error"
   # End of order end point
 
 components:
