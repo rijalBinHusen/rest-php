@@ -132,6 +132,17 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
+    public function get_order_dashboard_by_id($id)
+    {
+        $payment_model = new Binhusenstore_payment_model();
+
+        $payments = $payment_model->get_payments($id);
+        $order = $this->get_order_by_id($id);
+
+        // sum payments
+
+    }
+
     public function get_order_by_id($id)
     {
         if (substr($id, 0, 1) !== 'G' && substr($id, 0, 1) !== 'O') return array();
