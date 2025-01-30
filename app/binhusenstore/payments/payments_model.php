@@ -66,6 +66,33 @@ class Binhusenstore_payment_model
         $this->is_success = $this->database->is_error;
     }
 
+    public function get_paid_and_order_data_by_date_payment_desc($id_order)
+    {
+        if (substr($id_order, 0, 1) !== 'O') return array();
+        // Check the string length
+        if (strlen($id_order) !== 9) return array();
+        // Check if the rest of the characters are numbers
+        for ($i = 1; $i < strlen($id_order); $i++) {
+            if (!is_numeric($id_order[$i])) {
+                return array();
+            }
+        }
+
+        $where_s = array(
+            'id_order' => $id_order,
+            'is_paid' => 1
+        );
+
+        $result  = $this->database->select_where_s($this->table, $where_s, "date_payment", true)->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->database->is_error === null) {
+
+            $data_type_converted = $this->convert_data_type($result);
+            return $data_type_converted;
+        }
+
+        $this->is_success = $this->database->is_error;
+    }
 
     public function get_payments_by_id_order_group($id_order_group)
     {

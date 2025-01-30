@@ -136,11 +136,37 @@ class Binhusenstore_order_model
     {
         $payment_model = new Binhusenstore_payment_model();
 
-        $payments = $payment_model->get_payments($id);
+        $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
         $order = $this->get_order_by_id($id);
 
-        // sum payments
+        $date_start_as_time = strtotime($order['date_order']);
+        $date_current_as_time = strtotime("now");
+        $date_end_as_time = strtotime($order['date_end']);
 
+        $day_passed = ceil(($date_current_as_time - $date_start_as_time) / 60 / 60 / 24);
+        $day_all = ceil(($date_end_as_time - $date_start_as_time) / 60 / 60 / 24);
+        $day_remaining = ceil(($date_end_as_time - $date_current_as_time) / 60 / 60 / 24);
+        $day_percent_remaining = $day_passed / $day_all * 100;
+
+        $sum_payments_balance = 0;
+        // sum payments balance on $payments variable
+        foreach ($payments as $payment) {
+            $sum_payments_balance += $payment['balance'];
+        }
+        // pick only 5 first payments
+        $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements
+        return array(
+            "day_percent" => $day_percent_remaining,
+            "day_remaining" => $day_remaining,
+            "total_balance_percent" => (int)($sum_payments_balance / $order['total_balance']) * 100,
+            "total_payments_count" => (int)count($payments),
+            "date_order" => $order['date_order'],
+            "name_of_customer" => $order['name_of_customer'],
+            "title" => $order['title'],
+            "total_balance" => (int)$order['total_balance'],
+            "admin_charge" => (int)$order['admin_charge'],
+            "payments" => $payments_to_return
+        );
     }
 
     public function get_order_by_id($id)

@@ -142,6 +142,14 @@ class Binhusenstore_order
         $req = Flight::request();
         $limit = $req->query->limit;
 
+        // $limit should be number, reject if it not number
+        if (!is_numeric($limit)) {
+
+            Flight::json(array(
+                "success" => false,
+                "message" => "Request invalid"
+            ), 400);
+        }
         $result = $this->Binhusenstore_order->get_orders($limit);
 
         $is_exists = count($result) > 0;
