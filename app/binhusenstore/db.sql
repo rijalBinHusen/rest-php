@@ -383,18 +383,18 @@ CREATE OR REPLACE VIEW order_payments (
   balance,
   is_paid,
   date_paid,
+  id_order,
   name_of_customer,
-  title,
-  id_order
+  title
 ) AS
 SELECT
-  binhusenstore_payments.id,
-  binhusenstore_payments.date_payment,
-  binhusenstore_payments.balance,
-  binhusenstore_payments.is_paid,
-  binhusenstore_payments.date_paid,
-  binhusenstore_order.name_of_customer,
-  binhusenstore_order.title,
-  binhusenstore_payment.id_order
-FROM binhusenstore_payments
-INNER JOIN binhusenstore_order ON payments.id_order = order.id;
+  t1.id,
+  t1.date_payment,
+  t1.balance,
+  t1.is_paid,
+  t1.date_paid,
+  t1.id_order,
+  t2.name_of_customer,
+  t2.title
+FROM binhusenstore_payments t1
+INNER JOIN binhusenstore_orders t2 ON t1.id_order = t2.id;
