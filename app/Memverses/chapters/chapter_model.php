@@ -44,7 +44,7 @@ class Memverses_chapter_model
         $is_found = $get_all_verses_in_folder && count($get_all_verses_in_folder) > 0;
 
         for ($i = $verse_start; $i <= $verse_end; $i++) {
-            $id_chapter_client = $chapter + 300 + $i;
+            $id_chapter_client = $chapter * 300 + $i;
 
             $data_to_insert = array(
                 'id_chapter_client' => $id_chapter_client,
