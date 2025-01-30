@@ -46,6 +46,17 @@ Flight::route("GET /binhusenstore/order/@id", function ($id) {
     }
 });
 
+Flight::route("GET /binhusenstore/order/dashboard/@id", function ($id) {
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
+
+    if ($is_valid_code) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->get_order_dashboard($id);
+    }
+});
+
 Flight::route("PUT /binhusenstore/order/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);

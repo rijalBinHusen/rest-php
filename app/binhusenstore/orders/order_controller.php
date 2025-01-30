@@ -213,6 +213,43 @@ class Binhusenstore_order
         }
     }
 
+    public function get_order_dashboard($id_order)
+    {
+        // myguest/8
+        // the 8 will automatically becoming parameter $id_order
+        $result = $this->Binhusenstore_order->get_order_dashboard_by_id($id_order);
+
+        $is_success = $this->Binhusenstore_order->is_success;
+        $is_found = count($result) > 0;
+
+        if ($is_success === true && $is_found) {
+
+            Flight::json(
+                [
+                    'success' => true,
+                    'data' => $result
+                ]
+            );
+        } else if ($is_success !== true) {
+
+            Flight::json(
+                [
+                    'success' => false,
+                    'message' => $is_success
+                ],
+                500
+            );
+        } else {
+            Flight::json(
+                [
+                    'success' => false,
+                    'message' => 'Order not found'
+                ],
+                404
+            );
+        }
+    }
+
     public function get_phone_by_order_id($id)
     {
         // myguest/8

@@ -136,8 +136,10 @@ class Binhusenstore_order_model
     {
         $payment_model = new Binhusenstore_payment_model();
 
-        $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
         $order = $this->get_order_by_id($id);
+        if (count($order) == 0) return array();
+        $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
+        if (count($payments) == 0) return array();
 
         $date_start_as_time = strtotime($order['date_order']);
         $date_current_as_time = strtotime("now");
