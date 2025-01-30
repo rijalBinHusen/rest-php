@@ -6,37 +6,38 @@ Flight::route('POST /binhusenstore/payment', function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 
-    if($is_token_valid) {
-        
+    if ($is_token_valid) {
+
         $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->add_payment();    
+        $myreport_base_file->add_payment();
     }
 });
 
 Flight::route('GET /binhusenstore/payments', function () {
-    
+
     $access_code = new Access_code();
     $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    if($is_valid_code) {
-        
+    if ($is_valid_code) {
+
         $myreport_base_file = new Binhusenstore_payment();
         $myreport_base_file->get_payments();
     }
-
 });
 
 
 Flight::route("GET /binhusenstore/payment/@id", function ($id) {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_valid_token();
+    // $user = new User("binhusenstore_users");
+    // $is_token_valid = $user->is_valid_token();
+    $access_code = new Access_code();
+    $is_valid_code = $access_code->validate_code_on_header("binhusenstore");
 
-    if($is_token_valid) {
-       
+    // if ($is_token_valid) {
+    if ($is_valid_code) {
+
         $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->get_payment_by_id($id);    
+        $myreport_base_file->get_payment_by_id($id);
     }
-
 });
 
 // Flight::route("PUT /binhusenstore/payment/@id", function ($id) {
@@ -44,7 +45,7 @@ Flight::route("GET /binhusenstore/payment/@id", function ($id) {
 //     $is_token_valid = $user->is_valid_token();
 
 //     if($is_token_valid) {
-        
+
 //         $myreport_base_file = new Binhusenstore_payment();
 //         $myreport_base_file->update_payment_by_id($id);
 //     }
@@ -55,46 +56,42 @@ Flight::route("DELETE /binhusenstore/payment/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 
-    if($is_token_valid) {
-        
+    if ($is_token_valid) {
+
         $myreport_base_file = new Binhusenstore_payment();
         $myreport_base_file->remove_payment($id);
     }
-
 });
 
 Flight::route("PUT /binhusenstore/payment_mark_as_paid", function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 
-    if($is_token_valid) {
-        
+    if ($is_token_valid) {
+
         $myreport_base_file = new Binhusenstore_payment();
         $myreport_base_file->mark_payment_as_paid();
     }
-
 });
 
 Flight::route("GET /binhusenstore/payments/sum_balance", function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 
-    if($is_token_valid) {
-       
-        $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->get_sum_balance_payments();    
-    }
+    if ($is_token_valid) {
 
+        $myreport_base_file = new Binhusenstore_payment();
+        $myreport_base_file->get_sum_balance_payments();
+    }
 });
 
 Flight::route("GET /binhusenstore/payments/group_by_order_id", function () {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);
 
-    if($is_token_valid) {
-       
-        $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->get_payment_group_by_id_order();    
-    }
+    if ($is_token_valid) {
 
+        $myreport_base_file = new Binhusenstore_payment();
+        $myreport_base_file->get_payment_group_by_id_order();
+    }
 });

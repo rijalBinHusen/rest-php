@@ -15,12 +15,12 @@ paths:
     post:
       tags:
         - payment
-      summary: Lets a user post a new product
+      summary: Lets a user post a new payment
       requestBody:
         $ref: "#/components/requestBodies/payment"
       responses:
         "201":
-          description: Successfully created a new product
+          description: Successfully created a new payment
           content:
             application/json:
               schema:
@@ -70,7 +70,7 @@ paths:
     get:
       tags:
         - payment
-      summary: Get product by id.
+      summary: Get payment by id.
       responses:
         "200":
           $ref: "#/components/responses/getPayment200"
@@ -110,7 +110,7 @@ paths:
     put:
       tags:
         - payment
-      summary: Lets a user post a new product
+      summary: Lets a user post a new payment
       requestBody:
         required: true
         content:

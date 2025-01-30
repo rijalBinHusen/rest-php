@@ -360,3 +360,41 @@ CREATE TABLE if not exists binhusenstore_payments_archived (
     date_paid VARCHAR(10),
     date_created DATETIME
 );
+
+-- CREATE OR REPLACE VIEW order_payments (
+--     id,
+--     id_chapter_client,
+--     chapter,
+--     verse,
+--     readed_times,
+--     id_user,
+--     id_folder
+-- ) AS
+-- SELECT t1.id, t1.id_chapter_client, t1.chapter, t1.verse, t1.readed_times, t1.id_user, t1.id_folder
+-- FROM
+--     memverses_chapters t1
+--     JOIN memverses_folders t2 ON t1.id_user = t2.id_user
+--     AND t1.id_folder = t2.id
+-- ORDER BY t1.id_chapter_client
+
+CREATE OR REPLACE VIEW order_payments (
+  id,
+  date_payment,
+  balance,
+  is_paid,
+  date_paid,
+  name_of_customer,
+  title,
+  id_order
+) AS
+SELECT
+  binhusenstore_payments.id,
+  binhusenstore_payments.date_payment,
+  binhusenstore_payments.balance,
+  binhusenstore_payments.is_paid,
+  binhusenstore_payments.date_paid,
+  binhusenstore_order.name_of_customer,
+  binhusenstore_order.title,
+  binhusenstore_payment.id_order
+FROM binhusenstore_payments
+INNER JOIN binhusenstore_order ON payments.id_order = order.id;
