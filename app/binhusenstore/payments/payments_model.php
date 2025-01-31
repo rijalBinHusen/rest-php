@@ -110,7 +110,7 @@ class Binhusenstore_payment_model
     public function get_payment_by_id($id)
     {
 
-        $result = $this->database->select_where($this->table, 'id', $id, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
+        $result = $this->database->select_where('order_payments', 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
