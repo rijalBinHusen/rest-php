@@ -114,7 +114,7 @@ class Binhusenstore_payment_model
 
         if ($this->database->is_error === null) {
 
-            return $result;
+            return $result[0];
         }
 
         $this->is_success = $this->database->is_error;
