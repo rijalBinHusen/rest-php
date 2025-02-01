@@ -356,6 +356,7 @@ class Binhusenstore_payment_model
             $array_to_push = array(
                 'id' => $payment['id'],
                 'date_payment' => $payment['date_payment'],
+                'date_paid' => $payment['date_paid'],
                 'id_order' => $payment['id_order'],
                 'balance' => (int)$payment['balance'],
                 'is_paid' => boolval($payment['is_paid'])
