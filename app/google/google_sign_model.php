@@ -21,6 +21,7 @@ class Google_sign_model
         $this->client->addScope("email");
         $this->client->addScope("profile");
         $this->client->setAccessType("offline");
+        $this->client->setIncludeGrantedScopes(true);   // incremental auth
 
         $this->database = Query_builder::getInstance();
     }
@@ -35,6 +36,7 @@ class Google_sign_model
 
         $token = $this->client->fetchAccessTokenWithAuthCode($code);
         // check is it token exists or not
+        // error_log(json_encode($token));
         if (isset($token['access_token'])) return $token;
         return false;
     }
@@ -47,6 +49,8 @@ class Google_sign_model
         // get profile info
         $google_oauth = new Google_Service_Oauth2($this->client);
         $google_account_info = $google_oauth->userinfo->get();
+        $refresh_token = $this->client->getRefreshToken();
+        setcookie('Google-access-token', $refresh_token, time() + ((3600 * 24) * 3), '/', NULL, true, true);
 
         return array(
             "email" =>  $google_account_info->email,
