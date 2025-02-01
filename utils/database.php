@@ -297,6 +297,10 @@ class Query_builder
 
     function __destruct()
     {
+        if ($this->is_error != null) {
+
+            error_log("database error: " . $this->is_error);
+        }
         self::$instance = null;
         $this->db = null;
     }
