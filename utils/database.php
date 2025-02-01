@@ -212,6 +212,11 @@ class Query_builder
         return $stmt;
     }
 
+    function custom_query_return_prepare($your_query)
+    {
+        return $this->db->prepare($your_query);
+    }
+
     function getMaxId($tableName)
     {
         $last_id = $this->db->lastInsertId();

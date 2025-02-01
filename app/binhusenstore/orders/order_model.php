@@ -153,7 +153,7 @@ class Binhusenstore_order_model
         $sum_payments_balance = 0;
         // sum payments balance on $payments variable
         foreach ($payments as $payment) {
-            $sum_payments_balance += $payment['balance'];
+            $sum_payments_balance += $payment['total_balance'];
         }
         // pick only 5 first payments
         $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements

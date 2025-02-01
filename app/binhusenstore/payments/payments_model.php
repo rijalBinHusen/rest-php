@@ -78,17 +78,15 @@ class Binhusenstore_payment_model
             }
         }
 
-        $where_s = array(
-            'id_order' => $id_order,
-            'is_paid' => 1
-        );
-
-        $result  = $this->database->select_where_s($this->table, $where_s, "date_payment", true)->fetchAll(PDO::FETCH_ASSOC);
+        $query = "SELECT date_paid, SUM(balance) as total_balance FROM binhusenstore_payments WHERE is_paid=1 AND id_order=:id_order GROUP BY date_paid ORDER BY date_paid DESC";
+        $row = $this->database->custom_query_return_prepare($query);
+        $row->bindValue(":id_order", $id_order, PDO::PARAM_STR);
+        $row->execute();
+        $result = $row->fetchAll(PDO::FETCH_ASSOC);
 
         if ($this->database->is_error === null) {
 
-            $data_type_converted = $this->convert_data_type($result);
-            return $data_type_converted;
+            return $result;
         }
 
         $this->is_success = $this->database->is_error;
