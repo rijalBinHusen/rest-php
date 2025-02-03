@@ -139,39 +139,16 @@ class Binhusenstore_order_model
     {
         $payment_model = new Binhusenstore_payment_model();
 
-        $order = $this->get_order_by_id($id);
-        if (count($order) == 0) return array();
+        $summary_order_table = "binhusenstore_order_summary";
+        $order_info = $this->database->select_where($summary_order_table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);;
+        if (count($order_info) == 0) return array();
         $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
         if (count($payments) == 0) return array();
 
-        $date_start_as_time = strtotime($order[0]['date_order']);
-        $date_current_as_time = strtotime("now");
-        $date_end_as_time = strtotime($order[0]['date_end']);
-
-        $day_passed = ceil(($date_current_as_time - $date_start_as_time) / 60 / 60 / 24);
-        $day_all = ceil(($date_end_as_time - $date_start_as_time) / 60 / 60 / 24);
-        $day_remaining = ceil(($date_end_as_time - $date_current_as_time) / 60 / 60 / 24);
-        $day_percent_remaining = $day_passed / $day_all * 100;
-
-        $sum_payments_balance = 0;
-        // sum payments balance on $payments variable
-        foreach ($payments as $payment) {
-            $sum_payments_balance += $payment['total_balance'];
-        }
         // pick only 5 first payments
         $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements
-        return array(
-            "day_percent" => ceil($day_percent_remaining),
-            "day_remaining" => $day_remaining,
-            "total_balance_percent" => (int)ceil(($sum_payments_balance / $order[0]['total_balance']) * 100),
-            "total_payments_count" => (int)count($payments),
-            "date_order" => $order[0]['date_order'],
-            "name_of_customer" => $order[0]['name_of_customer'],
-            "title" => $order[0]['title'],
-            "total_balance" => (int)$order[0]['total_balance'],
-            "admin_charge" => (int)$order[0]['admin_charge'],
-            "payments" => $payments_to_return
-        );
+        array_push($order_info, array("payments" => $payments_to_return));
+        return $order_info;
     }
 
     public function get_order_by_id($id)
@@ -192,7 +169,7 @@ class Binhusenstore_order_model
 
         $result = array();
         if ($is_group_order) {
-            $get_orders = $this->database->select_where($this->table, 'id_group', $id)->fetchAll(PDO::FETCH_ASSOC);;
+            $get_orders = $this->database->select_where($this->table, 'id_group', $id)->fetchAll(PDO::FETCH_ASSOC);
             if (count($get_orders)) {
 
                 $array_to_push = array(

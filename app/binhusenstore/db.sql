@@ -361,22 +361,6 @@ CREATE TABLE if not exists binhusenstore_payments_archived (
     date_created DATETIME
 );
 
--- CREATE OR REPLACE VIEW order_payments (
---     id,
---     id_chapter_client,
---     chapter,
---     verse,
---     readed_times,
---     id_user,
---     id_folder
--- ) AS
--- SELECT t1.id, t1.id_chapter_client, t1.chapter, t1.verse, t1.readed_times, t1.id_user, t1.id_folder
--- FROM
---     memverses_chapters t1
---     JOIN memverses_folders t2 ON t1.id_user = t2.id_user
---     AND t1.id_folder = t2.id
--- ORDER BY t1.id_chapter_client
-
 CREATE OR REPLACE VIEW order_payments (
   id,
   date_payment,
@@ -398,3 +382,21 @@ SELECT
   t2.title
 FROM binhusenstore_payments t1
 INNER JOIN binhusenstore_orders t2 ON t1.id_order = t2.id;
+
+
+-- 
+CREATE OR REPLACE VIEW binhusenstore_order_summary AS
+SELECT 
+  o.id,
+  o.date_order,
+  o.name_of_customer,
+  o.title,
+  o.total_balance,
+  SUM(IF(p.is_paid=1, p.balance,0)) AS total_balance_paid,
+  CEILING((CURDATE() - STR_TO_DATE(o.date_order, '%Y-%m-%d')) / (STR_TO_DATE(o.date_end,'%Y-%m-%d') - STR_TO_DATE(o.date_order,'%Y-%m-%d')) * 100)  AS day_percent,
+  DATEDIFF(STR_TO_DATE(o.date_end, '%Y-%m-%d'), CURDATE()) AS day_remaining,
+  CEILING(SUM(IF(p.is_paid = 1, p.balance, 0)) / o.total_balance * 100) AS total_balance_percent,
+  COUNT(IF(p.is_paid = 1, 1, NULL)) AS total_payment_count
+FROM binhusenstore_orders o
+LEFT JOIN binhusenstore_payments p ON o.id = p.id_order
+GROUP BY o.id;

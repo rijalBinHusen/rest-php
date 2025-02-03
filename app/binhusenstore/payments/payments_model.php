@@ -155,6 +155,12 @@ class Binhusenstore_payment_model
             }
         }
 
+        // retrieve order by id || order by id group
+        // retrieve summary payments by id || by id group
+        // balance_remaining = order.total_balance - payments.total_balance
+        // if($payment > balance_remaining) return "Payment more than bill"
+        // else add payment based on date now
+
         $is_group_order = substr($id_order, 0, 1) === 'G';
 
         $where_s = "";
@@ -181,6 +187,47 @@ class Binhusenstore_payment_model
         $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order);
         return $mark_as_paid;
     }
+    // public function mark_payment_as_paid_by_id_order_or_id_group($id_order, $date_paid, $payment, $phone)
+    // {
+
+    //     if (substr($id_order, 0, 1) !== 'G' && substr($id_order, 0, 1) !== 'O') return array();
+
+    //     // Check the string length
+    //     if (strlen($id_order) !== 9) return array();
+
+    //     // Check if the rest of the characters are numbers
+    //     for ($i = 1; $i < strlen($id_order); $i++) {
+    //         if (!is_numeric($id_order[$i])) {
+    //             return array();
+    //         }
+    //     }
+
+    //     $is_group_order = substr($id_order, 0, 1) === 'G';
+
+    //     $where_s = "";
+    //     if ($is_group_order) $where_s = array('id_order_group' => $id_order, 'is_paid' => '0');
+    //     else $where_s = array('id_order' => $id_order, 'is_paid' => '0');
+
+    //     $retrieve_payments = $this->database->select_where_s($this->table, $where_s, "date_payment")->fetchAll(PDO::FETCH_ASSOC);
+    //     if (count($retrieve_payments) === 0) return 0;
+
+    //     $order_model = new Binhusenstore_order_model();
+
+    //     // find order by order_id and phone
+    //     $phone_order = $order_model->phone_by_order_id($retrieve_payments[0]['id_order']);
+    //     $is_phone_not_matched = $phone_order != $phone;
+    //     if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
+
+    //     $total_balance = 0;
+    //     foreach ($retrieve_payments as $value) {
+    //         $total_balance += $value['balance'];
+    //     }
+
+    //     if ($payment > $total_balance) return "Pembayaran melebihi tagihan";
+    //     $mark_as_paid = $this->mark_payment_as_paid($retrieve_payments, $payment, $date_paid);
+    //     $this->append_payment_to_google_spreadsheet($date_paid, $payment, $id_order);
+    //     return $mark_as_paid;
+    // }
 
     private function mark_payment_as_paid($payments_schedule, $payment, $date_paid)
     {
