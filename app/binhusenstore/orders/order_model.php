@@ -54,7 +54,7 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
-    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $week_distance)
+    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $week_distance, $date_end)
     {
         $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
@@ -68,7 +68,10 @@ class Binhusenstore_order_model
             'title' => $title,
             'total_balance' => $total_balance,
             'phone' => $encrypted_phone,
-            'admin_charge' => 0
+            'admin_charge' => 0,
+            'date_end' => $date_end,
+            'payment_period_distance' => $week_distance,
+            'payment_per_period' => $balance_payment
         );
 
         if ($admin_chrage) {

@@ -113,7 +113,22 @@ class Binhusenstore_order
             return;
         }
 
-        $result = $this->Binhusenstore_order->append_order_and_payment($req->data->date_order, $req->data->id_group, $req->data->is_group, $req->data->id_product, $req->data->name_of_customer, $req->data->sent, $req->data->title, $req->data->total_balance, $req->data->phone, $req->data->admin_charge, $req->data->start_date_payment, $req->data->balance_per_period, $req->data->week_distance);
+        $result = $this->Binhusenstore_order->append_order_and_payment(
+            $req->data->date_order,
+            $req->data->id_group,
+            $req->data->is_group,
+            $req->data->id_product,
+            $req->data->name_of_customer,
+            $req->data->sent,
+            $req->data->title,
+            $req->data->total_balance,
+            $req->data->phone,
+            $req->data->admin_charge,
+            $req->data->start_date_payment,
+            $req->data->balance_per_period,
+            $req->data->week_distance,
+            $req->data->date_end
+        );
 
         if ($this->Binhusenstore_order->is_success === true) {
 
