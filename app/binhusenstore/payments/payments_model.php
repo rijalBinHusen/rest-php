@@ -269,6 +269,7 @@ class Binhusenstore_payment_model
 
                 $data_to_update = array(
                     'date_paid' => $date_paid,
+                    'balance' => $payment_left,
                     'is_paid' => true
                 );
 
@@ -284,7 +285,7 @@ class Binhusenstore_payment_model
                 $this->update_payment_by_id($data_to_update, 'id', $payment_id);
             }
 
-            $payment_left = $payment_left - $payment_balance; // 1000 - 900= +100
+            $payment_left = $payment_balance - $payment_left; // 1000 - 900= +100
         }
 
         $this->is_success = $this->database->is_error;

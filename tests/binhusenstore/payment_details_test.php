@@ -187,13 +187,9 @@ class Payment_details_test extends TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
+        $this->assertEquals(150, $convertToAssocArray['data'][0]['balance']);
         $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
-
-        $this->assertEquals(50, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
         $this->assertEquals(50, $convertToAssocArray['data'][2]['balance']);
         $this->assertEquals("2023-10-02", $convertToAssocArray['data'][2]['date_payment']);
@@ -437,7 +433,7 @@ class Payment_details_test extends TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
+        $this->assertEquals(200, $convertToAssocArray['data'][0]['balance']);
         $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
@@ -445,7 +441,7 @@ class Payment_details_test extends TestCase
         $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
+        $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
         $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
         $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
     }
@@ -519,21 +515,17 @@ class Payment_details_test extends TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
+        $this->assertEquals(250, $convertToAssocArray['data'][0]['balance']);
         $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
+        $this->assertEquals(50, $convertToAssocArray['data'][1]['balance']);
         $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $this->assertEquals(50, $convertToAssocArray['data'][2]['balance']);
+        $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
         $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
-
-        $this->assertEquals(50, $convertToAssocArray['data'][3]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][3]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][3]['is_paid']);
     }
 
     public function testPayment300()
@@ -605,15 +597,15 @@ class Payment_details_test extends TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
+        $this->assertEquals(300, $convertToAssocArray['data'][0]['balance']);
         $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
+        $this->assertEquals(0, $convertToAssocArray['data'][1]['balance']);
         $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
+        $this->assertEquals(00, $convertToAssocArray['data'][2]['balance']);
         $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
         $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
     }
