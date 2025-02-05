@@ -9,64 +9,64 @@ class Binhusenstore_order
         $this->Binhusenstore_order = new Binhusenstore_order_model();
     }
 
+    // public function add_order()
+    // {
+    //     // request
+    //     $req = Flight::request();
+
+
+    //     $result = null;
+    //     $whats_request_body_to_check = array(
+    //         "date_order" => "string",
+    //         "id_group" => "string",
+    //         "is_group" => "boolean",
+    //         "id_product" => "string",
+    //         "name_of_customer" => "string",
+    //         "sent" => "string",
+    //         "title" => "string",
+    //         "total_balance" => "number",
+    //         "phone" => "number",
+    //         "admin_charge" => "boolean",
+    //     );
+
+    //     $is_request_body_oke = $this->check_is_request_body_oke($req->data, $whats_request_body_to_check);
+
+    //     if (!$is_request_body_oke) {
+
+    //         Flight::json(
+    //             array(
+    //                 'success' => false,
+    //                 'message' => 'Failed to add order, check the data you sent'
+    //             ),
+    //             400
+    //         );
+    //         return;
+    //     }
+
+    //     $result = $this->Binhusenstore_order->append_order($req->data->date_order, $req->data->id_group, $req->data->is_group, $req->data->id_product, $req->data->name_of_customer, $req->data->sent, $req->data->title, $req->data->total_balance, $req->data->phone, $req->data->admin_charge);
+
+    //     if ($this->Binhusenstore_order->is_success === true) {
+
+    //         Flight::json(
+    //             array(
+    //                 'success' => true,
+    //                 'id' => $result
+    //             ),
+    //             201
+    //         );
+    //     } else {
+
+    //         Flight::json(
+    //             array(
+    //                 'success' => false,
+    //                 'message' => $this->Binhusenstore_order->is_success
+    //             ),
+    //             500
+    //         );
+    //     }
+    // }
+
     public function add_order()
-    {
-        // request
-        $req = Flight::request();
-
-
-        $result = null;
-        $whats_request_body_to_check = array(
-            "date_order" => "string",
-            "id_group" => "string",
-            "is_group" => "boolean",
-            "id_product" => "string",
-            "name_of_customer" => "string",
-            "sent" => "string",
-            "title" => "string",
-            "total_balance" => "number",
-            "phone" => "number",
-            "admin_charge" => "boolean",
-        );
-
-        $is_request_body_oke = $this->check_is_request_body_oke($req->data, $whats_request_body_to_check);
-
-        if (!$is_request_body_oke) {
-
-            Flight::json(
-                array(
-                    'success' => false,
-                    'message' => 'Failed to add order, check the data you sent'
-                ),
-                400
-            );
-            return;
-        }
-
-        $result = $this->Binhusenstore_order->append_order($req->data->date_order, $req->data->id_group, $req->data->is_group, $req->data->id_product, $req->data->name_of_customer, $req->data->sent, $req->data->title, $req->data->total_balance, $req->data->phone, $req->data->admin_charge);
-
-        if ($this->Binhusenstore_order->is_success === true) {
-
-            Flight::json(
-                array(
-                    'success' => true,
-                    'id' => $result
-                ),
-                201
-            );
-        } else {
-
-            Flight::json(
-                array(
-                    'success' => false,
-                    'message' => $this->Binhusenstore_order->is_success
-                ),
-                500
-            );
-        }
-    }
-
-    public function add_order_and_payment()
     {
         // request
         $req = Flight::request();
@@ -113,7 +113,7 @@ class Binhusenstore_order
             return;
         }
 
-        $result = $this->Binhusenstore_order->append_order_and_payment(
+        $result = $this->Binhusenstore_order->append_order(
             $req->data->date_order,
             $req->data->id_group,
             $req->data->is_group,

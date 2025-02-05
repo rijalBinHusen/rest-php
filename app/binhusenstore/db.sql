@@ -392,6 +392,8 @@ SELECT
   o.name_of_customer,
   o.title,
   o.total_balance,
+  o.payment_period_distance,
+  o.payment_per_period,
   SUM(IF(p.is_paid=1, p.balance,0)) AS total_balance_paid,
   CEILING((CURDATE() - STR_TO_DATE(o.date_order, '%Y-%m-%d')) / (STR_TO_DATE(o.date_end,'%Y-%m-%d') - STR_TO_DATE(o.date_order,'%Y-%m-%d')) * 100)  AS day_percent,
   DATEDIFF(STR_TO_DATE(o.date_end, '%Y-%m-%d'), CURDATE()) AS day_remaining,

@@ -16,45 +16,45 @@ class Binhusenstore_order_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage)
-    {
-        $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
+    // public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage)
+    // {
+    //     $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
-        $data_to_insert = array(
-            'date_order' => $date_order,
-            'id_group' => $id_group,
-            'is_group' => (int)$is_group,
-            'id_product' => $id_product,
-            'name_of_customer' => $name_of_customer,
-            'sent' => $sent,
-            'title' => $title,
-            'total_balance' => $total_balance,
-            'phone' => $encrypted_phone,
-            'admin_charge' => 0
-        );
+    //     $data_to_insert = array(
+    //         'date_order' => $date_order,
+    //         'id_group' => $id_group,
+    //         'is_group' => (int)$is_group,
+    //         'id_product' => $id_product,
+    //         'name_of_customer' => $name_of_customer,
+    //         'sent' => $sent,
+    //         'title' => $title,
+    //         'total_balance' => $total_balance,
+    //         'phone' => $encrypted_phone,
+    //         'admin_charge' => 0
+    //     );
 
-        if ($admin_chrage) {
-            // retrieve admin charge
-            $retrieve_charge = $this->database->select_where('admin_charge', 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
+    //     if ($admin_chrage) {
+    //         // retrieve admin charge
+    //         $retrieve_charge = $this->database->select_where('admin_charge', 'domain', 'binhusenstore')->fetchAll(PDO::FETCH_ASSOC);
 
-            // set the admin charge
-            if ($retrieve_charge) {
+    //         // set the admin charge
+    //         if ($retrieve_charge) {
 
-                $data_to_insert['admin_charge'] = $retrieve_charge[0]['admin_charge'];
-            }
-        }
+    //             $data_to_insert['admin_charge'] = $retrieve_charge[0]['admin_charge'];
+    //         }
+    //     }
 
-        $this->database->insert($this->table, $data_to_insert);
+    //     $this->database->insert($this->table, $data_to_insert);
 
-        if ($this->database->is_error === null) {
+    //     if ($this->database->is_error === null) {
 
-            return $this->database->getMaxId($this->table);
-        }
+    //         return $this->database->getMaxId($this->table);
+    //     }
 
-        $this->is_success = $this->database->is_error;
-    }
+    //     $this->is_success = $this->database->is_error;
+    // }
 
-    public function append_order_and_payment($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $week_distance, $date_end)
+    public function append_order($date_order, $id_group, $is_group, $id_product, $name_of_customer, $sent, $title, $total_balance, $phone, $admin_chrage, $start_date_payment, $balance_payment, $week_distance, $date_end)
     {
         $encrypted_phone = encrypt_string($phone, ENCRYPT_DECRYPT_PHONE_KEY);
 
@@ -92,25 +92,25 @@ class Binhusenstore_order_model
 
             $id_order = $this->database->getMaxId($this->table);
 
-            $payment_model = new Binhusenstore_payment_model();
-            $balance_remaining = $data_to_insert['total_balance'];
-            $is_payment_created = false;
+            //     $payment_model = new Binhusenstore_payment_model();
+            //     $balance_remaining = $data_to_insert['total_balance'];
+            //     $is_payment_created = false;
 
-            $current_date = new DateTime($start_date_payment);
-            $dayPlus = $week_distance * 7;
+            //     $current_date = new DateTime($start_date_payment);
+            //     $dayPlus = $week_distance * 7;
 
-            while ($balance_remaining > 0) {
+            //     while ($balance_remaining > 0) {
 
-                $balance_to_insert = $balance_remaining >= $balance_payment ? $balance_payment : $balance_remaining;
-                $is_payment_created = $payment_model->append_payment($current_date->format('Y-m-d'), $id_order, $balance_to_insert, "");
-                $balance_remaining = $balance_remaining - $balance_payment;
+            //         $balance_to_insert = $balance_remaining >= $balance_payment ? $balance_payment : $balance_remaining;
+            //         $is_payment_created = $payment_model->append_payment($current_date->format('Y-m-d'), $id_order, $balance_to_insert, "");
+            //         $balance_remaining = $balance_remaining - $balance_payment;
 
-                $current_date->modify('+' . $dayPlus . 'day');
-                if (!$is_payment_created) {
-                    $this->is_success = $payment_model->is_success;
-                    return "Failed to create payment";
-                }
-            }
+            //         $current_date->modify('+' . $dayPlus . 'day');
+            //         if (!$is_payment_created) {
+            //             $this->is_success = $payment_model->is_success;
+            //             return "Failed to create payment";
+            //         }
+            //     }
 
             return $id_order;
         }
@@ -134,6 +134,31 @@ class Binhusenstore_order_model
 
         $this->is_success = $this->database->is_error;
     }
+
+    /**
+     * Get order dashboard by id_prder.
+     *
+     * @param $id number.
+     * @return array(
+     * "day_percent": => number,
+     * "day_remaining": => number,
+     * "total_balance_percent": => number,
+     * "total_payments_count": => number,
+     * "date_order": => string,
+     * "name_of_customer": => string,
+     * "title": => string,
+     * "total_balance": => number,
+     * "total_balance_paid": => number,
+     * "admin_charge": => number,
+     * "payment_period_distance" => number,
+     * "payments": => [
+     * {
+     * "id": => string,
+     * "order_number": => number,
+     * "date_paid": => string,
+     * "balance": => number
+     * }).
+     */
 
     public function get_order_dashboard_by_id($id)
     {
