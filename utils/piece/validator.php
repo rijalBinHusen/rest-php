@@ -27,6 +27,9 @@ class Validator
       if ($value == "number") {
         if (!is_numeric($data_to_check)) return false;
       }
+      if ($value == "YMDate") {
+        if (!$this->isYMDDate($data_to_check)) return false;
+      }
     }
 
     return true;
