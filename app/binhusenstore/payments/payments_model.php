@@ -58,8 +58,13 @@ class Binhusenstore_payment_model
         $order_model = new Binhusenstore_order_model();
         $order_summary = $order_model->get_order_dashboard_by_id($id_order);
 
+        if (count($order_summary) === 0) return array();
+
         $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
-        $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
+        $last_payment = "";
+        if (count($result_payments) === 0) $last_payment = new DateTime($order_summary['date_order']);
+        else
+            $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
 
         while ($i = $order_summary['total_balance_paid'] <= $order_summary['total_balance']) {
             // $last_payment as YY-MM-DD
