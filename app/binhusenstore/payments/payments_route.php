@@ -63,16 +63,16 @@ Flight::route("DELETE /binhusenstore/payment/@id", function ($id) {
     }
 });
 
-Flight::route("PUT /binhusenstore/payment_mark_as_paid", function () {
-    $user = new User("binhusenstore_users");
-    $is_token_valid = $user->is_admin(1);
+// Flight::route("PUT /binhusenstore/payment_mark_as_paid", function () {
+//     $user = new User("binhusenstore_users");
+//     $is_token_valid = $user->is_admin(1);
 
-    if ($is_token_valid) {
+//     if ($is_token_valid) {
 
-        $myreport_base_file = new Binhusenstore_payment();
-        $myreport_base_file->mark_payment_as_paid();
-    }
-});
+//         $myreport_base_file = new Binhusenstore_payment();
+//         $myreport_base_file->mark_payment_as_paid();
+//     }
+// });
 
 Flight::route("GET /binhusenstore/payments/sum_balance", function () {
     $user = new User("binhusenstore_users");
