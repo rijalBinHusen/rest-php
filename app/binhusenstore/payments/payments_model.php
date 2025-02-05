@@ -40,7 +40,8 @@ class Binhusenstore_payment_model
 
     public function get_payments($id_order)
     {
-        if (substr($id_order, 0, 1) !== 'G' && substr($id_order, 0, 1) !== 'O') return array();
+        // if (substr($id_order, 0, 1) !== 'G' && substr($id_order, 0, 1) !== 'O') return array();
+        if (substr($id_order, 0, 1) !== 'O') return array();
 
         // Check the string length
         if (strlen($id_order) !== 9) return array();
@@ -52,14 +53,35 @@ class Binhusenstore_payment_model
             }
         }
 
-        $is_group_order = substr($id_order, 0, 1) === 'G';
-        if ($is_group_order) return $this->get_payments_by_id_order_group($id_order);
+        // $is_group_order = substr($id_order, 0, 1) === 'G';
+        // if ($is_group_order) return $this->get_payments_by_id_order_group($id_order);
+        $order_model = new Binhusenstore_order_model();
+        $order_summary = $order_model->get_order_dashboard_by_id($id_order);
 
-        $result  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
+        $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
+        $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
+
+        while ($i = $order_summary['total_balance_paid'] <= $order_summary['total_balance']) {
+            // $last_payment as YY-MM-DD
+            $date_payment = date('Y-m-d', strtotime($last_payment->format('Y-m-d')));
+            $balance = $order_summary['payment_per_period'];
+
+            $array_to_push = array(
+                'id' => "",
+                'date_payment' => $date_payment,
+                'date_paid' => "",
+                'id_order' => $id_order,
+                'balance' => $balance,
+                'is_paid' => false
+            );
+            array_push($result_payments, $array_to_push);
+            $last_payment->modify("+ " . $order_summary['payment_period_distance'] . " week");
+            $i += $balance;
+        }
 
         if ($this->database->is_error === null) {
 
-            $data_type_converted = $this->convert_data_type($result);
+            $data_type_converted = $this->convert_data_type($result_payments);
             return $data_type_converted;
         }
 

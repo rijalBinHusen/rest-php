@@ -135,6 +135,31 @@ class Binhusenstore_order_model
         $this->is_success = $this->database->is_error;
     }
 
+    /**
+     * Get order dashboard by id_prder.
+     *
+     * @param $id number.
+     * @return array(
+     * "day_percent": => number,
+     * "day_remaining": => number,
+     * "total_balance_percent": => number,
+     * "total_payments_count": => number,
+     * "date_order": => string,
+     * "name_of_customer": => string,
+     * "title": => string,
+     * "total_balance": => number,
+     * "total_balance_paid": => number,
+     * "admin_charge": => number,
+     * "payment_period_distance" => number,
+     * "payments": => [
+     * {
+     * "id": => string,
+     * "order_number": => number,
+     * "date_paid": => string,
+     * "balance": => number
+     * }).
+     */
+
     public function get_order_dashboard_by_id($id)
     {
         $payment_model = new Binhusenstore_payment_model();
