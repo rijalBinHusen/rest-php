@@ -71,16 +71,17 @@ class Binhusenstore_payment_model
         else
             $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
 
-        $i = $order_summary[0]['total_balance_paid'];
+        $total_paid = $order_summary[0]['total_balance_paid'];
         $total_balance = $order_summary[0]['total_balance'];
-        while ($i <= $total_balance) {
+        $balance = $order_summary[0]['payment_per_period'];
+        while ($total_paid <= $total_balance) {
+            $total_paid += $balance;
+
             $last_payment->modify("+ " . $order_summary[0]['payment_period_distance'] . " week");
             // $last_payment as YY-MM-DD
             $date_payment = date('Y-m-d', strtotime($last_payment->format('Y-m-d')));
-            $balance = $order_summary[0]['payment_per_period'];
-            $i += $balance;
 
-            if ($i > $total_balance) $balance -= $i - $total_balance;
+            if ($total_paid > $total_balance) $balance -= $total_paid - $total_balance;
 
             $array_to_push = array(
                 'id' => "",

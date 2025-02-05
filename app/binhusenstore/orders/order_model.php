@@ -168,7 +168,7 @@ class Binhusenstore_order_model
         $order_info = $this->database->select_where($summary_order_table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);;
         if (count($order_info) == 0) return array();
         $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
-        if (count($payments) == 0) return array();
+        // if (count($payments) == 0) return array();
 
         // pick only 5 first payments
         $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements
