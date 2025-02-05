@@ -67,14 +67,20 @@ class Binhusenstore_payment_model
 
         $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
         $last_payment = "";
-        if (count($result_payments) === 0) $last_payment = new DateTime($order_summary['date_order']);
+        if (count($result_payments) === 0) $last_payment = new DateTime($order_summary[0]['date_order']);
         else
             $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
 
-        while ($i = $order_summary['total_balance_paid'] <= $order_summary['total_balance']) {
+        $i = $order_summary[0]['total_balance_paid'];
+        $total_balance = $order_summary[0]['total_balance'];
+        while ($i <= $total_balance) {
+            $last_payment->modify("+ " . $order_summary[0]['payment_period_distance'] . " week");
             // $last_payment as YY-MM-DD
             $date_payment = date('Y-m-d', strtotime($last_payment->format('Y-m-d')));
-            $balance = $order_summary['payment_per_period'];
+            $balance = $order_summary[0]['payment_per_period'];
+            $i += $balance;
+
+            if ($i > $total_balance) $balance -= $i - $total_balance;
 
             $array_to_push = array(
                 'id' => "",
@@ -85,8 +91,6 @@ class Binhusenstore_payment_model
                 'is_paid' => false
             );
             array_push($result_payments, $array_to_push);
-            $last_payment->modify("+ " . $order_summary['payment_period_distance'] . " week");
-            $i += $balance;
         }
 
         if ($this->database->is_error === null) {
