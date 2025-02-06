@@ -19,14 +19,9 @@ class Binhusenstore_payment
         $balance = $req->data->balance;
         $phone = $req->data->phone;
 
-        $validator = new Validator();
-
         $result = null;
-        $isDatePaymentValid = $validator->isYMDDate($phone);
-
         $is_request_body_not_oke = is_null($phone)
             || !is_numeric($phone)
-            || !$isDatePaymentValid
             || is_null($id_order)
             || !is_string($id_order)
             || is_null($balance)

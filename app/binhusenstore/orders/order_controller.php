@@ -75,7 +75,7 @@ class Binhusenstore_order
         $error_400_message = '';
 
         $whats_request_body_to_check = array(
-            "date_order" => "string",
+            "date_order" => "YMDate",
             "id_product" => "string",
             "id_group" => "string",
             "is_group" => "boolean",
@@ -85,7 +85,8 @@ class Binhusenstore_order
             "total_balance" => "number",
             "phone" => "number",
             "admin_charge" => "boolean",
-            "start_date_payment" => "string",
+            "start_date_payment" => "YMDate",
+            "end_date_payment" => "YMDate",
             "balance_per_period" => "number",
             "week_distance" => "number",
         );

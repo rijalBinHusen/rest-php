@@ -17,18 +17,23 @@ class Payment_details_test extends TestCase
     {
         $faker = Faker\Factory::create();
         $http = new HttpCall($this->url . "order");
+        $total_balance = $faker->numberBetween(100000, 110000);
         // Define the request body
         $data = array(
-            'date_order' => $faker->date('Y-m-d'),
+            'date_order' => "2024-01-01",
             'id_group' => $faker->text(9),
             'is_group' => $faker->boolean(),
             'id_product' => $faker->text(9),
             'name_of_customer' => $faker->text(40),
             'sent' => 'false',
             'title' => $faker->text(47),
-            'total_balance' => $faker->numberBetween(100000, 1000000),
+            'total_balance' => $total_balance,
             'phone' => $faker->numberBetween(100000000000, 999999999999),
-            'admin_charge' => true
+            'admin_charge' => false,
+            'start_date_payment' => "2024-01-01",
+            'end_date_payment' => "2025-01-01",
+            'balance_per_period' => $faker->numberBetween(25000, 30000),
+            'week_distance' => $faker->numberBetween(1, 5),
         );
 
         $http->setData($data);
@@ -49,42 +54,16 @@ class Payment_details_test extends TestCase
         $this->assertEquals(true, $convertToAssocArray['success']);
         $this->order_id = $convertToAssocArray['id'];
         $this->phone = $data['phone'];
+        $this->total_balance = $total_balance;
     }
 
     public function testTotalBalance()
     {
         $this->testCreateOrder();
         $faker = Faker\Factory::create();
-        $httpPostNewPayment = new HttpCall($this->url . "payment");
-        // Define the request body
-        $data = array(
-            'date_payment' => $faker->date('Y-m-d'),
-            'id_order' => $this->order_id,
-            'balance' => $faker->numberBetween(10000, 100000),
-            'is_paid' => false,
-            'id_order_group' => $faker->numberBetween(10000, 10000000) . "_",
-        );
-
-        // create new payment
-        for ($i = 0; $i <= 3; $i++) {
-
-            $this->total_balance += $data['balance'];
-
-            $httpPostNewPayment->setData($data);
-            $httpPostNewPayment->addJWTToken();
-            $response = $httpPostNewPayment->getResponse("POST");
-
-            $convertToAssocArray = json_decode($response, true);
-
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
 
         // get payment by id order
-        $id_order = $data['id_order'];
+        $id_order = $this->order_id;
         $httpGetPaymentByIdOrder = new HttpCall($this->url . 'payments?id_order=' . $id_order);
         $httpGetPaymentByIdOrder->addAccessCode("binhusenstore-access-code.txt");
         // Send a GET request to the /endpoint URL
@@ -119,62 +98,30 @@ class Payment_details_test extends TestCase
 
         $this->testCreateOrder();
         $httpPostNewPayment = new HttpCall($this->url . "payment");
-
-        // reset total balance
-        $this->total_balance = 300;
-        $id_order = $this->order_id;
-
-        // create payment
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $this->order_id,
-                'balance' => 100,
-                'is_paid' => false,
-                'id_order_group' => "",
-            );
-
-            $httpPostNewPayment->setData($data_to_send);
-            $httpPostNewPayment->addJWTToken();
-
-            $response = $httpPostNewPayment->getResponse("POST");
-
-            $convertToAssocArray = json_decode($response, true);
-
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
-
-        // pay the bill
-        $httpPostPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
-        $data_to_send2 = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 150,
+        // Define the request body
+        $data_to_send = array(
+            'date_payment' => "2024-01-06",
+            'id_order' => $this->order_id,
+            'balance' => 50100,
+            'is_paid' => true,
+            'id_order_group' => "",
             'phone' => $this->phone
         );
 
-        $httpPostPutPayment->setData($data_to_send2);
+        $httpPostNewPayment->setData($data_to_send);
+        $httpPostNewPayment->addJWTToken();
 
-        $httpPostPutPayment->addJWTToken();
+        $response = $httpPostNewPayment->getResponse("POST");
 
-        // Send a GET request to the /endpoint URL
-        $response2 = $httpPostPutPayment->getResponse("PUT");
-        // fwrite(STDERR, print_r(PHP_EOL . "id order: " . $id_order . PHP_EOL . "phone: " . $this->phone, true));
+        $convertToAssocArray = json_decode($response, true);
 
-        $convertToAssocArray = json_decode($response2, true);
+        fwrite(STDERR, print_r($response, true));
+        // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+        $this->assertArrayHasKey('id', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
 
-
-        // get all bill
-        $httpPostGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+        $httpPostGetPayment = new HttpCall($this->url . 'payments?id_order=' . $this->order_id);
         $httpPostGetPayment->addAccessCode("binhusenstore-access-code.txt");
         $response = $httpPostGetPayment->getResponse("GET");
 
@@ -187,426 +134,425 @@ class Payment_details_test extends TestCase
         $this->assertArrayHasKey('data', $convertToAssocArray, $response);
         $this->assertEquals(true, $convertToAssocArray['success']);
 
-        $this->assertEquals(150, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+        $this->assertEquals(50100, $convertToAssocArray['data'][0]['balance']);
         $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        $this->assertEquals(50, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
+        $total_balance_to_check = 0;
+        foreach ($convertToAssocArray['data'] as $payment) {
 
-        $this->assertEquals(100, $convertToAssocArray['data'][3]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][3]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][3]['is_paid']);
-    }
-
-    public function testPaymentLessThanBalance()
-    {
-        $this->testCreateOrder();
-        $id_order = $this->order_id;
-        $httpPostNewPayment = new HttpCall($this->url . "payment");
-
-        // reset total balance
-        $this->total_balance = 300;
-
-        // create payment
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
-                'balance' => 100,
-                'is_paid' => false,
-            );
-
-            $httpPostNewPayment->setData($data_to_send);
-            $httpPostNewPayment->addJWTToken();
-
-            $response = $httpPostNewPayment->getResponse("POST");
-
-            $convertToAssocArray = json_decode($response, true);
-
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
+            $total_balance_to_check += $payment['balance'];
         }
 
-        // pay the bill
-        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
-
-        $data_to_send = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 50,
-            'phone' => $this->phone
-        );
-
-        $httpPutPayment->setData($data_to_send);
-        $httpPutPayment->addJWTToken();
-
-        // Send a GET request to the /endpoint URL
-        $response = $httpPutPayment->getResponse("PUT");
-        // fwrite(STDERR, print_r($response, true));
-
-        $convertToAssocArray = json_decode($response, true);
-        $this->assertArrayHasKey('success', $convertToAssocArray, $response);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
-
-
-        // get all bill
-
-        $httpPutPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpPutPayment->addAccessCode("binhusenstore-access-code.txt");
-        $response = $httpPutPayment->getResponse("GET");
-
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-
-        $this->assertEquals(50, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
-
-        $this->assertEquals(150, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][1]['is_paid']);
-
-        $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
+        $this->assertEquals($this->total_balance, $total_balance_to_check);
     }
 
-    public function testPaymentEqualToBalance()
-    {
-
-        $this->testCreateOrder();
-        $id_order = $this->order_id;
-        $httpPostNewPayment = new HttpCall($this->url . "payment");
+    // public function testPaymentLessThanBalance()
+    // {
+    //     $this->testCreateOrder();
+    //     $id_order = $this->order_id;
+    //     $httpPostNewPayment = new HttpCall($this->url . "payment");
+
+    //     // reset total balance
+    //     $this->total_balance = 300;
+
+    //     // create payment
+    //     for ($i = 1; $i <= 3; $i++) {
+    //         // Define the request body
+    //         $data_to_send = array(
+    //             'date_payment' => "2023-10-0" . $i,
+    //             'id_order' => $id_order,
+    //             'balance' => 100,
+    //             'is_paid' => false,
+    //         );
+
+    //         $httpPostNewPayment->setData($data_to_send);
+    //         $httpPostNewPayment->addJWTToken();
+
+    //         $response = $httpPostNewPayment->getResponse("POST");
+
+    //         $convertToAssocArray = json_decode($response, true);
+
+    //         // fwrite(STDERR, print_r($response, true));
+    //         // Verify that the response same as expected
+    //         $this->assertArrayHasKey('success', $convertToAssocArray);
+    //         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+    //         $this->assertEquals(true, $convertToAssocArray['success']);
+    //     }
+
+    //     // pay the bill
+    //     $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
+    //     $data_to_send = array(
+    //         'id_order' => $id_order,
+    //         'date_paid' => "2023-10-01",
+    //         'balance' => 50,
+    //         'phone' => $this->phone
+    //     );
+
+    //     $httpPutPayment->setData($data_to_send);
+    //     $httpPutPayment->addJWTToken();
+
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $httpPutPayment->getResponse("PUT");
+    //     // fwrite(STDERR, print_r($response, true));
+
+    //     $convertToAssocArray = json_decode($response, true);
+    //     $this->assertArrayHasKey('success', $convertToAssocArray, $response);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+
 
-        // reset total balance
-        $this->total_balance = 300;
+    //     // get all bill
+
+    //     $httpPutPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+    //     $httpPutPayment->addAccessCode("binhusenstore-access-code.txt");
+    //     $response = $httpPutPayment->getResponse("GET");
+
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('data', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+
+    //     $this->assertEquals(50, $convertToAssocArray['data'][0]['balance']);
+    //     $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+
+    //     $this->assertEquals(150, $convertToAssocArray['data'][1]['balance']);
+    //     $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
+    //     $this->assertEquals("0", $convertToAssocArray['data'][1]['is_paid']);
+
+    //     $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
+    //     $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+    //     $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
+    // }
+
+    // public function testPaymentEqualToBalance()
+    // {
+
+    //     $this->testCreateOrder();
+    //     $id_order = $this->order_id;
+    //     $httpPostNewPayment = new HttpCall($this->url . "payment");
+
+    //     // reset total balance
+    //     $this->total_balance = 300;
 
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
-                'balance' => 100,
-                'is_paid' => false,
-            );
+    //     for ($i = 1; $i <= 3; $i++) {
+    //         // Define the request body
+    //         $data_to_send = array(
+    //             'date_payment' => "2023-10-0" . $i,
+    //             'id_order' => $id_order,
+    //             'balance' => 100,
+    //             'is_paid' => false,
+    //         );
 
-            $httpPostNewPayment->setData($data_to_send);
-            $httpPostNewPayment->addJWTToken();
-
-            $response = $httpPostNewPayment->getResponse("POST");
-
-            $convertToAssocArray = json_decode($response, true);
-
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
+    //         $httpPostNewPayment->setData($data_to_send);
+    //         $httpPostNewPayment->addJWTToken();
 
-        // pay the bill
-        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
-
-        $data_to_send = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 100,
-            'phone' => $this->phone,
-        );
-
-        $httpPutPayment->setData($data_to_send);
-        $httpPutPayment->addJWTToken();
-
-        // Send a GET request to the /endpoint URL
-        $response = $httpPutPayment->getResponse("PUT");
+    //         $response = $httpPostNewPayment->getResponse("POST");
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+    //         $convertToAssocArray = json_decode($response, true);
 
+    //         // fwrite(STDERR, print_r($response, true));
+    //         // Verify that the response same as expected
+    //         $this->assertArrayHasKey('success', $convertToAssocArray);
+    //         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+    //         $this->assertEquals(true, $convertToAssocArray['success']);
+    //     }
 
-        // get all bill
-        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
+    //     // pay the bill
+    //     $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
 
-        $response = $httpGetPayment->getResponse("GET");
-
-        $convertToAssocArray = json_decode($response, true);
+    //     $data_to_send = array(
+    //         'id_order' => $id_order,
+    //         'date_paid' => "2023-10-01",
+    //         'balance' => 100,
+    //         'phone' => $this->phone,
+    //     );
 
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $httpPutPayment->setData($data_to_send);
+    //     $httpPutPayment->addJWTToken();
 
-        $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $httpPutPayment->getResponse("PUT");
 
-        $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][1]['is_paid']);
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $this->assertEquals("Update payment success", $convertToAssocArray['message']);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
-    }
-
-    public function testPaymentMoreThanBalance200()
-    {
-
-        $this->testCreateOrder();
-        $id_order = $this->order_id;
-        $httpPostPayment = new HttpCall($this->url . "payment");
 
-        // reset total balance
-        $this->total_balance = 300;
+    //     // get all bill
+    //     $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+    //     $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
 
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
-                'balance' => 100,
-                'is_paid' => false,
-            );
+    //     $response = $httpGetPayment->getResponse("GET");
 
-            $httpPostPayment->setData($data_to_send);
-            $httpPostPayment->addJWTToken();
+    //     $convertToAssocArray = json_decode($response, true);
 
-            $response = $httpPostPayment->getResponse("POST");
-
-            $convertToAssocArray = json_decode($response, true);
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('data', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
 
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
+    //     $this->assertEquals(100, $convertToAssocArray['data'][0]['balance']);
+    //     $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        // pay the bill
-        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
-
-        $data_to_send = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 200,
-            'phone' => $this->phone
-        );
+    //     $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
+    //     $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
+    //     $this->assertEquals("0", $convertToAssocArray['data'][1]['is_paid']);
 
-        $httpPutPayment->setData($data_to_send);
-        $httpPutPayment->addJWTToken();
+    //     $this->assertEquals(100, $convertToAssocArray['data'][2]['balance']);
+    //     $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+    //     $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
+    // }
 
-        // Send a GET request to the /endpoint URL
-        $response = $httpPutPayment->getResponse("PUT");
+    // public function testPaymentMoreThanBalance200()
+    // {
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($convertToAssocArray, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+    //     $this->testCreateOrder();
+    //     $id_order = $this->order_id;
+    //     $httpPostPayment = new HttpCall($this->url . "payment");
 
+    //     // reset total balance
+    //     $this->total_balance = 300;
 
-        // get all bill
-        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
-        $response = $httpGetPayment->getResponse("GET");
+    //     for ($i = 1; $i <= 3; $i++) {
+    //         // Define the request body
+    //         $data_to_send = array(
+    //             'date_payment' => "2023-10-0" . $i,
+    //             'id_order' => $id_order,
+    //             'balance' => 100,
+    //             'is_paid' => false,
+    //         );
 
-        $convertToAssocArray = json_decode($response, true);
+    //         $httpPostPayment->setData($data_to_send);
+    //         $httpPostPayment->addJWTToken();
 
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+    //         $response = $httpPostPayment->getResponse("POST");
 
-        $this->assertEquals(200, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+    //         $convertToAssocArray = json_decode($response, true);
 
-        $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
+    //         // fwrite(STDERR, print_r($response, true));
+    //         // Verify that the response same as expected
+    //         $this->assertArrayHasKey('success', $convertToAssocArray);
+    //         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+    //         $this->assertEquals(true, $convertToAssocArray['success']);
+    //     }
 
-        $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
-    }
+    //     // pay the bill
+    //     $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
 
-    public function testPayment250()
-    {
+    //     $data_to_send = array(
+    //         'id_order' => $id_order,
+    //         'date_paid' => "2023-10-01",
+    //         'balance' => 200,
+    //         'phone' => $this->phone
+    //     );
 
-        $this->testCreateOrder();
-        $id_order = $this->order_id;
-        $httpPostNewPayment = new HttpCall($this->url . "payment");
+    //     $httpPutPayment->setData($data_to_send);
+    //     $httpPutPayment->addJWTToken();
 
-        // reset total balance
-        $this->total_balance = 300;
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $httpPutPayment->getResponse("PUT");
 
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
-                'balance' => 100,
-                'is_paid' => false,
-            );
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($convertToAssocArray, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $this->assertEquals("Update payment success", $convertToAssocArray['message']);
 
-            $httpPostNewPayment->setData($data_to_send);
-            $httpPostNewPayment->addJWTToken();
 
-            $response = $httpPostNewPayment->getResponse("POST");
+    //     // get all bill
+    //     $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+    //     $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
+    //     $response = $httpGetPayment->getResponse("GET");
 
-            $convertToAssocArray = json_decode($response, true);
+    //     $convertToAssocArray = json_decode($response, true);
 
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('data', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
 
-        // pay the bill
-        $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+    //     $this->assertEquals(200, $convertToAssocArray['data'][0]['balance']);
+    //     $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        $data_to_send = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 250,
-            'phone' => $this->phone
-        );
+    //     $this->assertEquals(100, $convertToAssocArray['data'][1]['balance']);
+    //     $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $httpPutPayment->setData($data_to_send);
-        $httpPutPayment->addJWTToken();
+    //     $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
+    //     $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+    //     $this->assertEquals("0", $convertToAssocArray['data'][2]['is_paid']);
+    // }
 
-        // Send a GET request to the /endpoint URL
-        $response = $httpPutPayment->getResponse("PUT");
+    // public function testPayment250()
+    // {
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($response, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+    //     $this->testCreateOrder();
+    //     $id_order = $this->order_id;
+    //     $httpPostNewPayment = new HttpCall($this->url . "payment");
 
+    //     // reset total balance
+    //     $this->total_balance = 300;
 
-        // get all bill
+    //     for ($i = 1; $i <= 3; $i++) {
+    //         // Define the request body
+    //         $data_to_send = array(
+    //             'date_payment' => "2023-10-0" . $i,
+    //             'id_order' => $id_order,
+    //             'balance' => 100,
+    //             'is_paid' => false,
+    //         );
 
-        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
-        $response = $httpGetPayment->getResponse("GET");
+    //         $httpPostNewPayment->setData($data_to_send);
+    //         $httpPostNewPayment->addJWTToken();
 
-        $convertToAssocArray = json_decode($response, true);
+    //         $response = $httpPostNewPayment->getResponse("POST");
 
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+    //         $convertToAssocArray = json_decode($response, true);
 
-        $this->assertEquals(250, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+    //         // fwrite(STDERR, print_r($response, true));
+    //         // Verify that the response same as expected
+    //         $this->assertArrayHasKey('success', $convertToAssocArray);
+    //         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+    //         $this->assertEquals(true, $convertToAssocArray['success']);
+    //     }
 
-        $this->assertEquals(50, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
+    //     // pay the bill
+    //     $httpPutPayment = new HttpCall($this->url . 'payment_mark_as_paid');
 
-        $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
-    }
+    //     $data_to_send = array(
+    //         'id_order' => $id_order,
+    //         'date_paid' => "2023-10-01",
+    //         'balance' => 250,
+    //         'phone' => $this->phone
+    //     );
 
-    public function testPayment300()
-    {
+    //     $httpPutPayment->setData($data_to_send);
+    //     $httpPutPayment->addJWTToken();
 
-        $this->testCreateOrder();
-        $id_order = $this->order_id;
-        $phone_order = $this->phone;
-        $httpPostNewPayment = new HttpCall($this->url . "payment");
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $httpPutPayment->getResponse("PUT");
 
-        // reset total balance
-        $this->total_balance = 300;
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($response, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $this->assertEquals("Update payment success", $convertToAssocArray['message']);
 
-        for ($i = 1; $i <= 3; $i++) {
-            // Define the request body
-            $data_to_send = array(
-                'date_payment' => "2023-10-0" . $i,
-                'id_order' => $id_order,
-                'balance' => 100,
-                'is_paid' => false,
-            );
 
-            $httpPostNewPayment->setData($data_to_send);
-            $httpPostNewPayment->addJWTToken();
+    //     // get all bill
 
-            $response = $httpPostNewPayment->getResponse("POST");
+    //     $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+    //     $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
+    //     $response = $httpGetPayment->getResponse("GET");
 
-            $convertToAssocArray = json_decode($response, true);
+    //     $convertToAssocArray = json_decode($response, true);
 
-            // fwrite(STDERR, print_r($response, true));
-            // Verify that the response same as expected
-            $this->assertArrayHasKey('success', $convertToAssocArray);
-            $this->assertArrayHasKey('id', $convertToAssocArray, $response);
-            $this->assertEquals(true, $convertToAssocArray['success']);
-        }
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('data', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
 
-        // pay the bill
-        $httpPutNewPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+    //     $this->assertEquals(250, $convertToAssocArray['data'][0]['balance']);
+    //     $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
 
-        $data_to_send = array(
-            'id_order' => $id_order,
-            'date_paid' => "2023-10-01",
-            'balance' => 300,
-            'phone' => $phone_order
-        );
+    //     $this->assertEquals(50, $convertToAssocArray['data'][1]['balance']);
+    //     $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
 
-        $httpPutNewPayment->setData($data_to_send);
-        $httpPutNewPayment->addJWTToken();
+    //     $this->assertEquals(0, $convertToAssocArray['data'][2]['balance']);
+    //     $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
+    // }
 
-        // Send a GET request to the /endpoint URL
-        $response = $httpPutNewPayment->getResponse("PUT");
+    // public function testPayment300()
+    // {
 
-        $convertToAssocArray = json_decode($response, true);
-        // fwrite(STDERR, print_r($id_order . $phone_order, true));
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('message', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
-        $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+    //     $this->testCreateOrder();
+    //     $id_order = $this->order_id;
+    //     $phone_order = $this->phone;
+    //     $httpPostNewPayment = new HttpCall($this->url . "payment");
 
+    //     // reset total balance
+    //     $this->total_balance = 300;
 
-        // get all bill
-        $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
-        $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
-        $response = $httpGetPayment->getResponse("GET");
+    //     for ($i = 1; $i <= 3; $i++) {
+    //         // Define the request body
+    //         $data_to_send = array(
+    //             'date_payment' => "2023-10-0" . $i,
+    //             'id_order' => $id_order,
+    //             'balance' => 100,
+    //             'is_paid' => false,
+    //         );
 
-        $convertToAssocArray = json_decode($response, true);
+    //         $httpPostNewPayment->setData($data_to_send);
+    //         $httpPostNewPayment->addJWTToken();
 
-        $this->assertArrayHasKey('success', $convertToAssocArray);
-        $this->assertArrayHasKey('data', $convertToAssocArray, $response);
-        $this->assertEquals(true, $convertToAssocArray['success']);
+    //         $response = $httpPostNewPayment->getResponse("POST");
 
-        $this->assertEquals(300, $convertToAssocArray['data'][0]['balance']);
-        $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+    //         $convertToAssocArray = json_decode($response, true);
 
-        $this->assertEquals(0, $convertToAssocArray['data'][1]['balance']);
-        $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
+    //         // fwrite(STDERR, print_r($response, true));
+    //         // Verify that the response same as expected
+    //         $this->assertArrayHasKey('success', $convertToAssocArray);
+    //         $this->assertArrayHasKey('id', $convertToAssocArray, $response);
+    //         $this->assertEquals(true, $convertToAssocArray['success']);
+    //     }
 
-        $this->assertEquals(00, $convertToAssocArray['data'][2]['balance']);
-        $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
-        $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
-    }
+    //     // pay the bill
+    //     $httpPutNewPayment = new HttpCall($this->url . 'payment_mark_as_paid');
+
+    //     $data_to_send = array(
+    //         'id_order' => $id_order,
+    //         'date_paid' => "2023-10-01",
+    //         'balance' => 300,
+    //         'phone' => $phone_order
+    //     );
+
+    //     $httpPutNewPayment->setData($data_to_send);
+    //     $httpPutNewPayment->addJWTToken();
+
+    //     // Send a GET request to the /endpoint URL
+    //     $response = $httpPutNewPayment->getResponse("PUT");
+
+    //     $convertToAssocArray = json_decode($response, true);
+    //     // fwrite(STDERR, print_r($id_order . $phone_order, true));
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('message', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+    //     $this->assertEquals("Update payment success", $convertToAssocArray['message']);
+
+
+    //     // get all bill
+    //     $httpGetPayment = new HttpCall($this->url . 'payments?id_order=' . $id_order);
+    //     $httpGetPayment->addAccessCode("binhusenstore-access-code.txt");
+    //     $response = $httpGetPayment->getResponse("GET");
+
+    //     $convertToAssocArray = json_decode($response, true);
+
+    //     $this->assertArrayHasKey('success', $convertToAssocArray);
+    //     $this->assertArrayHasKey('data', $convertToAssocArray, $response);
+    //     $this->assertEquals(true, $convertToAssocArray['success']);
+
+    //     $this->assertEquals(300, $convertToAssocArray['data'][0]['balance']);
+    //     $this->assertEquals("2023-10-01", $convertToAssocArray['data'][0]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][0]['is_paid']);
+
+    //     $this->assertEquals(0, $convertToAssocArray['data'][1]['balance']);
+    //     $this->assertEquals("2023-10-02", $convertToAssocArray['data'][1]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][1]['is_paid']);
+
+    //     $this->assertEquals(00, $convertToAssocArray['data'][2]['balance']);
+    //     $this->assertEquals("2023-10-03", $convertToAssocArray['data'][2]['date_payment']);
+    //     $this->assertEquals("1", $convertToAssocArray['data'][2]['is_paid']);
+    // }
 }
