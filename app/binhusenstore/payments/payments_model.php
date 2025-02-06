@@ -28,7 +28,6 @@ class Binhusenstore_payment_model
         if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
 
         $date_payment = "";
-        error_log(json_encode($order_summary));
         if (count($order_summary['payments']) === 0) $date_payment = new DateTime($order_summary['date_order']);
         else
             $date_payment = new DateTime($order_summary['payments'][0]['date_payment']);

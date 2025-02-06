@@ -171,9 +171,35 @@ class Binhusenstore_order_model
         // if (count($payments) == 0) return array();
 
         // pick only 5 first payments
-        $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements
-        $order_info[0]["payments"] = $payments_to_return;
-        return $order_info[0];
+        $payments_to_return = array(); // Start at index 0, take 5 elements
+
+        for ($i = 0; $i < 5; $i++) {
+            if (count($payments) < $i) continue;
+            $data = $payments[$i];
+            $array_to_push = array(
+                "date_paid" => $data['date_paid'],
+                "total_balance" => (int)$data['total_balance']
+            );
+            array_push($payments_to_return, $array_to_push);
+        }
+
+        $data_to_return = array(
+            "id" => $order_info[0]['id'],
+            "date_order" => $order_info[0]['date_order'],
+            "name_of_customer" => $order_info[0]['name_of_customer'],
+            "title" => $order_info[0]['title'],
+            "total_balance" => (int)$order_info[0]['total_balance'],
+            "payment_period_distance" => (int)$order_info[0]['payment_period_distance'],
+            "payment_per_period" => (int)$order_info[0]['payment_per_period'],
+            "admin_charge" => (int)$order_info[0]['admin_charge'],
+            "total_balance_paid" => (int)$order_info[0]['total_balance_paid'],
+            "day_percent" => $order_info[0]['day_percent'],
+            "day_remaining" => $order_info[0]['day_remaining'],
+            "total_balance_percent" => (int)$order_info[0]['total_balance_percent'],
+            "total_payments_count" => (int)$order_info[0]['total_payments_count'],
+            "payments" => $payments_to_return
+        );
+        return $data_to_return;
     }
 
     public function get_order_by_id($id)
