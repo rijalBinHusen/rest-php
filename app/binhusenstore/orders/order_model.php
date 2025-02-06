@@ -165,15 +165,15 @@ class Binhusenstore_order_model
         $payment_model = new Binhusenstore_payment_model();
 
         $summary_order_table = "binhusenstore_order_summary";
-        $order_info = $this->database->select_where($summary_order_table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);;
+        $order_info = $this->database->select_where($summary_order_table, 'id', $id)->fetchAll(PDO::FETCH_ASSOC);
         if (count($order_info) == 0) return array();
         $payments = $payment_model->get_paid_and_order_data_by_date_payment_desc($id);
         // if (count($payments) == 0) return array();
 
         // pick only 5 first payments
         $payments_to_return = array_slice($payments, 0, 5); // Start at index 0, take 5 elements
-        array_push($order_info, array("payments" => $payments_to_return));
-        return $order_info;
+        $order_info[0]["payments"] = $payments_to_return;
+        return $order_info[0];
     }
 
     public function get_order_by_id($id)

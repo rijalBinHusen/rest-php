@@ -41,7 +41,7 @@ class Binhusenstore_payment
 
         $result = $this->Binhusenstore_payment->append_payment($id_order, $balance, $id_order_group, $phone);
         $is_success = $this->Binhusenstore_payment->is_success;
-        if (is_string($result)) {
+        if (is_string($result) && strlen($result) > 9) {
 
             Flight::json(
                 array(
@@ -50,7 +50,7 @@ class Binhusenstore_payment
                 ),
                 400
             );
-        } else if ($is_success && count($result) > 0) {
+        } else if ($is_success && strlen($result) === 9) {
 
             Flight::json(
                 array(

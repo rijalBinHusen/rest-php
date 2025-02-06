@@ -29,9 +29,9 @@ class Binhusenstore_payment_model
 
         $date_payment = "";
         error_log(json_encode($order_summary));
-        if (count($order_summary[0]['payments']) === 0) $date_payment = new DateTime($order_summary[0]['date_order']);
+        if (count($order_summary['payments']) === 0) $date_payment = new DateTime($order_summary['date_order']);
         else
-            $date_payment = new DateTime($order_summary[0]['payments'][0]['date_payment']);
+            $date_payment = new DateTime($order_summary['payments'][0]['date_payment']);
 
         $payment_remaining = $order_summary['total_balance'] - $order_summary['total_balance_paid'];
         if ($balance > $payment_remaining) return "Pembayaran melebihi tagihan";
@@ -81,17 +81,17 @@ class Binhusenstore_payment_model
 
         $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
         $last_payment = "";
-        if (count($result_payments) === 0) $last_payment = new DateTime($order_summary[0]['date_order']);
+        if (count($result_payments) === 0) $last_payment = new DateTime($order_summary['date_order']);
         else
             $last_payment = new DateTime($result_payments[count($result_payments) - 1]['date_payment']);
 
-        $total_paid = $order_summary[0]['total_balance_paid'];
-        $total_balance = $order_summary[0]['total_balance'];
-        $balance = $order_summary[0]['payment_per_period'];
+        $total_paid = $order_summary['total_balance_paid'];
+        $total_balance = $order_summary['total_balance'];
+        $balance = $order_summary['payment_per_period'];
         while ($total_paid <= $total_balance) {
             $total_paid += $balance;
 
-            $last_payment->modify("+ " . $order_summary[0]['payment_period_distance'] . " week");
+            $last_payment->modify("+ " . $order_summary['payment_period_distance'] . " week");
             // $last_payment as YY-MM-DD
             $date_payment = date('Y-m-d', strtotime($last_payment->format('Y-m-d')));
 

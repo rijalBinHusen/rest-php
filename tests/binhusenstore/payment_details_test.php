@@ -115,6 +115,7 @@ class Payment_details_test extends TestCase
 
         $convertToAssocArray = json_decode($response, true);
 
+        // fwrite(STDERR, print_r($this->order_id, true));
         fwrite(STDERR, print_r($response, true));
         // Verify that the response same as expected
         $this->assertArrayHasKey('success', $convertToAssocArray);
