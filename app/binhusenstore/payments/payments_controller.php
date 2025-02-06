@@ -14,17 +14,18 @@ class Binhusenstore_payment
     {
         // request
         $req = Flight::request();
-        $date_payment = $req->data->date_payment;
         $id_order = $req->data->id_order;
         $id_order_group = $req->data->id_order_group;
         $balance = $req->data->balance;
+        $phone = $req->data->phone;
 
         $validator = new Validator();
 
         $result = null;
-        $isDatePaymentValid = $validator->isYMDDate($date_payment);
+        $isDatePaymentValid = $validator->isYMDDate($phone);
 
-        $is_request_body_not_oke = is_null($date_payment)
+        $is_request_body_not_oke = is_null($phone)
+            || !is_numeric($phone)
             || !$isDatePaymentValid
             || is_null($id_order)
             || !is_string($id_order)
@@ -43,9 +44,18 @@ class Binhusenstore_payment
             return;
         }
 
-        $result = $this->Binhusenstore_payment->append_payment($date_payment, $id_order, $balance, $id_order_group);
+        $result = $this->Binhusenstore_payment->append_payment($id_order, $balance, $id_order_group, $phone);
         $is_success = $this->Binhusenstore_payment->is_success;
-        if ($is_success && count($result) > 0) {
+        if (is_string($result)) {
+
+            Flight::json(
+                array(
+                    'success' => false,
+                    'message' => $result
+                ),
+                400
+            );
+        } else if ($is_success && count($result) > 0) {
 
             Flight::json(
                 array(
@@ -62,15 +72,6 @@ class Binhusenstore_payment
                     'message' => 'Order not found'
                 ),
                 404
-            );
-        } else if (is_string($result)) {
-
-            Flight::json(
-                array(
-                    'success' => false,
-                    'message' => $result
-                ),
-                400
             );
         } else {
 

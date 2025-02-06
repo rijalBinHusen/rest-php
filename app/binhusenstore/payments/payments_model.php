@@ -16,21 +16,29 @@ class Binhusenstore_payment_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_payment($date_payment, $id_order, $balance, $id_order_group)
+    public function append_payment($id_order, $balance, $id_order_group, $phone)
     {
         $order_model = new Binhusenstore_order_model();
         $order_summary = $order_model->get_order_dashboard_by_id($id_order);
         if (count($order_summary) === 0) return array();
 
+        // find order by order_id and phone
+        $phone_order = $order_model->phone_by_order_id($id_order);
+        $is_phone_not_matched = $phone_order != $phone;
+        if ($is_phone_not_matched) return "Id order atau nomor telfon tidak ditemukan";
+
+        $date_payment = new DateTime($order_summary[0]['payments'][0]['date_payment']);
+        $date_payment->modify("+ " . $order_summary[0]['payment_period_distance'] . " week");
+
         $payment_remaining = $order_summary['total_balance'] - $order_summary['total_balance_paid'];
         if ($balance > $payment_remaining) return "Pembayaran melebihi tagihan";
         $data_to_insert = array(
-            'date_payment' => $date_payment,
+            'date_payment' => $date_payment->format('Y-m-d'),
             'id_order' => $id_order,
             'id_order_group' => $id_order_group,
             'balance' => $balance,
-            'is_paid' => 0,
-            'date_paid' => true,
+            'is_paid' => 1,
+            'date_paid' => date('Y-m-d'),
         );
 
         $this->database->insert($this->table, $data_to_insert);
