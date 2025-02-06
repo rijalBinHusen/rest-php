@@ -174,7 +174,7 @@ class Binhusenstore_order_model
         $payments_to_return = array(); // Start at index 0, take 5 elements
 
         for ($i = 0; $i < 5; $i++) {
-            if (count($payments) < $i) continue;
+            if (count($payments) < ($i + 1)) continue;
             $data = $payments[$i];
             $array_to_push = array(
                 "date_paid" => $data['date_paid'],
