@@ -120,14 +120,12 @@ class Binhusenstore_order_model
 
     public function get_orders($limit)
     {
-        $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance, admin_charge";
+        $columnToSelect = "id, date_order, id_group, is_group, id_product, name_of_customer, sent, title, total_balance, admin_charge, payment_per_period";
         $query = "SELECT $columnToSelect FROM $this->table";
 
         $query = $query . " ORDER BY id DESC";
 
-        if ($limit > 0) $query = $query . " LIMIT " . $limit;
-        else $query = $query . " LIMIT 30";
-
+        if (is_numeric($limit) && $limit > 0) $query = $query . " LIMIT " . $limit;
 
         $result = $this->database->sqlQuery($query)->fetchAll(PDO::FETCH_ASSOC);
         if ($this->database->is_error === null) return $result;

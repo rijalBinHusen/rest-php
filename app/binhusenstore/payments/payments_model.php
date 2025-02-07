@@ -30,7 +30,8 @@ class Binhusenstore_payment_model
         $date_payment = "";
         if (count($order_summary['payments']) === 0) $date_payment = new DateTime($order_summary['date_order']);
         else
-            $date_payment = new DateTime($order_summary['payments'][0]['date_payment']);
+            $date_payment = new DateTime($order_summary['payments'][0]['date_paid']);
+        $date_payment->modify("+ " . $order_summary['payment_period_distance'] . " week");
 
         $payment_remaining = $order_summary['total_balance'] - $order_summary['total_balance_paid'];
         if ($balance > $payment_remaining) return "Pembayaran melebihi tagihan";
@@ -394,21 +395,37 @@ class Binhusenstore_payment_model
     public function retrieve_payment_group_by_id_order($limit)
     {
 
-        $is_limiter_oke = is_numeric($limit) && $limit > 0;
+        $order_model = new Binhusenstore_order_model();
+        $orders = $order_model->get_orders($limit);
+        if (count($orders) === 0) return array();
 
-        $query_payment_group_by_id_order = "SELECT date_payment, id_order, balance
-        FROM binhusenstore_payments
-        WHERE (id_order, date_payment) IN (
-          SELECT id_order, MIN(date_payment)
-          FROM binhusenstore_payments WHERE is_paid = 0 AND id_order_group = ''
-          GROUP BY id_order
-        ) AND date_payment <= CURRENT_DATE()";
+        $payments_to_return = array();
 
-        if ($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
+        foreach ($orders as $order) {
+            $array_to_push = array(
+                "id" => "",
+                "date_payment" => date("Y-m-d"),
+                "id_order" => $order['id'],
+                "balance" => $order['payment_per_period']
+            );
 
-        $result = $this->database->sqlQuery($query_payment_group_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
+            array_push($payments_to_return, $array_to_push);
+        }
+        // $is_limiter_oke = is_numeric($limit) && $limit > 0;
 
-        if ($this->database->is_error === null) return $result;
+        // $query_payment_group_by_id_order = "SELECT date_payment, id_order, balance
+        // FROM binhusenstore_payments
+        // WHERE (id_order, date_payment) IN (
+        //   SELECT id_order, MIN(date_payment)
+        //   FROM binhusenstore_payments WHERE is_paid = 0 AND id_order_group = ''
+        //   GROUP BY id_order
+        // ) AND date_payment <= CURRENT_DATE()";
+
+        // if ($is_limiter_oke) $query_payment_group_by_id_order = $query_payment_group_by_id_order . " LIMIT $limit";
+
+        // $result = $this->database->sqlQuery($query_payment_group_by_id_order)->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->database->is_error === null) return $payments_to_return;
 
         $this->is_success = $this->database->is_error;
         return array();

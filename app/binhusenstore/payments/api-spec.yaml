@@ -106,32 +106,32 @@ paths:
           $ref: "#/components/responses/401Error"
         "404":
           $ref: "#/components/responses/404Error"
-  /payment_mark_as_paid:
-    put:
-      tags:
-        - payment
-      summary: Lets a user post a new payment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id_order:
-                  type: string
-                date_paid:
-                  type: string
-                  example: "2023-07-23"
-                balance:
-                  type: number
-      responses:
-        "200":
-          $ref: "#/components/responses/200Success"
-        "400":
-          $ref: "#/components/responses/400Error"
-        "401":
-          $ref: "#/components/responses/401Error"
+  # /payment_mark_as_paid:
+  #   put:
+  #     tags:
+  #       - payment
+  #     summary: Lets a user post a new payment
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               id_order:
+  #                 type: string
+  #               date_paid:
+  #                 type: string
+  #                 example: "2023-07-23"
+  #               balance:
+  #                 type: number
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/200Success"
+  #       "400":
+  #         $ref: "#/components/responses/400Error"
+  #       "401":
+  #         $ref: "#/components/responses/401Error"
   /payments/group_by_order_id:
     get:
       parameters:
@@ -178,6 +178,10 @@ components:
           type: number
         is_paid:
           type: boolean
+        id_order_group:
+          type: string
+        phone:
+          type: number
   responses:
     400Error:
       description: Invalid request
