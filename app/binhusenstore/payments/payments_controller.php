@@ -18,16 +18,21 @@ class Binhusenstore_payment
         $id_order_group = $req->data->id_order_group;
         $balance = $req->data->balance;
         $phone = $req->data->phone;
+        $date_payment = $req->data->date_payment;
+
+        $validator = new Validator();
+
+        $what_s_to_check = array(
+            "phone" => "number",
+            "id_order" => "string",
+            "balance" => "number",
+            "date_payment" => "YMDate"
+        );
 
         $result = null;
-        $is_request_body_not_oke = is_null($phone)
-            || !is_numeric($phone)
-            || is_null($id_order)
-            || !is_string($id_order)
-            || is_null($balance)
-            || !is_numeric($balance);
+        $is_request_body_oke = $validator->check_type($req->data, $what_s_to_check);
 
-        if ($is_request_body_not_oke) {
+        if (!$is_request_body_oke) {
 
             Flight::json(
                 array(
@@ -39,7 +44,7 @@ class Binhusenstore_payment
             return;
         }
 
-        $result = $this->Binhusenstore_payment->append_payment($id_order, $balance, $id_order_group, $phone);
+        $result = $this->Binhusenstore_payment->append_payment($id_order, $balance, $id_order_group, $phone, $date_payment);
         $is_success = $this->Binhusenstore_payment->is_success;
         if (is_string($result) && strlen($result) > 9) {
 

@@ -16,7 +16,7 @@ class Binhusenstore_payment_model
         $this->database = Query_builder::getInstance();
     }
 
-    public function append_payment($id_order, $balance, $id_order_group, $phone)
+    public function append_payment($id_order, $balance, $id_order_group, $phone, $date_paid)
     {
         $order_model = new Binhusenstore_order_model();
         $order_summary = $order_model->get_order_dashboard_by_id($id_order);
@@ -36,7 +36,6 @@ class Binhusenstore_payment_model
         $payment_remaining = $order_summary['total_balance'] - $order_summary['total_balance_paid'];
         if ($balance > $payment_remaining) return "Pembayaran melebihi tagihan";
 
-        $date_paid = date('Y-m-d');
         $data_to_insert = array(
             'date_payment' => $date_payment->format('Y-m-d'),
             'id_order' => $id_order,
