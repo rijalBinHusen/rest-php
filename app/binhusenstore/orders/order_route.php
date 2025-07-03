@@ -57,6 +57,17 @@ Flight::route("GET /binhusenstore/order/dashboard/@id", function ($id) {
     }
 });
 
+Flight::route("GET /binhusenstore/order/summarize/order", function () {
+    $user = new User("binhusenstore_users");
+    $is_token_valid = $user->is_admin(1);
+
+    if ($is_token_valid) {
+
+        $myreport_base_file = new Binhusenstore_order();
+        $myreport_base_file->get_summary_orders_c();
+    }
+});
+
 Flight::route("PUT /binhusenstore/order/@id", function ($id) {
     $user = new User("binhusenstore_users");
     $is_token_valid = $user->is_admin(1);

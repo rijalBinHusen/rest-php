@@ -445,6 +445,9 @@ paths:
                       admin_charge:
                         type: number
                         example: 10000
+                      total_paid:
+                        type: number
+                        example: 2000
                       payments:
                         type: array
                         items:

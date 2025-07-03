@@ -200,6 +200,82 @@ class Binhusenstore_order_model
         return $data_to_return;
     }
 
+    /**
+     * Get order dashboard by id_prder.
+     *
+     * @param $id number.
+     * @return array(
+     * "day_percent": => number,
+     * "day_remaining": => number,
+     * "total_balance_percent": => number,
+     * "total_payments_count": => number,
+     * "date_order": => string,
+     * "name_of_customer": => string,
+     * "title": => string,
+     * "total_balance": => number,
+     * "total_balance_paid": => number,
+     * "admin_charge": => number,
+     * "payment_period_distance" => number,
+     * "payments": => [
+     * {
+     * "id": => string,
+     * "order_number": => number,
+     * "date_paid": => string,
+     * "balance": => number
+     * }).
+     */
+
+    public function get_summary_orders()
+    {
+        $payment_model = new Binhusenstore_payment_model();
+
+        $summary_order_table = "binhusenstore_order_summary";
+        $orders = $this->database->select_from($summary_order_table)->fetchAll(PDO::FETCH_ASSOC);
+        if (count($orders) == 0) return array();
+
+        $result = array();
+
+        foreach ($orders as $order) {
+            // get phone here
+            $id_order = $order['id'];
+            $phone = $this->phone_by_order_id($id_order);
+
+            $array_to_push = array(
+                "phone" => $phone,
+                "message" => "
+                    Hallo kak " . $order['name_of_customer'] . ",\n
+                    Pesan ini dikirim karena kakak memiliki dana yang disimpan diplatform kami dengan Id pesanan: " . $id_order . "\n
+                    Sistem kami mencatat total dana yang telah tersimpan adalah sebesar:\n\n
+                    Rp " . $order['total_balance_paid'] . "\n\n
+                    Data ini telah diverifikasi secara otomatis oleh sistem dan merupakan akumulasi dari seluruh transaksi Anda hingga tanggal" . date('d-M-Y') . "\n\n
+                    Terima kasih atas kepercayaan Anda dalam menggunakan layanan kami.\n\n
+                    Hormat kami,\n\n
+                    *Binhusenstore*\n\n>Pesan dibuat oleh sistem"
+            );
+
+            array_push($result, $array_to_push);
+        }
+
+        // $data_to_return = array(
+        //     "id" => $order_info[0]['id'],
+        //     "date_order" => $order_info[0]['date_order'],
+        //     "name_of_customer" => $order_info[0]['name_of_customer'],
+        //     "title" => $order_info[0]['title'],
+        //     "total_balance" => (int)$order_info[0]['total_balance'],
+        //     "payment_period_distance" => (int)$order_info[0]['payment_period_distance'],
+        //     "payment_per_period" => (int)$order_info[0]['payment_per_period'],
+        //     "admin_charge" => (int)$order_info[0]['admin_charge'],
+        //     "total_balance_paid" => (int)$order_info[0]['total_balance_paid'],
+        //     "day_percent" => $order_info[0]['day_percent'],
+        //     "day_remaining" => $order_info[0]['day_remaining'],
+        //     "total_balance_percent" => (int)$order_info[0]['total_balance_percent'],
+        //     "total_payments_count" => (int)$order_info[0]['total_payments_count'],
+        //     "payments" => $payments_to_return
+        // );
+
+        return $result;
+    }
+
     public function get_order_by_id($id)
     {
         if (substr($id, 0, 1) !== 'G' && substr($id, 0, 1) !== 'O') return array();
