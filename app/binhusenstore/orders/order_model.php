@@ -242,15 +242,13 @@ class Binhusenstore_order_model
 
             $array_to_push = array(
                 "phone" => $phone,
-                "message" => "
-                    Hallo kak " . $order['name_of_customer'] . ",\n
-                    Pesan ini dikirim karena kakak memiliki dana yang disimpan diplatform kami dengan Id pesanan: " . $id_order . "\n
-                    Sistem kami mencatat total dana yang telah tersimpan adalah sebesar:\n\n
-                    Rp " . $order['total_balance_paid'] . "\n\n
-                    Data ini telah diverifikasi secara otomatis oleh sistem dan merupakan akumulasi dari seluruh transaksi Anda hingga tanggal" . date('d-M-Y') . "\n\n
-                    Terima kasih atas kepercayaan Anda dalam menggunakan layanan kami.\n\n
-                    Hormat kami,\n\n
-                    *Binhusenstore*\n\n>Pesan dibuat oleh sistem"
+                "message" => "Hallo kak " . $order['name_of_customer']
+                    . ",\n\nPesan ini dikirim karena kakak memiliki dana yang disimpan diplatform kami dengan Id pesanan " . $id_order
+                    . ", Sistem kami mencatat total dana yang telah tersimpan adalah sebesar Rp*" . number_format($order['total_balance_paid'], 0, ",", ".")
+                    . "*.\n\nData ini telah diverifikasi secara otomatis oleh sistem dan merupakan akumulasi dari seluruh transaksi Anda hingga tanggal " . date('d-M-Y')
+                    . ".\n\nTerima kasih atas kepercayaan Anda dalam menggunakan layanan kami.\n\n"
+                    . "Hormat kami,\n\n"
+                    . "*Binhusenstore*\n> Pesan dibuat oleh sistem"
             );
 
             array_push($result, $array_to_push);
