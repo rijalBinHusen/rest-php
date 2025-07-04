@@ -78,7 +78,8 @@ class Binhusenstore_payment_model
 
         if (count($order_summary) === 0) return array();
 
-        $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
+        // $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_payment')->fetchAll(PDO::FETCH_ASSOC);
+        $result_payments  = $this->database->select_where($this->table, 'id_order', $id_order, 'date_paid')->fetchAll(PDO::FETCH_ASSOC);
         $last_payment = "";
         if (count($result_payments) === 0) $last_payment = new DateTime($order_summary['date_order']);
         else

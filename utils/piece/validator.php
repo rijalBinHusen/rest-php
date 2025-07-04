@@ -4,11 +4,17 @@ class Validator
 {
 
   // Methods
-  function isYMDDate($yourDate)
+  function isYMDDate($dateString)
   {
+    // DateTime::createFromFormat returns a DateTime object on success,
+    // or false on failure. It also sets errors which can be retrieved.
+    $date = DateTime::createFromFormat('Y-m-d', $dateString);
 
-    $dt = DateTime::createFromFormat("Y-m-d", $yourDate);
-    return $dt !== false && !array_sum($dt::getLastErrors());
+    // Check if the creation was successful AND if the format matches exactly.
+    // The second check is important because createFromFormat can sometimes
+    // parse partial matches or unrelated parts if the string is longer.
+    // For example, '2023-10-05 extra text' might still return a DateTime object.
+    return $date && $date->format('Y-m-d') === $dateString;
   }
 
   public function check_type($your_object, $whats_to_check)
